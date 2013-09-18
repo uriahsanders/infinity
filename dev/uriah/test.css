@@ -1,0 +1,720 @@
+html, body{
+    margin:0;
+    padding:0;
+    background: #474747;
+    background: url('/images/dark_stripes.png');
+    color: #fff;
+    font-family: 'Droid Sans', sans-serif;
+    width:100%;
+    min-width:1000px;
+    height: 100%;
+}
+a{
+    cursor: pointer;
+    color: grey;
+    text-decoration: none;
+}
+a:hover{
+    cursor: pointer;
+    color: #fff;
+}
+#welcome_popup{
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: url('/images/broken_noise.png');
+}
+#welcome_head{
+    font-weight: bolder;
+    font-size: 1.5em;
+    font-style: italic;
+}
+button:hover{
+    color: grey;
+}
+#navigation{
+    float: left;
+    width: 212px;
+    max-width: 36%;
+    margin-top: 20px;
+    background: url('/images/broken_noise.png');
+    border-radius: 3px;
+}
+#top{
+    position: fixed;
+    border: 1px solid #24272b;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    padding: 2px;
+    background: url('/images/broken_noise.png');
+    opacity: 1;
+    z-index: 2;
+    border-bottom: 2px solid #000;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#content{
+    width: 80%;
+    margin-left: 225px;
+    padding: 5px;
+}
+#cms{
+    padding: 5px;
+}
+#main{
+    padding: 5px;
+}
+#navigation li{
+    padding: 15px;
+    margin-bottom: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    border: 1px solid black;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+#navigation li:hover{
+    background: rgba(255,255,255,.2);
+}
+.active{
+    background: rgba(255,255,255,.2);
+}
+#icons{
+    float: right;
+    margin-right: 30px;
+}
+#logo {
+    width: 400px;
+    height: 99px;
+    position: absolute;
+    display: inline-box;
+    left: 0;
+    border: 0;
+    background: url('/images/logo99.png') no-repeat;
+    z-index: 1;
+    cursor: pointer;
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    border-radius: 5px;
+}
+button {
+    border-radius: 3px;
+    cursor: pointer;
+}
+#logo:hover{
+    opacity: 1;
+}
+span[class^="cms_opt"], .badge{
+    display: inline-block;
+    padding: 30px;
+    border: 1px solid #24272b;
+    border-radius: 3px;
+    background: url('/images/broken_noise.png');
+    text-align: center;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+span[class^="cms_opt"]:hover{
+    cursor: pointer;
+    color: white;
+    border: 1px solid grey;
+}
+#top_opt li{
+    float: left;
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 2px;
+}
+#top_opt li:hover:not(#my_place){
+    color: grey;
+}
+#head{
+    font-weight: bold;
+    text-align: left;
+    font-size: 120%;
+    color: rgba(255,255,255,1);
+    padding: 10px 15px;
+}
+div[class^='head']{
+    padding: 7.5px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    border: 1px solid #24272b;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    cursor: pointer;
+}
+.input{
+    margin-left: 10%;
+}
+.row:not(:last-child){
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+input[type=text]:not(#inputStatus), textarea, input[type=password]{
+    width: 90%;
+    padding: 7px;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 3px;
+    border: 1px solid #1e2226;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-box-shadow: 0 1px 0 #363B3E;
+    -webkit-box-shadow: 0 1px 0 #363B3E;
+    box-shadow: 0 1px 0 #363B3E;
+}
+textarea{
+    height: 100px;
+}
+.tableBody{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+#inputStatus, #searchbar{
+    padding: 3px;
+    border-radius: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #1e2226;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-box-shadow: 0 1px 0 #363B3E;
+    -webkit-box-shadow: 0 1px 0 #363B3E;
+    box-shadow: 0 1px 0 #363B3E;
+}
+button[class^='button']{
+    border-radius: 3px;
+    cursor: pointer;
+}
+.submit_button{
+    border: 1px solid black;
+    padding: 5px;
+}
+.top_opt{
+    margin: 10px;
+}
+.widget{
+    background: url('/images/broken_noise.png');
+}
+.help li{
+    padding: 5px;
+}
+div[class^='body']{
+    border-radius: 3px;
+    color: #fafafa;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid #24272b;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+    padding: 10px;
+}
+::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
+::-webkit-scrollbar-button       { 
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
+  border: 1px solid #0d0d0d;
+  height: 10px;
+  width: 10px;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666; }
+::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/images/down.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/images/down2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/images/up.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/images/up2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment { background:url(/images/right.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/images/right2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement { background:url(/images/left.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/images/left2.png) no-repeat; background-size:6px; background-position:center} 
+
+::-webkit-scrollbar-track        { }
+::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
+::-webkit-resizer                {  }
+::-webkit-scrollbar-thumb { 
+  background: rgba(27,27,27,1);
+  opacity: 0.5;
+  border: 1px solid #0d0d0d;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666;}
+::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
+::-webkit-scrollbar-corner       {  }
+#stats{
+    margin-top: -100px;
+    margin-left: 430px;
+    padding: 10px;
+}
+select {
+    display: inline-block;
+    line-height: 28px;
+    border: 1px solid #aaa;
+    padding: 2px;
+    border-radius: 3px;
+    color: #555;
+    background-color: rgb(221, 221, 221);
+    -webkit-appearance: menulist;
+    box-sizing: border-box;
+    -webkit-box-align: center;
+    border: 1px solid;
+    border-image: initial;
+    white-space: pre;
+    -webkit-rtl-ordering: logical;
+    color: black;
+    background-color: white;
+    cursor: default;
+    margin: 0em;
+    font: -webkit-small-control;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    -webkit-writing-mode: horizontal-tb;
+}
+select:focus {
+outline-offset: -2px;
+}
+.dim, #dim{
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,.7);
+}
+.cms_popup{
+    position:fixed;
+    z-index: 100;  
+    top: 50%;  
+    left: 50%;  
+    margin: -300px 0 0 -300px;  
+    width: 600px;  
+    height: 500px;  
+    border: 6px solid rgba(0,0,0,1);
+    padding: 50px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    background: url('/images/broken_noise.png');
+    text-align: center;
+    overflow-y: auto;
+}
+.cms_popup_head{
+    margin-bottom: 20px;
+}
+.launch_info, .add_member_list, .message_form{
+    border: 2px inset #000;
+    padding: 7px;
+    background: rgba(255,255,255,.2);
+    color: #fafafa;
+}
+tr{
+    text-align: center;
+}
+table {
+    display: table;
+    border-spacing: 10px;
+}
+.multiselect{
+    border: 1px solid #000;
+    height: 100px;
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 3px;
+    width: 96%;
+    text-align: center;
+}
+#empty{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 2em;
+    font-style: italic;
+    font-weight: bold;
+    border-radius: 3px;
+    border: 1px solid #24272b;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    background: url('/images/gray_sand.png');
+    padding-top: 175px;
+    padding-bottom: 175px;
+    opacity: .8;
+}
+.tablehide{
+    display: none;
+}
+.cms_foot, .back, .back-groups{
+    margin-top:30px;border-radius:3px;border:1px solid #000;
+    background: rgba(255,255,255,.2);
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    cursor: pointer;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50px;
+    padding: 5px;
+    
+}
+button, select{
+    border-radius:3px;
+    border:1px solid #000;
+    background: rgba(255,255,255,.2);
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    padding: 5px;
+}
+.cms_foot:hover, .back:hover, .back-groups:hover, button:hover, select:hover{
+    opacity: 1;
+}
+.wiu{
+    margin-bottom: 10px;
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+}
+.wiu:hover{
+    opacity:1;
+}
+.stream_link{
+    cursor: pointer;
+}
+div[class$="note"]{
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #fff;
+    padding: 8px 24px;
+    width: 280px;
+    border: 1px solid #000;
+    background: url('/images/gray_sand.png');
+    font-size: 1.2em;
+    border:1px #E8Ds47 solid;
+    -moz-box-shadow:0px 0px 6px 1px #333333;
+    -webkit-box-shadow:0px 0px 6px 1px #333333;
+    box-shadow:0px 0px 6px 1px #333333;
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    border-radius: 3.5px;
+    cursor: pointer;
+    overflow: auto;
+}
+div[class$="note"]:hover{
+    opacity: 1;
+    border: 1px solid grey;
+}
+.note ol {
+    margin: 12px;
+}
+span[class^='arrow']{
+    float: right;
+    background: url('/images/arrowc.png');
+    margin-right: 10px;
+    height: 13px;
+    width: 10px;
+}
+::-webkit-input-placeholder { color:grey; }
+::-moz-placeholder { color:grey; } /* firefox 19+ */
+:-ms-input-placeholder { color:grey; } /* ie */
+input:-moz-placeholder { color:grey; }
+canvas{
+    border-radius: 5px;
+    padding: 20px;
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+}
+canvas:hover{
+    opacity: 1;
+}
+#loader{
+    position: fixed;
+    bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    padding-left: 20px;
+    left: 50%;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.5em;
+    z-index: 100;
+    background: url('/images/gray_sand.png');
+    border: 1px solid black;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+#edit_menu {
+    vertical-align: top;
+    border: 1px solid black;
+    background: url('/images/gray_sand.png');
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    text-align: center;
+    width: 140px;
+    margin-left: auto;
+    border-radius: 3px;
+    margin-right: auto;
+    padding: 10px;
+}
+div[id^='event-div']{
+    display: inline-block;
+    width: 250px;
+    height: 200px;
+    border: 2px solid #000;
+    border-radius: 3px;
+    background: url('/images/gray_sand.png');
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    text-align: center;
+    font-size: 1.2em;
+    opacity: 0.8;
+    cursor: pointer;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+}
+div[id^='event-div']:hover{
+    opacity: 1;
+}
+#event-day{
+    font-weight: bold;
+    font-size: 2em;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+#event-date{
+    font-style: italic;
+}
+#events_calendar{
+    height: 550px;
+    width: 100%;
+    background: url('/images/gray_sand.png');
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+#events_calendar_options{
+    float: left;
+    width:33.33333%;
+    text-align:left;
+}
+#events_calendar_head{
+    background: url('/images/broken_noise.png');
+    padding: 5px;
+    text-align: center;
+    height: 4.5%; 
+    border-bottom: 1px solid #000;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+#events_calendar_title{
+    font-size: 1.2em;
+    font-weight: bold;
+    float: left;
+    width:33.33333%;
+    text-align:center;
+}
+#events_calendar_body{
+    
+}
+span[id^="bt_go"]{
+    font-size: 1.3em;
+    border: 1px solid black;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 5px;
+
+}
+#bt_go-left{
+    margin-right: 5px;
+}
+#bt_go-right{
+    margin-left: 5px;
+}
+/*TOUR BOX STYLING*/
+#tour_dim_screen {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,.3);
+}
+div[class^="tour_div"]{
+    display: none;
+    z-index: 25;
+    position: fixed;
+    background: grey;
+    padding: 10px;
+}
+/*ARROW TOP*/
+.tour_arrow-up:after, .tour_arrow-up:before {
+    bottom: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.tour_arrow-up:after {
+    border-color: transparent;
+    border-bottom-color: grey;
+    border-width: 30px;
+    left: 50%;
+    margin-left: -30px;
+}
+.tour_arrow-up:before {
+    border-color: transparent;
+    border-bottom-color: transparent;
+    border-width: 36px;
+    left: 50%;
+    margin-left: -36px;
+}
+/*ARROW LEFT*/
+.tour_arrow-down:after, .tour_arrow-down:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.tour_arrow-down:after {
+    border-color: transparent;
+    border-top-color: grey;
+    border-width: 30px;
+    left: 50%;
+    margin-left: -30px;
+}
+.tour_arrow-down:before {
+    border-color: transparent;
+    border-top-color: transparent;
+    border-width: 36px;
+    left: 50%;
+    margin-left: -36px;
+}
+/*ARROW RIGHT*/
+.tour_arrow-right:after, .tour_arrow-right:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.tour_arrow-right:after {
+    border-color: transparent;
+    border-left-color: grey;
+    border-width: 30px;
+    top: 50%;
+    margin-top: -30px;
+}
+.tour_arrow-right:before {
+    border-color: transparent;
+    border-left-color: transparent;
+    border-width: 36px;
+    top: 50%;
+    margin-top: -36px;
+}
+/*ARROW LEFT*/
+.tour_arrow-left:after, .tour_arrow-left:before {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.tour_arrow-left:after {
+    border-color: transparent;
+    border-right-color: grey;
+    border-width: 30px;
+    top: 50%;
+    margin-top: -30px;
+}
+.tour_arrow-left:before {
+    border-color: transparent;
+    border-right-color: transparent;
+    border-width: 36px;
+    left: 50%;
+    margin-top: -36px;
+}
+/*END TOUR STUFF*/

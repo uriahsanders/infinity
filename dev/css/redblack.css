@@ -1,0 +1,299 @@
+html body {
+    background-color: #000000;
+    color: #cbc9c9;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    margin: 0;
+}
+html a {
+    color: #b80000;
+    text-decoration: none;
+}
+html a:hover {
+    color: #B22424;
+    text-decoration: none;
+}
+#topbar ul {
+    float: right;
+    padding-right: 30px;
+    width: 100%;
+}
+#topbar li {
+    display: inline;
+}
+#topbar ul a {
+    color: #cbc9c9;
+    float: right;
+    margin-top: -14px;
+    padding: 7px 12px;
+    text-decoration: none;
+}
+#topbar a:hover, #topbar_active {
+    background-color: #101017;
+}
+#topbar_active {
+    color: #b80000 !important;
+    font-weight: bold;
+}
+#topbar {
+    background-color: #2e2e2e;
+    box-shadow: 0 0 4px #000000;
+    height: 30px;
+    width: 100%;
+}
+#mid {
+    background: url("../images/midrightbg.png") repeat-x scroll center bottom transparent;
+    display: inline-block;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+#midleft {
+    background: url("../images/midleftbg.png") repeat-x scroll center bottom transparent;
+    float: left;
+    height: 200px;
+    width: 50%;
+}
+#midmid {
+    background: url("../images/midmidbg.png") no-repeat scroll center bottom transparent;
+    float: left;
+    height: 200px;
+    width: 30px;
+    z-index: 1;
+}
+#midright {
+    float: right;
+    height: 200px;
+    padding-right: 15px;
+    padding-top: 8px;
+    text-align: right;
+}
+#logo {
+    background: url("../images/phoenix.png") no-repeat scroll center top transparent;
+    float: left;
+    height: 184px;
+    margin-top: 11px;
+    padding-left: 20px;
+    position: absolute;
+    width: 242px;
+    z-index: 2;
+}
+#logotxt {
+    background: url("../images/logotxt.png") no-repeat scroll center top transparent;
+    float: left;
+    height: 121px;
+    margin-left: 260px;
+    margin-top: 25px;
+    position: absolute;
+    width: 396px;
+}
+#inputusr, #inputpwd, #loginbtn, #newbtn, #forgottbtn, #inputusername, #inputname, #inputpasswordc, #inputpassword, #inputpassword2c, #inputpassword2, #inputemail, #regsubbtn, #capcode {
+    border: 0 none;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 0 4px #000000;
+    font-size: 10px;
+    height: 21px;
+}
+#inputusr, #inputpwd, #inputusername, #inputname, #inputpasswordc, #inputpassword, #inputpassword2c, #inputpassword2, #inputemail, #capcode {
+    color: #b80000;
+    line-height: 10px;
+    text-indent: 13px;
+}
+#inputusername, #inputname, #inputpasswordc, #inputpassword, #inputpassword2c, #inputpassword2, #inputemail {
+    width: 240px;
+}
+#capcode {
+    width: 150px;
+}
+#loginbtn, #newbtn, #forgottbtn, #regsubbtn {
+    background: linear-gradient(to bottom, #cccccc 0%, #4c4c4c 100%) repeat scroll 0 0 transparent;
+    height: 2.3em;
+}
+#loginbtn:active, #newbtn:active, #forgottbtn:active, #regsubbtn:active {
+    box-shadow: none;
+    position: relative;
+    top: 2px;
+}
+#loginbtn:hover, #newbtn:hover, #forgottbtn:hover, #regsubbtn:hover {
+    color: #b80000;
+}
+#content {
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 500px;
+    padding-top: 20px;
+    position: relative;
+    width: 85%;
+}
+#main {
+    float: left;
+    height: 100%;
+    padding-right: 15px;
+    position: absolute;
+    width: 73%;
+}
+#links {
+    float: right;
+    font-size: 12px;
+    height: 100%;
+    width: 180px;
+}
+#head {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+#Q {
+    font-size: 1em;
+    font-weight: bold;
+    padding-bottom: 2px;
+    padding-top: 5px;
+}
+#A {
+    color: #CBC9C9;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding-bottom: 5px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+#terms, #faq, #contact {
+    display: none;
+    padding-bottom: 30px;
+}
+#terms, #faq, #contact, #about {
+    height: 100%;
+}
+#links #linksitem #linkssub a {
+    color: #FFFFff !important;
+    font-weight: bold;
+    padding-bottom: 0;
+    text-decoration: none;
+}
+#links #linksitem {
+    background-color: #2e2e2e;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 0 4px #000000;
+    padding: 6px 7px 7px 10px;
+    position: relative;
+    width: 100%;
+}
+.linkstxt {
+    height: 100%;
+    margin-top: 5px;
+    width: 96%;
+}
+#news {
+    float: right;
+    font-size: 12px;
+    height: 100%;
+    width: 24%;
+}
+#news #newsitem {
+    background-color: #2e2e2e;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 0 2px #000000;
+    padding: 6px 7px 7px 10px;
+    position: relative;
+    width: 100%;
+}
+#news #newssub {
+    font-weight: bold;
+}
+.newstxt {
+    height: 100%;
+    margin-top: 5px;
+    width: 96%;
+}
+#news #newsitem #newsdate {
+    color: #b80000;
+    float: right;
+    font-size: 11px;
+    margin-top: -2px;
+}
+.newstxt p {
+    margin: 0;
+    padding: 0;
+}
+#news2, #news3, #news4, #news5, #news6, #news7, #news8, #news9, #news10, #news11 {
+    display: none;
+}
+#news1 {
+    display: block;
+}
+#register {
+    background-color: #2e2e2e;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: -5px 5px 15px #000000;
+    display: none;
+    margin-top: -9px;
+    padding: 10px;
+    position: absolute;
+    text-align: left;
+    width: 17.5em;
+    z-index: 5;
+}
+#register p {
+    margin: 0.4em;
+}
+#errusr, #errpwd, #errname, #errpwd2, #erremail, #errusr2, #erremail2, #errcap, #errusr3, #errname2, #errpwd3, #errcap2 {
+    color: #FF0000;
+    display: none;
+    font-size: 10px;
+}
+#regnav {
+    margin: -10px 10px 10px 7px;
+    text-align: right;
+    width: 100%;
+}
+#regsubnav {
+    text-align: right;
+    width: 98%;
+}
+#regnav a {
+    text-decoration: none;
+}
+#inputpassword, #inputpassword2 {
+    display: none;
+}
+#capcode {
+    margin-top: 10px;
+}
+#status {
+    background-color: #25252D;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: -5px 5px 15px #000000;
+    margin-left: 30%;
+    margin-top: -100px;
+    min-height: 100px;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    width: 25em;
+    z-index: 5;
+}
+#termss {
+    background-color: #25252D;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: -5px 5px 15px #000000;
+    display: none;
+    margin-left: 200px;
+    margin-top: 50px;
+    min-height: 300px;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    width: 55em;
+    z-index: 5;
+}
+#navclose {
+    height: 18px;
+    width: 18px;
+}
+#main hr {
+    background: linear-gradient(to right, #000000 0%, #b80000 50%, #000000 100%) repeat scroll 0 0 transparent;
+    border: 0 none;
+    height: 1px;
+    width: 90%;
+}
+

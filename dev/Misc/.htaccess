@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "development"
+AuthUserFile "/home/infinit7/.htpasswds/public_html/dev/passwd"
+require valid-user

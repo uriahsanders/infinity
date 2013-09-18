@@ -1,0 +1,195 @@
+#mem_top{
+    background-image:url(../member/images/top_lr.png);
+    background-repeat:repeat-x;
+    width: 100%;
+    height: 90px;
+    float:left;
+    position: relative;
+    z-index:1;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+.bookmark_list_btns {
+ display:none;padding-right:15px; text-align:right; padding-top:3px;
+}
+#mem_left_menu {
+    min-height:400px;
+    width: 270px;
+    height: 600px;
+    margin-top:35px;
+    position: fixed;
+    background-color: #25252d;
+    -moz-box-shadow: 0 0  5px #000000;
+    -webkit-box-shadow:  0 0 5px #000;
+    box-shadow: 0px 0px  5px #000;
+    border: 1px solid #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 3px;
+    padding: 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index:50;
+    display:none;
+}
+
+#mem_top_middle {
+    background-image: url(../member/images/top_middle.png);
+    background-repeat:no-repeat;
+    height: 90px;
+    width: 371px;
+    position:relative;
+    margin-left:auto;
+    text-align:center;
+    margin-right:auto;
+    z-index:2;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#mem_top_left {
+    float:left;
+    text-align:left;
+    padding-left:10px;
+    font-weight:bold;
+    font-size:17px;
+    padding-top:5px;
+    text-shadow: 0 0 0.3em  #999999;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+#mem_top_left2 {
+    float:left;
+    text-align:left;
+    padding-left:10px;
+    padding-top:6px;
+}
+#mem_top_left:hover {
+    text-shadow: 0 0 0.4em #FFF;
+}
+
+#mem_top_right {
+    float:right;
+    text-align:right;
+    padding-top:0px;
+    padding-right:10px;
+}
+#mem_top_middle_icon {
+    display: inline;
+    border:0px;
+    width:60px; height:60px;
+    vertical-align:text-top;
+    padding-left:3px; padding-right:3px;
+}
+#mem_top_middle_icons {
+    position:absolute;
+    margin-top:4px;
+    margin-left:0px;
+    width:380px;
+}
+
+#mem_left_menu_bookmarks {
+    width:100%;
+    height:33%;
+}
+
+#mem_left_menu_projects {
+    width:100%;
+    height:33%;    
+}
+#mem_left_menu_friends {
+    position: relative;
+    width:100%;
+    height:33%;
+}
+#mem_left_menu_headers {
+    text-indent: 10px;
+    width: 300px;
+    font-weight: bold;
+    text-decoration:underline;
+}
+#mem_left_menu_bottom {
+    padding-right:7px;
+    vertical-align:central;
+}
+#mem_left_menu_bottom_buttons {
+    float:right;
+    padding-top:2px;
+    vertical-align:central;
+}
+#mem_left_show {
+    position:fixed;
+    top:50%;
+    left:-5px;
+    z-index:1;
+    
+    background-color: #25252d;
+    -moz-box-shadow: 0 0  5px #000000;
+    -webkit-box-shadow:  0 0 5px #000;
+    box-shadow: 0px 0px  5px #000;
+    border: 1px solid #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 3px;
+    padding: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor:default;
+}
+#i {
+    opacity:0.8;
+    filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+#i:hover {
+    opacity:1;
+    filter:alpha(opacity=100); /* For IE8 and earlier */
+}
+.donate_btn {
+    height:20px; width:60px; position:relative; margin-left:15px;
+}
+#bookmark_list_icon, #project_list_icon, #friend_list_icon {
+    float:left; padding-left:5px;
+}
+#bookmark_list_cont, #project_list_cont, #friend_list_cont {
+    float:left
+}
+#bookmark_list, #project_list, #friends_list {
+     width:100%; float:left; position: relative; overflow:hidden;
+}
+#bookmark_list_scroll, #project_list_scroll, #friends_list_scroll {
+    width:15px;position: absolute; margin-left: 255px;
+}
+#bookmark_list_item:hover {
+    display:inlinebox;
+}
+.bookmark_list_item {
+    display:inline-block;
+    width:100%;
+}
+.bookmark_list_item:hover {
+    background-color: rgba(255,255,255,0.5);
+    width:99%;
+}
+#rawr {
+    width:80%; 
+    min-height:530px; 
+    margin-left:auto; 
+    margin-right:auto; 
+    position: relative; 
+    padding-top:100px; 
+    text-align:left;
+}

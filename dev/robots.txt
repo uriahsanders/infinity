@@ -1,0 +1,3 @@
+#GTFO
+User-agent: *
+Disallow: /

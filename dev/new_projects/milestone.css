@@ -1,0 +1,130 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#calendar {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .3);
+    padding: 2px;
+    text-align: center;
+    width: 50%;
+    height: 65%;
+    align: center;
+    position: absolute;
+    clear: both;
+    margin-bottom: -100px;
+    left: 400px;
+}
+
+#months {
+    margin-top: 20px;
+    text-align: center;
+    float: left;
+    width: 40%;
+    hieght: 30%;
+}
+
+#years {
+    margin-top: 20px;
+    text-align: center;
+    float: right;
+    width: 40%;
+    height: 10%;
+}
+
+td.day {
+    min-height: 80px;
+    font-size: 11px;
+    position: relative; 
+    padding: 2px;
+} 
+
+* html div.day {
+    height: 80px; 
+}
+
+tr.header {
+    font-weight: bold;
+    text-align: center;
+    width: 120px;
+    padding: 5px;
+}
+
+td.day {
+    border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+td.day:hover {
+    background: #A9A9C6;
+}
+
+div.day-num {
+    padding: 3px;
+    font-weight: bold;
+    float: right;
+    margin: -32px -8px 0 0;
+    width: 20px;
+    text-align: center;
+}
+
+caption.month-year {
+    font-weight: bold;
+    padding: 2px;
+}
+
+#milestones {
+    text-align: center;
+}
+
+#backgroundPopup {
+    z-index: 1;
+    position: fixed;
+    display: none;
+    height: 100%;
+    width: 100%;
+    background: #000000;
+    top: 0px;
+    left: 0px;
+}
+#toPopup {
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 10px solid #ccc;
+    border-radius: 3px 3px 3px 3px;
+    color: #333333;
+    display: none;
+    font-size: 14px;
+    left: 50%;
+    margin-left: -402px;
+    position: fixed;
+    top: 20%;
+    width: 800px;
+    z-index: 2;
+}
+div.close {
+    bottom: 30px;
+    cursor: pointer;
+    float: right;
+    height: 30px;
+    left: 50px;
+    position: relative;
+    width: 30px;
+}
+
+#popup_content {
+    margin: 4px 7px;
+}
+
+.bar {
+    background: blue;
+}
+
+#mark {
+    background: blue;
+}
+

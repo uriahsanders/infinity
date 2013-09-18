@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<rss version="2.0">
+    <channel>
+        <category>Projects</category>
+        <copyright>Infinity-forum.org 2013 all rights reserved</copyright>
+        <language>en-us</language>
+        <title>
+            Infinity RSS
+        </title>
+        <link>
+            http://dev.infinity-forum.org
+        </link>
+        <description>
+            Awesome site for making projects and learning.
+        </description>
+        <item>
+            <title>
+                First Post
+            </title>
+            <description>
+                BLAH BLAH BLAH
+            </description>
+        </item>
+        <item>
+            <title>
+                Second Post
+            </title>
+            <description>
+                BLAH BLAH BLAH
+            </description>
+        </item>
+        <item>
+            <title>
+                Third Post
+            </title>
+            <description>
+                BLAH BLAH BLAH
+            </description>
+        </item>
+        <item>
+            <title>
+                Fourth Post
+            </title>
+            <description>
+                BLAH BLAH BLAH
+            </description>
+        </item>
+    </channel>
+</rss>

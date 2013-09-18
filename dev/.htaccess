@@ -1,0 +1,100 @@
+
+#ExpiresActive On
+#Header Set Cache-Control "max-age=0, no-store"
+#ExpiresDefault "access plus 1 seconds"
+
+ErrorDocument 404 /error/404.htm
+
+RewriteEngine on
+
+RewriteCond %{REQUEST_URI} ^/member/index.php$
+RewriteCond %{QUERY_STRING} !marker  
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)
+RewriteRule ^/?member\/index\.php$ /user/%1? [R=301,L]
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)
+RewriteRule ^/?member\/$ /user/%1? [R=301,L]
+RewriteRule ^\/?user\/([-a-zA-Z0-9_]+)\/?$ /member/index.php?marker&usr=$1 [L]
+RewriteRule ^\/?user\/([-a-zA-Z0-9_]+)\/add\/?$ /member/index.php?marker&usr=$1&add [L]
+
+RewriteCond %{REQUEST_URI} ^/member/index.php$
+RewriteCond %{QUERY_STRING} !marker  
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)&p
+RewriteRule ^/?member\/index\.php$ /user/%1/p? [R=301,L]
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)&p
+RewriteRule ^/?member\/$ /user/%1/p? [R=301,L]
+RewriteRule ^\/?user\/([-a-zA-Z0-9_]+)\/p\/?$ /member/index.php?marker&usr=$1&p [L]
+
+RewriteCond %{REQUEST_URI} ^/member/index.php$
+RewriteCond %{QUERY_STRING} !marker  
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)&m
+RewriteRule ^/?member\/index\.php$ /user/%1/m? [R=301,L]
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)&m
+RewriteRule ^/?member\/$ /user/%1/m? [R=301,L]
+RewriteRule ^\/?user\/([-a-zA-Z0-9_]+)\/m\/?$ /member/index.php?marker&usr=$1&m [L]
+
+
+RewriteCond %{REQUEST_URI} ^/accsummary.php$
+RewriteCond %{QUERY_STRING} !marker  
+RewriteCond %{QUERY_STRING} usr=([-a-zA-Z0-9_]+)
+RewriteRule ^/?accsummary\.php$ /user/2/%1? [R=301,L]
+RewriteRule ^\/?user\/2\/([-a-zA-Z0-9_]+)\/?$ /accsummary.php?marker&usr=$1 [L]
+
+
+
+
+RewriteCond %{REQUEST_URI} ^/index.php$
+RewriteRule index.php / [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/forum.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?forum\.php$ /forum/ [R=301,L]
+RewriteRule ^/?forum/$ forum.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^/help.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?help\.php$ /help/ [R=301,L]
+RewriteRule ^/?help/$ help.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^/infinity.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?infinity\.php$ /infinity/ [R=301,L]
+RewriteRule ^/?infinity/$ infinity.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^/about.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?about\.php$ /about/ [R=301,L]
+RewriteRule ^/?about/$ about.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^/projects/projects.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^\/?projects/projects\.php$ /projects/ [R=301,L]
+RewriteRule ^\/?projects\/?$ /projects/projects.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^\/?projects/workspace/workspace/?$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^\/?projects/workspace/workspace/?$ /projects/workspace/ [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/projects/([-a-zA-Z0-9_+]+).php$
+RewriteCond %{REQUEST_URI} !/projects/projects.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^\/?projects/([-a-zA-Z0-9_+]+)\.php$ /projects/$1/ [R=301,L]
+RewriteRule ^\/?projects\/([-a-zA-Z0-9_+]+)\/?$ /projects/$1.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^/projects/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+).php$
+RewriteCond %{REQUEST_URI} !^$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^\/?projects/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+)\.php$ /projects/$1/$2/ [R=301,L]
+RewriteRule ^\/?projects\/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+)\/?$ /projects/$2.php?marker [L]
+
+RewriteCond %{REQUEST_URI} ^/projects/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+).php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^\/?projects/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+)/([-a-zA-Z0-9_+]+)\.php$ /projects/$1/$3/ [R=301,L]
+
+RewriteCond %{REQUEST_URI} ^/member/forum/$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?member/forum/?$ /member/index.php?marker&forum [L]
+
+
+
+
+

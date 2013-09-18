@@ -1,0 +1,11 @@
+ExpiresActive On
+Header Set Cache-Control "max-age=0, no-store"
+ExpiresDefault "access plus 1 seconds"
+#RewriteEngine on
+
+
+#RewriteCond %{QUERY_STRING} !marker  
+#RewriteCond %{QUERY_STRING} id=([-a-zA-Z0-9_+\s]+)  
+#RewriteRule ^/?$ /test/%1?/ [R=301,L]
+#RewriteRule ^/?([-a-zA-Z0-9_+\s]+)/?$ index.php?marker&id=$1 [L]
+

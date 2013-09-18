@@ -1,0 +1,359 @@
+html, body {
+                margin:0;
+                padding:0;
+                background: url('/images/broken_noise.png');
+                color:#fff;
+                font-family: 'Droid Sans', sans-serif;
+            }
+            a {
+                text-decoration:none;
+                color:#8c8993;
+                -webkit-transition: all linear 0.2s;
+                -moz-transition: all linear 0.2s;
+                -ms-transition: all linear 0.2s;
+                -o-transition: all linear 0.2s;
+                transition: all linear 0.2s;
+                cursor: pointer;
+            }
+            a:hover {
+                color: #fff;
+            }
+            #foot {
+                text-align:center;
+                font-size:80%;
+                padding:10px;
+                background: url('/images/dark_stripes.png');
+                border-top: 1px solid rgba(255,255,255,0.2);
+                padding-left: 240px;
+                position: relative;
+                bottom: 0px;
+                margin: 0px;
+            }
+            #top {
+                text-align:center;
+                font-size:80%;
+                padding:10px;
+                background: url('/images/dark_stripes.png');
+                border-top: 1px solid rgba(255,255,255,0.2);
+                padding-left: 240px;
+                border: 6px solid black;
+            }
+            #sidenav {
+                border: 6px solid black;
+                background: url('/images/dark_stripes.png');
+                width: 240px;
+                height: 100%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+                overflow: auto;
+            }
+            ul {
+                list-style-type: none;
+            }
+            #container {
+                position: relative;
+                left: 0px;
+                transition: left 0.3s ease-in-out;
+                overflow: auto;
+            }
+            #head{
+                text-align: left;
+                top: 20%;
+                padding-left: 20px;
+            }
+            #main {
+                margin-left: 240px;
+                background: url('/images/broken_noise.png');
+            }
+            h2 {
+                font-weight: 300;
+                font-size: 4em;
+                padding: 0 0 10px;
+                color: #333;
+                margin-top: 0;
+                margin-bottom: 0;
+                text-align: left;
+                box-shadow: 0 10px 0 rgba(0,0,0,0.02);
+                text-shadow: 0 0 2px #fff;
+            }
+            #description {
+                padding-left: 20px;
+                font-weight: bolder;
+                font-style: italic;
+            }
+            #content {
+                padding-left: 40px;
+            }
+            #bigbutton {
+                text-align: center;
+                width: 80px;
+                height: 27px;
+                color: rgb(0, 0, 0);
+                font-weight: bolder;
+                background: url(/images/slider-button.png);
+                background-size: 200px 80px;
+                background-position: -45px -15px;
+                position: relative;
+                -webkit-border-radius: 30px;
+                -moz-border-radius: 30px;
+                border-radius: 30px;
+                padding-top: 7px;
+                border: 4px solid #000;
+                pointer: cursor;
+                margin-left: 10px;
+            }
+            #bigbutton:active:before, #bigbutton:before {
+                background: rgba(0,0,0,.4);
+                content: " ";
+                width: 80px;
+                height: 27px;
+                -webkit-border-radius: 15px;
+                -moz-border-radius: 15px;
+                border-radius: 15px;
+                padding-top: 7px;
+                -webkit-transition: all 0.3s linear;
+                -moz-transition: all 0.3s linear;
+                -ms-transition: all 0.3s linear;
+                -o-transition: all 0.3s linear;
+                transition: all 0.3s linear;
+                pointer: cursor;
+            }
+            h3 {
+                font-size: 1.8em;
+                padding-top: 10px;
+                padding-left: 10px;
+                font-weight: 300;
+                color: #fff;
+                box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+            }
+            #sidenav ul {
+                list-style:none;
+                padding:0;
+                font-size:125%;
+                margin:0;
+                padding-bottom:2px;
+            }
+            .active {
+                background: rgba(255,255,255,.2);
+                color: lightblue;
+                cursor: pointer;
+            }
+            .active, #sidenav li:hover {
+                background: rgba(255,255,255,.2);
+                color: lightblue;
+                cursor: pointer;
+            }
+            #sidenav li {
+                margin: 0;
+                padding: 11px 0;
+                border-bottom: 3px solid black;
+                -moz-box-shadow: 0px 1px 1px rgba(255,255,255,1);
+                -webkit-box-shadow: 0px 1px 1px rgba(255,255,255,1);
+                box-shadow: 0px 1px 1px rgba(255,255,255,0.2);
+                -webkit-transition: all linear 0.2s;
+                -moz-transition: all linear 0.2s;
+                -ms-transition: all linear 0.2s;
+                -o-transition: all linear 0.2s;
+                transition: all linear 0.2s;
+                padding-left: 25px;
+            }
+            ::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
+            ::-webkit-scrollbar-button       { 
+              background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
+              border: 1px solid #0d0d0d;
+              height: 10px;
+              width: 10px;
+              border-top: 1px solid #666666;
+              border-left: 1px solid #666666; }
+            ::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/images/down.png) no-repeat; background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/images/down2.png) no-repeat; background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/images/up.png) no-repeat; background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/images/up2.png) no-repeat; background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:horizontal:increment { background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/images/right2.png) no-repeat; background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:horizontal:decrement { background-size:6px; background-position:center} 
+            ::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/images/left2.png) no-repeat; background-size:6px; background-position:center} 
+            
+            ::-webkit-scrollbar-track        { }
+            ::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
+            ::-webkit-resizer                {  }
+            ::-webkit-scrollbar-thumb { 
+              background: rgba(27,27,27,1);
+              opacity: 0.5;
+              border: 1px solid #0d0d0d;
+              border-top: 1px solid #666666;
+              border-left: 1px solid #666666;}
+            ::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
+            ::-webkit-scrollbar-corner       {  }
+            #search {
+                cursor: pointer;
+            }
+            input:not([type='checkbox']), textarea{        
+                -webkit-border-radius: 1px;
+                -moz-border-radius: 1px;
+                border-radius: 3px;
+                border: 1px solid rgba(0,0,0,.5);
+                -moz-box-shadow:
+                    1px 1px 1px rgba(255,255,255,.3);
+                -webkit-box-shadow:
+                    1px 1px 1px rgba(255,255,255,.3);
+                box-shadow:
+                    1px 1px 1px rgba(255,255,255,.6);
+                padding: 2px 5px;
+                width: 200px;
+                height: 18px;
+                font-size: 90%;
+                -webkit-transition: all linear 0.3s;
+                -moz-transition: all linear 0.3s;
+                -ms-transition: all linear 0.3s;
+                -o-transition: all linear 0.3s;
+                transition: all linear 0.3s;
+            }
+            #btn {
+                border: 1px solid black;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            textarea {
+                resize:none;
+                height: 100px;
+                width: 250px;
+            }
+            input[type='checkbox'] {
+                margin: 0;
+                margin-top:3px;
+            }
+            input:focus, textarea:focus {
+                outline: none;
+                -webkit-box-shadow: 0px 0px 5px #000;  
+                -moz-box-shadow: 0px 0px 5px #000;  
+                box-shadow: 0px 0px 5px #000; 
+            }
+            .projectlink {
+                border-bottom: 3px solid black;
+            }
+            .member_block {
+                border: 10px solid black;
+                padding: 5px;
+            }
+            .cms {
+                display: none;
+            }
+            #milestones table {
+    border: 1px solid #000;
+    -webkit-border-radius: 5px;
+    background: rgba(0, 0, 0, .3);
+    padding: 5px;
+    text-align: center;
+    width: 700;
+    height: 425;
+}
+
+#milestones td.day {
+    min-height: 80px;
+    font-size: 11px;
+    position: relative; 
+    padding: 2px;
+} 
+
+* html div.day {
+    height: 80px; 
+}
+
+#milestones tr.header {
+    font-weight: bold;
+    text-align: center;
+    width: 120px;
+    padding: 5px;
+}
+
+#milestones td.day {
+    -webkit-border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+#milestones td.day:hover {
+    background: #A9A9C6;
+}
+
+#milestones div.day-num {
+    padding: 3px;
+    font-weight: bold;
+    float: right;
+    margin: -32px -8px 0 0;
+    width: 20px;
+    text-align: center;
+}
+
+#milestones caption.month-year {
+    font-weight: bold;
+    padding: 2px;
+}
+
+#milestones {
+    text-align: center;
+}
+
+#backgroundPopup {
+    z-index: 1;
+    position: fixed;
+    display: none;
+    height: 100%;
+    width: 100%;
+    background: #000000;
+    top: 0px;
+    left: 0px;
+}
+#toPopup {
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 10px solid #ccc;
+    border-radius: 3px 3px 3px 3px;
+    color: #333333;
+    display: none;
+    font-size: 14px;
+    left: 50%;
+    margin-left: -402px;
+    position: fixed;
+    height: 50%;
+    top: 25%;
+    width: 800px;
+    z-index: 2;
+}
+div.close {
+    bottom: 30px;
+    cursor: pointer;
+    float: right;
+    height: 30px;
+    left: 50px;
+    position: relative;
+    width: 30px;
+}
+
+#popup_content {
+    margin: 4px 7px;
+}
+#tableform table, td, th { 
+    border: 1px solid #CCC; 
+    border-collapse: collapse; 
+    color: black;
+    }
+
+#tableform td, th { 
+    background-color: #FFF; 
+    width: 50px; 
+    height: 20px; 
+    text-align: center; 
+    vertical-align: middle;
+    font: 10px Verdana, sans-serif; 
+    }
+#tableform th {
+    background-color: #DDD;
+    font: bold 11px Verdana, sans-serif;
+    border-color: #BBB;
+    }

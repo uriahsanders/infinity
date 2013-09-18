@@ -1,0 +1,540 @@
+Noob Proof PHP Guide by relax Part 1/3
+
+<?php 
+    // always start with <?php where you will have php code 
+    // marks that this line will be a comment
+    /* this marks that the next lines of code will be commented out
+    Everything here will be commented out
+    this marks that the comments will end */
+    // ?> will tell that the php code will end
+ ?> 
+ 
+ outside the php code you can 
+ always have html/JS/CSS, not really always but we will 
+ come to that later (spoiler: headers) 
+
+<?php
+     /*
+     you can ofc have how many php code tags as you want in a file,
+     all php files must be saved as *.php to be picked up by php engine (rule for now atleast)
+     
+     lets start off coding something easy
+     */
+ 
+     // echo simply prints the text inside the quotes, 
+     // all commands must end with ; 
+
+     echo "Hello World!"; 
+     echo 'Hello World!';
+     echo("Hello World!");
+     echo ('Hello World'); 
+     // are some examples of how you can print out text personally I use 1 or 2 :P
+     // you can also add code from other languages in your echo like html or js
+ 
+     echo "<b>bold text</b><br />\n"; 
+     // the \n is the code for a new line this won't show in the 
+     // output page but if you look at the source you will see it 
+     // will you need double quote " to run commands as \n
+     /*
+        From http://php.net/manual/en/language.types.string.php
+        Escaped characters
+        Sequence    Meaning
+        \n    linefeed (LF or 0x0A (10) in ASCII)
+        \r    carriage return (CR or 0x0D (13) in ASCII)
+        \t    horizontal tab (HT or 0x09 (9) in ASCII)
+        \v    vertical tab (VT or 0x0B (11) in ASCII) (since PHP 5.2.5)
+        \e    escape (ESC or 0x1B (27) in ASCII) (since PHP 5.4.0)
+        \f    form feed (FF or 0x0C (12) in ASCII) (since PHP 5.2.5)
+        \\    backslash
+        \$    dollar sign
+        \"    double-quote
+        \[0-7]{1,3}     the sequence of characters matching the regular expression is a character in octal notation
+        \x[0-9A-Fa-f]{1,2}     the sequence of characters matching the regular expression is a character in hexadecimal notation 
+         
+        I won't go in on this so much but you will see me use some of them mostly
+        \n, \", \', \\ and \$
+     */
+
+      /* 
+          Lets keep going to next useful thing you will use.... Variables
+          a variable in php starts with $ and are usually 
+          boolean (true or false), 
+          int (a number), 
+          float or double (a number with decimals, e.g. 1.123), 
+          a string ("lol") 
+          a (object or array we'll come back to that later)
+      */
+      /* 
+          Now lets start testing this shit out >.>
+      */
+      $a = 1;
+      $b = 4;
+      $c = $a + $b;
+      echo $c; // OMG IT WORKS !!! It's the number you where thinking of right?
+      echo $b - $1;
+      echo $b . $a; // this is actually little different it just adds the first value to the next so this will output 41
+         /*
+         just going to tell about the . quick
+         . putts stuff together, think it's easiest to show */
+         $t = "Hi";
+         $h = 5; 
+         echo $h . " " . $t . " to you"; // prints "5 Hi to you"
+         // this can also be done with 
+         echo "$h $t to you"; // prints the same
+         
+      
+      $a += $b; // same as $a = $a + $b
+      $a -= $b; // same as $a = $a - $b
+      // These can be +=, -=, *=, /=, %= and .=
+      // Now let's step it up and mix a bit
+      echo $a . " + " . $b . " = " . ($a+b); // will output "1 + 4 = 5"
+      // Theres a lot of math functions you can find them here 
+      // if you need further reading about it http://www.php.net/manual/en/ref.math.php
+      // A good thing to know is how to convert the different values from float to int, string to int etc.
+  
+      $a2 = "2"; //this is a string
+      $a2 = intval($a); // now it's a int
+      $a2 = strval($a2); //back to string
+      $a2 .= ".123"; // this is the same as $a2 = $a2 . ".123"; which will set $a as a sting with the value "2.123"
+      $a2 = inval($a2) + 3; // gives 5
+      $b2 = floatval($a2); // makes it a float 2.123
+      $b2 = intval($b2); // converts float 2.123 to int 2
+      
+      //and ofc you can use echo on it
+      echo $a2 . " " . $b2; // prints "5 2"
+      // more info http://www.php.net/manual/en/function.intval.php
+      
+      /*
+       lets check some basic stuff you can do with strings
+      */
+      $string = "This is a text";
+      echo strlen($string); // the length of the string is 14
+      echo strpos($string, "text"); // this will print the position of "text"
+      // and it starts to count from 0 so the answer is 10
+      // let's play with substr ^_^
+      
+      echo substr($string, 0, 10); // will give you "This is a"
+      echo substr($string, -4); // "text" negative number count backwards in the string
+      echo substr($string, strpos($string, "This"), strpos($string, "a")); // "This is"
+      // pretty easy substr("the text", what position to start on, what position to end at)
+      // if the position is negative it will start backwards
+  
+      // upper and lowercase
+      $rr = "RaWr";
+      echo strpos($rr, "rawr"); // prints nothing
+      echo strpos($rr, "RaWr"); // prints 0
+      echo strpos(strtolower($rr), "rawr"); // prints 0
+      echo strpos(strtoupper($rr), "RAWR"); //prints 0
+      
+      echo $rr; // prints RaWr
+      echo strtolower($rr); // prints rawr
+      echo strtoupper($rr); // prints RAWR
+  
+      /*
+      now lets start with the fun part, IF STATMENTS
+      what an if statement does is its checks if the conditions of you 
+      statements are met 
+      */
+      if () { // this is how if statements look in php, its really easy, this one won't do anything
+      } 
+      // now I'm going to do a real statement
+      $a = 10;
+      if ($a==5) { // as you see we check if $a equals 5
+          echo "true \$a equals 5"; //this code will not be run because $a is not 5, 
+          // note the \$a in the string if you don't have this the value of $a will be written out
+          // so it would have printed "true 10 equals 5", not really because the conditions
+          // are not met, mor below
+          // but would we have used echo '$a'; the code would not be written out se below
+      } else if ($a==10){ // is $a 10?
+          echo "true \$a has the int value of 10"; //yes it has so this will be printed out :)
+      } else {
+          echo "no conditions were met"; // if we could have set $a to anything except 5 or 10 this code would run
+      }
+  
+      echo '$a'; // writes out $a
+      echo "$a"; // writes out 10
+      echo '$a = ' . $a; // writes out $a = 10
+      echo "\$a = " . $a; // same as above
+      echo "\$a = $a"; // same as above
+      /*
+      $a == 10 // checks if $a is equal to 10, true
+      $a <= 20 // checks if $a is less or equal to 20, true
+      $a >= 20 // checks if $a is more or equal to 20, false
+      $a < 10 // checks if $a is less the 10, false $a is 10 not less
+      $a > 10 // checks if $a is more than 10, false
+      $a === 10 // checks if $a is identical to int 10, true
+      $a === "10" // checks if $a is identical to string 10, false $a is int 10 not string
+      $a != 10 // checks if $a is NOT 10, false because $a is 10
+      $a <> 10 // same as above, code will not run
+      $a !== 10 // checks if $a is NOT identical to 10, code will not run
+      
+      now lets play with them and also && and, || or
+      */
+      $a = 1;
+      $b = 2;
+      
+      if ($a !== 1 || $b !== 2)
+          echo "\$a id not identical to 1 or \$b is not identical to 2"; // this will not run
+    
+      // note that I did not use { or } to open and close the if block,
+      // this is not required if you only have one command after the if
+      // but if you have more then 1 command you need the { and }
+      
+      if ($a != $b)
+          echo "\$a is not same as \$b"; //this will run
+      else 
+          echo "\$a is equal to \$b"; // this will not run
+        
+      //litle more fun
+      $a = "10";
+      if ($a == 10)
+        echo "true"; // this will run cause == checks both int and string        
+      if ($a === 10)
+        echo "false"; // check if $a is int 10 which its not its string, code will not run
+        
+      if ($a == 10 || $a == 20)
+        echo "true"; // checks if $a is 10 or 20, code will run
+        
+      if ($a == 10 && $b == 2)
+        echo "true"; // checks if $a is equal to 10 and if $b is equal to 2, code will run
+    
+    /*
+    if you didn't understand it by not when you use &&(and) both conditions must be met 
+    for the code to run
+    when you use ||(or) at least one of the conditions must be met
+    */
+    $r = "Rawr means I Love You in dinosaur";
+    if (strpos($r, "Rawr") !== null) // strpos will get the index 0 because Rawr starts at position 0 
+                                     // then we check of 0 is NOT identical to null, 
+                                     // null means nothing (doesn't exist) and 0 is something
+         echo "\$r contains the word Rawr"; //code will run
+    
+    $r = "Rawr means I Love You in dinosaur";
+    if (strpos($r, "Love") === strlen($r) - strlen("Love")) // is "Love" the last word in the string? We will look closer on this soon
+        echo "Last"; // code will not run
+    else if (strpos($r,"Love") === 0)  // is "Love" the first word in the string?
+        echo "First"; // code will not run
+    else
+        echo "It's not the first or last word in the string"; // this will run 
+        
+     /*
+     lets check the condition
+     strpos($r, "Love") === strlen($r) - strlen("Love")
+     
+     strpos($r, "Love") will be 13
+     strlen($r) will check the length of the string $r which will be 33
+     strlen("Love"); will check the length of the word Love which will be 4
+     so it checks if 13 === 33 - 4 which is false
+    */
+     $w = "no no no you're doing it all WRONG!!!";
+     $s = "Wrong!!!";
+     if (strpos($w, $s) === strlen($w) - strlen($s))
+        echo "the last word is not \"Wrong!!!\""; // this code will not run, note the \" 
+                                               // code explanation below
+     else if (strpos(strtolower($w), strtolower($s)) == strlen($w) - strlen($s))
+        echo "the last word is \"wrong!!!\" when checked with lowercase"; // code will run
+     
+     /*
+     as said before then using double quote sometimes you need \ 
+     for special characters and variables now I will try to explain why you need \"
+     let's say we have a variable string that looks like this
+     */
+     $test = "this is a test"; // lets say you want it to print out: this is a "test"
+     // the first thing you think of is to write the code
+     $test = "this is a "test""; // but what you do here is that you actually close the string before test 
+     // you could do like this
+     $test = 'this is a "test"'; // this would actually print it right :)
+     // but what if you have this
+     $html_code = "<a href='javascript: function () { alert();}'>alert me</a>"; 
+     // you want to write a string in the javascript alert popup if you write ' you will end the href attribute
+     // if you write " you will end the php string
+     // so what you do is you use
+     $html_code = "<a href='javascript: function () { alert(\"you are alerted\");}'>alert me</a>";
+     // or possibly
+     $html_code = '<a href=\'javascript: function () { alert("you are alerted");}\'>alert me</a>'; 
+ 
+ 
+     /*
+     think we are done with if now, I got a little sidetracked :P
+     let's go to loops :)
+     we will start a for loop
+     loops are used to run the same code over and over again
+     this can be good for a lot of things lets start looking at a standard for loop
+     */
+     for ($i = 0;$i < 9; $i++) {
+        echo $i . "<br />";
+     }
+     /*
+     lets start with first line
+     for ($i = 0;$i <= 9; $i++) {
+     for () { // indicates that its a foor loop we will run
+     $i = 0; gives the variable $i the int 0 before the loop is started
+     $i < 10; runs the loop as long as this is true in this case as long as $i is less than 10
+     $i++ after every loop the value of $i will increase by 1
+     so the loop will run 10 times because it starts at 0
+ 
+     second line is 
+     echo $i . "<br />"; // will print out the current value of $i and then an html code <br /> = new line
+     The third line will ofc close it }
+     
+     its really not harder then that :P just have to learn what it do and the order of the first line ^.^
+     
+     yeah the $i++ is commonly used as well the other would be $i-- with decreases the value :P
+     do not use $i = $++;
+     $i++;
+     $i += 1;
+     $i = $i + 1;
+     they are all the same
+     $i = $i++; will give you an error
+     lets try one more for loop
+     */
+     for ($i = 10; $i >= 1; $i--) {
+        echo "<font color=\"rgb(".rand(0,255).",".rand(0,255).",".rand(0,255).")\">$i</a><br>\n";
+     }
+     /*
+     will count down from 10 to 1
+     will write out the current value of $i with a random font color 
+     lets check a small part of the source of the generated page
+        ...
+        <font color="rgb(14,203,252)">5</a><br>
+        <font color="rgb(133,27,234)">4</a><br>
+        <font color="rgb(209,61,132)">3</a><br>
+        ...
+    
+     rand(0,255); is a function to randomize a number in php this will randomize an int between 0 and 255
+     you can also use mt_rand() which they say gives more "random" number but WTF do I know >.>
+     */
+ 
+     /* 
+     next loop we will look at is while loop this can you run forever >.>
+     */
+ 
+     while (true) {
+        //will run forever, don't do this >.<
+     }
+     $i = 1;
+     while ($i <= 100) {
+        echo "$i <br>\n";
+        $i++; // don't forget this or the code will run forever because $i will always be 1
+        // will run the code 100 times
+     }
+     /*
+     next loop will be an do loop
+     I actually never use this one but here it comes
+     */
+     do
+    {
+      $i++;
+      echo "$i <br>\n";
+    }
+    while ($i <= 100);
+    /*
+    does like the one above nothing special that I know of
+    there's one more which isn't really a loop
+    and that is foreach() but we will take that after we have done arrays
+    
+    so arrays :)
+    You got to love them :P
+    the easiest way of explaining them is that it's a variable with multiple values :)
+    */
+
+    $lol = array(); // this is how you start an array
+    
+    $lol = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
+    echo $lol[0]; // will print out Mon
+    echo $lol[6]; // will print out Sun
+    
+    // an harder array
+    $lol = array("Mon" => "Pancakes", "Thu" => "Pizza", "Wed" => "Pasta", "Thu" => "Chicken", "Fri" => "Beer", "Sat" => "Vodka", "Sun" => "Aspirin and pizza");
+    echo $lol["Thu"]; // will print Pizza
+
+    // now I can show the foreach loop
+    $lol = array("Mon" => "Pancakes", 
+                 "Thu" => "Pizza", 
+                 "Wed" => "Pasta", 
+                 "Thu" => "Chicken", 
+                 "Fri" => "Beer", 
+                 "Sat" => "Vodka", 
+                 "Sun" => "Aspirin and pizza"); // multiple lines makes it easier to read
+                 
+    foreach($lol as $key => $value) {
+        echo "on $key I will have $value<br />\n"; 
+    }
+    /* this will print
+    on Mon I will have Pancakes
+    on Thu I will have Chicken
+    on Wed I will have Pasta
+    on Fri I will have Beer
+    on Sat I will have Vodka
+    on Sun I will have Aspirin and pizza
+    
+    lets check the code
+    foreach($lol as $key => $value) { 
+    foreach loop DUH!!!
+    $lol //the array
+    as // don't really know what to explain
+    $key //will give $key the name of the array key "Mon", "Thu", "Wed" etc.
+    => // just use it if you want both key and value
+    $value // value ofc
+
+    if you do not want to use key you can just use without
+    */
+    echo "This week I will have<br />\n";
+    
+    foreach($lol as $value) {
+        echo $value .", "; 
+    }
+    /*
+    This week I will have
+    Pancakes, Chicken, Pasta, Beer, Vodka, Aspirin and pizza,
+    as you see you have the , at the end which should be replaced to a dot.
+    this can be done in many ways
+    I think I would do this
+    */
+    echo "This week I will have<br />\n";
+    $str = "";
+    foreach($lol as $value) {
+        $str .= $value .", "; 
+    }
+    echo substr($str, -2) . ".";
+    // or
+    echo "This week I will have<br />\n";
+    foreach($lol as $value) {
+        echo $value;
+        if ($value != end($lol)) echo ", "; // checks if the current value is NOT 
+                                    //the last value of the array, if its true = not the last it will print , 
+        else echo "."; // else = it is the last it will print .
+    }
+    /*
+    before I said that you didn't have to use {} if it was only one command after the if
+    what I didn't say is that you don't need to put it on a new line
+    sometimes it's easier/takes less space to write it on one line
+    */
+    $a = 1;
+    if ($a === 1) echo "true";
+    if ($a === 1) 
+        echo "true";
+    if ($a === 1) { echo "true"; }
+    if ($a === 1) { 
+        echo "true";
+    }
+    // they all do the same
+    
+    /* often you want to add to the array */
+    $name = array("my", "name"); //standard array
+    array_push($name, "relax"); // add relax to the end of the array
+    // $name will now be Array ( [0] => my [1] => name [2] => relax ) 
+    array_splice($name,2,0,"is"); // add "is" to the 2 index and push everything else forward
+    // $name will now be Array ( [0] => my [1] => name [2] => is [3] => relax ) 
+    // lets sort the array by alfabethic order
+    asort($name);
+    // $name will now be Array ( [2] => is [0] => my [1] => name [3] => relax )
+    array_push($name, "?"); // well you can figure it out, I'm rooting for you ;)  
+    
+    /*
+    more about sort arrays 
+    http://php.net/manual/en/array.sorting.php
+    */
+    /*
+    there's also 2d or 3d arrays, well really as many as you want but 
+    you rarely use more then 3 sometimes only 2 max
+    often only one
+    this is how they look
+    warning this can be a bit messy sometimes and might be hard to understand for some ppl
+    */
+
+    $stufftodo =  array("Jan" => array(4 => "Dentist", 
+                                       15 => "job interview"),
+                        "Feb" => array(1 => "Semester",
+                                       14 => "Back to work",
+                                       32 => "If this day comes I'm going to kill myself"),
+                        "Mar" => array(5 => "The day didn't come I'm still alive",
+                                       6 => "Or did it come and I chickened out? :S"));
+    // you don't have to define your keys but in this example I did cause i wanted to 
+    // set the note to a date
+    // if you do not set the key it starts with 0 as the first
+    // now lets write this shit out
+
+    foreach ($stufftodo as $month => $cal) {
+        echo "Stuff to do in $month<br />\n"; // $month is the key of the first level in $stufftodo
+        foreach ($cal as $day => $note) { // now we need to go up one level
+            echo "The ".$day."th I have $note<br />\n"; // ".$day."th because else it would be "The $dayth I...
+                                                    // there is no variable named $dayth
+            if ($note == end($cal)) echo "<br />"; // if it's the last item on the month add an extra <br />
+        }
+    }
+
+    /* prints 
+    
+    Stuff to do In Jan
+    The 4th I have Dentist
+    The 15th I have job interview
+    
+    Stuff to do In Feb
+    The 1th I have Semester
+    The 14th I have Back to work
+    The 32th I have If this day comes I'm going to kill myself
+    
+    Stuff to do In Mar
+    The 5th I have The day diden't come I'm still alive
+    The 6th I have Or did it come and I chickened out? :S
+    
+    one good thing to know is the print_r() command which will print the array raw
+    */                                 
+    print_r($lol);
+    echo "<br/>";
+    print_r($stufftodo);
+    /*
+    will print 
+    
+    Array ( [Mon] => Pankakes [Thu] => Chicken [Wed] => Pasta [Fri] => Beer [Sat] => Vodka [Sun] => Asperin and pizza ) 
+    Array ( [Jan] => Array ( [4] => Dentist [15] => job interview ) [Feb] => Array ( [1] => Semester [14] => Back to work [32] => If this day comes I'm going to kill myself ) [Mar] => Array ( [5] => The day didn't come I'm still alive [6] => Or did it come and I chickened out? :S ) )
+    
+    here you see that the key/index is between [] and value is after the => 
+
+
+    think we are done with arrays and loops now tbh
+    let's go to switch
+    
+    sometimes you dont want if statements on everything because its annoying and unnecessary
+    like
+    $nr = rand(1, 10);
+    if ($nr === 0) {    
+    } else if ($nr === 1) {    
+    } else if // omg cba to continue >.>
+    how does this look instead?
+    */
+    $nr = rand(1,10); //randomizes a number from 1 to 10
+    switch ($nr) {
+        case 1:
+            // php code here that will run if $nr is 1
+            break; // tells that after this php code is ran it will quit the switch,
+            //else it will continue to the rest of the code
+        case 2:
+            // php code here that will run if $nr is 2
+            break;
+        case 3:
+            // php code here that will run if $nr is 3
+            break;
+        case 4:
+            // php code here that will run if $nr is 4
+            break;
+        case 5:
+            // php code here that will run if $nr is 5
+            break;
+        default:
+            // the value of $nr is more than 5, this will run if you haven't made a case for the value 
+    }
+
+// you can also use strings in cases
+// case "lol": //will run if $nr = "lol";
+
+
+
+/*
+This is all for the first part of my Noob proof PHP tutorial
+next part will have own functions, files, GET and POST, maybe own classes, maybe some simple regex, 
+introduction to mysql and more i have no idea of atm...
+
+Please come again >.>
+*/
