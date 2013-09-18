@@ -1,0 +1,264 @@
+html, body{
+    margin:0;
+    padding:0;
+    background: #474747;
+    background: url('/images/dark_stripes.png');
+    color: #fff;
+    font-family: 'Droid Sans', sans-serif;
+    width:100%;
+    min-width:1000px;
+    height: 100%;
+}
+a{
+    cursor: pointer;
+    color: grey;
+    text-decoration: none;
+}
+a:hover{
+    cursor: pointer;
+    color: #fff;
+}
+#navigation{
+    float: left;
+    width: 212px;
+    max-width: 36%;
+    margin-top: 20px;
+    background: url('/images/broken_noise.png');
+    border-radius: 3px;
+}
+#top{
+    position: fixed;
+    border: 1px solid #24272b;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    padding: 2px;
+    background: url('/images/broken_noise.png');
+    opacity: 1;
+    z-index: 2;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#content{
+    width: 80%;
+    margin-left: 225px;
+    padding: 5px;
+}
+#cms{
+    padding: 5px;
+}
+#main{
+    padding: 5px;
+}
+#navigation li{
+    padding: 15px;
+    margin-bottom: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+#navigation li:hover{
+    background: rgba(255,255,255,.2);
+}
+.active{
+    background: rgba(255,255,255,.2);
+}
+#icons{
+    float: right;
+    margin-right: 30px;
+}
+#logo {
+    width: 400px;
+    height: 99px;
+    position: absolute;
+    display: inline-box;
+    left: 0;
+    border: 0;
+    background: url('/images/logo99.png') no-repeat;
+    z-index: 1;
+    cursor: pointer;
+    opacity: .8;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    border-radius: 5px;
+}
+#logo:hover{
+    opacity: 1;
+}
+.cms_opt, .badge{
+    display: inline-block;
+    padding: 30px;
+    border: 1px solid #24272b;
+    border-radius: 3px;
+    background: url('/images/broken_noise.png');
+    text-align: center;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+.cms_opt:hover{
+    cursor: pointer;
+    color: white;
+    border: 1px solid grey;
+}
+#top_opt li{
+    float: left;
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 2px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+#top_opt li:hover{
+    color: grey;
+}
+#head{
+    font-weight: bold;
+    text-align: left;
+    font-size: 120%;
+    text-transform: capitalize;
+    color: rgba(255,255,255,1);
+    padding: 10px 15px;
+}
+.head{
+    padding: 7.5px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    border: 1px solid #24272b;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+.input{
+    margin-left: 10%;
+}
+.row:not(:last-child){
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+}
+input[type=text], textarea, input[type=password] {
+    width: 90%;
+    padding: 7px;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #1e2226;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-box-shadow: 0 1px 0 #363B3E;
+    -webkit-box-shadow: 0 1px 0 #363B3E;
+    box-shadow: 0 1px 0 #363B3E;
+}
+.submit_button{
+    border: 1px solid black;
+    padding: 5px;
+}
+.top_opt{
+    margin: 10px;
+}
+.widget{
+    background: url('/images/broken_noise.png');
+}
+.help li{
+    padding: 5px;
+}
+.body{
+    border-radius: 3px;
+    color: #fafafa;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid #24272b;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+    padding: 10px;
+}
+::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
+::-webkit-scrollbar-button       { 
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
+  border: 1px solid #0d0d0d;
+  height: 10px;
+  width: 10px;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666; }
+::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/images/down.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/images/down2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/images/up.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/images/up2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment { background:url(/images/right.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/images/right2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement { background:url(/images/left.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/images/left2.png) no-repeat; background-size:6px; background-position:center} 
+
+::-webkit-scrollbar-track        { }
+::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
+::-webkit-resizer                {  }
+::-webkit-scrollbar-thumb { 
+  background: rgba(27,27,27,1);
+  opacity: 0.5;
+  border: 1px solid #0d0d0d;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666;}
+::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
+::-webkit-scrollbar-corner       {  }
+#stats{
+    margin-top: -100px;
+    margin-left: 430px;
+    position: relative;
+    padding: 10px;
+}
+select {
+display: inline-block;
+line-height: 28px;
+border: 1px solid #aaa;
+padding: 2px;
+border-radius: 3px;
+color: #555;
+background-color: rgb(221, 221, 221);
+-webkit-appearance: menulist;
+box-sizing: border-box;
+-webkit-box-align: center;
+border: 1px solid;
+border-image: initial;
+white-space: pre;
+-webkit-rtl-ordering: logical;
+color: black;
+background-color: white;
+cursor: default;
+margin: 0em;
+font: -webkit-small-control;
+color: initial;
+letter-spacing: normal;
+word-spacing: normal;
+text-transform: none;
+text-indent: 0px;
+text-shadow: none;
+display: inline-block;
+text-align: start;
+-webkit-writing-mode: horizontal-tb;
+}
+select:focus {
+outline-offset: -2px;
+}

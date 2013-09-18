@@ -1,0 +1,197 @@
+#error messages
+ErrorDocument 404 /error/404.php
+
+#disable cache for now
+<filesMatch ".(html|htm|js|css|php)$">
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+</FilesMatch>
+
+#rewriting rules
+# For security reasons, Option followsymlinks cannot be overridden.
+Options -Indexes +SymLinksIfOwnerMatch
+
+RewriteEngine on
+
+
+#register done
+RewriteRule ^\/?member\/register\/done\/?$ /index.php?done&marker [L]
+
+
+
+
+RewriteRule ^\/?restricted/?$ /index.php?marker&restricted [L]
+
+#send feedback
+RewriteCond %{REQUEST_URI} ^/extra/feedback.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?extra/feedback\.php$ /feedback/send [R=301,L]
+RewriteRule ^/?feedback/send/?$ /extra/feedback.php?marker [L]
+
+#WALL
+RewriteCond %{REQUEST_URI} ^/extra/wall.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?extra/wall\.php$ /user/wall [R=301,L]
+RewriteRule ^/?user/wall/post?$ /extra/wall.php?marker&action=post [L]
+
+#images
+RewriteRule ^\/?images\/user\/([0-9a-z]*)\/?$ /images/image.php?id=$1 [L]
+
+
+#friend actions
+RewriteRule ^\/?user\/(add|remove|block|unblock|accept|decline)\/([0-9]+)\/([0-9a-z]+)\/?$ /libs/friend.php?marker&action=$1&ID=$2&token=$3 [L]
+
+
+#profile for others
+RewriteCond %{REQUEST_URI} ^/profile.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} user=([A-Za-z0-9_-]+)
+RewriteRule ^/?profile\.php$ /user/%1? [R=301,L]
+RewriteRule ^\/?user\/([A-Za-z0-9_-]+)\/?$ /profile.php?marker&user=$1 [L]
+
+#profile page for current user
+RewriteCond %{REQUEST_URI} ^/profile.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?profile\.php$ /user/ [R=301,L]
+RewriteRule ^\/?user\/?$ /profile.php?marker [L]
+
+
+
+
+#feedback error/thanks
+RewriteCond %{REQUEST_URI} ^/index.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} feedback=([A-Za-z]+)
+RewriteRule ^/?index\.php$ /feedback/%1? [R=301,L]
+RewriteRule ^\/?feedback\/([A-Za-z]+)\/?$ /index.php?marker&feedback=$1 [L]
+
+
+#upload
+RewriteCond %{REQUEST_URI} ^/extra/imgUpload/index.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} ID=([0-9]+)
+RewriteRule ^/?extra\/imgUpload\/index\.php$ /imgUpload/%1? [R=301,L]
+RewriteRule ^\/?imgUpload\/([0-9]+)\/?$ /extra/imgUpload/index.php?marker&ID=$1 [L]
+
+
+#register new member
+RewriteCond %{REQUEST_URI} ^/libs/register.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^\/?libs/register\.php$ /member/register [R=301,L]
+RewriteRule ^\/?member\/register\/?$ /libs/register.php?marker [L]
+#register error
+RewriteRule ^\/?member\/register\/error\/?$ /index.php?marker [L]
+
+#recover email
+RewriteRule ^\/?recover\/done\/?$ /index.php?recover=done&marker [L]
+RewriteRule ^\/?recover\/change\/?$ /libs/recover.php?change&marker [L]
+RewriteRule ^\/?recover\/?$ /libs/recover.php [L]
+RewriteRule ^\/?recover\/error\/?$ /index.php?recover=error&marker [L]
+RewriteRule ^\/?recover\/email\/?$ /index.php?recover=email&marker [L]
+RewriteRule ^\/?recover\/code\/([a-z0-9]+)\/?$ /index.php?marker&recover=code&code=$1 [L]
+
+
+#login/out
+RewriteRule ^\/?login\/?$ /libs/login.php?marker [L]
+RewriteRule ^\/?lounge\/logout\/?$ /lounge/logout.php?marker [L]
+RewriteRule ^\/?login\/error\/?$ /index.php?marker&login=3 [L]
+RewriteRule ^\/?login\/info\/?$ /index.php?marker&login=1 [L]
+
+
+#activate shit
+RewriteRule ^\/?member\/activate\/error\/?$ /index.php?marker&activate=0 [L]
+RewriteRule ^\/?member\/activate\/done\/?$ /index.php?marker&activate=1 [L]
+RewriteRule ^\/?member\/activate\/active\/?$ /index.php?marker&activate=2 [L]
+RewriteRule ^\/?member\/activate\/notfound\/?$ /index.php?marker&activate=3 [L]
+
+
+
+
+#register done
+RewriteCond %{REQUEST_URI} ^/libs/activate.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} !activate
+RewriteCond %{QUERY_STRING} code=([a-z0-1]+)
+RewriteRule ^\/?libs\/activate\.php$ /member/activate/%1? [R=301,L]
+RewriteRule ^\/?member\/activate\/([a-z0-9]+)\/?$ /libs/activate.php?marker&code=$1 [L]
+
+
+
+
+
+
+#about page
+RewriteCond %{REQUEST_URI} ^/about.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?about\.php$ /about [R=301,L]
+RewriteRule ^\/?about\/?$ /about.php?marker [L]
+
+#projects
+RewriteCond %{REQUEST_URI} ^/projects.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?projects\.php$ /projects [R=301,L]
+RewriteRule ^\/?projects\/?$ /projects.php?marker [L]
+
+
+
+
+#forum ##I see you added this >.> will need forum in a own folder later so this will have to change
+# also forum will have a million of sub cats on url rewrite, have not decided if going with ID's (the easiest)
+# or with costum names ( looks best )
+# either way welcome to url_rewrite mod on apache scripting, regex is your friend... the only one ;)
+RewriteCond %{REQUEST_URI} ^/forum.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?forum\.php$ /forum [R=301,L]
+RewriteRule ^\/?forum\/?$ /forum.php?marker [L]
+
+
+
+
+
+
+RewriteCond %{REQUEST_URI} ^/libs/notification.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} ID=([0-9]+)
+RewriteRule ^/?libs/notification\.php$ /mix/notification/%1? [R=301,L]
+RewriteRule ^\/?mix\/notification\/([0-9]+)\/?$ /libs/notification.php?marker&ID=$1 [L]
+
+
+
+#terms
+RewriteCond %{REQUEST_URI} ^/extra/terms.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?extra\/terms\.php$ /terms [R=301,L]
+RewriteRule ^\/?terms\/?$ /extra/terms.php?marker [L]
+
+#after the contact send, with success and errors
+RewriteCond %{REQUEST_URI} ^/about.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} status=([0-9]+)
+RewriteRule ^/?about\.php$ /about/err/%1? [R=301,L]
+RewriteRule ^\/?about\/err\/([0-9]+)\/?$ /about.php?marker&status=$1 [L]
+RewriteCond %{REQUEST_URI} ^/about.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteCond %{QUERY_STRING} status=([a-zA-Z]+)
+RewriteRule ^/?about\.php$ /about/%1? [R=301,L]
+RewriteRule ^\/?about\/([a-zA-Z]+)\/?$ /about.php?marker&status=$1 [L]
+
+#contact form on about
+RewriteCond %{REQUEST_URI} ^/extra/contact.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?extra/contact\.php$ /extra/contact [R=301,L]
+RewriteRule ^/?extra/contact/?$ /extra/contact.php?marker [L]
+
+
+
+
+
+
+#index
+RewriteCond %{REQUEST_URI} ^/index.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?index\.php$ / [R=301,L]
+AuthType Basic
+AuthName "You No Have Access!!!"
+AuthUserFile "/home2/infiniz7/.htpasswds/public_html/new/passwd"
+require valid-user
