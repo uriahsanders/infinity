@@ -2,16 +2,24 @@
     header("Content-Type: text/xml; charset=ISO-8859-1");
     include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
     include('test_framework.php');
+    $workspace_dir = 'http://'.$_SERVER['HTTP_HOST'].'/uriah/test.php';
+    $start = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+            <rss version="2.0">
+                <channel>
+                    <category>Workspace</category>
+                    <copyright>Infinity-forum.org 2013 all rights reserved</copyright>
+                    <language>en-us</language>';
+    $end = '</channel>
+            </rss>';
     if(isset($_GET['feed'])){
         $sql = new SQL;
         $result = $sql->Query("SELECT * FROM `projects_data` WHERE `projectID` = %d AND `what` != %s AND `what` != %s AND `what` != %s ORDER BY `date` DESC LIMIT 10", $_GET['feed'], 'branch', 'message', 'note');
         $return = NULL;
-        $workspace_dir = $_SERVER['DOCUMENT_ROOT'].'/uriah/test.php/';
         if(mysql_num_rows($result) == 0){
-            $return .= '
+            $return = '
                 <item>
                     <title>Nothing here!</title>
-                    <link>http://infinity-forum.org/workspace</link>
+                    <link>'.$workspace_dir.'</link>
                     <description>There has been no activity in your workspace yet. Please try again later.</description>
                 </item>
             ';
@@ -66,7 +74,7 @@
                 $return .= '
                     <item>
                         <title>'.$row['title'].', '.$action.' by: '.$by.''.$extra.': '.$row['date'].' ('.$row['what'].')</title>
-                        <link>'.$workspace_dir.$row['what'].'/'.$row['id'].'</link>
+                        <link>'.$workspace_dir.'?'.$row['what'].'='.$row['id'].'</link>
                         <description>
                             '.$body.'
                         </description>
@@ -74,14 +82,9 @@
                 ';
             }
         }
-        echo '<?xml version="1.0" encoding="ISO-8859-1" ?>
-            <rss version="2.0">
-                <channel>
-                    <category>Workspace</category>
-                    <copyright>Infinity-forum.org 2013 all rights reserved</copyright>
-                    <language>en-us</language>
+        echo $start.'
                     <title>
-                        '.Person::id2projectname($_GET['feed']).' RSS feed
+                        '.Person::id2projectname($_GET['feed']).' workspace RSS feed
                     </title>
                     <link>
                         http://infinity-forum.org
@@ -90,7 +93,16 @@
                         Workspace stream for '.Person::id2projectname($_GET['feed']).'
                     </description>
                     '.$return.'
-                </channel>
-            </rss>
-        ';
+        '.$end;
+    }else{
+        echo $start.'
+                    <title>
+                        Infinity Workspace RSS
+                    </title>
+                    <item>
+                    <title>Nothing here!</title>
+                    <link>'.$workspace_dir.'</link>
+                    <description>Uhhh...what are you doing here? To see something useful, create a workspace and view your RSS.</description>
+                    </item>
+                    '.$end;
     }

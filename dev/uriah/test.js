@@ -23,17 +23,20 @@ $(document).ready(function() {
     };
     //global vars
     var GLOBAL = {
-        category: 'Start',
+        category: 'Start', //what page am i on?
         rutter: null, //are we filtering anything?
+        numResults: null, //how many results do i currently have?
         limiter: 20, //results to filter out on avg.
-        getOne: false
+        getOne: false, //am i getting one thing by itself?
+        tour: false //has a tour been called yet?
     }
     /*END*/
 
     /*Javascript alterations*/
     Function.prototype.iterate = function(params) {
+        //iterate over a single argument function EX. object.myFunction.iterate(['argumentForFirstRun', 'argumentForSecondRun']); //and so on
         for (var i = 0; i < params.length; ++i) {
-            this(params[i]);
+            this(params[i]); //run the function
         }
     }
     String.prototype.capitalize = function() {
@@ -43,7 +46,7 @@ $(document).ready(function() {
 
     /*Functions*/
     //most common ajax run: post some data and refresh the GLOBAL.category
-    //saves ultra repetitive and long code 
+    //saves ultra repetitive and long code (this app uses so many ajax requests :P)
 
     function ajax(query, refresh, async, back) {
         async = (async === 'undefined') ? false : true;
@@ -61,7 +64,7 @@ $(document).ready(function() {
                         workspace.retrieve(GLOBAL.category); //refresh ajax call
                         break;
                     case 1:
-                        window.location.reload(true); //refresh entire page
+                        location.reload(); //refresh entire page
                         break;
                     case 2:
                         break; //do nothing
@@ -75,7 +78,7 @@ $(document).ready(function() {
                 //alert(data); //temp
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                alert('An error has occured. Please try again later, or contact Infinity staff if the problems persist.');
+                alert('An error has occured. Please try again later, or contact Infinity staff if the problems persist.' + thrownError);
             }
         });
     }
@@ -86,7 +89,7 @@ $(document).ready(function() {
         }
     }
 
-    function datePicker(){
+    function datePicker() {
         $('.datepicker').datepicker();
         $('.datepicker').datepicker('option', 'dateFormat', 'D M d, \'20\'y');
     }
@@ -407,6 +410,9 @@ $(document).ready(function() {
             }
         } else workspace.getOne('event', id);
     });
+    $(document).on('click', '#workspace_tour', function() {
+        workspace.tour();
+    });
     /*END*/
 
     /*AUTOSAVE (optional-performance)*/
@@ -437,7 +443,9 @@ $(document).ready(function() {
 
     /*Object literals*/
     var workspace = {
-        init: function(num) {
+        init: function(num, retrieve) {
+            //workspace.retrieve() afterwards by default
+            retrieve = (typeof(retrieve) === 'undefined') ? true : retrieve;
             //branches/logo/statistics
             if (num === 0) { //0 for full page update
                 $.ajax({
@@ -456,11 +464,13 @@ $(document).ready(function() {
                             $('#branch').html(response.branch); //branches
                             $('#logo').css('background', response.logo); //logo
                             $('#stats').html(response.stats); //statistics
-                            workspace.retrieve(GLOBAL.category); //main content
+                            if (retrieve === true) workspace.retrieve(GLOBAL.category); //main content
                         } else {
                             $('#branch').html("<select id='branch_select'><option>0</option></select>"); //branches
                             //throw up a big screen!
                             workspace.welcome();
+                            //they havent visited the workspace before, so throw a tour
+                            localStorage.workspaceHasBeenVisited = false;
                         }
                     }
                 });
@@ -488,6 +498,30 @@ $(document).ready(function() {
                 }
             });
         },
+        err: function() {
+            $('#head').text('Nothing is here.');
+            $('#main').html('<div id="empty"><span>Sorry! We couldnt find what you were looking for.</span></div>');
+        },
+        tour: function() {
+            //Initiate tour, wrap in if to only create elements on first call
+            if (GLOBAL.tour === false) { //has a tour been called yet?
+                var myTour = new Tour(); //dim the screen
+                //add elements
+                myTour.newTourElement('#top', 'All your general workspace actions are up here.<br /> You can also change your status, and current project/branch.', 'up', 'margin-top:55px;');
+                myTour.newTourElement('#top', 'Here you can view your RSS feed for this branch, <br /> get help using the workspace, <br /> or go back to the lounge.', 'up', 'margin-left: 900px;margin-top:50px;');
+                myTour.newTourElement('#logo', 'This is your workspace logo.', 'left', 'margin-left:400px;');
+                myTour.newTourElement('#stats', 'Your workspace statistics and general information.', 'up', 'margin-top:40px;margin-left:300px;');
+                myTour.newTourElement('#cms', 'This is where the CMS (content management) buttons go.<br /> Use these to perform special options on this page.', 'up');
+                myTour.newTourElement('#top', 'Search the current branch,<br /> or navigate to different pages.', 'down', 'margin-top:50px;');
+                myTour.newTourElement('#side', 'This is where the general content is displayed.', 'none', 'margin-left:300px;margin-top:300px;');
+                myTour.init(); //start the tour
+                localStorage.workspaceHasBeenVisited = true;
+                GLOBAL.tour = true; //a tour has been called before now
+            } else {
+                var myTour = new Tour(0); //call Tour for function use only, ie without dim screen
+                myTour.resumeTour(); //restart the tour
+            }
+        },
         retrieve: function(what, opt) {
             //dont allow pointless retrievals
             if (opt === 'undefined') opt = 1;
@@ -513,7 +547,7 @@ $(document).ready(function() {
                         $('#main').html('<div id="empty"><span>Nothing has been posted here yet.</span></div>');
                     }
                     //change the current GLOBAL.category
-                    GLOBAL.category = what;
+                    if (GLOBAL.category !== 'Welcome') GLOBAL.category = what;
                     //reset scroll
                     GLOBAL.limiter = 20;
                     //style stuff
@@ -596,27 +630,27 @@ $(document).ready(function() {
             GLOBAL.category = 'Welcome';
             var categorySelect;
             for (var i = 0; i <= DATA.projectTypes.length; i++) {
-                GLOBAL.categorySelect += '<option>' + DATA.projectTypes[i] + '</option>';
+                categorySelect += '<option>' + DATA.projectTypes[i] + '</option>';
             }
             var form = '\
-  <div id="dim"></div>\
-  <div id="welcome_popup">\
-  <br /><br /><br /><br /><br /><br /><br /><br /> \
-  <span id="welcome_head">\
-  Welcome to the workspace!<br /><br />\
-  </span>\
-  It looks like you haven\'t created or joined any workspaces yet.\
-  Before using the workspace, please join a project or job <a target="_blank"href="/projects">here</a>.<br />\
-  Or, make your own right now.<br /><br />\
-  <select class="create_GLOBAL.category">\
-  ' + GLOBAL.categorySelect + '\
-  </select><br />\
-  <input type="text" class="create_title" placeholder="Title" autofocus/><br />\
-  <textarea class="create_body" placeholder="Description"></textarea>\
-  <br />\
-  <button class="button_create">Create</button>\
-  </div>\
-  ';
+            <div id="dim"></div>\
+            <div id="welcome_popup">\
+                <br /><br /><br /><br /><br /><br /><br /><br /> \
+                <span id="welcome_head">\
+                  Welcome to the workspace!<br /><br />\
+                </span>\
+                It looks like you haven\'t created or joined any workspaces yet.\
+                Before using the workspace, please join a project or job <a target="_blank"href="/projects">here</a>.<br />\
+                Or, make your own right now.<br /><br />\
+                <select class="create_GLOBAL.category">\
+                  ' + categorySelect + '\
+                </select><br />\
+                <input type="text" class="create_title" placeholder="Title" autofocus/><br />\
+                <textarea class="create_body" placeholder="Description"></textarea>\
+                <br />\
+                <button class="button_create">Create</button>\
+            </div>\
+            ';
             $(document.body).append(form);
         },
         verify: function(title, body) {
@@ -700,14 +734,16 @@ $(document).ready(function() {
                     branch: $('#branch_select').val()
                 },
                 success: function(data) {
-                    GLOBAL.getOne = true;
-                    $('#navigation li').removeClass('active');
-                    $('#cms').html('');
-                    $('#head').text(type.capitalize());
-                    $('#main').html(data);
-                    $('#main').prepend('<div style="float:left;margin-top:0px;"class="back">Back</div><br /><br />');
-                    if (type === 'document') $('select[class^=version_select]').val($('.doc_level').val());
-                    datePicker();
+                    if (data !== '') {
+                        GLOBAL.getOne = true;
+                        $('#navigation li').removeClass('active');
+                        $('#cms').html('');
+                        $('#head').text(type.capitalize());
+                        $('#main').html(data);
+                        $('#main').prepend('<div style="float:left;margin-top:0px;"class="back">Back</div><br /><br />');
+                        if (type === 'document') $('select[class^=version_select]').val($('.doc_level').val());
+                        datePicker();
+                    } else workspace.err();
                 }
             });
         },
@@ -729,10 +765,13 @@ $(document).ready(function() {
                 },
                 success: function(data) {
                     var response = JSON.parse(data);
-                    $('#main').html(response.main);
-                    $('#head').text(response.head);
-                    $('#cms').html('');
-                    $('#main').prepend('<div style="float:left;margin-top:0px;"class="back-groups">Back</div><br /><br />');
+                    if (response.check === false) workspace.err();
+                    else {
+                        $('#main').html(response.main);
+                        $('#head').text(response.head);
+                        $('#cms').html('');
+                        $('#main').prepend('<div style="float:left;margin-top:0px;"class="back-groups">Back</div><br /><br />');
+                    }
                     GLOBAL.getOne = true;
                     $('#navigation li').removeClass('active');
                     GLOBAL.category = id;
@@ -768,31 +807,43 @@ $(document).ready(function() {
     };
     //popup forms for the cms options
     var cms = {
+        //repetitive css function for popups and dimming screen
+        cssFunc: function(type, data) {
+            if (type === 1) {
+                $('.dim').hide();
+                $('.cms_popup').html(data);
+            } else {
+                $(document.body).append(data);
+                $('.dim').hide().fadeIn();
+                $('.cms_popup').hide().fadeIn();
+            }
+        },
         popup: function(what, type, id) {
             if (type === undefined) type = 0;
             if (id === undefined) id = 0;
-            $.ajax({
-                url: DATA.scriptFile,
-                type: 'POST',
-                data: {
-                    signal: 'cms',
-                    what: what,
-                    projectID: $('#project_select').val(),
-                    branch: $('#branch_select').val(),
-                    id: id
-                },
-                success: function(data) {
-                    if (type === 1) {
-                        $('.dim').hide();
-                        $('.cms_popup').html(data);
-                    } else {
-                        $(document.body).append(data);
-                        $('.dim').hide().fadeIn();
-                        $('.cms_popup').hide().fadeIn();
+            //if session storage var has not already been set
+            if (sessionStorage[what] !== undefined) {
+                var data = sessionStorage[what];
+                cms.cssFunc(type, data); //create a popup with client data
+            } else {
+                //no client storage so get from server
+                $.ajax({
+                    url: DATA.scriptFile,
+                    type: 'POST',
+                    data: {
+                        signal: 'cms',
+                        what: what,
+                        projectID: $('#project_select').val(),
+                        branch: $('#branch_select').val(),
+                        id: id
+                    },
+                    success: function(data) {
+                        cms.cssFunc(type, data);
+                        datePicker(); //make proper fields datepickers
+                        sessionStorage[what] = data; //set sessionstorage for speed
                     }
-                    datePicker();
-                }
-            });
+                });
+            }
         },
         killPopup: function() {
             $('.dim').mousedown();
@@ -925,7 +976,7 @@ $(document).ready(function() {
                         branch: $('#branch_select').val()
                     },
                     success: function(data) {
-                        if(level === 0) $('#main').html(data);
+                        if (level === 0) $('#main').html(data);
                         else $('#events_calendar_body').html(data);
                     }
                 });
@@ -1361,26 +1412,27 @@ $(document).ready(function() {
 
 
     /*BEGIN*/
-    /*Initiate tour. Note: check for first time visiting page*/
-    var myTour = new Tour(); //dim the screen
-    //add elements
-    myTour.newTourElement('#top', 'All your general workspace actions are up here.<br /> You can also change your status, and current project/branch.', 'up', 'margin-top:55px;');
-    myTour.newTourElement('#top', 'Here you can view your RSS feed for this branch, <br /> get help using the workspace, <br /> or go back to the lounge.', 'up', 'margin-left: 900px;margin-top:50px;');
-    myTour.newTourElement('#logo', 'This is your workspace logo.', 'left', 'margin-left:400px;');
-    myTour.newTourElement('#stats', 'Your workspace statistics and general information.', 'up', 'margin-top:40px;margin-left:300px;');
-    myTour.newTourElement('#cms', 'This is where the CMS (content management) buttons go.<br /> Use these to perform special options on this page.', 'up');
-    myTour.newTourElement('#top', 'Search the current branch,<br /> or navigate to different pages.', 'down', 'margin-top:50px;');
-    myTour.newTourElement('#side', 'This is where the general content is displayed.', 'none', 'margin-left:300px;margin-top:300px;');
-    myTour.init(); //start the tour
-    workspace.init(0); //show the start page, prepare everything
+    if (localStorage.workspaceHasBeenVisited === 'false') {
+        workspace.tour();
+    }
+    workspace.init(0, false); //show the start page, prepare everything, but dont retrieve any content
     //if arguments are in the URL (Links from RSS)
-    if($('#params').val() !== '0'){
+    if ($('#params').val() !== '0') {
         var params = $('#params').val();
         //grab key and value from $_GET
         var pair = params.split("=>");
-        var key = pair[0];
-        var value = pair[1];
-        //get the element in the URL
-        workspace.getOne(key, value);
+        if (pair.length === 2 && pair[1].length >= 1) { //verify URL integrity
+            //key => value pair
+            var key = pair[0];
+            var value = pair[1];
+            //get the element in the URL
+            if (key == 'member') workspace.getUser(value);
+            else workspace.getOne(key, value);
+            //error handling is within above functions
+        } else {
+            workspace.err();
+        }
+    } else {
+        workspace.retrieve('Start'); //normal launch
     }
 });
