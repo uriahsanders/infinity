@@ -5,9 +5,9 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 <head>
 <title>Drag and drop contacts</title>
 <meta charset='utf8'>
-<link href='/css/dark.css' rel='stylesheet' type='text/css' />
+<link href='/infinity/dev/css/dark.css' rel='stylesheet' type='text/css' />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src='/js/jquery-1.8.3.min.js'></script>
+<script src='/infinity/dev/js/jquery-1.8.3.min.js'></script>
 <script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 </head>
 <body>

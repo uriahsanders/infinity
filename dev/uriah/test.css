@@ -2,7 +2,7 @@ html, body{
     margin:0;
     padding:0;
     background: #474747;
-    background: url('/images/dark_stripes.png');
+    background: url('/infinity/dev/images/dark_stripes.png');
     color: #fff;
     font-family: 'Droid Sans', sans-serif;
     width:100%;
@@ -26,7 +26,7 @@ a:hover{
     position: fixed;
     top: 0;
     left: 0;
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
 }
 #welcome_head{
     font-weight: bolder;
@@ -41,7 +41,7 @@ button:hover{
     width: 212px;
     max-width: 36%;
     margin-top: 20px;
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
     border-radius: 3px;
 }
 #top{
@@ -51,7 +51,7 @@ button:hover{
     top: 0px;
     left: 0px;
     padding: 2px;
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
     opacity: 1;
     z-index: 2;
     border-bottom: 2px solid #000;
@@ -104,7 +104,7 @@ ul{
     display: inline-box;
     left: 0;
     border: 0;
-    background: url('/images/logo99.png') no-repeat;
+    background: url('/infinity/dev/images/logo99.png') no-repeat;
     z-index: 1;
     cursor: pointer;
     opacity: .8;
@@ -127,7 +127,7 @@ span[class^="cms_opt"], .badge{
     padding: 30px;
     border: 1px solid #24272b;
     border-radius: 3px;
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
     text-align: center;
     -webkit-transition: all linear 0.2s;
     -moz-transition: all linear 0.2s;
@@ -225,7 +225,7 @@ button[class^='button']{
     margin: 10px;
 }
 .widget{
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
 }
 .help li{
     padding: 5px;
@@ -248,14 +248,14 @@ div[class^='body']{
   width: 10px;
   border-top: 1px solid #666666;
   border-left: 1px solid #666666; }
-::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/images/down.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/images/down2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/images/up.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/images/up2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:increment { background:url(/images/right.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/images/right2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:decrement { background:url(/images/left.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/images/left2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/infinity/dev/images/down.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/infinity/dev/images/down2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/infinity/dev/images/up.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/infinity/dev/images/up2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment { background:url(/infinity/dev/images/right.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/infinity/dev/images/right2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement { background:url(/infinity/dev/images/left.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/infinity/dev/images/left2.png) no-repeat; background-size:6px; background-position:center} 
 
 ::-webkit-scrollbar-track        { }
 ::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
@@ -329,7 +329,7 @@ outline-offset: -2px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
     text-align: center;
     overflow-y: auto;
 }
@@ -370,7 +370,7 @@ table {
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
-    background: url('/images/gray_sand.png');
+    background: url('/infinity/dev/images/gray_sand.png');
     padding-top: 175px;
     padding-bottom: 175px;
     opacity: .8;
@@ -438,7 +438,7 @@ div[class$="note"]{
     padding: 8px 24px;
     width: 280px;
     border: 1px solid #000;
-    background: url('/images/gray_sand.png');
+    background: url('/infinity/dev/images/gray_sand.png');
     font-size: 1.2em;
     border:1px #E8Ds47 solid;
     -moz-box-shadow:0px 0px 6px 1px #333333;
@@ -499,7 +499,7 @@ canvas:hover{
     font-style: italic;
     font-size: 1.5em;
     z-index: 100;
-    background: url('/images/gray_sand.png');
+    background: url('/infinity/dev/images/gray_sand.png');
     border: 1px solid black;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
@@ -508,7 +508,7 @@ canvas:hover{
 #edit_menu {
     vertical-align: top;
     border: 1px solid black;
-    background: url('/images/gray_sand.png');
+    background: url('/infinity/dev/images/gray_sand.png');
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
@@ -525,7 +525,7 @@ div[id^='event-div']{
     height: 200px;
     border: 2px solid #000;
     border-radius: 3px;
-    background: url('/images/gray_sand.png');
+    background: url('/infinity/dev/images/gray_sand.png');
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
@@ -556,7 +556,7 @@ div[id^='event-div']:hover{
 #events_calendar{
     height: 550px;
     width: 100%;
-    background: url('/images/gray_sand.png');
+    background: url('/infinity/dev/images/gray_sand.png');
     border: 1px solid #000;
     border-radius: 5px;
 }
@@ -566,7 +566,7 @@ div[id^='event-div']:hover{
     text-align:left;
 }
 #events_calendar_head{
-    background: url('/images/broken_noise.png');
+    background: url('/infinity/dev/images/broken_noise.png');
     padding: 5px;
     text-align: center;
     height: 4.5%; 

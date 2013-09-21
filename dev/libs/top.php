@@ -11,8 +11,8 @@ include_once($_SERVER['DOCUMENT_ROOT']."/libs/lib.php");
     
     <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="/js/calendar.js" type="text/javascript"></script>    
-    <script src="/js/infinity.js" type="text/javascript"></script> 
+    <script src="/infinity/dev//js/calendar.js" type="text/javascript"></script>    
+    <script src="/infinity/dev//js/infinity.js" type="text/javascript"></script> 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>  
         <?php /*Change Style Script, commented out until styles are done.
          include_once('/home2/infiniz7/public_html/dev/libs/lib.php');
@@ -32,7 +32,7 @@ include_once($_SERVER['DOCUMENT_ROOT']."/libs/lib.php");
     echo '<link rel="stylesheet" type="text/css" href="/css/dark.css" />';
     }*/
     ?>
-    <link rel="stylesheet" type="text/css" href="/css/dark.css" />
+    <link rel="stylesheet" type="text/css" href="/infinity/dev/css/dark.css" />
       <script src="/js/jquery-1.8.3.min.js" type="text/javascript"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js"></script>

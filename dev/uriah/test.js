@@ -3,8 +3,11 @@ $(document).ready(function() {
      *Global Information
      */
     //general data
+    var fileAppend = {
+        uriah: '/infinity/dev'
+    };
     var DATA = {
-        scriptFile: '/uriah/test_script.php',
+        scriptFile: fileAppend.uriah + '/uriah/test_script.php',
         //how many ways can we seperate users?
         groupTypes: ['me', 'one', 'multiple', 'group', 'privilege', 'project'],
         privileges: ['creator', 'manager', 'supervisor', 'member', 'observer'],
@@ -39,9 +42,14 @@ $(document).ready(function() {
             this(params[i]); //run the function
         }
     }
+    //some basic stuff ya cant live without
     String.prototype.capitalize = function() {
         return this.charAt(0).toUpperCase() + this.slice(1);
     }
+    String.prototype.lowerCase = function() {
+        return this.charAt(0).toLowerCase() + this.slice(1);
+    }
+
     /*END*/
 
     /*Functions*/

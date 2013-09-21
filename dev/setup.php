@@ -6,7 +6,7 @@ if (!isset($_GET['install']))
 }
 else
 {
-	include_once($_SERVER['DOCUMENT_ROOT']."/config.php");
+	include_once($_SERVER['DOCUMENT_ROOT']."/infinity/dev/config.php");
 	
 	ini_set('memory_limit', '5120M');
 	set_time_limit ( 0 );

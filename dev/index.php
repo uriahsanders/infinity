@@ -1,4 +1,5 @@
 <?php
+$_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
 include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 include_once($_SERVER['DOCUMENT_ROOT'].'/libs/top.php'); //DO NOT REMOVE OR CHANGE 
 include_once($_SERVER['DOCUMENT_ROOT'].'/libs/links.php'); // DO NOT REMOVE OR CHANGE

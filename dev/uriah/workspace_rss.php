@@ -1,5 +1,6 @@
 <?php
     header("Content-Type: text/xml; charset=ISO-8859-1");
+    $_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
     include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
     include('test_framework.php');
     $workspace_dir = 'http://'.$_SERVER['HTTP_HOST'].'/uriah/test.php';

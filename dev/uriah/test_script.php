@@ -1,4 +1,5 @@
 <?php
+    $_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
     /*INCLUDES*/
     include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
     include_once('test_framework.php');

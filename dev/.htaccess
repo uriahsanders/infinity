@@ -5,7 +5,7 @@
 
 ErrorDocument 404 /error/404.htm
 
-RewriteEngine on
+#RewriteEngine on
 
 RewriteCond %{REQUEST_URI} ^/member/index.php$
 RewriteCond %{QUERY_STRING} !marker  

@@ -1,12 +1,13 @@
-<!DOCTYPE html>
 <?php
-    $token = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
-    $_SESSION['token'] = $token;
+    $_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
     include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
     include_once('test_framework.php');
-    include_once($_SERVER['DOCUMENT_ROOT']."/member/check_auth.php");
-    include_once($_SERVER['DOCUMENT_ROOT'].'/libs/loading.php'); //temp
+    $token = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
+    $_SESSION['token'] = $token;
+    //include_once($_SERVER['DOCUMENT_ROOT']."/member/check_auth.php");
+    //include_once($_SERVER['DOCUMENT_ROOT'].'/libs/loading.php'); //temp
 ?>
+<!DOCTYPE html>
 <html>
     <head>
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -47,7 +48,7 @@
         <div id="side">
             <div id="navigation">
                 <ul>
-                    <li><input id="searchbar"placeholder="Search this branch..."autofocus /></li>
+                    <li><input id="searchbar"placeholder="Search this branch..."/></li>
                     <li class="Start">Start</li>
                     <li class="Stream">Stream</li>
                     <li class="Wall">Wall</li>
