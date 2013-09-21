@@ -33,15 +33,8 @@
                 if($what == 'document' || $what == 'update'){
                     $body = $row['body'];
                 }else if($what == 'task'){
-                    $to = json_decode($row['big_array']);
-                    $assigned_to = NULL;
-                    for($i = 0; $i < count($to); $i++){
-                        $assigned_to .= '<a>'.id2user($to[$i]).'</a>, ';
-                    }
-                    $assigned_to = substr($assigned_to, 0, -2);
-                    if($assigned_to == NULL){ 
-                        $assigned_to = 'Everyone';
-                    }
+                    $to = json_decode($big_array);
+                    $assigned_to = Observer::return_assigned_people($to);
                     $body = 'Assigned to: '.$assigned_to;
                     $action = ($row['mark'] == 0) ? 'created' : 'completed';
                     $by = ($action == 'completed') ? id2user($row['mark']) : $by;

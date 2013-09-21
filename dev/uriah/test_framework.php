@@ -578,7 +578,7 @@
             }
             return array($status, $return);
         }
-        private function return_assigned_people($to){
+        public static function return_assigned_people($to){
             $assigned_to = NULL;
             for($i = 0; $i < count($to); $i++){
                 $assigned_to .= '<a class="profile_'.$to[$i].'">'.id2user($to[$i]).'</a>, ';
@@ -622,7 +622,6 @@
                 ';
             }else{
                 $to = json_decode($big_array);
-                $assigned_to = $this->return_assigned_people($to);
                 $current = $this->current_assigned_people($to, $projectID);
                 $status = ($level == 0) ? 'Incomplete' : 'Complete';
                 return '
