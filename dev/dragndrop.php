@@ -1,4 +1,5 @@
 <?php
+$_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev';
 include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 ?>
 <html>
@@ -22,8 +23,12 @@ $('#submit').click(function (){
         group: $('#group').val(),
         members: $('#members').val()
         }, function(data){
-            alert("Succesfully created group " + $('#group').val());
-            $('#form').find('input[type=text]').val('');
+        	if(data != "error" || data != ""){
+            	alert("Succesfully created group " + $('#group').val());
+            	$('#form').find('input[type=text]').val('');
+            }else{
+            	alert("There was a problem making the group: " + $('#group').val());
+            }
         });
     }else{
         alert("You must fill in all fields");
@@ -43,7 +48,7 @@ $('#create').toggle(function (){
 });
 $('#show').toggle(function (){
     $(this).text("Hide groups");
-    if($('#groups').children().length <= 1){
+    if($('#groups').children().length <= 1){ //check if the groups were already retrieved
         $.post("dragndrop_script.php", {
         get: "groups"
         }, function(data){
@@ -51,14 +56,15 @@ $('#show').toggle(function (){
             $('#groups').slideDown();
             if(response.length > 0){
                 for(var i = 0; i <= response.length; i++){
+                	if(response[i] == undefined) break; //check if theres nothing left in the array
                     $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div>");
-                    $('#' + response[i]).draggable({cursor: "move"});
+                    $('#' + response[i]).draggable({cursor: "move"}); //make each div draggable
                 }
                 $('#trash').show();
                 $('#trash').droppable({
                     drop: function (event, ui){
-                        var id = ui.draggable.attr("id");
-                        var className = ui.draggable.attr("class");
+                        var id = ui.draggable.attr("id"); //get the id of the dropped div
+                        var className = ui.draggable.attr("class"); //get the class name of the dropped div
                         if(className.startsWith("group")) className = "group";
                         else className = "member";
                         $.post("dragndrop_script.php", {
@@ -69,6 +75,20 @@ $('#show').toggle(function (){
                             console.log(data);
                         });
                     }
+                });
+                $('#showMembers').toggle(function (){
+                	$(this).text("Hide members");
+                	$.post("dragndrop.php", {
+                	get: "members",
+                	group: ""
+                	}, function (data){
+                		console.log(data);
+                		var response = jQuery.parseJSON(data);
+                		//$('#members').append(response);
+                	});
+                }, function (){
+                	$(this).text("Show members");
+                	//$('#members').slideUp();
                 });
             }else{
                 $('#groups').text("You have no groups.");
