@@ -20,15 +20,14 @@ function Planner(wrapper){
 }
 //hold all recent states of the Planner
 Planner.recentStates = []; 
-Planner.maxStates = 10; //How many states will we save?
+Planner.maxStates = 20; //How many states will we save?
 Planner.pointer = null; //which state are we on?
 Planner.planType = 'Tree'; //what type of Plan is this?
-/*NOTE: undo/redo is extremely verbose, minimalize ASAP*/
 //stick this into the undo array (recentStates)
-Planner.prototype.addState = function(){
+Planner.prototype.addState = function(id, txt, add){
 	//only save max states
 	if(Planner.recentStates.length >= Planner.maxStates) Planner.recentStates.shift(); //remove oldest state
-	Planner.recentStates.push($('#Planner_planner-id').html()); //save html of current state
+	Planner.recentStates.push(Planner.minimalize(id, txt, add)); //save min data of element
 	if(Planner.pointer === null) Planner.pointer = 0; //set pointer to first element
 	else ++Planner.pointer; //move pointer forward
 }
@@ -36,24 +35,51 @@ Planner.prototype.addState = function(){
 Planner.prototype.undo = function(){
 	//make sure we arent on the first element
 	if(Planner.pointer != Planner.recentStates[0]){
-		$('#Planner_planner-id').html(Planner.recentStates[Planner.pointer - 1]); //get the html of the most recent state
-		--Planner.pointer; //move pointer to new state
+		Planner.mergeState(Planner.recentStates[Planner.pointer - 1]); //get the html of the most recent state
+		--Planner.pointer; //move pointer to new state, back one
 	}
 }
 Planner.prototype.redo = function(){
-	//make sure there we are not already on the last element
+	//make sure that we are not already on the last element
 	if(Planner.pointer != Planner.recentStates[Planner.recentStates.length - 1]){
-		$('#Planner_planner-id').html(Planner.recentStates[Planner.pointer + 1]); //get the html of the state after the current one
-		++Planner.pointer; 
+		Planner.mergeState(Planner.recentStates[Planner.pointer + 1]); //get the html of the state after the current one
+		++Planner.pointer; //we are now one state ahead
 	}
 }
+//split elements into not-redundant component parts and return an object
+Planner.prototype.minimalize = function(id, txt, add){
+	return {
+		id: id,
+		txt: txt,
+		add: add, //true for adding element, false for removing
+		position: Planner.getLevelAndCol(id) //grab data from class name
+	};
+}
+//actually merge the now expanded data into the DOM
+Planner.prototype.mergeState = function(min){
+	if(min.add === false) $('#' + min.id).remove(); //if we are removing from the planner
+	else $('#Planner_planner-id').append(Planner.expand(min)); //append expanded the element. order does not matter
+	Planner.cleanUp(); //re-connect everything
+}
+//expand a minimalized object into html
+Planner.prototype.expand = function(min){
+	return '<div id="' + min['id'] + '" class="pos_' + min.position[0] + '-' + min.position[1] + '">' + min.txt + '</div>';
+}
 //END
+//what level and column is the element with the given id on?
+Planner.prototype.getLevelAndCol = function(id){
+	return $(id).attr('class').substring(4).split('-'); //Ex: pos_3-2 (level-column)
+}
 //Create a new Planner element
 Planner.prototype.createElement = function(){
 
 }
 //Join two Elements together
 Planner.prototype.joinElements = function(){
+
+}
+//Clean up things by correctly connecting them
+Planner.prototype.cleanUp = function(){
 
 }
 //Add another layer to add more room for elements
