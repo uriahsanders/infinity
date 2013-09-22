@@ -23,11 +23,19 @@ function Planner(wrapper){
 		$(wrapper).html(environment); //stick the environment into the given area
 	}
 }
+//(a 'level' is equivalent to a 'row')
 //hold all recent states of the Planner
 Planner.recentStates = []; 
 Planner.maxStates = 20; //How many states will we save?
 Planner.pointer = null; //which state are we on?
 Planner.numElements = 0; //how many elements are there?
+Planner.mapPositions = { //map storing all positions
+	//how many columns in each level?
+	level0: {
+		cols: 1,
+		parentCol: null
+	}
+}; 
 //defaults:
 Planner.defaults = {
 	type: 'Tree',
@@ -73,12 +81,8 @@ Planner.prototype.mergeState = function(min){
 }
 //expand a minimalized object into html
 Planner.prototype.expand = function(min, classes){ //classes must be an array
-	var allClasses; //all the classes of this element
-	for(var i = 0; i < classes.length; ++i){
-		allClasses += classes[i] + ' ';
-	}
 	//stick it in HTML
-	return '<div id="' + min['id'] + '" class="pos_' + min.position[0] + '-' + min.position[1] + ' ' + allClasses + '">' + min.txt + '</div>';
+	return '<div id="' + min['id'] + '" class="pos_' + min.position[0] + '-' + min.position[1] + ' ' + classes.join(' ') + '">' + min.txt + '</div>';
 }
 //END
 //what level and column is the element with the given id on?
@@ -86,14 +90,32 @@ Planner.prototype.getLevelAndCol = function(id){
 	//grab the first class and split into level/column
 	return $(id).attr('class').split(' ')[0].substring(4).split('-'); //Ex: pos_3-2 (level-column)
 }
+//make a new level from a parent column
+Planner.prototype.makeLevel = function(parentCol){
+	var newLevel = Planner.mapPositions.length; //because of indexing, length is technically index + 1
+	Planner.mapPositions['level' + newLevel] = { //new level with empty columns
+		cols: 0,
+		parentCol: parentCol //map which parent column this level inherited
+	}; 
+	Planner.createElement(newLevel, {'sub_origin'}); //create first element for new level and add sub-origin class
+}
+//make a column for that level and return class names
+Planner.prototype.returnPosClass = function(level){
+	++Planner.mapPositions['level' + level].cols; //add 1 column
+	return 'pos_' + level + '-' + Planner.mapPositions['level' + level].cols; //column is the newest one
+}
 //Create a new Planner element
-Planner.prototype.createElement = function(classes){ //argument must be an array
-	var element;
-	//if we have no extra classes make it an array of just the default shape
-	//else, the extra classes + default shape array
-	classes = (typeof classes === 'undefined') ? [Planner.defaults.shape] : classes.concat(Planner.defaults.shape);
+Planner.prototype.createElement = function(level, classes){ //what level is the new element on?; classes must be an array
+	var element, id;
+	var posAndShape = [];
+	id = Planner.numElements; //same as how many elements there are already
+	//stick default classes together
+	posAndShape.push(returnPosClass(level), Planner.defaults.shape);
+	//if we have no extra classes make it an array of just the default shape & position
+	//else, the extra classes + default shape array & position
+	classes = (typeof classes === 'undefined') ? posAndShape : classes.concat(posAndShape);
 	element = Planner.expand({
-		id: 'Planner_element-' + Planner.numElements, //increment id #
+		id: 'Planner_element-' + id, //increment id #
 		txt: '',
 		add: true,
 		position: [/*Level and column*/]
