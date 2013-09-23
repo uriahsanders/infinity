@@ -16,15 +16,16 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 <div id='form' style='display:none'>
 Group: <input type='text' id='group' /><br />
 Members: <input type='text' id='members' /><input type='submit' value='Submit' id='submit' />
+</div>
 <script>
 $('#submit').click(function (){
-    if($('#group').val() != "" && $('#members').val() != ""){
+    if($('#group').val() != "" && $('#members').val() != ""){ //check if the input boxes are empty
         $.post("dragndrop_script.php",{
         group: $('#group').val(),
         members: $('#members').val()
         }, function(data){
-        	if(data != "error" || data != ""){
-            	alert("Succesfully created group " + $('#group').val());
+        	if(data != "error" || data != ""){ //check for errors 
+            	alert("Succesfully created group: " + $('#group').val());
             	$('#form').find('input[type=text]').val('');
             }else{
             	alert("There was a problem making the group: " + $('#group').val());
@@ -35,7 +36,6 @@ $('#submit').click(function (){
     }
 });
 </script>
-</div>
 <a id='show'>Show groups</a>
 <div id='groups' style='display:none'><div id='trash' style='display:none'>trash</div></div>
 <script>
@@ -52,12 +52,12 @@ $('#show').toggle(function (){
         $.post("dragndrop_script.php", {
         get: "groups"
         }, function(data){
-            var response = jQuery.parseJSON(data);
+            var response = jQuery.parseJSON(data); //parse the json
             $('#groups').slideDown();
-            if(response.length > 0){
-                for(var i = 0; i <= response.length; i++){
+            if(response.length > 0){ //check to see if response is empty
+                for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
-                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div>");
+                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div>"); //make a div for each group and append it to groups
                     $('#' + response[i]).draggable({cursor: "move"}); //make each div draggable
                 }
                 $('#trash').show();
@@ -71,7 +71,7 @@ $('#show').toggle(function (){
                         del: className,
                         name: id
                         }, function(data){
-                            alert("Succesfully deleted " + className + ": " + id)
+                            alert("Succesfully deleted " + className + ": " + id);
                             console.log(data);
                         });
                     }
@@ -80,7 +80,7 @@ $('#show').toggle(function (){
                 	$(this).text("Hide members");
                 	$.post("dragndrop.php", {
                 	get: "members",
-                	group: ""
+                	group: $('#showMembers').attr("class")
                 	}, function (data){
                 		console.log(data);
                 		var response = jQuery.parseJSON(data);
