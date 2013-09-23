@@ -40,7 +40,7 @@ function createGroup($group, $members){
         while($row = mysql_fetch_array($getID)){
         	$id = $row['id'];
         }
-        $result2 = mysql_query("INSERT INTO `members` (`groupId`,`member`,`groupCreator`) VALUES ('".$id."', '".$members."', '".$_SESSION['ID']."')")or die(mysql_error()); //insert all the info for the members
+        $result2 = mysql_query("INSERT INTO group_members (`groupId`,`member`,`groupCreator`) VALUES ('".$id."', '".$members."', '".$_SESSION['ID']."')")or die(mysql_error()); //insert all the info for the members
         if($result2){
         	return "Successfully created group and inserted members";
         }else{
