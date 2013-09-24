@@ -12,6 +12,17 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 <script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 </head>
 <body>
+<style>
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+#groupTable {
+	width: 300;
+	height: 100;
+}
+</style>
 <a id='create'>Create a group</a><br />
 <div id='form' style='display:none'>
 Group: <input type='text' id='group' /><br />
@@ -24,11 +35,11 @@ $('#submit').click(function (){
         group: $('#group').val(),
         members: $('#members').val()
         }, function(data){
-        	if(data != "error" || data != ""){ //check for errors 
+        	if(data != "error" && data != ""){ //check for errors 
             	alert("Succesfully created group: " + $('#group').val());
-            	$('#form').find('input[type=text]').val('');
+            	$('#form').find('input[type=text]').val(''); //clear the input boxes
             }else{
-            	alert("There was a problem making the group: " + $('#group').val());
+            	alert("There was a problem making the group: " + $('#group').val()); 
             }
         });
     }else{
@@ -53,11 +64,12 @@ $('#show').toggle(function (){
         get: "groups"
         }, function(data){
             var response = jQuery.parseJSON(data); //parse the json
+            //console.log(response);
             $('#groups').slideDown();
             if(response.length > 0){ //check to see if response is empty
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
-                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div>"); //make a div for each group and append it to groups
+                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div><div id='members'></div><a id='showMembers' class='" + response[i] + "'>Show Members</a>"); //make a div for each group and append it to groups
                     $('#' + response[i]).draggable({cursor: "move"}); //make each div draggable
                 }
                 $('#trash').show();
@@ -71,24 +83,37 @@ $('#show').toggle(function (){
                         del: className,
                         name: id
                         }, function(data){
-                            alert("Succesfully deleted " + className + ": " + id);
+                        	if(data != "error" && data != "") alert("Succesfully deleted " + className + ": " + id);
+                        	else alert("There was an error deleting group: " + className + ". Please try again later.");
                             console.log(data);
                         });
                     }
                 });
                 $('#showMembers').toggle(function (){
                 	$(this).text("Hide members");
-                	$.post("dragndrop.php", {
+                	$.post("dragndrop_script.php", {
                 	get: "members",
-                	group: $('#showMembers').attr("class")
+                	group: $('#showMembers').attr("class") //send the group
                 	}, function (data){
                 		console.log(data);
-                		var response = jQuery.parseJSON(data);
-                		//$('#members').append(response);
+                		if(data != "error" && data != ""){
+                			var response = jQuery.parseJSON(data);
+                			if(response.length > 0){ //check to see if any members were returned
+                				for(var i = 0;i <= response.length; ++i){
+                					if(response[i] == undefined) break;
+                					$('#members').append("<div id='" + response[i] + "' class='member'>" + response[i] + "</div>"); //make a div for each member
+                					$('#' + response[i]).draggable({move: "true"}); //make each member div draggable
+                				}
+                			}else{
+                				$('#showMembers').text("There are no members in this group.");
+                			}
+                		}else{
+                			alert("There was a problem getting the members for group: " + $('#showMembers').attr("class") + ". Please try again later.");
+                		}
                 	});
                 }, function (){
                 	$(this).text("Show members");
-                	//$('#members').slideUp();
+                	$('#members').slideUp();
                 });
             }else{
                 $('#groups').text("You have no groups.");
