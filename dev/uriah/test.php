@@ -37,6 +37,7 @@
                <a target="_blank"id="rss_link"style="line-height: 25px;"href="">RSS</a>
                </li>
                <li style="line-height: 25px;"><a target="_blank"href="/help#workspace" id="help">Help</a></li>
+               <li style="line-height: 25px;"><a id="workspace_tour">Tour</a></li>
                <li style="line-height: 25px;"><a href="/lounge">Lounge</a></li>
                <li style="line-height: 25px;"><a>Logout</a></li>
                <li> </li>

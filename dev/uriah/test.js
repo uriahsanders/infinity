@@ -477,8 +477,6 @@ $(document).ready(function() {
                             $('#branch').html("<select id='branch_select'><option>0</option></select>"); //branches
                             //throw up a big screen!
                             workspace.welcome();
-                            //they havent visited the workspace before, so throw a tour
-                            localStorage.workspaceHasBeenVisited = false;
                         }
                     }
                 });
@@ -513,21 +511,19 @@ $(document).ready(function() {
         tour: function() {
             //Initiate tour, wrap in if to only create elements on first call
             if (GLOBAL.tour === false) { //has a tour been called yet?
-                var myTour = new Tour(); //dim the screen
-                //add elements
-                myTour.newTourElement('#top', 'All your general workspace actions are up here.<br /> You can also change your status, and current project/branch.', 'up', 'margin-top:55px;');
-                myTour.newTourElement('#top', 'Here you can view your RSS feed for this branch, <br /> get help using the workspace, <br /> or go back to the lounge.', 'up', 'margin-left: 900px;margin-top:50px;');
-                myTour.newTourElement('#logo', 'This is your workspace logo.', 'left', 'margin-left:400px;');
-                myTour.newTourElement('#stats', 'Your workspace statistics and general information.', 'up', 'margin-top:40px;margin-left:300px;');
-                myTour.newTourElement('#cms', 'This is where the CMS (content management) buttons go.<br /> Use these to perform special options on this page.', 'up');
-                myTour.newTourElement('#top', 'Search the current branch,<br /> or navigate to different pages.', 'down', 'margin-top:50px;');
-                myTour.newTourElement('#side', 'This is where the general content is displayed.', 'none', 'margin-left:300px;margin-top:300px;');
-                myTour.init(); //start the tour
-                localStorage.workspaceHasBeenVisited = true;
+                Tour.createElement({
+                    attachTo: '#main',
+                    txt: 'My first tour!',
+                    arrowDir: 'left',
+                    style: 'color:red'
+                });
+                Tour.init({
+                    page: 'workspace',
+                    localstorage: true
+                });
                 GLOBAL.tour = true; //a tour has been called before now
             } else {
-                var myTour = new Tour(0); //call Tour for function use only, ie without dim screen
-                myTour.resumeTour(); //restart the tour
+                Tour.resumeTour(); //restart the tour
             }
         },
         retrieve: function(what, opt) {
@@ -1417,12 +1413,8 @@ $(document).ready(function() {
 
     };
     /*END*/
-
-
     /*BEGIN*/
-    if (localStorage.workspaceHasBeenVisited === 'false') {
-        workspace.tour();
-    }
+    workspace.tour();
     workspace.init(0, false); //show the start page, prepare everything, but dont retrieve any content
     //if arguments are in the URL (Links from RSS)
     if ($('#params').val() !== '0') {
