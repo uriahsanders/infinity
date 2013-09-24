@@ -512,14 +512,43 @@ $(document).ready(function() {
             //Initiate tour, wrap in if to only create elements on first call
             if (GLOBAL.tour === false) { //has a tour been called yet?
                 Tour.createElement({
-                    attachTo: '#main',
-                    txt: 'My first tour!',
+                    attachTo: '#top',
+                    txt: 'All your general workspace actions are up here.<br /> You can also change your status, and current project/branch.',
+                    arrowDir: 'up',
+                    style: 'margin-top:55px;'
+                });
+                Tour.createElement({
+                    attachTo: '#top',
+                    txt: 'Here you can view your RSS feed for this branch, <br /> get help using the workspace, <br /> or go back to the lounge.',
+                    arrowDir: 'up',
+                    style: 'margin-left:900px;margin-top:50px;'
+                });
+                Tour.createElement({
+                    attachTo: '#logo',
+                    txt: 'This is your workspace logo.',
                     arrowDir: 'left',
-                    style: 'color:red'
+                    style: 'margin-left:400px;'
+                });
+                Tour.createElement({
+                    attachTo: '#stats',
+                    txt: 'Your workspace statistics and general information.',
+                    arrowDir: 'up',
+                    style: 'margin-top:40px;margin-left:300px;'
+                });
+                Tour.createElement({
+                    attachTo: '#cms',
+                    txt: 'This is where the CMS (content management) buttons go.<br /> Use these to perform special options on this page.',
+                    arrowDir: 'up'
+                });
+                Tour.createElement({
+                    attachTo: '#side',
+                    txt: 'This is where the general content is displayed.',
+                    arrowDir: 'none',
+                    style: 'margin-left:300px;margin-top:300px;'
                 });
                 Tour.init({
                     page: 'workspace',
-                    localstorage: true
+                    localstorage: false
                 });
                 GLOBAL.tour = true; //a tour has been called before now
             } else {
