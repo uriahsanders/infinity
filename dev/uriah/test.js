@@ -128,7 +128,7 @@ $(document).ready(function() {
         $(document).on('mousedown', '.' + DATA.categories[i], callBackCategory(DATA.categories[i]));
     }
     //cms options
-    $(document).on('mousedown', 'span[class^=cms_opt_]', function() {
+    $(document).on('mousedown', 'span[class^="cms_opt_"]', function() {
         var which = $(this).attr('class').substring(8);
         //client-side (special)
         if ($.inArray(which, DATA.specialCMSStream) > -1) {
@@ -178,11 +178,11 @@ $(document).ready(function() {
             });
         });
     });
-    $(document).on('mousedown', 'span[class^=request_link]', function() {
+    $(document).on('mousedown', 'span[class^="request_link"]', function() {
         $('.canJoin').val($(this).attr('class').substring(12));
     });
     //buttons; a substring determines the function
-    $(document).on('mousedown', 'button[class^=button_]', function() {
+    $(document).on('mousedown', 'button[class^="button_"]', function() {
         var sub = $(this).attr('class').substring(7);
         if (sub === 'create-branch' || sub === 'rename-branch' || sub === 'delete-branch') {
             control.manageBranch(sub);
@@ -271,10 +271,10 @@ $(document).ready(function() {
             }
         }
     });
-    $(document).on('mousedown', 'button[class^=confirm-suggest]', function() {
+    $(document).on('mousedown', 'button[class^="confirm-suggest"]', function() {
         suggest.confirm($(this).attr('class').substring(15));
     });
-    $(document).on('mousedown', 'button[class^=deny-suggest]', function() {
+    $(document).on('mousedown', 'button[class^="deny-suggest"]', function() {
         suggest.deny($(this).attr('class').substring(12));
     });
     //change info given about launching
@@ -309,9 +309,9 @@ $(document).ready(function() {
         }, 3000);
     });
     //slide down
-    $(document).on('mousedown', 'div[class^=head]:not(.version_select)', function() {
+    $(document).on('mousedown', 'div[class^="head"]:not(.version_select)', function() {
         var num = $(this).attr('class').substring(4);
-        $('div[class^=body]:not(.body' + num + ')').slideUp();
+        $('div[class^="body"]:not(.body' + num + ')').slideUp();
         $('.body' + num).slideToggle();
     });
     $(document).on('mousedown', '.stream_table tr', function() {
@@ -340,24 +340,24 @@ $(document).ready(function() {
             GLOBAL.category = 'Groups';
         }
     });
-    $(document).on('mousedown', 'a[class^=more_], button[class^=more_]', function() {
+    $(document).on('mousedown', 'a[class^="more_"], button[class^="more_"]', function() {
         var sub = $(this).attr('class').substring(5);
         var subArray = sub.split('-');
         workspace.getOne(subArray[0], subArray[1]);
     });
-    $(document).on('mousedown', 'a[class^=profile_]', function() {
+    $(document).on('mousedown', 'a[class^="profile_"]', function() {
         workspace.getUser($(this).attr('class').substring(8));
     });
-    $(document).on('mousedown', 'div[class$=note]', function() {
+    $(document).on('mousedown', 'div[class$="note"]', function() {
         cms.popup('note', 0, $(this).attr('class').slice(0, -4));
     });
-    $(document).on('mousedown', 'button[class$=version]', function() {
+    $(document).on('mousedown', 'button[class$="version"]', function() {
         cms.popup('new-doc-version', 0, $(this).attr('class').slice(0, -7));
     });
-    $(document).on('change', 'input[type=radio][name^=status]', function() {
+    $(document).on('change', 'input[type=radio][name^="status"]', function() {
         tasks.mark($(this).attr('name').substring(6), $(this).val());
     });
-    $(document).on('change', 'input[type=checkbox][name^=status]', function() {
+    $(document).on('change', 'input[type=checkbox][name^="status"]', function() {
         var status = ($(this).is(':checked')) ? 1 : 0;
         events.mark($(this).attr('name').substring(6), status);
         status = (status == 0) ? 'Incomplete' : 'Complete';
@@ -388,23 +388,23 @@ $(document).ready(function() {
             $('#main').text("No search results.");
         }
     });
-    $(document).on('change', 'select[class^=version_select]', function() {
+    $(document).on('change', 'select[class^="version_select"]', function() {
         boards.getVersion($(this).attr('class').substring(14), $(this).val());
         $('select[class^=version_select]').val($(this).val());
     });
     $(document).on('change', '.group_privilege_select', function() {
         groups.changePrivilege($(this).val());
     });
-    $(document).on('mousedown', 'button[class^=remRow]', function() {
+    $(document).on('mousedown', 'button[class^="remRow"]', function() {
         Table.removeRow('tbody', $(this).attr('class').substring(6));
         Table.toggleDeleteMenu.iterate(['tbody', 'tbody']);
     });
-    $(document).on('mousedown', 'button[class^=remCol]', function() {
+    $(document).on('mousedown', 'button[class^="remCol"]', function() {
         Table.removeCol('tbody', $(this).attr('class').substring(6));
         Table.toggleDeleteMenu.iterate(['tbody', 'tbody']);
     });
     //events: clicking thumbnails
-    $(document).on('mousedown', 'div[id^=event-div]', function() {
+    $(document).on('mousedown', 'div[id^="event-div"]', function() {
         var id = $(this).attr('id').substring(9);
         //Dont getOne for checkbox
         if (GLOBAL.category === 'Tasks') {
@@ -549,7 +549,7 @@ $(document).ready(function() {
                 Tour.createElement();
                 Tour.init({
                     page: 'workspace',
-                    localstorage: true
+                    localstorage: false
                 });
                 GLOBAL.tour = true; //a tour has been called before now
             } else {

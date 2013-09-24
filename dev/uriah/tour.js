@@ -16,7 +16,7 @@
 var Tour = Tour || (function($){ //dont overwrite if Tour variable already exists
     //CLICK-HANDLERS
     $(document).ready(function() {
-        //finish the tour (all elements can be revover with resumeTour())
+        //finish the tour (all elements can be recovered with resumeTour())
         $(document).on('mousedown', '.finish-tour', function() {
             Private.endTour();
         });
@@ -24,7 +24,7 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
         $(document).on('mousedown', '.next-tour-element', function() {
             Private.goTo('next');
         });
-        //last element button
+        //previous element button
         $(document).on('mousedown', '.previous-tour-element', function() {
             Private.goTo('previous');
         });
@@ -47,7 +47,7 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
     Public.init = function(options){ //actually start the tour
         var options = options || {}; //empty object if not set
         var pageSet = (typeof options.page === 'undefined') ? false : true; //is the page var defined?
-        if(pageSet) var pageVisited = options.page + 'HasBeenVisited'; //create a unique localstorage variable for this page
+        if(pageSet) var pageVisited = options.page + 'HasBeenVisited'; //unique localstorage variable for this page
         //start tour if page has not been visited/set or if localStorage is being ignored
         if(typeof localStorage[pageVisited] === 'undefined' || options.localstorage !== true || !pageSet){
             $('<div id="tour_dim_screen"></div>').appendTo(document.body).hide().fadeIn(); //dim the screen
@@ -62,9 +62,9 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
         }
     };
     Public.createElement = function(options){ //add a new hidden element to the DOM
-        //all options are...well...optional
+        //all options are...well...optional: setting defaults
         var options = options || {};
-        var element = options.attachTo || 'div:first'; //default first div if attach is not set
+        var element = options.attachTo || 'div:first'; 
         var txt = options.txt || '';
         var arrow = options.arrowDir || 'none';
         var style = options.style || '';
@@ -80,20 +80,20 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
         Private.fadeRelevant(); //fade in first element
     };
     Public.removeAllElements = function(){ //actually remove all elements from the DOM for good
-        $('div[class^=tour_div], #tour_dim_screen').remove();
+        $('div[class^="tour_div"], #tour_dim_screen').remove();
     };
     //private:
     Private.fadeRelevant = function(){ //only what matters :)
-        $('div[class^=tour_div]').fadeOut(); //fade out all tour elements if any are displayed
+        $('div[class^="tour_div"]').fadeOut(); //fade out all tour elements if any are displayed
         $('.tour_div' + Private.selector).fadeIn(); //fade in the selected element
     };
     Private.goTo = function(dir){ //go to next or previous element
         if(dir === 'previous') --Private.selector; //move selector to appropriate position
         else ++Private.selector;
         Private.fadeRelevant(); //fade in proper items
-    }
+    };
     Private.endTour = function(){ //fade out but dont remove all Tour stuff
-        $('div[class^=tour_div], #tour_dim_screen').fadeOut();
+        $('div[class^="tour_div"], #tour_dim_screen').fadeOut();
     };
     //END METHODS
     return Public; //make the main object public
