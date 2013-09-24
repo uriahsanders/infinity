@@ -1,4 +1,5 @@
-//Infinity-Forum.org 2013
+//infinity-forum.org 2013
+"use strict";
 function Planner(wrapper){
 	//call with 0 to avoid constructor
 	if(wrapper != 0){
@@ -30,10 +31,9 @@ Planner.maxStates = 20; //How many states will we save?
 Planner.pointer = null; //which state are we on?
 Planner.numElements = 0; //how many elements are there?
 Planner.mapPositions = { //map storing all positions
-	//how many columns in each level?
 	level0: {
-		cols: 1,
-		parentCol: null
+		cols: 1, //how many columns?
+		parentCol: null //what column did we inherit?
 	}
 }; 
 //defaults:
@@ -125,6 +125,10 @@ Planner.prototype.createElement = function(level, classes){ //what level is the 
 }
 //Join two Elements together
 Planner.prototype.joinElements = function(){
+
+}
+//create a line between two elements. can be externally rotated to correct position
+Planner.prototype.makeSexyLine = function(){
 
 }
 //Clean up things by correctly connecting them
