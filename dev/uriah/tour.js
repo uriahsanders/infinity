@@ -51,7 +51,7 @@ var Tour = Tour || (function($){
     //METHODS
     //public:
     Tour.init = function(options){ //actually start the tour
-        var options = options || {};
+        var options = options || {}; //empty object if not set
         var pageSet = (typeof options.page === 'undefined') ? false : true; //is the page var defined?
         if(pageSet) var pageVisited = options.page + 'HasBeenVisited'; //create a unique localstorage variable for this page
         //start tour if page has not been visited/set or if localStorage is being ignored
@@ -68,7 +68,9 @@ var Tour = Tour || (function($){
     };
     Tour.createElement = function(options){ //add a new hidden element to the DOM
         //all options are...well...optional
-        var element = options.attachTo || document.body; //use document body if attach is not set 
+        var options = options || {};
+        if(options === {}) console.log("Warning: tour might not work properly, a create element is not attached to something.");
+        var element = options.attachTo || document.body; //use document body if attach is not set (experimental atm, doesnt work)
         //...and so on:
         var txt = options.txt || '';
         var arrow = options.arrowDir || 'none';

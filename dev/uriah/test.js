@@ -548,7 +548,7 @@ $(document).ready(function() {
                 });
                 Tour.init({
                     page: 'workspace',
-                    localstorage: false
+                    localstorage: true
                 });
                 GLOBAL.tour = true; //a tour has been called before now
             } else {
