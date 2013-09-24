@@ -1,11 +1,5 @@
 //infinity-forum.org 2013
 /*
-    Style: modified singleton module pattern
-    Ensures you dont overwrite variables, saves the namespace, and allows for public/private
-    I always stick the public stuff in an object with the same name as the function
-    Return only the public object for public use, all else is private
-*/
-/*
     -Tiny script to produce a simple page introduction
     Example:
     Tour.createElement({
@@ -19,9 +13,7 @@
         localstorage: true
     });
 */
-"use strict"; //lets not be evil, eh?
-//dont overwrite if Tour variable already exists
-var Tour = Tour || (function($){
+var Tour = Tour || (function($){ //dont overwrite if Tour variable already exists
     //CLICK-HANDLERS
     $(document).ready(function() {
         //finish the tour (all elements can be revover with resumeTour())
@@ -38,12 +30,12 @@ var Tour = Tour || (function($){
         });
     });
     //END CLICK-HANDLERS
-    //i like declaring the object name explicitly for less brace tracking
-    var Tour = {}; //main object, public data
+    //declaring the object name explicitly for for easier information hiding
+    var Public = {}; //main object, public data
     var Private = {}; //stuff i only want access in here; will not return
     //PROPERTIES
     //public:
-    Tour.version = '2.0.0';
+    Public.version = '2.0.0';
     //private:
     Private.button_nextElement = '&nbsp; <button class="next-tour-element">Next</button>';
     Private.button_previousElement  = '&nbsp; <button class="previous-tour-element">Previous</button>';
@@ -52,7 +44,7 @@ var Tour = Tour || (function($){
     //END PROPERTIES
     //METHODS
     //public:
-    Tour.init = function(options){ //actually start the tour
+    Public.init = function(options){ //actually start the tour
         var options = options || {}; //empty object if not set
         var pageSet = (typeof options.page === 'undefined') ? false : true; //is the page var defined?
         if(pageSet) var pageVisited = options.page + 'HasBeenVisited'; //create a unique localstorage variable for this page
@@ -69,11 +61,10 @@ var Tour = Tour || (function($){
             localStorage[pageVisited] = true;
         }
     };
-    Tour.createElement = function(options){ //add a new hidden element to the DOM
+    Public.createElement = function(options){ //add a new hidden element to the DOM
         //all options are...well...optional
         var options = options || {};
         var element = options.attachTo || 'div:first'; //default first div if attach is not set
-        //...and so on:
         var txt = options.txt || '';
         var arrow = options.arrowDir || 'none';
         var style = options.style || '';
@@ -83,12 +74,12 @@ var Tour = Tour || (function($){
             '&nbsp; <button class="finish-tour">Finish</button></div>');
         ++Private.count; //up the count so we know we just added one more element
     };
-    Tour.resumeTour = function(){ //restart a tour
+    Public.resumeTour = function(){ //restart a tour
         Private.selector = 0;
         $('#tour_dim_screen').fadeIn();
         Private.fadeRelevant(); //fade in first element
     };
-    Tour.removeAllElements = function(){ //actually remove all elements from the DOM for good
+    Public.removeAllElements = function(){ //actually remove all elements from the DOM for good
         $('div[class^=tour_div], #tour_dim_screen').remove();
     };
     //private:
@@ -105,5 +96,5 @@ var Tour = Tour || (function($){
         $('div[class^=tour_div], #tour_dim_screen').fadeOut();
     };
     //END METHODS
-    return Tour; //make the main object public
-}).call(this, jQuery); //allow $ use within function
+    return Public; //make the main object public
+})(jQuery); //allow $ use within function
