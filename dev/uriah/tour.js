@@ -42,6 +42,8 @@ var Tour = Tour || (function($){
     var Tour = {}; //main object, public data
     var Private = {}; //stuff i only want access in here; will not return
     //PROPERTIES
+    //public:
+    Tour.version = '2.0.0';
     //private:
     Private.button_nextElement = '&nbsp; <button class="next-tour-element">Next</button>';
     Private.button_previousElement  = '&nbsp; <button class="previous-tour-element">Previous</button>';
@@ -70,7 +72,7 @@ var Tour = Tour || (function($){
     Tour.createElement = function(options){ //add a new hidden element to the DOM
         //all options are...well...optional
         var options = options || {};
-        var element = options.attachTo || 'div:first'; //default first div if attach is not set (experimental atm, doesnt work)
+        var element = options.attachTo || 'div:first'; //default first div if attach is not set
         //...and so on:
         var txt = options.txt || '';
         var arrow = options.arrowDir || 'none';
