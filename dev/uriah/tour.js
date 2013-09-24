@@ -56,10 +56,11 @@ var Tour = Tour || (function($){
         if(pageSet) var pageVisited = options.page + 'HasBeenVisited'; //create a unique localstorage variable for this page
         //start tour if page has not been visited/set or if localStorage is being ignored
         if(typeof localStorage[pageVisited] === 'undefined' || options.localstorage !== true || !pageSet){
+            $('<div id="tour_dim_screen"></div>').appendTo(document.body).hide().fadeIn(); //dim the screen
             Private.fadeRelevant(); //fade in the first element
             //do some cleaning up:
             $('.tour_div0 .previous-tour-element').remove(); //remove the "previous" button from the first element
-            $('.tour_div' + (Tour.count - 1) + ' .next-tour-element').remove(); //remove the "next" button from the last element
+            $('.tour_div' + (Private.count - 1) + ' .next-tour-element').remove(); //remove the "next" button from the last element
         }
         //set page visited to true if we are not ignoring localStorage and the page hasnt been visited
         if(options.localstorage === true && typeof localStorage[pageVisited] === 'undefined'){
@@ -69,8 +70,7 @@ var Tour = Tour || (function($){
     Tour.createElement = function(options){ //add a new hidden element to the DOM
         //all options are...well...optional
         var options = options || {};
-        if(options === {}) console.log("Warning: tour might not work properly, a create element is not attached to something.");
-        var element = options.attachTo || document.body; //use document body if attach is not set (experimental atm, doesnt work)
+        var element = options.attachTo || 'div:first'; //default first div if attach is not set (experimental atm, doesnt work)
         //...and so on:
         var txt = options.txt || '';
         var arrow = options.arrowDir || 'none';

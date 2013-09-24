@@ -543,9 +543,10 @@ $(document).ready(function() {
                 Tour.createElement({
                     attachTo: '#side',
                     txt: 'This is where the general content is displayed.',
-                    arrowDir: 'none',
+                    arrowDir: 'up',
                     style: 'margin-left:300px;margin-top:300px;'
                 });
+                Tour.createElement();
                 Tour.init({
                     page: 'workspace',
                     localstorage: true
