@@ -3,10 +3,13 @@ var Element = (function() {
 	"use strict";
 	var Element = function(type, name, creator) {
 		console.log('New element created:');
+		//we want to be able to edit this's from both Element and sub-class
 		this.name = name;
 		this.creator = creator;
+		//the number of this type of element so far (index)
 		this.num = Model['num_' + type + 's'];
-		Model[type+'s'][type + this.num] = {
+		//create an object for this new element using its num as a unique key
+		Model[type + 's'][type + this.num] = {
 			name: name,
 			creator: creator,
 			num: this.num
@@ -71,25 +74,33 @@ var Event = (function() {
 })();
 //END
 //FUNCTIONS
-var Workspace = (function() {
+var Workspace = (function($) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
+	Private.ajax = function(query, after) {
+		//standard function for server communication
+		$.ajax({
+			success: function() {
+				switch (after) {
+					//if int do a standard function, else call do()
+				}
+			}
+		});
+	};
+	//start Controller, get data from server
 	Public.init = function() {
 		console.log('The workspace has been initiated.');
 		Controller.init();
 	};
-	Private.ajax = {
-		//standard functions for server communication
-	};
-	//let's make add an object to Public for each major feature
+	//let's add an object to Public for each major feature
 	Public.boards = { //EX:
 		create: function() {
 
 		}
 	};
 	return Public;
-})();
+})(jQuery);
 //END
 //MVC
 var Model = (function() {
@@ -117,11 +128,25 @@ var View = (function() {
 	var Public = {}, Private = {};
 	Public.changed = null;
 	Public.notify = function() {
-		switch (Public.changed) {
-			//main view stuff: depending on what changed, do something
-			case 'test':
-				console.log('Testing...it works! Model.test = ' + Model['test']);
-				break;
+		//work with a dynamically add element in the Model
+		if (Public.changed.charAt(0) === '*') {
+			//do lots of hard stuff in here to parse Public.changed
+			//to do the appropriate action
+			var changed = Public.changed.substring(1).split('-'); //remove astrid and get pieces
+			var type = changed[0]; //type of element, eg: documents, tasks, etc.
+			var num = changed[1].substring(changed[0].length - 1); //get the index #
+			var what = changed[2]; //exactly what was changed?
+			switch (type) { //we need to do something different depending on the element
+				//then, do something for each one depending on the actual property changed (var what)
+			}
+		} else {
+			//work with constant Model variables
+			switch (Public.changed) {
+				//main view stuff: depending on what changed, do something
+				case 'test':
+					console.log('Testing...it works! Model.test = ' + Model['test']);
+					break;
+			}
 		}
 	};
 	return Public;
@@ -148,7 +173,8 @@ var Controller = (function() {
 		//change a dynamically added Model property
 		tickle: function(cat, thing, what, newValue) {
 			Model[cat][thing][what] = newValue;
-			View.changed = cat + '-' + thing + '-' + what;
+			// * astrid to tell view it is dynamic
+			View.changed = '*' + cat + '-' + thing + '-' + what;
 			View.notify();
 			console.log('-tickled: Model.' + cat + '.' + thing + '.' + what);
 		}
@@ -165,5 +191,5 @@ var Controller = (function() {
 	// var elTable = new Table('table', 'uriah');
 	// var elNote = new Note('note', 'uriah');
 	// var elEvent = new Event('event', 'uriah');
-	// Workspace.init(); //for testing hard coded tests
+	// Workspace.init(); //for testing hard coded tests (because it must go after the elements)
 })();
