@@ -231,7 +231,7 @@ var View = (function() {
 	};
 	return Public;
 })();
-var Controller = (function() {
+var Controller = (function($) {
 	"use strict";
 	//click handlers: Modify Model
 	return {
@@ -240,9 +240,12 @@ var Controller = (function() {
 			console.log("(Controller): Controller now listening for events!");
 			View.begin(); //onload events
 			//start listening for changes
+			$(document).ready(function(){
+				
+			});
 		}
 	};
-})();
+})(jQuery);
 //END
 //START
 (function() {
