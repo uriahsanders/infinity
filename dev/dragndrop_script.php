@@ -7,15 +7,19 @@ mysql_select_db(SQL_DB)or die(mysql_error());
 
 function getGroups(){
     $result = mysql_query("SELECT * FROM `groups` WHERE `creator` = '".$_SESSION['ID']."'")or die(mysql_error());
-    $groups = array();
-    while($row = mysql_fetch_array($result)){
-        $group = $row['group'];
-        array_push($groups, $group); //push all the groups into an array
-    }
-    if(isset($groups) && !empty($groups)){ //check if the groups array is set and not empty
-        return json_encode($groups); //return json encoded array
+    if($result){
+    	$groups = array();
+    	while($row = mysql_fetch_array($result)){
+   	  	   $group = $row['group'];
+    	    array_push($groups, $group); //push all the groups into an array
+    	}
+    	if(isset($groups) && !empty($groups)){ //check if the groups array is set and not empty
+    	    return json_encode($groups); //return json encoded array
+    	}else{
+    	    return json_encode("no groups");
+    	}
     }else{
-        return "no groups";
+    	return json_encode("bad query");
     }
 }
 
@@ -27,14 +31,17 @@ function delete($item, $name){
     	$result = mysql_query("DELETE FROM `groups` WHERE `group` = '".$name."' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete group
     	$result2 = mysql_query("DELETE FROM `group_members` WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete members
     }
-    else{
-    	$id = getID($name);
-    	$result = mysql_query("DELETE FROM `group_members` WHERE `group` = '".$id."' AND `member` = '".$name."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete members
-    }
-    if($result){
-        return "success";
+    else if($item == "member" && isset($_POST['group'])){
+    	$group = mysql_real_escape_string(htmlspecialchars($_POST['group']));
+    	$id = getID($group);
+    	$result = mysql_query("DELETE FROM `group_members` WHERE `member` = '".$name."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete members
+    	if($result){
+    	    return "success";
+    	}else{
+    	    return "error";
+    	}
     }else{
-        return "error";
+    	return "unknown type: " . $item;
     }
 }
 
@@ -68,27 +75,26 @@ function getMembers($group){
         if(isset($members) && !empty($members)){ //check if the members array is set and not empty
             return json_encode($members); //return json encoded array
         }else{
-            return "no members";
+            return json_encode("no members");
         }
     }else{
-        return "bad query";
+        return json_encode("bad query");
     }
 }
 
-function editInfo($type, $name, $group){
-	$name = mysql_real_escape_string(htmlspecialchars($name));
+function editInfo($type, $group){
 	$group = mysql_real_escape_string(htmlspecialchars($group));
 	if($type == "member"){
 		$id = getID($group);
-		$result = mysql_query("UPDATE `group_members` SET `member` = '".$name."' WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error());
+		/*$result = mysql_query("UPDATE `group_members` SET `member` = '".$name."' WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //update member name
 		if($result){
 			return "success";
 		}else{
 			return "error";
-		}
+		}*/
 	}else if($type == "group"){
 		$id = getID($group);
-		$result = mysql_query("UPDATE `groups` SET `group` = '".$group."' WHERE `creator` = '".$_SESSION['ID']."' AND `id` = '".$id."'")or die(mysql_error());
+		$result = mysql_query("UPDATE `groups` SET `group` = '".$group."' WHERE `creator` = '".$_SESSION['ID']."' AND `id` = '".$id."'")or die(mysql_error()); //update group name
 		if($result){
 			return "success";
 		}else{
@@ -116,7 +122,7 @@ if(isset($_POST['group']) && isset($_POST['members'])){
     echo getMembers($_POST['group']);
 }else if(isset($_POST['del']) && $_POST['del'] == "group" || $_POST['del'] == "member" && isset($_POST['name'])){
     echo delete($_POST['del'], $_POST['name']);
-}else if(isset($_POST['edit']) && $_POST['edit'] == "member" || $_POST['edit'] == "group" && isset($_POST['name']) && isset($_POST['group'])){
+}else if(isset($_POST['edit']) && $_POST['edit'] == "member" || $_POST['edit'] == "group" && isset($_POST['group'])){
 	echo editInfo($_POST['edit'], $_POST['name'], $_POST['group']);
 }else{
     die("error"); //if no requirements are met return error
