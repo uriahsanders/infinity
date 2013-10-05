@@ -79,13 +79,35 @@ var Workspace = (function($ /*, _, T*/ ) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
-	Private.ajax = function(query, after) {
+	Private.ajax = function(query, after, obj) { //data to send; what to do after; special args;
 		//standard function for server communication
+		after = after || 2;
 		$.ajax({
-			success: function() {
+			url: Model.scriptFile,
+			async: obj.async || true,
+			cache: obj.cache || false,
+			type: 'POST',
+			datatype: obj.datatype || '',
+			data: query,
+			success: function(data) {
 				switch (after) {
-					//if int do a standard function, else call do()
+					//if int do a standard function, else call after()
+					case 0: //reload page
+						location.reload(obj.reload || false);
+						break;
+					case 1: //refresh page (ajax)
+						Controller.modify('page', Model.page);
+						break;
+					case 2:
+						//do nothing
+						break;
+					default: //call given function with data
+						after(data);
 				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				console.err.log("AJAX error: " + thrownError);
+				console.err.log("More information on error: Query: " + query + "; After: " + after);
 			}
 		});
 	};
@@ -108,6 +130,8 @@ var Model = (function() {
 	"use strict";
 	//all data: notify view when stuff changes
 	return {
+		//DEV
+		scriptFile: 'workspace_script.php',
 		//everything is public
 		test: false,
 		//defaults
@@ -121,7 +145,7 @@ var Model = (function() {
 		elements: ['Document', 'Task', 'Event', 'Table', 'Note'],
 		pages: ['Start', 'Wall', 'Control', 'Members', 'Documents', 'Tasks', 'Events', 'Tables', 'Files', 'Notes', 'Suggested'],
 		//buttons for controlling content
-		CMS : [
+		CMS: [
 
 		],
 		//How many of each element we have OPEN
