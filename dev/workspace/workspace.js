@@ -111,10 +111,10 @@ var Workspace = (function($ /*, _, T*/ ) {
 			}
 		});
 	};
-	//start Controller, get data from server
+	//get initial view
 	Public.init = function() {
 		console.log('The workspace has been initiated.');
-		Controller.init();
+		View.begin(); //onload events
 	};
 	//let's add an object to Public for each major feature
 	Public.boards = { //EX:
@@ -232,19 +232,14 @@ var View = (function() {
 	return Public;
 })();
 var Controller = (function($) {
+	//we'll just autorun this, so click handlers set before anything is loaded
 	"use strict";
 	//click handlers: Modify Model
-	return {
-		//everything is public
-		init: function() {
-			console.log("(Controller): Controller now listening for events!");
-			View.begin(); //onload events
-			//start listening for changes
-			$(document).ready(function(){
-				
-			});
-		}
-	};
+	console.log("(Controller): Controller now listening for events!");
+	//start listening for changes
+	$(document).ready(function() {
+		
+	});
 })(jQuery);
 //END
 //START
