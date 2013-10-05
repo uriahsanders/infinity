@@ -96,7 +96,7 @@ var Workspace = (function($ /*, _, T*/ ) {
 						location.reload(obj.reload || false);
 						break;
 					case 1: //refresh page (ajax)
-						Controller.modify('page', Model.page);
+						Model.modify('page', Model.page);
 						break;
 					case 2:
 						//do nothing
@@ -159,7 +159,24 @@ var Model = (function() {
 		tasks: {},
 		tables: {},
 		notes: {},
-		events: {}
+		events: {},
+		//functions for modifications:
+		modify: function(what, value) { //change a constant Model property
+			//change data
+			this[what] = value;
+			//notify view
+			View.changed = what; //tell view our most recent change
+			View.notify(); //we just pushed
+			console.log('-modified: Model.' + what);
+		},
+		//change a dynamically added Model property
+		tickle: function(cat, thing, what, newValue) {
+			this[cat][thing][what] = newValue;
+			// * astrid to tell view it is dynamic
+			View.changed = '*' + cat + '-' + thing + '-' + what;
+			View.notify();
+			console.log('-tickled: Model.' + cat + '.' + thing + '.' + what);
+		}
 	};
 })();
 var View = (function() {
@@ -169,7 +186,7 @@ var View = (function() {
 	Public.changed = null;
 	Public.begin = function() { //function for onload handler
 		console.log("(View): initial functions starting...");
-		Controller.modify('test', true);
+		Model.modify('test', true);
 	};
 	Public.notify = function() {
 		//work with a dynamically added element in the Model
@@ -221,23 +238,6 @@ var Controller = (function() {
 			console.log("Controller now listening for events!");
 			View.begin(); //onload events
 			//start listening for changes
-		},
-		//change a constant Model property
-		modify: function(what, value) {
-			//change data
-			Model[what] = value;
-			//notify view
-			View.changed = what; //tell view our most recent change
-			View.notify(); //we just pushed
-			console.log('-modified: Model.' + what);
-		},
-		//change a dynamically added Model property
-		tickle: function(cat, thing, what, newValue) {
-			Model[cat][thing][what] = newValue;
-			// * astrid to tell view it is dynamic
-			View.changed = '*' + cat + '-' + thing + '-' + what;
-			View.notify();
-			console.log('-tickled: Model.' + cat + '.' + thing + '.' + what);
 		}
 	};
 })();
