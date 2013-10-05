@@ -167,7 +167,7 @@ var Model = (function() {
 			//notify view
 			View.changed = what; //tell view our most recent change
 			View.notify(); //we just pushed
-			console.log('-modified: Model.' + what);
+			console.log('(Model): -modified: Model.' + what);
 		},
 		//change a dynamically added Model property
 		tickle: function(cat, thing, what, newValue) {
@@ -175,7 +175,7 @@ var Model = (function() {
 			// * astrid to tell view it is dynamic
 			View.changed = '*' + cat + '-' + thing + '-' + what;
 			View.notify();
-			console.log('-tickled: Model.' + cat + '.' + thing + '.' + what);
+			console.log('(Model): -tickled: Model.' + cat + '.' + thing + '.' + what);
 		}
 	};
 })();
@@ -186,6 +186,8 @@ var View = (function() {
 	Public.changed = null;
 	Public.begin = function() { //function for onload handler
 		console.log("(View): initial functions starting...");
+
+		console.log("(View): Finished.");
 		Model.modify('test', true);
 	};
 	Public.notify = function() {
@@ -215,14 +217,14 @@ var View = (function() {
 
 					break;
 				default:
-					console.err.log("There is no such element: " + type);
+					console.err.log("(View): There is no such element: " + type);
 			}
 		} else {
 			//work with constant Model variables
 			switch (Public.changed) {
 				//main view stuff: depending on what changed, do something
 				case 'test':
-					console.log('Testing...MVC works! Model.test = ' + Model['test']);
+					console.log('(View): Testing...MVC works! Model.test = ' + Model['test']);
 					break;
 			}
 		}
@@ -235,7 +237,7 @@ var Controller = (function() {
 	return {
 		//everything is public
 		init: function() {
-			console.log("Controller now listening for events!");
+			console.log("(Controller): Controller now listening for events!");
 			View.begin(); //onload events
 			//start listening for changes
 		}
