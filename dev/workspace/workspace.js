@@ -1,3 +1,4 @@
+//Infinity-forum.org: 2013
 //ELEMENTS
 var Element = (function() {
 	"use strict";
@@ -74,7 +75,7 @@ var Event = (function() {
 })();
 //END
 //FUNCTIONS
-var Workspace = (function($) {
+var Workspace = (function($ /*, _, T*/ ) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
@@ -100,7 +101,7 @@ var Workspace = (function($) {
 		}
 	};
 	return Public;
-})(jQuery);
+})(jQuery /*, NOHTML, Tour*/ );
 //END
 //MVC
 var Model = (function() {
@@ -109,12 +110,27 @@ var Model = (function() {
 	return {
 		//everything is public
 		test: false,
+		//defaults
+		page: 'Start',
+		filter: [], //are we filtering anything?
+		num_results: null, //how many results are currently displayed?
+		limiter: 20, //how many results to get at once
+		tour: false, //has a Tour been called yet?
+		//general data
+		privileges: ['Observer', 'Contributor', 'Supervisor', 'Manager', 'Creator'],
+		elements: ['Document', 'Task', 'Event', 'Table', 'Note'],
+		pages: ['Start', 'Wall', 'Control', 'Members', 'Documents', 'Tasks', 'Events', 'Tables', 'Files', 'Notes', 'Suggested'],
+		//buttons for controlling content
+		CMS : [
+
+		],
 		//How many of each element we have OPEN
 		num_documents: 0,
 		num_tasks: 0,
 		num_tables: 0,
 		num_notes: 0,
 		num_events: 0,
+		//store entries of each element
 		documents: {},
 		tasks: {},
 		tables: {},
@@ -127,8 +143,12 @@ var View = (function() {
 	//UI: change interface when model changes (calls, but does not define functions)
 	var Public = {}, Private = {};
 	Public.changed = null;
+	Public.begin = function() { //function for onload handler
+		console.log("(View): initial functions starting...");
+		Controller.modify('test', true);
+	};
 	Public.notify = function() {
-		//work with a dynamically add element in the Model
+		//work with a dynamically added element in the Model
 		if (Public.changed.charAt(0) === '*') {
 			//do lots of hard stuff in here to parse Public.changed
 			//to do the appropriate action
@@ -138,13 +158,30 @@ var View = (function() {
 			var what = changed[2]; //exactly what was changed?
 			switch (type) { //we need to do something different depending on the element
 				//then, do something for each one depending on the actual property changed (var what)
+				case 'documents':
+
+					break;
+				case 'tasks':
+
+					break;
+				case 'tables':
+
+					break;
+				case 'notes':
+
+					break;
+				case 'events':
+
+					break;
+				default:
+					console.err.log("There is no such element: " + type);
 			}
 		} else {
 			//work with constant Model variables
 			switch (Public.changed) {
 				//main view stuff: depending on what changed, do something
 				case 'test':
-					console.log('Testing...it works! Model.test = ' + Model['test']);
+					console.log('Testing...MVC works! Model.test = ' + Model['test']);
 					break;
 			}
 		}
@@ -158,7 +195,7 @@ var Controller = (function() {
 		//everything is public
 		init: function() {
 			console.log("Controller now listening for events!");
-			this.modify('test', true);
+			View.begin(); //onload events
 			//start listening for changes
 		},
 		//change a constant Model property
