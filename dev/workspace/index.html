@@ -3,13 +3,339 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Infinity workspace</title>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<!-- Stylesheets -->
 	<link href="workspace.css" rel="stylesheet">
-	<!-- <script src="../libs/NOHTML.js"></script>
-	<script src="../libs/Tour.js"></script> -->
+	<!-- Libs -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="NOHTML.js"></script>
+	<script src="Tour.js"></script>
 </head>
 <body>
-	
+	<!-- 
+		Okay, so, here's what I'm thinking....
+		an open space design, with nothing in the way but a top toolbar
+		Use a bunch of select boxes for different options and such
+		perhaps a few links
+		top bar will remain fixed and carry all the required content to
+		do anything on the page
+		CMS stuff will appear at the bottom half of the screen
+		it will slide up/down to come in
+		dark, transparent theme
+		that brings the question of where the CMS buttons will be located...
+		I think it would look kind of sexy to have them going down the left side of the screen
+		Hold them in arrays and have them change when you change views
+		they can each have a little tooltip saying what its for
+		Other than that, we just have the main area
+		Content can be displayed there to take up all remaining space,
+		so long as the design remains constant
+		In the top toolbar you should be able to store stuff you want open at once
+		in some sort of context/select box for later easy reference
+	-->
+	<!-- Top toolbar -->
+	<div id="content">
+		<nav id="top-bar">
+			<ul id="top-bar-options">
+				<li id="top-bar-option-" class="top-bar-option link"><a>Infinity-Forum</a></li>|
+				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"/></li>|
+				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Infinity</option></select></li>
+				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Master</option></select></li>|
+				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Quick Add</option></select></li>
+				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Actions</option></select></li> |
+				<li id="top-bar-option-" class="top-bar-option link">Open</li><span>(6)</span>
+			</ul>
+			<ul id="top-bar-options" class="right">
+				<li id="top-bar-option-" class="top-bar-option link"><a>RSS</a></li>
+				<li id="top-bar-option-" class="top-bar-option link"><a>General</a></li>
+				<li class="top-bar-option link"><a>Logout</a></li>
+			</ul>
+		</nav>
+		<!-- Side CMS bar -->
+		<div id="side-bar">
+			<ul id="side-bar-options">
+				<li id="side-bar-option-" class="side-bar-option link">1</li>
+				<li id="side-bar-option-" class="side-bar-option link">2</li>
+				<li id="side-bar-option-" class="side-bar-option link">3</li>
+				<li id="side-bar-option-" class="side-bar-option link">4</li>
+				<li id="side-bar-option-" class="side-bar-option link">5</li>
+				<li id="side-bar-option-" class="side-bar-option link">6</li>
+				<li id="side-bar-option-" class="side-bar-option link">7</li>
+				<li id="side-bar-option-" class="side-bar-option link">8</li>
+			</ul>
+		</div>
+		<!-- Main area -->
+		<div id="main">
+			<span id="page-title">Stream</span>&nbsp;
+			<div id="all-pages">
+				<span id="tiny-page-stream" class="link">Stream</span>
+				<span id="tiny-page-control" class="link">Control</span>
+				<span id="tiny-page-members" class="link">Members</span>
+				<span id="tiny-page-documents" class="link">Documents</span>
+				<span id="tiny-page-tasks" class="link">Tasks</span>
+				<span id="tiny-page-events" class="link">Events</span>
+				<span id="tiny-page-tables" class="link">Tables</span>
+				<span id="tiny-page-files" class="link">Files</span>
+				<span id="tiny-page-notes" class="link">Notes</span>
+				<span id="tiny-page-suggested" class="link">Suggested</span>
+			</div>
+			<hr class="hr-std">
+			<div id="workspace-info">
+				<span class="link header">Mail: 3</span> &emsp; <span class="link header">Requests: 7</span> &emsp; <span class="link header">Suggestions: 4</span>
+				<hr class="hr-fancy">
+				<span class="header">Statistics:</span><br><br>
+				<div id="statistics">
+					<strong>Creator:</strong> <span class="link">Uriah Sanders</span>,<br><br>
+					<strong>Created:</strong> 2013-09-18,<br><br>
+					<strong>Launched:</strong> Yes,<br><br>
+					<strong>Members:</strong> 23,<br><br>
+					<strong>Members online:</strong> 7,<br><br>
+					<strong>Branches:</strong> 8,<br><br>
+					<strong>Popularity:</strong> 1129,<br><br>
+					<strong>Duration:</strong> 1 year, 6 months, 13 days
+				</div>
+				<br>
+				<hr class="hr-fancy">
+				<span class="header">Contributions:</span><br>
+				<div id="workspace-graphs">
+					<canvas id="graph-contributions" class="graph"></canvas>
+				</div>
+			</div>
+			<!-- Unique content -->
+			<div id="entries">
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">created</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						6 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Task</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">assigned</span> 
+						<span class="link">"<a>Start coding</a>"</span>
+						<br />
+						4 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Event</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">removed</span> 
+						<span class="link">"<a>Buy pancakes</a>"</span>
+						<br />
+						3 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View Comments</button>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Scripts -->
 	<script src="workspace.js"></script>
 </body>
 </html>

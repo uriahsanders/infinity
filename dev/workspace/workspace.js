@@ -74,8 +74,26 @@ var Event = (function() {
 	return Event;
 })();
 //END
+//URL HANDLING (PUSHSTATE)
+var Router = (function() {
+	"use strict";
+	var Public = {}, Private = {};
+	Public.goTo = function(param, second) {
+		//history.pushState('', '', param);
+	};
+	Public.isURLDefault = function() {
+		var paths = location.href.split('/');
+		if (paths[paths.length - 2] === 'workspace') return true;
+		return false
+	};
+	Public.implement = function(path){ //do ajax depending on URL
+		//do a lot of annyoing parsing to modify Model data depnding on URL
+	};
+	return Public;
+})();
+//END
 //FUNCTIONS
-var Workspace = (function($ /*, _, T*/ ) {
+var Workspace = (function($, _, T) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
@@ -113,29 +131,50 @@ var Workspace = (function($ /*, _, T*/ ) {
 	};
 	//get initial view
 	Public.init = function() {
-		console.log('The workspace has been initiated.');
-		View.begin(); //onload events
+		if (Router.isURLDefault()) { // URL is standard
+			console.log('The workspace has been initiated.');
+			console.log("Initial functions starting...");
+			$('#tiny-page-' + Model['page'].lcfirst()).css('display', 'none'); //fade out "Stream" link
+			Router.goTo(Model['page']);
+			console.log("Finished.");
+		} else { //URL has special path
+			var paths;
+			console.log("This workspace has been linked to. URL:" + location);
+			paths = location.split('/workspace/'); //everything after this is the path
+			Router.implement(paths[1]); //do ajax functions for this URL
+		}
 	};
 	//let's add an object to Public for each major feature
-	Public.boards = { //EX:
-		create: function() {
+	Public.gen = { //EX:
+		welcome: function() {
+
+		},
+		changePage: function() {
+			$('#page-title').text(Model['page'].ucfirst()); //change title
+			$('span[id^="tiny-page-"]').show(); //show all links
+			$('#tiny-page-' + Model['page']).hide(); //hide link that we just clicked
+			Router.goTo(Model['page']);
+			//do ajax request
+		},
+		tour: function() {
 
 		}
 	};
 	return Public;
-})(jQuery /*, NOHTML, Tour*/ );
+})(jQuery, NOHTML, Tour);
 //END
 //MVC
 var Model = (function() {
 	"use strict";
-	//all data: notify view when stuff changes
+	//all data: notify view when stuff changes (All Public)
 	return {
 		//DEV
 		scriptFile: 'workspace_script.php',
-		//everything is public
 		test: false,
 		//defaults
-		page: 'Start',
+		page: 'Stream',
+		project: null,
+		branch: 'Master',
 		filter: [], //are we filtering anything?
 		num_results: null, //how many results are currently displayed?
 		limiter: 20, //how many results to get at once
@@ -143,7 +182,7 @@ var Model = (function() {
 		//general data
 		privileges: ['Observer', 'Contributor', 'Supervisor', 'Manager', 'Creator'],
 		elements: ['Document', 'Task', 'Event', 'Table', 'Note'],
-		pages: ['Start', 'Wall', 'Control', 'Members', 'Documents', 'Tasks', 'Events', 'Tables', 'Files', 'Notes', 'Suggested'],
+		pages: ['Stream', 'Control', 'Members', 'Documents', 'Tasks', 'Events', 'Tables', 'Files', 'Notes', 'Suggested'],
 		//buttons for controlling content
 		CMS: [
 
@@ -179,17 +218,11 @@ var Model = (function() {
 		}
 	};
 })();
-var View = (function() {
+var View = (function($) {
 	"use strict";
 	//UI: change interface when model changes (calls, but does not define functions)
-	var Public = {}, Private = {};
+	var Public = {};
 	Public.changed = null;
-	Public.begin = function() { //function for onload handler
-		console.log("(View): initial functions starting...");
-
-		console.log("(View): Finished.");
-		Model.modify('test', true);
-	};
 	Public.notify = function() {
 		//work with a dynamically added element in the Model
 		if (Public.changed.charAt(0) === '*') {
@@ -226,26 +259,40 @@ var View = (function() {
 				case 'test':
 					console.log('(View): Testing...MVC works! Model.test = ' + Model['test']);
 					break;
+				case 'page':
+					console.log("(View): Page changed to '" + Model['page'] + "'");
+					Workspace.gen.changePage();
+					break;
 			}
 		}
 	};
 	return Public;
-})();
+})(jQuery);
 var Controller = (function($) {
-	//we'll just autorun this, so click handlers set before anything is loaded
 	"use strict";
 	//click handlers: Modify Model
 	console.log("(Controller): Controller now listening for events!");
+	Model.modify('test', true); //make sure MVC works
 	//start listening for changes
 	$(document).ready(function() {
-		
+		$(document).on('click', 'span[id^="tiny-page-"]', function() {
+			Model.modify('page', $(this).attr('id').substring(10));
+		});
 	});
 })(jQuery);
 //END
 //START
 (function() {
 	"use strict";
-	Workspace.init();
+	//JS additions
+	String.prototype.ucfirst = String.prototype.ucfirst || function() {
+		return this.charAt(0).toUpperCase() + this.slice(1);
+	}
+	String.prototype.lcfirst = String.prototype.lcfirst || function() {
+		return this.charAt(0).toLowerCase() + this.slice(1);
+	}
+	//BEGIN
+	Workspace.init(); //start everything
 	//FOR TESTING IN DEV ONLY:
 	// var elDocument = new Document('task', 'uriah');
 	// var elTask = new Task('task', 'uriah');

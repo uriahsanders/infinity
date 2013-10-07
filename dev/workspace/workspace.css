@@ -1,0 +1,223 @@
+html, body{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background: url('/infinity/dev/images/dark_stripes.png');
+	color: grey;
+}
+#content{
+	height: 100%;
+	width: 100%;
+}
+#top-bar{
+	border: 1px solid black;
+	position: fixed;
+	width: 100%;
+	height: 35px;
+	background: url('/infinity/dev/images/broken_noise.png');
+	z-index: 2;
+}
+#side-bar{
+	border: 1px solid black;
+	float: left;
+	height: 100%;
+	position: fixed;
+	width: 2%;
+	background: url('/infinity/dev/images/gray_sand.png');
+	opacity: .8;
+	z-index: 1;
+	padding-left: 5px;
+	padding-top: 30px;
+}
+#main{
+	padding: 3%;
+	margin-left: auto;
+	opacity: .8;
+}
+#page-title{
+	font-size: 300%;
+}
+#page-nav{
+	font-size: 300%;
+}
+#all-pages{
+	display: inline-block;
+}
+span[id^="tiny-page-"]{
+	margin: 0px 3px;
+}
+ul{
+	list-style: none;
+	padding: 0;
+	display: inline-block;
+}
+li[class$="-option"]{
+	cursor: pointer;
+}
+#top-bar-options{
+	margin: auto;
+}
+li.top-bar-option{
+	margin: 5px;
+	display: inline-block;
+}
+li.side-bar-option{
+	
+}
+button, select {
+	border: 1px solid black;
+    padding: 2px;
+    border-radius:3px;
+    background: rgba(255,255,255,.2);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+button{
+	padding: 5px;
+	cursor: pointer;
+	-webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+}
+button:hover{
+	border: 1px solid grey;
+	opacity: 1;
+}
+.link{
+	opacity: .7;
+	-webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    cursor: pointer;
+}
+.link:hover{
+	opacity: 1;
+}
+input[type=text], textarea, input[type=password]{
+	background: rgba(255,255,255,.2);
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid #1e2226;
+    color: darkgrey;
+}
+.one-opacity{
+	opacity: 1;
+}
+.right {
+    float: right;
+    text-align: right;
+    position: relative; 
+    top: 0.2em;
+    right: 0.5em;
+}
+.hr-std{
+	box-shadow: inset 0 12px 12px -12px #fff;
+	border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+}
+.entry{
+	opacity: .9;
+	-webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    border: 2px solid black;
+    background: url('/infinity/dev/images/gray_sand.png');
+    padding: 5px;
+    width: 95%;
+    float: right;
+    display: inline-block;
+    margin: 3px;
+}
+.entry:hover{
+	opacity: 1;
+}
+.entry-media{
+	float: left;
+	padding: 5px;
+}
+.entry-content{
+	margin-left: 65px;
+	padding: 10px;
+}
+.entry-comments-wrapper{
+	margin-left: 50px;
+}
+#entries{
+	background: url('/infinity/dev/images/broken_noise.png');
+	padding: 5px;
+	height: 775px;
+	overflow-y: scroll;
+	border: 2px solid black;
+	width: 50%;
+	float: right;
+}
+#statistics{
+	font-size: 115%;
+	margin-left: 7%;
+}
+#workspace-info{
+	display: inline-block;
+	background: url('/infinity/dev/images/gray_sand.png');
+	padding: 5px;
+	width: 45%;
+	border: 2px solid black;
+	height: 775px;
+}
+#workspace-graphs{
+	background: url('/infinity/dev/images/broken_noise.png');
+}
+.graph{
+	height: 90%;
+	width: 90%;
+}
+.header{
+	font-size: 200%;
+}
+.hr-fancy{
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+}
+/*SCROLLBARS*/
+::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
+::-webkit-scrollbar-button       { 
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
+  border: 1px solid #0d0d0d;
+  height: 10px;
+  width: 10px;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666; }
+::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/infinity/dev/images/down.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/infinity/dev/images/down2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/infinity/dev/images/up.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/infinity/dev/images/up2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment { background:url(/infinity/dev/images/right.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/infinity/dev/images/right2.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement { background:url(/infinity/dev/images/left.png) no-repeat; background-size:6px; background-position:center} 
+::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/infinity/dev/images/left2.png) no-repeat; background-size:6px; background-position:center} 
+
+::-webkit-scrollbar-track        { }
+::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
+::-webkit-resizer                {  }
+::-webkit-scrollbar-thumb { 
+  background: rgba(27,27,27,1);
+  opacity: 0.5;
+  border: 1px solid #0d0d0d;
+  border-top: 1px solid #666666;
+  border-left: 1px solid #666666;}
+::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
+::-webkit-scrollbar-corner       {  }
