@@ -129,7 +129,7 @@ var Workspace = (function($, _, T) {
 			}
 		});
 	};
-	//get initial view
+	//do all the starting stuff
 	Public.init = function() {
 		if (Router.isURLDefault()) { // URL is standard
 			console.log('The workspace has been initiated.');
@@ -218,9 +218,9 @@ var Model = (function() {
 		}
 	};
 })();
+//UI: change interface when model changes (calls, but does not define functions)
 var View = (function($) {
 	"use strict";
-	//UI: change interface when model changes (calls, but does not define functions)
 	var Public = {};
 	Public.changed = null;
 	Public.notify = function() {
@@ -268,9 +268,9 @@ var View = (function($) {
 	};
 	return Public;
 })(jQuery);
+//Click handlers: modify Model
 var Controller = (function($) {
 	"use strict";
-	//click handlers: Modify Model
 	console.log("(Controller): Controller now listening for events!");
 	Model.modify('test', true); //make sure MVC works
 	//start listening for changes

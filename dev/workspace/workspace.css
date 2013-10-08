@@ -62,7 +62,7 @@ li.top-bar-option{
 	display: inline-block;
 }
 li.side-bar-option{
-	
+	margin: 7px 0px;
 }
 button, select {
 	border: 1px solid black;
