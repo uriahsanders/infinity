@@ -5,6 +5,8 @@
     //also i cba atm to check table info so youll need to correct any wrong stuff
     //if you wait until tmmrw i will hopefully have time to extensively test and correct everything
     class Status extends SQL{
+        //i thought a class might be neccesary since more functions may eventually be added
+        //always good to be prepared
         public static get_status(){
             $result = $this->Query("SELECT `status` FROM `members` WHERE `ID` = %d", $_SESSION['ID']);
             $row = mysql_fetch_assoc($result);

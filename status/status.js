@@ -4,7 +4,7 @@ var Status = Status || (function($) {
 	var Public = {}, Private = {};
 	Private.url = 'status.php';
 	Private.idleTime = 0;
-	Private.forced = false;
+	Private.forced = false; //is their current status voluntary?
 	Public.changeStatus = function(id, forced) {
 		$.ajax({
 			url: Private.url,
@@ -37,7 +37,7 @@ var Status = Status || (function($) {
 			Public.changeStatus('Away');
 			Private.forced = true; //they didnt choose this :P
 		}
-		++Private.idleTime; //they have been idle for one more second
+		++Private.idleTime; //they have been idle for one more minute
 	};
 	Public.init = function() {
 		$(document).ready(function() {
@@ -53,8 +53,8 @@ var Status = Status || (function($) {
 			//keep polling server every minute
 			window.setInterval(function() {
 				Private.pollStatus();
-			}, 60000);
+			}, 60000); //every minute
 		});
 	};
 	return Public;
-})(jQuery);
+})(jQuery); //include jQuery before this
