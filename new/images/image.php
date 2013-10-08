@@ -10,7 +10,7 @@ if (isset($_GET['id']) && preg_match('/^([0-9a-z]){33}$/', $_GET['id'])) {
 		case "j":
 			$ext = ".jpg";
 			break;
-		case "p":
+		case "p":default:
 			$ext = ".png";
 			break;
 		/*case "g":
@@ -18,8 +18,11 @@ if (isset($_GET['id']) && preg_match('/^([0-9a-z]){33}$/', $_GET['id'])) {
 			break;	*/
 	}	
     $_file = substr($_GET['id'],0,32) . $ext;  
-    if (file_exists('/home2/infiniz7/upload/'.$_file)) {
-        echo file_get_contents('/home2/infiniz7/upload/'.$_file);
+	
+	//if (file_exists('/home2/infiniz7/upload/'.$_file)) {
+        //echo file_get_contents('/home2/infiniz7/upload/'.$_file);
+    if (file_exists(PATH.'upload/'.$_file)) {
+        echo file_get_contents(PATH.'/upload/'.$_file);
     } else{
         echo file_get_contents(PATH.'images/profile-photo.jpg');
     }

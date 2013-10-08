@@ -43,7 +43,6 @@ a:hover {
         1px 1px 1px rgba(255,255,255,0.2);
     box-shadow:
         1px 1px 1px rgba(255,255,255,0.2);
-    display: inline-box;
     white-space: nowrap;
     min-width: 600px; 
     background: url('/images/broken_noise.png');
@@ -105,7 +104,6 @@ a:hover {
     width: 349px;    
     height: 99px; 
     position:absolute;
-    display: inline-box;
     left:0;
     border:0;
     border-bottom:6px solid #000;
@@ -367,7 +365,7 @@ a:hover {
     left:25%;
     right:25%;
     top:20%;
-    botton:30%;
+    bottom:30%;
     -moz-opacity: 0;
     opacity: 0;
     -webkit-transition: all 1000ms linear;
@@ -811,7 +809,6 @@ div[class^='A_'] {
     -o-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
     padding: 3px 0;
     cursor:move;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;

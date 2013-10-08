@@ -25,11 +25,12 @@ if(!$member->logged())
         <link rel="shortcut icon" href="/favicon.ico" />
         <?php
             include_once(PATH . "extra/loading/loading.php");
+			echo "\n";
         ?>
         <link rel="stylesheet" type="text/css" href="/css/default.css" /><!--php?style=default-->
         <?php
             if ($member->logged())
-                echo '<link rel="stylesheet" type="text/css" href="/css/member.css" />';        
+                echo '<link rel="stylesheet" type="text/css" href="/css/member.css" />'."\n";        
         ?>
         <link href='http://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
@@ -60,8 +61,11 @@ if(!$member->logged())
                 echo '<script src="/js/forum.js" type="text/javascript"></script>';
             }
             if ($member->logged())
+			{
                 echo '<script src="/js/lmember.js" type="text/javascript"></script>';
-            else 
+                echo '<script src="/js/status.js" type="text/javascript"></script>';
+			}
+			else 
                 echo '<script src="/js/member.js" type="text/javascript"></script>';
         ?>
     </head>
@@ -250,12 +254,25 @@ if(!$member->logged())
                         </div>
                     </div>
                     <div id=\"member_bar_icons\">";
-                        
+                        echo "<div id=\"status_icon\"><img src=\"/images/status/0.png\" class=\"status_icon\" alt=\"status\" title=\"status\">";
+						echo "<span>";
+						$status = [
+								1 => "Online",
+								2 => "Away",
+								3 => "Busy",		
+								0 => "Invisible"					
+							];
+						foreach($status as $id=>$name)
+							echo "<label><img src=\"/images/status/$id.png\" alt=\"$id\" title=\"$name\"/>$name</label>";
+						echo "</span>";
+						echo "</div>";
+						
+						 /* commenting out this because it will be redone completely...
                         $res = $member->GetNotification();
                         $res2 = $member->GetNotification(1);
                         echo "<span id=\"member_notification\" ".((mysql_num_rows($res2) > 0)? "new":"")."><h6>". mysql_num_rows($res2) . "</h6>";
                         
-                        echo "<div id=\"member_notifications\">";
+                       echo "<div id=\"member_notifications\">";
                                 
                                 
                                 echo "<i>Your events:</i>";
@@ -272,8 +289,10 @@ if(!$member->logged())
                                 
                                 
                             echo "</div>
-                        </span>
-                        <a href=\"/member/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>&nbsp;
+                        </span>*/
+						
+						
+                        echo "<a href=\"/member/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
                         <!--Need messages icon here-->
                         <a href=\"/lounge/logout\"><img src=\"/images/logout.png\" alt=\"logout\" title=\"logout\" border=\"0\"/></a>
                     </div>

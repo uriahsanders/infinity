@@ -14,8 +14,8 @@ include_once(PATH ."core/bar_main_start.php");
                 $sql = new SQL(); 
                 $res = $sql->Query("SELECT * FROM news ORDER BY date DESC LIMIT 8");
                 while($row = mysql_fetch_array($res)){
-                    echo "<li id=\"$row[id]\" ".(($row['id']==0)?"active":"").">$row[subject]</li>\n";
-                    if ($row['id']==0)
+                    echo "<li id=\"$row[ID]\" ".(($row['ID']==0)?"active":"").">$row[subject]</li>\n";
+                    if ($row['ID']==0)
                         $welcome = $row;
                 }
                 ?>

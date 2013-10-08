@@ -22,8 +22,8 @@ function uploadImageFile() { // Note: GD library is required for this function
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
-        $iWidth = (($_POST['ID']== 1)?250:870);
-		$iHeight = (($_POST['ID']== 1)?250:180); // desired image result dimensions
+        $iWidth = (($_POST['id']== 1)?250:870);
+		$iHeight = (($_POST['id']== 1)?250:180); // desired image result dimensions
         $iJpgQuality = 90;
 
         if ($_FILES) {
@@ -34,7 +34,8 @@ function uploadImageFile() { // Note: GD library is required for this function
 
                     // new unique filename
 					$rnd = md5(time().rand());
-                    $sTempFileName = '/home2/infiniz7/upload/' . $rnd;
+                    //$sTempFileName = '/home2/infiniz7/upload/' . $rnd;
+					$sTempFileName = PATH.'upload/' . $rnd;
 
                     // move uploaded file into cache folder
                     move_uploaded_file($_FILES['image_file']['tmp_name'], $sTempFileName);

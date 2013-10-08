@@ -2,7 +2,15 @@
 if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
 	
-define("PATH", "/home2/infiniz7/public_html/new/"); // so we can try using presice path in includes
+session_start_secure();
+include_once($_SERVER['DOCUMENT_ROOT']."/config.php");
+
+
+
+///////////////////////////////////
+//	Global variables
+///////////////////////////////////
+
 
 ///////////////////////////////////
 // function for the link
@@ -31,36 +39,113 @@ function listlinks($page, $path = "")
         }
     }
 }
+function session_start_secure() //starting a secure session
+{
+	if (session_status() != PHP_SESSION_ACTIVE) //check if there is one atm
+	{
+		if (isset($_COOKIE['PHPSESSID']) && !preg_match('/^[a-z0-9-,]{22,40}$/i', $_COOKIE['PHPSESSID']))//check session ID so its not manipullated
+				unset($_COOKIE['PHPSESSID']); //removing cookie, incorrect
+		
+		$currentCookieParams = session_get_cookie_params(); // getting active session parameters
+		session_set_cookie_params(  //putting a new secure cookie
+			$currentCookieParams["lifetime"],  
+			$currentCookieParams["path"],  
+			$currentCookieParams["domain"],  
+			$currentCookieParams["secure"],  
+			true //http_only
+		); 
+		session_start(); //starting session
+		session_regenerate_id(); //regenerate ID to prevent hojacking
+	}
+}
+
+
+
+///////////////////////////////////////////
+//  SQL with cleanQuery
+///////////////////////////////////////////
+class SQL{ 
+    private $SQL_USR = SQL_USR; //username to sql server
+    private $SQL_PWD = SQL_PWD; //password
+    private $SQL_SERVER = SQL_SERVER; //server
+    private $SQL_DB = SQL_DB; //database
+    public $CON;  //the connection will be here
+    public $RESULTS; //results if you need em again
+	private $die_on_error = true; //kill on error, should ALWAYS be true
+	//private $errors = false; //production mode
+	private $errors = true; //developing mode
+	
+    function __construct() // at init
+	{ 
+        $this->CON = mysql_connect($this->SQL_SERVER, $this->SQL_USR, $this->SQL_PWD) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :""); //create connection
+        mysql_select_db($this->SQL_DB, $this->CON) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :""); //select db
+    }
+	
+    function Query($query)  //the query, will trow error if empty
+	{
+        $args = func_get_args();  // get all the arguments from the call
+        if (count($args) > 1) // check if its a query with our without parameters
+		{  
+			array_shift($args);//shift to hide the first argument (the query)
+			for ($i = 0; $i < count($args); $i++) //loop all arguments
+			{ 
+				$args[$i] = $this->cleanQuery($args[$i]); //clean the arguments one by one
+			}
+			foreach($args as $key=>$value) //do an extra check if int, float or string
+				$args[$key] = ((preg_match('/^([0-9]*)$/',$value) || is_int($value))?intval($value):((preg_match('/^([0-9]*)\.([0-9]*)$/',$value) || is_float($value))?floatval($value) : "'".$value."'"));  
+			$query = call_user_func_array('sprintf', array_merge((array)$query, $args)); //merge the arguments with the query
+        }
+		$this->RESULTS = mysql_query($query) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :"");  // execute the done query 
+        return $this->RESULTS; //return the results
+    }
+    function cleanQuery($string, $xss = true, $br = false, $br2 = false) { //if you clean by yourseld call with this parameters
+	    $string = ($xss === true) ? htmlspecialchars($string) : $string; // XSS preventation, SHOULD ALWAYS BE ON, ask relax about situations where you can turn this off
+        $string = ($br != false) ? str_replace("\n","<br />",$string) : $string; // replace new lines to BR, used in WALL and FORUM
+        $string = (phpversion() >= '4.3.0') ? mysql_real_escape_string($string) : mysql_escape_string($string); // sql injection preventation, you can't turn this off
+  
+        if ($br2 != false) { // to stripp multiple br
+            while (preg_match('~<br /><br /><br />~',$string)) { $string = preg_replace('~<br /><br /><br />~', "<br /><br />", $string); } //replace 3br to 2br
+            if (substr($string,-12) == "<br /><br />") $string = substr($string,0,-12); else if (substr($string,-6) == "<br />") $string = substr($string,0,-6); //remove br from the end
+        }
+        return $string; //return
+    }
+	function __destruct() {
+       @mysql_close($this->CON); //kill connection when destroyed
+   }
+}
 
 ////////////////////////////////////////////////
 //	Member class to use for all info functions
 ////////////////////////////////////////////////
 class member extends SQL{
-		function checkDub($what, $value) 
-		{
-			if ($what == "username") 
+	public $ranks = array("Banned","Member","Trusted","VIP","MOD","GMOD","Admin"); //this will be changed from values from the database....
+	
+		function UpdateRanks() { // cant have __construct() because that will apperantly break the SQL __construct() :/
+			$ran = $this->Query("SELECT * FROM ranks"); //fix the ranks from db...
+			$this->ranks = array();
+			while ($row = mysql_fetch_array($ran))
 			{
-				$results = $this->Query("SELECT username FROM members WHERE `username` = %s",$value);
-			} 
-			elseif ($what == "email") 
-			{
-				$results = $this->Query("SELECT email FROM members WHERE `email` = %s",$value);
-			} 
-			else 
-			{
-				return "Please specify the $what variable as username or email";
+				array_push($this->ranks,  $row["name"]);	//pusch all the ranks into the array
 			}
-			return mysql_num_rows($results);	
 		}
-		function getUsrData($id)
+		
+		function checkDub($what, $value) //check if email or username already exists in database
+		{
+			if ($what == "username") //what can only be username or email here
+				$results = $this->Query("SELECT username FROM members WHERE `username` = %s",$value);
+			elseif ($what == "email") 
+				$results = $this->Query("SELECT email FROM members WHERE `email` = %s",$value);
+			else 
+				return "Please specify the $what variable as username or email";
+			return mysql_num_rows($results); //if >1 then it exist.... clearly >.>
+		}
+		
+		function getUsrData($id) //return all data for the $id... should not be used because the pwd hash will come with this too.... use $this->getUsrInfo instead
 		{
 			$res = $this->Query("SELECT * FROM members WHERE `ID` = %d", $id);
-			if (!$res)
-			{
-				return false;
-			}
-			return mysql_fetch_array($res);
+			return mysql_fetch_array($res); //return the array
 		}
+		
 		function getUsrPicture($id) {
 			$data = $this->getUsrInfo($id);
 			return $data['image'];	
@@ -382,7 +467,16 @@ class member extends SQL{
 				$this->logout(1);	
 		}
 		
-		
+		function getUserRank($ID = 0, $type = "name"){ // default is active user and to return the name of the rank.
+			if ($ID === 0)
+				$ID = $_SESSION['ID'];
+			$res = $this->Query("SELECT rank FROM memberinfo WHERE ID=%d", $ID);
+			$row = mysql_fetch_row($res);
+			if ($type === "name")
+				return $this->ranks[$row[0]];
+			return $row[0];
+			
+		}
 		
 		function setUsrData($what, $value)
 		{
@@ -552,47 +646,131 @@ class Bcrypt {
     return $bytes;
   }
 }
-///////////////////////////////////////////
-//  SQL with cleanQuery
-///////////////////////////////////////////
-class SQL{
-    private $SQL_USR = "infiniz7_web";
-    private $SQL_PWD = "p,G4?+B@n5~8]XIRP(";
-    private $SQL_SERVER = "localhost";
-    private $SQL_DB = "infiniz7_new2";
-    public $CON; //the connection will lie here
-    public  $RESULTS;
-    public  $CLEAN = true; // if its going to be cleaned or not
-    function __construct() { 
-        $this->CON = mysql_connect($this->SQL_SERVER, $this->SQL_USR, $this->SQL_PWD) or die(mysql_error()); //connect
-        mysql_select_db($this->SQL_DB, $this->CON) or die(mysql_error()); // select db
-    }
-    function Query($query = "") { //standard query with or without args
-        $args = func_get_args(); // get rest of arguments
-        if (count($args) < 1) { $this->Error(__METHOD__.' No arguments'); return;}; // not even a query as an argument
-        array_shift($args); // hide the query so we can work with the args
-        if ($this->CLEAN === true) { for ($i = 0; $i < count($args); $i++) { $args[$i] = $this->cleanQuery($args[$i]); }} // clean all args if clean is true
-        foreach($args as $key=>$value)
-            $args[$key] = ((preg_match('/^([0-9]*)$/',$value) || is_int($value))?intval($value):((preg_match('/^([0-9]*)\.([0-9]*)$/',$value) || is_float($value))?floatval($value) : "'".$value."'")); //small modification so not all arguments will be strings
-        $query = call_user_func_array('sprintf', array_merge((array)$query, $args));  // merge the query with the arguments
-        $this->RESULTS = mysql_query($query) or die(mysql_error()); // RUUUUUUUUUNNNN!!!
-        return $this->RESULTS; // send back
-    }
-    function cleanQuery($string, $xss = true, $br = false, $br2 = false) { //if you clean by yourseld
-        $string = ($xss === true) ? htmlspecialchars($string) : $string; // XSS preventation
-        $string = ($br != false) ? str_replace("\n","<br />",$string) : $string; // replace new lines to BR
-        $string = (phpversion() >= '4.3.0') ? mysql_real_escape_string($string) : mysql_escape_string($string); // sql injection preventation, you can't turn this off
-        
-        if ($br2 != false) { // to stripp multiple br
-            while (preg_match('~<br /><br /><br />~',$string)) { $string = preg_replace('~<br /><br /><br />~', "<br /><br />", $string); } //replace 3br to 2br
-            if (substr($string,-12) == "<br /><br />") $string = substr($string,0,-12); else if (substr($string,-6) == "<br />") $string = substr($string,0,-6); //remove br from the end
-        }
-        return $string; //return
-    }
+
+
+
+
+//////////////////////////////////////////////
+//	Forum function
+//////////////////////////////////////////////
+
+class forum extends member {
+	function getTopicCount($ForumID) //how many topics in the forum
+	{
+		$res = $this->Query("SELECT * FROM topics WHERE parent_ID=%d", $ForumID);
+		return mysql_num_rows($res); //return the number of results
+	}
+	function getPostCount($TopicID) // how many posts in the Topic (can be an array with many)
+	{
+		if (is_array($TopicID)) //check if array
+		{
+			if (sizeof($TopicID) === 0) //check that the array is not empty
+				return 0;
+			$query = "SELECT * FROM posts WHERE parent_ID="; //start of query
+			foreach($TopicID as $id) //list through the array
+			{
+				$query .= $id . " OR parent_ID="; //append to the query
+			}
+			$query =  substr($query,0, strripos($query, "OR")); // stripp the last OR parent_ID=
+			$res = $this->Query($query); //run
+			return mysql_num_rows($res);//return results
+		}
+		else //only 1 ID
+		{
+			$res = $this->Query("SELECT * FROM posts WHERE parent_ID=%d", $TopicID);
+			return mysql_num_rows($res); //return the number of results
+		}
+	}
+	function getPostCountByForum($ForumID) //if you want to check a whole subcat instead of individual topics
+	{
+		$res = $this->Query("SELECT * FROM topics WHERE parent_ID=%d", $ForumID); //get all the topics from the subcat
+		$array = array();
+		while ($row = mysql_fetch_array($res))
+		{
+			array_push($array, $row["ID"]); //pusch all the ID's to an array
+		}
+		return $this->getPostCount($array); //send to the post count with all the ID's and then return the results
+	}
+	
+	function getLastPost($TopicID) //last post of a topic
+	{
+		$sys = new sys; //we need this for the timediff function
+		if (is_array($TopicID)) //check if array 
+		{
+			if (sizeof($TopicID) === 0) //check so its not empty
+				return "";
+			$query = "SELECT * FROM posts WHERE ";//start of query
+			foreach($TopicID as $id)
+			{
+				$query .= "parent_ID=".$id." OR ";//append query
+			}
+			$query =  substr($query,0, strripos($query, "OR")) . "ORDER BY time_ desc"; //remove the last OR parent_ID= from query
+			$res = $this->Query($query);//run the query
+			
+			$query = "SELECT * FROM topics WHERE ";//start of query
+			foreach($TopicID as $id)
+			{
+				$query .= "ID=".$id." OR ";//append query
+			}
+			$query =  substr($query,0, strripos($query, "OR")) . "ORDER BY time_ desc"; //remove the last OR parent_ID= from query
+			$res2 = $this->Query($query);//run the query
+		}
+		else //only checking 1 ID
+		{
+			$res = $this->Query("SELECT * FROM posts WHERE parent_ID=%d ORDER BY time_ desc", $TopicID);
+			$res2 = $this->Query("SELECT * FROM topics WHERE ID = %d ORDER BY time_ desc", $TopicID);
+		}
+		
+		$row = mysql_fetch_array($res);//because we are sorting by date desc we only want the oldest post
+		$row2 = mysql_fetch_array($res2);
+		if ($row2["time_"] > $row["time_"])
+			$row = $row2;
+		$data = $this->getUsrInfo($row["by_"]); //get the info from the user
+		return "by <a href=\"/user/$data[username]\">".$data["username"]."</a> &nbsp;&nbsp;<span title=\"".$this->getTopicName($row["parent_ID"]).":\n".substr($row["msg"],0,100)."\">&iexcl;</span><br/>".$sys->timeDiff($row["time_"]) . "&nbsp;&nbsp;<a href=\"#t=".$row["parent_ID"]."&p=".$row["ID"]."\">&raquo;</a>";	
+		//return our costumized "last post"-text
+		
+	}
+	
+	function getTopicName($TopicID)
+	{
+		$res = $this->Query("SELECT title FROM topics WHERE ID=%d", $TopicID);
+		return mysql_fetch_array($res)["title"];	//return the name of the topic
+	}
+	function convertName($name)
+	{
+		return str_replace(" ","_",$name);
+	}
+	function getLastPostByForum($ForumID)//check by forum/subcat instead of only 1 topic
+	{
+		$res = $this->Query("SELECT * FROM topics WHERE parent_ID=%d", $ForumID);
+		$array = array();
+		while ($row = mysql_fetch_array($res))
+		{
+			array_push($array, $row["ID"]); //push resulted ID's to array
+		}
+		return $this->getLastPost($array); //run the ormal function but with an array
+	}
+	function getPostCountByUser($userID)
+	{
+		$res = $this->Query("SELECT by_ FROM posts WHERE by_=%u", $userID);
+		$a = mysql_num_rows($res);
+		$res = $this->Query("SELECT by_ FROM topics WHERE by_=%u", $userID);
+		return mysql_num_rows($res) + $a;
+	}
 }
 
+
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////
-//    the classes
+//    auto run
 ////////////////////////////////////////////
 $member		= 	new member;
+$member->UpdateRanks(); //update the ranks from database so we hae the current once
 ?>

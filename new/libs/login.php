@@ -4,8 +4,8 @@ include_once("relax.php");
 
 
 //http://new2.infinity-forum.org/about/
-if (!preg_match("/^http(s)?\:\/\/([a-zA-Z0-9]*)?\.?infinity-forum\.org\/?/", $_SERVER['HTTP_REFERER']))// only allow this file to be accessed from our servers
-    header("Location: /"); 
+//if (!preg_match("/^http(s)?\:\/\/([a-zA-Z0-9]*)?\.?infinity-forum\.org\/?/", $_SERVER['HTTP_REFERER']))// only allow this file to be accessed from our servers
+  //  header("Location: /"); 
 
 if(!isset($_SESSION['token']) || empty($_SESSION['token']) || !isset($_POST['token']) || $_SESSION['token'] != $_POST['token']) //check token
 {
@@ -18,7 +18,6 @@ if (!isset($_POST['usr']) || !isset($_POST['pwd']))
     header("Location: /login/error");
 }
 
-$member = new member;
 $sys = new sys;
 $usr = $_POST['usr']; // faster to write $usr
 $pwd = $_POST['pwd']; // same lol
@@ -66,6 +65,8 @@ if ($bcrypt->verify($pwd, $row[2]))
     $_SESSION['ID']     =     $row[0]; //save the user ID so we know whos logged on
     $_SESSION['USR']     =     $row[1]; // just so it will be faster to retrieve username without calling a class
     $_SESSION['ADMIN']     =     (($row[3] == "1")?"1":"0");
+	include_once("status.php"); //set status
+	$Status->change_status("1");
     header("Location: /lounge/");
     die();
 }
