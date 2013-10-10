@@ -8,9 +8,9 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 			2,//: "Away",
 			3 //: "Busy"
 		];
-	Private.url = '/libs/status.php'; //changed to the right path
 	Private.idleTime = 0;
-	Private.forced = false; //is their current status voluntary?
+	Private.timer;
+	Private.url = '/libs/status.php'; //changed to the right path		
 	Public.changeStatus = function(id, forced) {
 		$(".status_icon").attr("src", "/images/status/"+id+".png");
 		$.ajax({
@@ -18,7 +18,8 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 			type: 'POST',
 			data: 'signal=change-status&status=' + id,
 			success: function() {
-				Private.forced = forced || false; //they chose to change their status, or a manual param
+				Private.setForced(forced || false); //they chose to change their status, or a manual param
+
 			}
 		});
 	};
@@ -40,30 +41,58 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 		}).responseText;
 		return status;
 	};
+	
+	Private.setForced = function(force)
+	{
+		if(typeof(Storage)!=="undefined")
+			sessionStorage.force = force;
+		else
+			Private.forced = force;
+	}
+	Private.getForced = function()
+	{
+		if(typeof(Storage)!=="undefined")
+			return sessionStorage.force;
+		else
+			return Private.forced;
+	}
+	
+	
 	//Poll server every minute to see if away or now available
 	Private.pollStatus = function() {
 		++Private.idleTime; //they have been idle for one more minute
 		//if they chose to go away, dont make them available
-		if (Private.idleTime == 0 && Private.forced == true) {
-			Public.changeStatus(1);
-			//if they dont have another status already (only make them go away if they are "Available")
-		} else if (Private.idleTime >= 10 && Public.getStatus() == 1) { //10 minutes
-			Public.changeStatus(2);
-			Private.forced = true; //they didnt choose this :P
+		if (Private.idleTime >= 1 && Public.getIcon() == 1) { //10 minutes
+			Public.changeStatus(2, true);
 		}
 	};
+	Public.getIcon = function()
+	{
+		var icon =$(".status_icon").attr("src"); //== eg "/images/status/2.png";
+		return icon.substr(icon.lastIndexOf("/")+1,1);
+	}
 	Public.init = function() {
 		$(document).ready(function() {
-			Public.getStatus();
+			if (typeof(Private.getForced()) === "undefined")
+				Private.setForced(false);
+				
+			Public.getStatus(); 
 			//reset idle time with any movements
 			$(this).on('mousemove keypress', function() {
 				Private.idleTime = 0;
+				Private.timer = setTimeout(function()
+					{
+						clearInterval(Private.timer);
+						if (Private.getForced() && Public.getIcon() == 2)
+							Public.changeStatus(1, false);
+							//if they dont have another status already (only make them go away if they are "Available")
+					},2000); //a delay so the vForced value can be set before this runs
 			});
 			//change status on element click
 			$(document).on('click', '#status_icon label', function() {
 				//you may want to change some of this depending on the DOM
 				var new_status = $(this).children("img").attr('alt');
-				Public.changeStatus(new_status);
+				Public.changeStatus(new_status, false);
 			});
 			//keep polling server every minute
 			window.setInterval(function() {
