@@ -31,10 +31,10 @@ $('#submit').click(function (){
         members: $('#memberInput').val()
         }, function(data){
         	if(data != "error" && data != ""){ //check for errors 
-            	alert("Succesfully created group: " + $('#group').val());
+            	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
             }else{
-            	alert("There was a problem making the group: " + $('#group').val());
+            	alert("There was a problem making the group: " + $('#groupInput').val());
             }
         });
     }else{
@@ -84,6 +84,7 @@ $('#show').toggle(function (){
                 }
                 $('#groups').slideDown();
                 $('#trash').show();
+                //code for making trash can
                 $('#trash').droppable({
                     drop: function (event, ui){
                         var id = ui.draggable.attr("id"); //get the id of the dropped div
@@ -110,6 +111,7 @@ $('#show').toggle(function (){
                         });
                     }
                 });
+                //code for showing members
                 $('.showMembers').toggle(function (){
                 	var group = $(this).attr("id"); //get the group name
                 	$(this).text("Hide members");
@@ -118,7 +120,7 @@ $('#show').toggle(function (){
                 		get: "members", //send what you want to get
                 		group: group //send the group
                 		}, function (data){
-                			console.log(data);
+                			//console.log(data);
                 			if(data != "error" && data != ""){ //check for errors
                 				var members = jQuery.parseJSON(data); //parse json
                 				if(members.length > 0){ //check to see if any members were returned
@@ -142,6 +144,7 @@ $('#show').toggle(function (){
                 	$(this).text("Show members");
                 	$('#' + $(this).attr("id") + '-members').slideUp();
                 });
+                //known problems: error when deleting even though successful and not being able to copy members
                 $('.edit').toggle(function (){
                 	$(this).text("Save");
                 	var group = $(this).attr("id");
@@ -157,7 +160,7 @@ $('#show').toggle(function (){
                 	group: group, //old group name
                 	name: $('#' + group).text() //new group name
                 	}, function(data){
-                		$('#' + group).attr("id", $('#' + group).text());
+                		$('#' + group).attr("id", $('#' + group).text()); //change the group id to the new one
                 		console.log(data);
                 	});
                 });
@@ -171,6 +174,38 @@ $('#show').toggle(function (){
 }, function (){
     $(this).text("Show groups");
     $('#groups').slideUp();
+});
+</script>
+<div></div>
+<a id='searchLink'>Search</a>
+<div style='display:none' id='searchForm'><input type='text' id='query' /><input type='submit' id='searchButton' value='Search' /></div><div id='results'></div>
+<script>
+$('#searchLink').toggle(function (){
+	$(this).text("Hide Search Form");
+	$('#searchForm').slideToggle();
+	$('#searchButton').click(function (){
+		if($('#query').val() != ""){
+			$.post("dragndrop_script.php", {
+			query: $('#query').val()
+			}, function(data){
+				console.log(data);
+				if(data != null && data != undefined){
+					var results = jQuery.parseJSON(data);
+					for(var i = 0; i <= results.length; ++i){
+						if(results[i] == undefined) break;
+						$('#results').append(results[i]);
+					}
+				}else{
+					$('#results').append("No results");
+				}
+			});
+		}else{
+			alert("Please fill in the search feild.");
+		}
+	});
+}, function (){
+	$(this).text("Search");
+	$('#searchForm').slideToggle();
 });
 </script>
 </body>

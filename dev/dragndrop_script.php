@@ -119,11 +119,26 @@ function copyMember($group, $member){
 	$group = mysql_real_escape_string(htmlspecialchars($group));
 	$member = mysql_real_escape_string(htmlspecialchars($member));
 	$id = getID($group);
-	$result = mysql_query("INSERT INTO `group_members` (`groupCreator`, `groupId`, `member`) VALUES ('".$_SESSION['ID']."', '".$id."', '".$member."')")or die(mysql_error());	
+	$result = mysql_query("INSERT INTO `group_members` (`groupCreator`, `groupId`, `member`) VALUES ('".$_SESSION['ID']."', '".$id."', '".$member."')")or die(mysql_error()); //insert the info for the member
 	if($result){
 		return "success";
 	}else{
 		return "error";
+	}
+}
+
+function search($query){
+	$query = mysql_real_escape_string(htmlspecialchars($query));
+	$result = mysql_query("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error());
+	$results = array();
+	while($row = mysql_fetch_array($result)){
+		$group = $row['group'];
+		array_push($results, $group);
+	}
+	if(isset($results) && !empty($results)){
+		return json_encoded($results);
+	}else{
+		return null;
 	}
 }
 
@@ -133,12 +148,14 @@ if(isset($_POST['group']) && isset($_POST['members'])){
     echo getGroups();
 }else if(isset($_POST['get']) && $_POST['get'] == "members" && isset($_POST['group'])){
     echo getMembers($_POST['group']);
+}else if(isset($_POST['group']) && isset($_POST['member']) && isset($_POST['do']) == "copy"){
+	echo copyMember($_POST['group'], $_POST['member']);
+}else if(isset($_POST['query'])){
+	echo search($_POST['query']);
 }else if(isset($_POST['del']) && $_POST['del'] == "group" || $_POST['del'] == "member" && isset($_POST['name'])){
     echo delete($_POST['del'], $_POST['name']);
 }else if(isset($_POST['edit']) && $_POST['edit'] == "member" || $_POST['edit'] == "group" && isset($_POST['group']) && isset($_POST['name'])){
 	echo editInfo($_POST['edit'], $_POST['name'], $_POST['group']);
-}else if(isset($_POST['group']) && isset($_POST['member']) && isset($_POST['do']) == "copy"){
-	echo copyMember($_POST['group'], $_POST['member']);
 }else{
     die("error"); //if no requirements are met return error
 }
