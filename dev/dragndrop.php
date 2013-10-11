@@ -17,47 +17,6 @@ body {
 	margin: 0px;
 	padding: 0px;
 }
-
-#backgroundPopup {
-    z-index: 1;
-    position: fixed;
-    display: none;
-    height: 100%;
-    width: 100%;
-    background: #000000;
-    top: 0px;
-    left: 0px;
-}
-
-#toPopup {
-    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 10px solid #ccc;
-    border-radius: 3px 3px 3px 3px;
-    color: #333333;
-    display: none;
-    font-size: 14px;
-    left: 50%;
-    margin-left: -402px;
-    position: fixed;
-    top: 20%;
-    width: 800px;
-    z-index: 2;
-}
-
-div.close {
-    bottom: 30px;
-    cursor: pointer;
-    float: right;
-    height: 30px;
-    left: 50px;
-    position: relative;
-    width: 30px;
-}
-
-#popup_content {
-    margin: 4px 7px;
-}
 </style>
 <a id='create'>Create a group</a><br />
 <div id='form' style='display:none'>
@@ -72,10 +31,10 @@ $('#submit').click(function (){
         members: $('#memberInput').val()
         }, function(data){
         	if(data != "error" && data != ""){ //check for errors 
-            	alert("Succesfully created group: " + $('#group').val());
+            	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
             }else{
-            	alert("There was a problem making the group: " + $('#group').val());
+            	alert("There was a problem making the group: " + $('#groupInput').val());
             }
         });
     }else{
@@ -105,11 +64,27 @@ $('#show').toggle(function (){
             if(response.length > 0){ //check to see if response is empty
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
-                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div><a id='" + response[i] + "' class='showMembers'>Show Members</a><div id='" + response[i] + "-members' style='display:none'></div> <a class='edit' id='" + response[i] + "'>Edit group</a> <div id='toPopup'><div class='close'><a>Close</a></div><div id='popup_content'></div></div><div id='backgroundPopup'></div>"); //make a div for each group and append it to groups
+                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div><a id='" + response[i] + "' class='showMembers'>Show Members</a><div id='" + response[i] + "-members' style='display:none'></div> <a class='edit' id='" + response[i] + "'>Edit Group</a>"); //make a div for each group and append it to groups
                     $('#' + response[i]).draggable({cursor: "move"}); //make each div draggable 
+                    $('#' + response[i]).droppable({
+                    	drop: function (event, ui){
+                    		if(ui.draggable.attr("class").startsWith("member")){
+                    			console.log("dropped");
+                    			$.post("dragndrop_script.php", {
+                    			group: $(this).attr("id"),
+                    			member: ui.draggable.attr("id"),
+                    			do: "copy"
+                    			}, function(data){
+                    				console.log(data);
+                    				alert("Sucess");
+                    			});
+                    		}
+                    	}
+                    });
                 }
                 $('#groups').slideDown();
                 $('#trash').show();
+                //code for making trash can
                 $('#trash').droppable({
                     drop: function (event, ui){
                         var id = ui.draggable.attr("id"); //get the id of the dropped div
@@ -136,6 +111,7 @@ $('#show').toggle(function (){
                         });
                     }
                 });
+                //code for showing members
                 $('.showMembers').toggle(function (){
                 	var group = $(this).attr("id"); //get the group name
                 	$(this).text("Hide members");
@@ -144,7 +120,7 @@ $('#show').toggle(function (){
                 		get: "members", //send what you want to get
                 		group: group //send the group
                 		}, function (data){
-                			console.log(data);
+                			//console.log(data);
                 			if(data != "error" && data != ""){ //check for errors
                 				var members = jQuery.parseJSON(data); //parse json
                 				if(members.length > 0){ //check to see if any members were returned
@@ -168,8 +144,25 @@ $('#show').toggle(function (){
                 	$(this).text("Show members");
                 	$('#' + $(this).attr("id") + '-members').slideUp();
                 });
-                $('.edit').click(function (){
-                	popup("edit", $(this).attr("id")); //make the popup
+                //known problems: error when deleting even though successful and not being able to copy members
+                $('.edit').toggle(function (){
+                	$(this).text("Save");
+                	var group = $(this).attr("id");
+                	$('#' + group).draggable("disable"); //disable dragging so its easier to edit
+                	$('#' + group).attr("contenteditable", "true"); //make div editable
+                }, function (){
+                	$(this).text("Edit Group");
+                	var group = $(this).attr("id");
+                	$('#' + group).draggable("enable"); //enable dragging
+                	$('#' + group).attr("contenteditable", "false"); //turn editing off
+                	$.post("dragndrop_script.php", {
+                	edit: "group", //what your editing
+                	group: group, //old group name
+                	name: $('#' + group).text() //new group name
+                	}, function(data){
+                		$('#' + group).attr("id", $('#' + group).text()); //change the group id to the new one
+                		console.log(data);
+                	});
                 });
             }else{
                 $('#groups').text("You have no groups.");
@@ -182,42 +175,37 @@ $('#show').toggle(function (){
     $(this).text("Show groups");
     $('#groups').slideUp();
 });
-function disablePopup(){
-    $('#toPopup').fadeOut("normal"); //fadeout the popup div
-    $('#backgroundPopup').fadeOut("normal"); //fadeout the content div
-}
-function popup(type, group){
-	$('#toPopup').fadeIn(0500);
-    $('#popup_content').text("Loading...");
-    $('#backgroundPopup').css('opacity', '0.7');
-    $('#backgroundPopup').fadeIn(0001);
-    if(type == "edit"){
-    	$('#popup_content').text(""); //get rid of Loading...
-    	$('#popup_content').append("<p>Group name: <input id='groudEdit' type='text' value='" + group + "'></input></p><input type='submit' value='Submit' id='submitEdit'></input>"); //append the edit form
-    	$('#submitEdit').click(function (){
-    		$.post("dragndrop_script.php", {
-    		edit: "group", //send what your going to edit
-    		group: $('#groupEdit').val() //send the new group name
-    		}, function (data){
-    			console.log(data);
-    			if(data != "" && data != "error"){
-    				alert("Successfully edited group: " + group);
-    			}else{
-    				alert("There was an error please try again.");
-    			}
-    		});
-    	});
-    }else{
-    	$('#popup_content').text("Error");
-    }
-    $('.close').click(function (){
-    	disablePopup();
-    });
-}
-$(this).keyup(function (event){
-    if(event.which == 27){ //check if key pressed was esc
-        disablePopup();
-    }
+</script>
+<div></div>
+<a id='searchLink'>Search</a>
+<div style='display:none' id='searchForm'><input type='text' id='query' /><input type='submit' id='searchButton' value='Search' /></div><div id='results'></div>
+<script>
+$('#searchLink').toggle(function (){
+	$(this).text("Hide Search Form");
+	$('#searchForm').slideToggle();
+	$('#searchButton').click(function (){
+		if($('#query').val() != ""){
+			$.post("dragndrop_script.php", {
+			query: $('#query').val()
+			}, function(data){
+				console.log(data);
+				if(data != null && data != undefined){
+					var results = jQuery.parseJSON(data);
+					for(var i = 0; i <= results.length; ++i){
+						if(results[i] == undefined) break;
+						$('#results').append(results[i]);
+					}
+				}else{
+					$('#results').append("No results");
+				}
+			});
+		}else{
+			alert("Please fill in the search feild.");
+		}
+	});
+}, function (){
+	$(this).text("Search");
+	$('#searchForm').slideToggle();
 });
 </script>
 </body>
