@@ -40,8 +40,7 @@
 				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Infinity</option></select></li>
 				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Master</option></select></li>|
 				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Quick Add</option></select></li>
-				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Actions</option></select></li> |
-				<li id="top-bar-option-" class="top-bar-option link">Open</li><span>(6)</span>
+				<li id="top-bar-option-" class="top-bar-option"><select><option value="">Actions</option></select></li>
 			</ul>
 			<ul id="top-bar-options" class="right">
 				<li id="top-bar-option-" class="top-bar-option link"><a>RSS</a></li>
@@ -52,14 +51,13 @@
 		<!-- Side CMS bar -->
 		<div id="side-bar">
 			<ul id="side-bar-options">
-				<li id="side-bar-option-" class="side-bar-option link">+</li>
-				<li id="side-bar-option-" class="side-bar-option link">2</li>
-				<li id="side-bar-option-" class="side-bar-option link">3</li>
-				<li id="side-bar-option-" class="side-bar-option link">4</li>
-				<li id="side-bar-option-" class="side-bar-option link">5</li>
-				<li id="side-bar-option-" class="side-bar-option link">6</li>
-				<li id="side-bar-option-" class="side-bar-option link">7</li>
-				<li id="side-bar-option-" class="side-bar-option link">8</li>
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/documents.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/tasks.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/events.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/tables.png" height="20px"width="20px"></li>
+				<hr class="hr-std">
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/chat.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link" style="color:black;font-weight:bolder;">(6)</li>
 			</ul>
 		</div>
 		<!-- Main area -->
@@ -76,6 +74,7 @@
 				<span id="tiny-page-files" class="link">Files</span>
 				<span id="tiny-page-notes" class="link">Notes</span>
 				<span id="tiny-page-suggested" class="link">Suggested</span>
+				&emsp;<input type="text" placeholder="Search...">
 			</div>
 			<hr class="hr-std">
 			<div id="workspace-info">
@@ -101,12 +100,16 @@
 			</div>
 			<!-- Unique content -->
 			<div id="entries">
+				<textarea style="float:left;" name="" id="" cols="50" rows="2"></textarea> <button style="margin-top:7px;">Post</button>
 				<div class="entry">
 					<div class="entry-media">
 						<div class="entry-img">
 							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
 						</div>
 						<span class="link">Document</span>
+					</div>
+					<div class="entry-type-img">
+						<img style="float:right"src="/images/documents.png"width="100px"height="100px">
 					</div>
 					<div class="entry-content">
 						<span class="link">Uriah Sanders</span> 
@@ -118,7 +121,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -128,6 +131,9 @@
 							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
 						</div>
 						<span class="link">Document</span>
+					</div>
+					<div class="entry-type-img">
+						<img style="float:right"src="/images/documents.png"width="100px"height="100px">
 					</div>
 					<div class="entry-content">
 						<span class="link">Uriah Sanders</span> 
@@ -139,7 +145,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -149,6 +155,9 @@
 							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
 						</div>
 						<span class="link">Task</span>
+					</div>
+					<div class="entry-type-img">
+						<img style="float:right"src="/images/tasks.png"width="100px"height="100px">
 					</div>
 					<div class="entry-content">
 						<span class="link">Uriah Sanders</span> 
@@ -160,7 +169,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -170,6 +179,9 @@
 							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
 						</div>
 						<span class="link">Event</span>
+					</div>
+					<div class="entry-type-img">
+						<img style="float:right"src="/images/events.png"width="100px"height="100px">
 					</div>
 					<div class="entry-content">
 						<span class="link">Uriah Sanders</span> 
@@ -181,7 +193,55 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Document</span>
+					</div>
+					<div class="entry-type-img">
+						<img style="float:right"src="/images/documents.png"width="100px"height="100px">
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">edited</span> 
+						<span class="link">"<a>My First Kiss</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View More</button>
+					</div>
+				</div>
+				<!-- Another -->
+				<div class="entry">
+					<div class="entry-media">
+						<div class="entry-img">
+							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
+						</div>
+						<span class="link">Task</span>
+					</div>
+					<div class="entry-type-img">
+						<img style="float:right"src="/images/tasks.png"width="100px"height="100px">
+					</div>
+					<div class="entry-content">
+						<span class="link">Uriah Sanders</span> 
+						<span style="color:lightblue">created</span> 
+						<span class="link">"<a>My First Task</a>"</span>
+						<br />
+						10 hours ago
+						<br />
+						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
+					</div>
+					<div class="entry-comments-wrapper">
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -202,7 +262,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -223,7 +283,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -244,7 +304,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -265,7 +325,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				<!-- Another -->
@@ -286,49 +346,7 @@
 						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
 					</div>
 					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
-					</div>
-				</div>
-				<!-- Another -->
-				<div class="entry">
-					<div class="entry-media">
-						<div class="entry-img">
-							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
-						</div>
-						<span class="link">Document</span>
-					</div>
-					<div class="entry-content">
-						<span class="link">Uriah Sanders</span> 
-						<span style="color:lightblue">edited</span> 
-						<span class="link">"<a>My First Kiss</a>"</span>
-						<br />
-						10 hours ago
-						<br />
-						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
-					</div>
-					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
-					</div>
-				</div>
-				<!-- Another -->
-				<div class="entry">
-					<div class="entry-media">
-						<div class="entry-img">
-							<img src="/infinity/dev/images/profile-photo.jpg"width="75px"height="75px">
-						</div>
-						<span class="link">Document</span>
-					</div>
-					<div class="entry-content">
-						<span class="link">Uriah Sanders</span> 
-						<span style="color:lightblue">edited</span> 
-						<span class="link">"<a>My First Kiss</a>"</span>
-						<br />
-						10 hours ago
-						<br />
-						In Branch <span class="link"><a>Master</a></span>, Project <span class="link"><a>Infinity</a></span>
-					</div>
-					<div class="entry-comments-wrapper">
-						<button>View Comments</button>
+						<button>View More</button>
 					</div>
 				</div>
 				</div>

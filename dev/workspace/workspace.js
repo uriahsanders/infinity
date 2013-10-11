@@ -86,7 +86,7 @@ var Router = (function() {
 		if (paths[paths.length - 2] === 'workspace') return true;
 		return false
 	};
-	Public.implement = function(path){ //do ajax depending on URL
+	Public.implement = function(path) { //do ajax depending on URL
 		//do a lot of annyoing parsing to modify Model data depnding on URL
 	};
 	return Public;
@@ -158,6 +158,83 @@ var Workspace = (function($, _, T) {
 		},
 		tour: function() {
 
+		}
+	};
+	Public.graphs = {
+		contributions: function() {
+			var data = {
+				values: [{
+					X: "Mon",
+					Y: 12
+				}, {
+					X: "Tue",
+					Y: 28
+				}, {
+					X: "Wed",
+					Y: 18
+				}, {
+					X: "Thu",
+					Y: 34
+				}, {
+					X: "Fri",
+					Y: 6
+				}, {
+					X: "Sat",
+					Y: 15
+				}, {
+					X: "Sun",
+					Y: 62
+				}],
+				getXValue: function(i) {
+					return data.padding + (i * (data.padding - 10) * 2);
+				},
+				getYValue: function(i) {
+					var value = ((canvas.height - (data.padding - 15)) - (data.padding - 20)) - 2 * i;
+					return value;
+				},
+				maxY: 60,
+				padding: 25,
+				colors: ['gray', 'lightblue'],
+				axisWidth: 1,
+				lineThickness: 1
+			};
+			var canvas = document.getElementById('graph-contributions');
+			var ctx = canvas.getContext('2d');
+			//X/Y axis lines
+			ctx.beginPath();
+			ctx.lineWidth = data.axisWidth;
+			ctx.strokeStyle = data.colors[0];
+			//X/Y axis
+			ctx.moveTo(data.padding, 0);
+			ctx.lineTo(data.padding, canvas.height - data.padding + 10);
+			ctx.lineTo(canvas.width, canvas.height - data.padding + 10);
+			ctx.stroke();
+			ctx.font = '.6em Arial';
+			//bottom dates
+			for (var i = 0; i < data.values.length; i++) {
+				ctx.fillText(data.values[i].X, data.getXValue(i) + 7, canvas.height);
+			}
+			//left numbers
+			for (var i = 0; i <= data.maxY; i += 10) {
+				ctx.fillText(i, 0, data.getYValue(i));
+			}
+			//points
+			ctx.beginPath();
+			ctx.fillStyle = data.colors[0];
+			for (var i = 0; i < data.values.length; i++) {
+				ctx.arc(data.getXValue(i) + 15, data.getYValue(data.values[i].Y) - 5, 3, 0, Math.PI * 2, true);
+				ctx.fill();
+			}
+			//lines
+			ctx.beginPath();
+			ctx.moveTo(data.getXValue(0), data.getYValue(0));
+			ctx.strokeStyle = data.colors[1];
+			for (var i = 0; i < data.values.length; i++) {
+				ctx.lineTo(data.getXValue(i) + 15, data.getYValue(data.values[i].Y) - 5);
+				ctx.lineCap = 'round';
+				ctx.lineJoin = 'round';
+				ctx.stroke();
+			}
 		}
 	};
 	return Public;
@@ -293,6 +370,7 @@ var Controller = (function($) {
 	}
 	//BEGIN
 	Workspace.init(); //start everything
+	Workspace.graphs.contributions();
 	//FOR TESTING IN DEV ONLY:
 	// var elDocument = new Document('task', 'uriah');
 	// var elTask = new Task('task', 'uriah');

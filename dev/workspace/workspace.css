@@ -26,13 +26,15 @@ html, body{
 	background: url('/infinity/dev/images/gray_sand.png');
 	opacity: .8;
 	z-index: 1;
-	padding-left: 5px;
+	padding-left: 2px;
 	padding-top: 30px;
+	padding-right: 2px;
 }
 #main{
 	padding: 3%;
 	margin-left: auto;
 	opacity: .8;
+	height: 100%;
 }
 #page-title{
 	font-size: 300%;
@@ -63,6 +65,9 @@ li.top-bar-option{
 }
 li.side-bar-option{
 	margin: 7px 0px;
+}
+.side-bar-option img{
+	opacity: .6;
 }
 button, select {
 	border: 1px solid black;
@@ -135,7 +140,6 @@ input[type=text], textarea, input[type=password]{
     background: url('/infinity/dev/images/gray_sand.png');
     padding: 5px;
     width: 95%;
-    float: right;
     display: inline-block;
     margin: 3px;
 }
@@ -153,13 +157,15 @@ input[type=text], textarea, input[type=password]{
 .entry-comments-wrapper{
 	margin-left: 50px;
 }
+.entry-type-img{
+}
 #entries{
 	background: url('/infinity/dev/images/broken_noise.png');
 	padding: 5px;
-	height: 775px;
 	overflow-y: scroll;
 	border: 2px solid black;
 	width: 50%;
+	height: 750px;
 	float: right;
 }
 #statistics{
@@ -172,17 +178,18 @@ input[type=text], textarea, input[type=password]{
 	padding: 5px;
 	width: 45%;
 	border: 2px solid black;
-	height: 775px;
+	height: 750px;
 }
-#workspace-graphs{
+#graph-contributions{
 	background: url('/infinity/dev/images/broken_noise.png');
+	height: 50%;
+	width: 95%;
 }
 .graph{
-	height: 90%;
-	width: 90%;
+	width: 100%;
 }
 .header{
-	font-size: 200%;
+	font-size: 150%;
 }
 .hr-fancy{
     border: 0;
@@ -221,3 +228,6 @@ input[type=text], textarea, input[type=password]{
   border-left: 1px solid #666666;}
 ::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
 ::-webkit-scrollbar-corner       {  }
+canvas{
+    padding: 5px;
+}
