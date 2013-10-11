@@ -69,7 +69,6 @@ $('#show').toggle(function (){
                     $('#' + response[i]).droppable({
                     	drop: function (event, ui){
                     		if(ui.draggable.attr("class").startsWith("member")){
-                    			console.log("dropped");
                     			$.post("dragndrop_script.php", {
                     			group: $(this).attr("id"),
                     			member: ui.draggable.attr("id"),
@@ -189,14 +188,16 @@ $('#searchLink').toggle(function (){
 			query: $('#query').val()
 			}, function(data){
 				console.log(data);
-				if(data != null && data != undefined){
+				if(data != null && data != undefined && data != "error"){
 					var results = jQuery.parseJSON(data);
+					console.log(results);
+					$('#results').append("<p>Found " + results.length + " result(s).</p>");
 					for(var i = 0; i <= results.length; ++i){
 						if(results[i] == undefined) break;
 						$('#results').append(results[i]);
 					}
 				}else{
-					$('#results').append("No results");
+					$('#results').append("There was an error trying to search for " + $('#query').val());
 				}
 			});
 		}else{

@@ -129,16 +129,16 @@ function copyMember($group, $member){
 
 function search($query){
 	$query = mysql_real_escape_string(htmlspecialchars($query));
-	$result = mysql_query("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error());
+	$result = mysql_query("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' OR `group` LIKE '%".$query."' OR `group` LIKE '".$query."%' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error());
 	$results = array();
 	while($row = mysql_fetch_array($result)){
 		$group = $row['group'];
 		array_push($results, $group);
 	}
 	if(isset($results) && !empty($results)){
-		return json_encoded($results);
+		return json_encode($results);
 	}else{
-		return null;
+		return json_encode("no results");
 	}
 }
 
