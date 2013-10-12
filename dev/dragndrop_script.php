@@ -16,10 +16,10 @@ function getGroups(){
     	if(isset($groups) && !empty($groups)){ //check if the groups array is set and not empty
     	    return json_encode($groups); //return json encoded array
     	}else{
-    	    return json_encode("no groups");
+    	    return json_encode(array("no groups"));
     	}
     }else{
-    	return json_encode("bad query");
+    	return json_encode(array("bad query"));
     }
 }
 
@@ -75,10 +75,10 @@ function getMembers($group){
         if(isset($members) && !empty($members)){ //check if the members array is set and not empty
             return json_encode($members); //return json encoded array
         }else{
-            return json_encode("no members");
+            return json_encode(array("no members"));
         }
     }else{
-        return json_encode("bad query");
+        return json_encode(array("bad query"));
     }
 }
 
@@ -129,16 +129,16 @@ function copyMember($group, $member){
 
 function search($query){
 	$query = mysql_real_escape_string(htmlspecialchars($query));
-	$result = mysql_query("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' OR `group` LIKE '%".$query."' OR `group` LIKE '".$query."%' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error());
+	$result = mysql_query("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' OR `group` LIKE '%".$query."' OR `group` LIKE '".$query."%' AND `creator` = '".$_SESSION['ID']."' ORDER BY id DESC")or die(mysql_error());
 	$results = array();
 	while($row = mysql_fetch_array($result)){
 		$group = $row['group'];
-		array_push($results, $group);
+		array_push($results, $group); //put all results into an array
 	}
 	if(isset($results) && !empty($results)){
-		return json_encode($results);
+		return json_encode($results); //return results
 	}else{
-		return json_encode("no results");
+		return json_encode(array("No results."));
 	}
 }
 

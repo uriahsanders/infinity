@@ -33,6 +33,7 @@ $('#submit').click(function (){
         	if(data != "error" && data != ""){ //check for errors 
             	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
+            	$('#groups').append("<div id='" + $('#groupInput') + "' class='group'>" + $('#groupInput').val() + "</div>"); //append the new group to groups
             }else{
             	alert("There was a problem making the group: " + $('#groupInput').val());
             }
@@ -61,7 +62,7 @@ $('#show').toggle(function (){
         	//console.log(data);
             var response = jQuery.parseJSON(data); //parse the json
             //console.log(response);
-            if(response.length > 0){ //check to see if response is empty
+            if(response.length > 0 && response[0] != "no groups"){ //check to see if response is empty
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
                     $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div><a id='" + response[i] + "' class='showMembers'>Show Members</a><div id='" + response[i] + "-members' style='display:none'></div> <a class='edit' id='" + response[i] + "'>Edit Group</a>"); //make a div for each group and append it to groups
@@ -90,7 +91,7 @@ $('#show').toggle(function (){
                         var className = ui.draggable.attr("class"); //get the class name of the dropped div
                         if(className.startsWith("group")){
                         	className = "group";
-                        	group = "";
+                        	group = ""; //group isnt needed so set it to null
                         }
                         else{ 
                         	className = "member";
@@ -122,7 +123,7 @@ $('#show').toggle(function (){
                 			//console.log(data);
                 			if(data != "error" && data != ""){ //check for errors
                 				var members = jQuery.parseJSON(data); //parse json
-                				if(members.length > 0){ //check to see if any members were returned
+                				if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
                 					for(var i = 0; i <= members.length; ++i){
                 						if(members[i] == undefined) break;
                 						$('#' + group + '-members').append("<div id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</div>"); //make a div for each member
@@ -131,6 +132,7 @@ $('#show').toggle(function (){
                 					$('#' + group + '-members').slideDown();
                 				}else{
                 					$('#' + group + '-members').text("There are no members in this group.");
+                					$('#' + group + '-members').slideDown();
                 				}
                 			}else{
                 				alert("There was a problem getting the members for group: " + group + ". Please try again later.");
@@ -146,6 +148,7 @@ $('#show').toggle(function (){
                 //known problems: error when deleting even though successful and not being able to copy members
                 $('.edit').toggle(function (){
                 	$(this).text("Save");
+                	$('#close').show();
                 	var group = $(this).attr("id");
                 	$('#' + group).draggable("disable"); //disable dragging so its easier to edit
                 	$('#' + group).attr("contenteditable", "true"); //make div editable
@@ -189,12 +192,14 @@ $('#searchLink').toggle(function (){
 			}, function(data){
 				console.log(data);
 				if(data != null && data != undefined && data != "error"){
+					$('#results').empty();
 					var results = jQuery.parseJSON(data);
 					console.log(results);
-					$('#results').append("<p>Found " + results.length + " result(s).</p>");
+					$('#results').slideDown();
+					if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>");
 					for(var i = 0; i <= results.length; ++i){
 						if(results[i] == undefined) break;
-						$('#results').append(results[i]);
+						$('#results').append("<div>" + results[i] + "</div>"); //append each result
 					}
 				}else{
 					$('#results').append("There was an error trying to search for " + $('#query').val());
@@ -207,6 +212,7 @@ $('#searchLink').toggle(function (){
 }, function (){
 	$(this).text("Search");
 	$('#searchForm').slideToggle();
+	$('#results').slideUp();
 });
 </script>
 </body>
