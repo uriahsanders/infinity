@@ -1,9 +1,12 @@
 html, body{
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	background: url('/infinity/dev/images/dark_stripes.png');
-	color: grey;
+	margin:0;
+    padding:0;
+    background: #474747;
+    background: url('/infinity/dev/images/dark_stripes.png');
+    color: grey;
+    width:100%;
+    min-width:1000px;
+    height: 100%;
 }
 #content{
 	height: 100%;
@@ -29,6 +32,12 @@ html, body{
 	padding-left: 2px;
 	padding-top: 30px;
 	padding-right: 2px;
+}
+.i{
+	font-style: italic;
+}
+.b{
+	font-style: bold;
 }
 #main{
 	padding: 3%;
@@ -165,7 +174,7 @@ input[type=text], textarea, input[type=password]{
 	overflow-y: scroll;
 	border: 2px solid black;
 	width: 50%;
-	height: 750px;
+	height: 760px;
 	float: right;
 }
 #statistics{
@@ -178,7 +187,7 @@ input[type=text], textarea, input[type=password]{
 	padding: 5px;
 	width: 45%;
 	border: 2px solid black;
-	height: 750px;
+	height: 760px;
 }
 #graph-contributions{
 	background: url('/infinity/dev/images/broken_noise.png');
@@ -186,7 +195,6 @@ input[type=text], textarea, input[type=password]{
 	width: 95%;
 }
 .graph{
-	width: 100%;
 }
 .header{
 	font-size: 150%;
@@ -229,5 +237,5 @@ input[type=text], textarea, input[type=password]{
 ::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
 ::-webkit-scrollbar-corner       {  }
 canvas{
-    padding: 5px;
+    padding: 7px;
 }

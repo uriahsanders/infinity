@@ -1,4 +1,15 @@
 //Infinity-forum.org: 2013
+/*
+	Im going to stick some stuff in here that allows the below
+	code to run without support from certain external scripts
+	so just ignore for now, will include said scripts later
+	Will all be deleted soon...
+*/
+var Status = {};
+Status.isIdle = false;
+/*
+	Okay now for the real stuff :P
+*/
 //ELEMENTS
 var Element = (function() {
 	"use strict";
@@ -104,10 +115,11 @@ var Workspace = (function($, _, T) {
 			url: Model.scriptFile,
 			async: obj.async || true,
 			cache: obj.cache || false,
-			type: 'POST',
+			type: obj.type || 'POST',
 			datatype: obj.datatype || '',
-			data: query,
+			data: obj.query || query,
 			success: function(data) {
+				console.log("AJAX run successful.");
 				switch (after) {
 					//if int do a standard function, else call after()
 					case 0: //reload page
@@ -124,10 +136,19 @@ var Workspace = (function($, _, T) {
 				}
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
-				console.err.log("AJAX error: " + thrownError);
-				console.err.log("More information on error: Query: " + query + "; After: " + after);
+				console.log("AJAX error: " + thrownError);
+				console.log("More information on error:\nQuery: " + query + ";\nAfter: " + after);
 			}
 		});
+	};
+	//return all essential data from the Model as a query string
+	Private.getEssentialData = function(){
+		var queryString;
+		var essentials = ['page', 'project', 'branch', 'filter', 'numResults', 'limiter', 'current'];
+		for(var i = 0; i <= essentials.length; ++i){
+			queryString += essentials[i]+'='+Model[essentials[i]]+'&';
+		}
+		return queryString;
 	};
 	//do all the starting stuff
 	Public.init = function() {
@@ -142,6 +163,30 @@ var Workspace = (function($, _, T) {
 			console.log("This workspace has been linked to. URL:" + location);
 			paths = location.split('/workspace/'); //everything after this is the path
 			Router.implement(paths[1]); //do ajax functions for this URL
+		}
+		//a long polling loop to get ALL information needed with one ajax call
+		window.setInterval(Public.updateEverything(), 60000); //update every minute
+	};
+	Public.updateEverything = function(){
+		//if the user isnt even here, why the FUCK would we just keep updating shit
+		if(Status.isIdle === false){
+			Private.ajax(Private.getEssentialData(), function(data){
+				//parse response to see what needs to be done
+				var res = jQuery.parseJSON(data);
+				//do any general stuff here
+
+				//END
+				for(var i = 0; i <= res.signal.length; ++i){
+					switch(res.signal[i]){
+						//this will allow us to react to multiple signals
+					}
+					console.log("Everything was updated.");
+				}
+			}, {
+				cache: false,
+				type: 'GET',
+				datatype: 'json'
+			});
 		}
 	};
 	//let's add an object to Public for each major feature
@@ -210,6 +255,7 @@ var Workspace = (function($, _, T) {
 			ctx.lineTo(canvas.width, canvas.height - data.padding + 10);
 			ctx.stroke();
 			ctx.font = '.6em Arial';
+			ctx.fillStyle = 'gray';
 			//bottom dates
 			for (var i = 0; i < data.values.length; i++) {
 				ctx.fillText(data.values[i].X, data.getXValue(i) + 7, canvas.height);
@@ -250,6 +296,7 @@ var Model = (function() {
 		test: false,
 		//defaults
 		page: 'Stream',
+		current: null, //#id of whatever user has open
 		project: null,
 		branch: 'Master',
 		filter: [], //are we filtering anything?
@@ -352,6 +399,7 @@ var Controller = (function($) {
 	Model.modify('test', true); //make sure MVC works
 	//start listening for changes
 	$(document).ready(function() {
+		//CHANGING PAGES
 		$(document).on('click', 'span[id^="tiny-page-"]', function() {
 			Model.modify('page', $(this).attr('id').substring(10));
 		});
