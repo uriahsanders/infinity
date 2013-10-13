@@ -9,24 +9,42 @@
     class Status extends SQL{
         //i thought a class might be neccesary since more functions may eventually be added
         //always good to be prepared
-        function get_status(){
-            $result = $this->Query("SELECT status,status_time FROM `memberinfo` WHERE `ID` = %d", $_SESSION['ID']); //changed to mamberinfo because we don't want things in members (pwd hash and core member info is there(eg if a vurln if found there or something happens there the user can be deleted or corrupt)
+        function getStatus($ID = 0){
+			if ($ID == 0) // if not specified
+				$ID = @$_SESSION['ID']; //current user
+				
+            $result = $this->Query("SELECT status,status_time FROM `memberinfo` WHERE `ID` = %d", $ID); //changed to mamberinfo because we don't want things in members (pwd hash and core member info is there(eg if a vurln if found there or something happens there the user can be deleted or corrupt)
 			//also get status_time
             $row = mysql_fetch_assoc($result);
+			
+			if ($ID == $_SESSION['ID']) //if the current user check status
+				$this->Query("UPDATE `memberinfo` SET `status` = %d, `status_time`=%s WHERE `ID` = %d", $row['status'], date("Y-m-d H:i:s"), $ID); //update the timestamp so it on't show offline.
+			else if (strtotime($row['status_time']) <= strtotime("-30 min")) //more than 30 min sience last update
+				return 0; //show as offline
+				
+				
             return $row['status'];
         }
-        function change_status($status){
-            $this->Query("UPDATE `memberinfo` SET `status` = %d, `status_time` = %s WHERE `ID` = %d", $status, date("Y-d-m H:i:s"), $_SESSION['ID']); // update the status_time as well...
+        function changeMyStatus($status){
+			$this->Query("  UPDATE 
+								`memberinfo` 
+							SET 
+								`status` = %d,
+								`status_time`=%s
+							WHERE 
+								`ID` = %d"
+							, $status, date("Y-m-d H:i:s"), $_SESSION['ID']); // update the status_time as well...
+			
         }
     }
 	$Status = new Status;
 	
     if(isset($_GET['signal']) && $_GET['signal'] == 'get-status'){
-        echo $Status->get_status();
+        echo $Status->getStatus();
     }
 	if(isset($_POST['signal']) && $_POST['signal'] == 'change-status' && isset($_POST['status']) && preg_match("/^([0-9]+)$/", $_POST['status'])){ 
 		//check the post status as well and we will be using int's to store
-        $Status->change_status($_POST['status']);
+        $Status->changeMyStatus($_POST['status']);
     }
 	
 ?>
