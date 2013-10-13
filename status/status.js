@@ -16,7 +16,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 		$.ajax({
 			url: Private.url,
 			type: 'POST',
-			data: 'signal=change-status&status=' + id,
+			data: {'signal':'change-status', 'status':id},
 			success: function() {
 				Private.setForced(forced || false); //they chose to change their status, or a manual param
 				if(after) after();
@@ -63,17 +63,17 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	
 	//Poll server every minute to see if away or now available
 	Private.pollStatus = function() {
-		++Private.idleTime; //they have been idle for one more minute
 		//if they chose to go away, dont make them available
-		if (Private.idleTime >= 1 && Public.getIcon() == 1) { //10 minutes
+		if (++Private.idleTime > 1 && Public.getIcon() == 1) { //15 minutes
 			Public.changeStatus(2, true, function(){
-				window.setTimeout(Private.pollStatus(), 60000); //tell changeStatus to recall us afterwards
+				window.setTimeout(Private.pollStatus, 60000); //tell changeStatus to recall us afterwards
 			});
-		}
+		} else
+			setTimeout(Private.pollStatus, 60000); // loop
 	};
 	Public.getIcon = function()
 	{
-		var icon =$(".status_icon").attr("src"); //== eg "/images/status/2.png";
+		var icon =$(".status_icon").attr("src");
 		return icon.substr(icon.lastIndexOf("/")+1,1);
 	}
 	Public.init = function() {
@@ -88,8 +88,8 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 				Private.timer = setTimeout(function()
 					{
 						clearInterval(Private.timer);
-						if (Private.getForced() === true && Public.getIcon() == 2)
-							Public.changeStatus(1, false);
+						if (Private.getForced() && Public.getIcon() == 2)
+							Public.changeStatus("1", false);
 							//if they dont have another status already (only make them go away if they are "Available")
 					},2500); //a delay so the vForced value can be set before this runs
 			});
@@ -99,7 +99,6 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 				var new_status = $(this).children("img").attr('alt');
 				Public.changeStatus(new_status, false);
 			});
-			//keep polling server every minute
 			Private.pollStatus();
 		});
 	};
