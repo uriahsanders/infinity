@@ -11,7 +11,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	Private.url = '/libs/status.php'; //changed to the right path
 	Private.idleTime = 0;
 	Private.forced = false; //is their current status voluntary?
-	Public.changeStatus = function(id, forced) {
+	Public.changeStatus = function(id, forced, after) {
 		$(".status_icon").attr("src", "/images/status/"+id+".png");
 		$.ajax({
 			url: Private.url,
@@ -19,6 +19,11 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 			data: 'signal=change-status&status=' + id,
 			success: function() {
 				Private.forced = forced || false; //they chose to change their status, or a manual param
+				//i realize i could have used OR here but for a function "if" is more optimal, i think
+				if(after) after(); //do a function afterwards if requested
+			}, 
+			error: function(){
+				if(after) after();
 			}
 		});
 	};
@@ -45,10 +50,14 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 		++Private.idleTime; //they have been idle for one more minute
 		//if they chose to go away, dont make them available
 		if (Private.idleTime == 0 && Private.forced == true) {
-			Public.changeStatus(1);
+			Public.changeStatus(1, false, function(){
+				window.setTimeout(Private.pollStatus(), 60000); //tell changeStatus() that we want to recall this function afterwards
+			});
 			//if they dont have another status already (only make them go away if they are "Available")
 		} else if (Private.idleTime >= 10 && Public.getStatus() == 1) { //10 minutes
-			Public.changeStatus(2);
+			Public.changeStatus(2, false, function(){
+				window.setTimeout(Private.pollStatus(), 60000);
+			});
 			Private.forced = true; //they didnt choose this :P
 		}
 	};
@@ -66,9 +75,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 				Public.changeStatus(new_status);
 			});
 			//keep polling server every minute
-			window.setInterval(function() {
-				Private.pollStatus();
-			}, 60000); //every minute
+			Private.pollStatus();
 		});
 	};
 	return Public;
