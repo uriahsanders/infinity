@@ -136,8 +136,9 @@ var Workspace = (function($, _, T) {
 				}
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
-				console.log("AJAX error: " + thrownError);
-				console.log("More information on error:\nQuery: " + query + ";\nAfter: " + after);
+				console.log("(AJAX): (\nError: " + thrownError);
+				console.log("More information on error:\nQuery: " + query + ";\nAfter: " + after+"\n)");
+				if(obj.err) obj.err();
 			}
 		});
 	};
@@ -165,7 +166,7 @@ var Workspace = (function($, _, T) {
 			Router.implement(paths[1]); //do ajax functions for this URL
 		}
 		//a long polling loop to get ALL information needed with one ajax call
-		window.setInterval(Public.updateEverything(), 60000); //update every minute
+		Public.updateEverything();
 	};
 	Public.updateEverything = function(){
 		//if the user isnt even here, why the FUCK would we just keep updating shit
@@ -180,12 +181,17 @@ var Workspace = (function($, _, T) {
 					switch(res.signal[i]){
 						//this will allow us to react to multiple signals
 					}
-					console.log("Everything was updated.");
 				}
+				console.log("(AJAX): Everything was just updated; Restarting loop");
+				window.setTimeout(Public.updateEverything, 60000); //wait one minute
 			}, {
 				cache: false,
 				type: 'GET',
-				datatype: 'json'
+				datatype: 'json',
+				err: function(){
+					window.setTimeout(Public.updateEverything, 60000);
+					console.log('Encountered an error while attempting to update everything...\nResuming loop now.');
+				}
 			});
 		}
 	};
