@@ -108,15 +108,16 @@ var Workspace = (function($, _, T) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
-	Private.ajax = function(query, after, obj) { //data to send; what to do after; special args;
+	Public.ajax = function(query, after, obj) { //data to send; what to do after; special args;
 		//standard function for server communication
 		after = after || 2;
+		obj.datatype = obj.datatype || '';
 		$.ajax({
 			url: Model.scriptFile,
 			async: obj.async || true,
 			cache: obj.cache || false,
 			type: obj.type || 'POST',
-			datatype: obj.datatype || '',
+			datatype: obj.datatype,
 			data: obj.query || query,
 			success: function(data) {
 				console.log("AJAX run successful.");
@@ -128,7 +129,10 @@ var Workspace = (function($, _, T) {
 					case 1: //refresh page (ajax)
 						Model.modify('page', Model.page);
 						break;
-					case 2:
+					case 2: //return response
+						return (obj.datatype === 'json') ? jQuery.parseJSON(data) : data;
+						break;
+					case 3:
 						//do nothing
 						break;
 					default: //call given function with data
@@ -138,7 +142,7 @@ var Workspace = (function($, _, T) {
 			error: function(xhr, ajaxOptions, thrownError) {
 				console.log("(AJAX): (\nError: " + thrownError);
 				console.log("More information on error:\nQuery: " + query + ";\nAfter: " + after + "\n)");
-				if (obj.err) obj.err();
+				if (obj.err) obj.err(); //throw custom error as well
 			}
 		});
 	};
@@ -156,7 +160,7 @@ var Workspace = (function($, _, T) {
 		if (Router.isURLDefault()) { // URL is standard
 			console.log('The workspace has been initiated.');
 			console.log("Initial functions starting...");
-			$('#tiny-page-' + Model['page'].lcfirst()).css('display', 'none'); //fade out "Stream" link
+			$('#tiny-page-' + Model['page'].cFirst('l')).css('display', 'none'); //fade out "Stream" link
 			Router.goTo(Model['page']);
 			console.log("Finished.");
 		} else { //URL has special path
@@ -171,7 +175,7 @@ var Workspace = (function($, _, T) {
 	Public.updateEverything = function() {
 		//if the user isnt even here, why the FUCK would we just keep updating shit
 		if (Status.isIdle === false) {
-			Private.ajax(Private.getEssentialData(), function(data) {
+			Public.ajax(Private.getEssentialData(), function(data) {
 				//parse response to see what needs to be done
 				var res = jQuery.parseJSON(data);
 				//do any general stuff here
@@ -201,7 +205,7 @@ var Workspace = (function($, _, T) {
 
 		},
 		changePage: function() {
-			$('#page-title').text(Model['page'].ucfirst()); //change title
+			$('#page-title').text(Model['page'].cFirst('u')); //change title
 			$('span[id^="tiny-page-"]').show(); //show all links
 			$('#tiny-page-' + Model['page']).hide(); //hide link that we just clicked
 			Router.goTo(Model['page']);
@@ -416,22 +420,17 @@ var Controller = (function($) {
 		//jquery UI stuff
 		$('#search').autocomplete({ //use categories so that they know what they're getting
 			source: function(request, response) {
-				//direct ajax here so we can use res()
-				$.ajax({
+				response(
+					Workspace.ajax('signal=search-autocomplete', 2, { //return result
 					type: 'GET',
 					url: Model.scriptFile,
-					data: 'signal=search-autocomplete',
-					datatype: 'json',
-					success: function(data) {
-						response($.map(data, function(){
-							return ''; //return category: thing
-						}));
-					}
-				});
+					datatype: 'json'
+					})
+				);
 			},
 			select: function(){
 				//search automatically when they choose something
-				workspace.gen.searchAll($(this).val());
+				Workspace.gen.searchAll($(this).val());
 			}
 		});
 	});
@@ -441,11 +440,9 @@ var Controller = (function($) {
 (function() {
 	"use strict";
 	//JS additions
-	String.prototype.ucfirst = String.prototype.ucfirst || function() {
-		return this.charAt(0).toUpperCase() + this.slice(1);
-	}
-	String.prototype.lcfirst = String.prototype.lcfirst || function() {
-		return this.charAt(0).toLowerCase() + this.slice(1);
+	String.prototype.cFirst = String.prototype.cFirst || function(what){
+		var func = (what === 'u') ? 'toUpperCase' : 'toLowerCase';
+		return this.charAt(0)[func]() + this.slice(1);
 	}
 	//BEGIN
 	Workspace.init(); //start everything
