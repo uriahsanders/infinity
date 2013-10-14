@@ -7,6 +7,8 @@
 	<link href="workspace.css" rel="stylesheet">
 	<!-- Libs -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 	<script src="NOHTML.js"></script>
 	<script src="Tour.js"></script>
 	<!-- RSS -->
@@ -37,11 +39,11 @@
 	<div id="content">
 		<nav id="top-bar">
 			<ul id="top-bar-options">
-				<li id="top-bar-option-" class="top-bar-option link"><a>Infinity-Forum</a></li>|
-				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"/></li>|
-				<li id="top-bar-option-" class="top-bar-option link i">Infinity</li>|
-				<li id="top-bar-option-" class="top-bar-option link i">Master</li>|
-				<li id="top-bar-option-" class="top-bar-option link i">Quick Add</li>|
+				<li id="top-bar-option-" class="top-bar-option link b"><a>Infinity-Forum</a></li>
+				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"/></li>
+				<li id="top-bar-option-" class="top-bar-option link i">Infinity</li><span class="b i">/</span>
+				<li id="top-bar-option-" class="top-bar-option link i">Master</li><span class="b i">/</span>
+				<li id="top-bar-option-" class="top-bar-option link i">Quick Add</li><span class="b i">/</span>
 				<li id="top-bar-option-" class="top-bar-option link i">Actions</li>
 			</ul>
 			<ul id="top-bar-options" class="right">
@@ -76,7 +78,13 @@
 				<span id="tiny-page-files" class="link">Files</span>
 				<span id="tiny-page-notes" class="link">Notes</span>
 				<span id="tiny-page-suggested" class="link">Suggested</span>
-				&emsp;<input style="background: url('/infinity/dev/images/broken_noise.png');" type="text" placeholder="Search...">
+				&emsp;
+				<input 
+					id="search"
+					style="background: url('/infinity/dev/images/broken_noise.png');border:1px solid grey;" 
+					type="text" 
+					placeholder="Search..."
+				/>
 			</div>
 			<hr class="hr-std">
 			<div id="workspace-info">

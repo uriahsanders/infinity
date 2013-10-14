@@ -37,7 +37,7 @@ html, body{
 	font-style: italic;
 }
 .b{
-	font-style: bold;
+	font-weight: bold;
 }
 #main{
 	padding: 3%;

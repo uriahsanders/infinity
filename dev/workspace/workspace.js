@@ -137,17 +137,17 @@ var Workspace = (function($, _, T) {
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
 				console.log("(AJAX): (\nError: " + thrownError);
-				console.log("More information on error:\nQuery: " + query + ";\nAfter: " + after+"\n)");
-				if(obj.err) obj.err();
+				console.log("More information on error:\nQuery: " + query + ";\nAfter: " + after + "\n)");
+				if (obj.err) obj.err();
 			}
 		});
 	};
 	//return all essential data from the Model as a query string
-	Private.getEssentialData = function(){
+	Private.getEssentialData = function() {
 		var queryString;
 		var essentials = ['page', 'project', 'branch', 'filter', 'numResults', 'limiter', 'current'];
-		for(var i = 0; i <= essentials.length; ++i){
-			queryString += essentials[i]+'='+Model[essentials[i]]+'&';
+		for (var i = 0; i <= essentials.length; ++i) {
+			queryString += essentials[i] + '=' + Model[essentials[i]] + '&';
 		}
 		return queryString;
 	};
@@ -168,17 +168,17 @@ var Workspace = (function($, _, T) {
 		//a long polling loop to get ALL information needed with one ajax call
 		Public.updateEverything();
 	};
-	Public.updateEverything = function(){
+	Public.updateEverything = function() {
 		//if the user isnt even here, why the FUCK would we just keep updating shit
-		if(Status.isIdle === false){
-			Private.ajax(Private.getEssentialData(), function(data){
+		if (Status.isIdle === false) {
+			Private.ajax(Private.getEssentialData(), function(data) {
 				//parse response to see what needs to be done
 				var res = jQuery.parseJSON(data);
 				//do any general stuff here
 
 				//END
-				for(var i = 0; i <= res.signal.length; ++i){
-					switch(res.signal[i]){
+				for (var i = 0; i <= res.signal.length; ++i) {
+					switch (res.signal[i]) {
 						//this will allow us to react to multiple signals
 					}
 				}
@@ -188,7 +188,7 @@ var Workspace = (function($, _, T) {
 				cache: false,
 				type: 'GET',
 				datatype: 'json',
-				err: function(){
+				err: function() {
 					window.setTimeout(Public.updateEverything, 60000);
 					console.log('Encountered an error while attempting to update everything...\nResuming loop now.');
 				}
@@ -208,6 +208,9 @@ var Workspace = (function($, _, T) {
 			//do ajax request
 		},
 		tour: function() {
+
+		},
+		searchAll: function(val){
 
 		}
 	};
@@ -408,6 +411,28 @@ var Controller = (function($) {
 		//CHANGING PAGES
 		$(document).on('click', 'span[id^="tiny-page-"]', function() {
 			Model.modify('page', $(this).attr('id').substring(10));
+		});
+
+		//jquery UI stuff
+		$('#search').autocomplete({ //use categories so that they know what they're getting
+			source: function(request, response) {
+				//direct ajax here so we can use res()
+				$.ajax({
+					type: 'GET',
+					url: Model.scriptFile,
+					data: 'signal=search-autocomplete',
+					datatype: 'json',
+					success: function(data) {
+						response($.map(data, function(){
+							return ''; //return category: thing
+						}));
+					}
+				});
+			},
+			select: function(){
+				//search automatically when they choose something
+				workspace.gen.searchAll($(this).val());
+			}
 		});
 	});
 })(jQuery);
