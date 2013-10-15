@@ -103,9 +103,27 @@
 				</div>
 				<br>
 				<hr class="hr-fancy">
-				<span class="header">Contributions:</span><br>
+				<span class="header">Contributions this Week:</span><br>
 				<div id="workspace-graphs">
-					<canvas id="graph-contributions" class="graph"></canvas>
+					<!-- <canvas id="graph-contributions" class="graph"></canvas> -->
+					<svg class="graph-contributions">
+					    <g class="grid x-grid" id="xGrid">
+					      <line x1="10" x2="10" y1="0" y2="300"></line>
+					      <line x1="259" x2="259" y1="10" y2="380"></line>
+					      <line x1="405" x2="405" y1="10" y2="380"></line>
+					      <line x1="551" x2="551" y1="10" y2="380"></line>
+					      <line x1="697" x2="697" y1="10" y2="380"></line>
+					    </g>
+					    <g class="grid y-grid" id="yGrid">
+					      <line x1="86" x2="697" y1="10" y2="10"></line>
+					      <line x1="86" x2="697" y1="68" y2="68"></line>
+					      <line x1="86" x2="697" y1="126" y2="126"></line>
+					      <line x1="86" x2="697" y1="185" y2="185"></line>
+					      <line x1="86" x2="697" y1="243" y2="243"></line>
+					      <line x1="86" x2="697" y1="301" y2="301"></line>
+					      <line x1="86" x2="697" y1="360" y2="360"></line>
+					    </g>
+					</svg>
 				</div>
 			</div>
 			<!-- Unique content -->

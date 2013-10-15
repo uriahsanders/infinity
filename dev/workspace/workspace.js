@@ -113,7 +113,7 @@ var Workspace = (function($, _, T) {
 		after = after || 2;
 		obj.datatype = obj.datatype || '';
 		$.ajax({
-			url: Model.scriptFile,
+			url: obj.url || Model.scriptFile,
 			async: obj.async || true,
 			cache: obj.cache || false,
 			type: obj.type || 'POST',
@@ -170,7 +170,7 @@ var Workspace = (function($, _, T) {
 			Router.implement(paths[1]); //do ajax functions for this URL
 		}
 		//a long polling loop to get ALL information needed with one ajax call
-		Public.updateEverything();
+		window.setTimeout(Public.updateEverything, 60000); //wait 1 minute before calling
 	};
 	Public.updateEverything = function() {
 		//if the user isnt even here, why the FUCK would we just keep updating shit
@@ -200,7 +200,8 @@ var Workspace = (function($, _, T) {
 		}
 	};
 	//let's add an object to Public for each major feature
-	Public.gen = { //EX:
+	Public.gen = {
+		//if they havent created any projects yet, throw a big-ass screen in their face
 		welcome: function() {
 
 		},
@@ -211,89 +212,104 @@ var Workspace = (function($, _, T) {
 			Router.goTo(Model['page']);
 			//do ajax request
 		},
+		//introduce to page
 		tour: function() {
 
 		},
-		searchAll: function(val){
+		//search with no filter
+		searchAll: function(val) {
+
+		},
+		//stick a loading symbol in a place
+		loading: function(id) {
 
 		}
 	};
 	Public.graphs = {
 		contributions: function() {
+			//linear graph listing contributions
+			Public.gen.loading('#workspace-graphs'); //may take a while, so start loading screen
+			var WIDTH = $('#workspace-graphs').css('width');
+			var SVG = '<svg class="graph-contributions">', //begin all groups
+				xGrid = '<g class="grid x-grid" id="xGrid">',
+				yGrid = '<g class="grid y-grid" id="yGrid">',
+				points = '<g class="inset points">',
+				xLabels = '<g class="labels x-labels">',
+				yLabels = '<g class="labels y-labels">',
+				lines = '<g class="lines">'; //connecting points
+			//*remember: xLines are vertical, yLines are horizontal
 			var data = {
-				values: [{
-					X: "Mon",
-					Y: 12
-				}, {
-					X: "Tue",
-					Y: 28
-				}, {
-					X: "Wed",
-					Y: 18
-				}, {
-					X: "Thu",
-					Y: 34
-				}, {
-					X: "Fri",
-					Y: 6
-				}, {
-					X: "Sat",
-					Y: 15
-				}, {
-					X: "Sun",
-					Y: 62
-				}],
-				getXValue: function(i) {
-					return data.padding + (i * (data.padding - 10) * 2);
-				},
-				getYValue: function(i) {
-					var value = ((canvas.height - (data.padding - 15)) - (data.padding - 20)) - 2 * i;
-					return value;
-				},
-				maxY: 60,
-				padding: 25,
-				colors: ['gray', 'lightblue'],
-				axisWidth: 1,
-				lineThickness: 1
-			};
-			var canvas = document.getElementById('graph-contributions');
-			var ctx = canvas.getContext('2d');
-			//X/Y axis lines
-			ctx.beginPath();
-			ctx.lineWidth = data.axisWidth;
-			ctx.strokeStyle = data.colors[0];
-			//X/Y axis
-			ctx.moveTo(data.padding, 0);
-			ctx.lineTo(data.padding, canvas.height - data.padding + 10);
-			ctx.lineTo(canvas.width, canvas.height - data.padding + 10);
-			ctx.stroke();
-			ctx.font = '.6em Arial';
-			ctx.fillStyle = 'gray';
-			//bottom dates
-			for (var i = 0; i < data.values.length; i++) {
-				ctx.fillText(data.values[i].X, data.getXValue(i) + 7, canvas.height);
+				//how many lines in each dimension? (GRID)
+				xLines: 6, //since we're dealing with days-a-week
+				yLines: 9, //max contributions a day shown is 80, each line is 10 contributions, first line is 0
+				//Dimensions of SVG for scale
+				height: 300, //match with CSS!
+				//slice off the 'px' for width (SVG is 100% width)
+				width: WIDTH.substring(0, WIDTH.length - 2),
+				//Distances between lines
+				xDist: 90,
+				yDist: 30,
+				//leave space for labels:
+				xOffset: 25,
+				yOffset: 20,
+				padding: 7, //keep labels from touching edges
+				//points
+				points: [],
+				xOfPoints: [], //get x and y coordinates of points
+				yOfPoints: [],
+				//graph info
+				dates: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 			}
-			//left numbers
-			for (var i = 0; i <= data.maxY; i += 10) {
-				ctx.fillText(i, 0, data.getYValue(i));
+			//*Later get points from ajax, but for now:
+			data.points.push(0, 26, 33, 74, 12, 49, 18);
+			//(Throughout the following I subtract and add 5 where needed, idk why, but it just works...)
+			//X-GRID LINES
+			for (var i = 1; i <= data.xLines; ++i) {
+				//x1 and x2 must be the same (dist. from left), 
+				//start at very top (y1 = 0), all the way to the bottom (y = height)
+				var nxt = i * data.xDist;
+				xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + data.yOffset + '" y2="' + (data.height - data.yOffset) + '"></line>';
 			}
-			//points
-			ctx.beginPath();
-			ctx.fillStyle = data.colors[0];
-			for (var i = 0; i < data.values.length; i++) {
-				ctx.arc(data.getXValue(i) + 15, data.getYValue(data.values[i].Y) - 5, 3, 0, Math.PI * 2, true);
-				ctx.fill();
+			//Y-GRID LINES
+			for (var i = 1; i <= data.yLines; ++i) {
+				//y1 and y2 must be the same (dist. from top),
+				//ALL x1's & x2's must be the same so we start at same dist. from left & right
+				var nxt = i * data.yDist;
+				yGrid += '<line x1="' + (data.xOffset + 5) + '" x2="' + (data.width - data.xOffset) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
 			}
-			//lines
-			ctx.beginPath();
-			ctx.moveTo(data.getXValue(0), data.getYValue(0));
-			ctx.strokeStyle = data.colors[1];
-			for (var i = 0; i < data.values.length; i++) {
-				ctx.lineTo(data.getXValue(i) + 15, data.getYValue(data.values[i].Y) - 5);
-				ctx.lineCap = 'round';
-				ctx.lineJoin = 'round';
-				ctx.stroke();
+			//POINTS (INDIVIDUAL)
+			for (var i = 0; i < data.dates.length; ++i) { //7 for days in week
+				//scale: every actual 30 should equal 10 in points (use yDist for if this changes)
+				//so cy should = 30 when point = 10 and so on... (points[i]+10 just fixes the points to match the scale... 
+				//i fucked up and everything is 10 off)
+				var inc = data.height - ((data.points[i]+10) * (data.yDist / 10)); //subtract from height to invert graph
+				//set our x coor depending on i due to offset (first and last are special) :/;
+				var x = (i === 0) ? i * data.xDist + data.xOffset + 5 : (i === 6 ? i * data.xDist - data.xOffset - 5 : i * data.xDist);
+				points += '<circle cx="' + x + '" cy="' + inc + '" r="5"></circle>'; //cx is always on a vert. line
+				//store coordinates so we can easily connect them with lines
+				data.xOfPoints.push(x);
+				data.yOfPoints.push(inc);
+				//xLABELS
+				xLabels += '<text x="' + x + '" y="' + (data.height - data.padding) + '">' + data.dates[i] + '</text>';
 			}
+			//yLABELS
+			for (var i = 1; i <= data.yLines; ++i) {
+				var x = (i != 1) ? data.xOffset : data.xOffset - 10; //clean it up: move 1 digit numbers 1 place to the left
+				//y subtracted from height to invert graph
+				yLabels += '<text x="' + x + '" y="' + ((data.height - (data.yDist * i - data.padding)) - 5) + '">' + (i * 10 - 10) + '</text>';
+			}
+			//LINES
+			for(var i = 0; i < data.points.length - 1; ++i){
+				var j = i + 1; //get next point coordinate
+				//to connect two points: x1 = (x of first point), x2 = (x of second point),
+				//y1 = (y of first point), y2 = (y of second point)
+				lines += '<line x1="' + data.xOfPoints[i] + '" x2="' + data.xOfPoints[j] + '" y1="' + data.yOfPoints[i] + '" y2="' + data.yOfPoints[j] + '"></line>';
+			}
+			//COMBINING
+			xGrid, yGrid, points, lines, xLabels, yLabels += '</g>'; //close all tags
+			SVG += xGrid + yGrid + points + lines + xLabels + yLabels + '</svg>'; //build html
+			//build with strings 'cause DOM is sooooo slow
+			$('#workspace-graphs').html(SVG);
 		}
 	};
 	return Public;
@@ -410,10 +426,13 @@ var Controller = (function($) {
 	"use strict";
 	console.log("(Controller): Controller now listening for events!");
 	Model.modify('test', true); //make sure MVC works
+	//instant UI changes:
+	$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
+
 	//start listening for changes
 	$(document).ready(function() {
-		//CHANGING PAGES
-		$(document).on('click', 'span[id^="tiny-page-"]', function() {
+		//normal listeners
+		$(document).on('click', 'span[id^="tiny-page-"]', function() { //changing pages
 			Model.modify('page', $(this).attr('id').substring(10));
 		});
 
@@ -422,13 +441,13 @@ var Controller = (function($) {
 			source: function(request, response) {
 				response(
 					Workspace.ajax('signal=search-autocomplete', 2, { //return result
-					type: 'GET',
-					url: Model.scriptFile,
-					datatype: 'json'
+						type: 'GET',
+						url: Model.scriptFile,
+						datatype: 'json'
 					})
 				);
 			},
-			select: function(){
+			select: function() {
 				//search automatically when they choose something
 				Workspace.gen.searchAll($(this).val());
 			}
@@ -440,9 +459,8 @@ var Controller = (function($) {
 (function() {
 	"use strict";
 	//JS additions
-	String.prototype.cFirst = String.prototype.cFirst || function(what){
-		var func = (what === 'u') ? 'toUpperCase' : 'toLowerCase';
-		return this.charAt(0)[func]() + this.slice(1);
+	String.prototype.cFirst = String.prototype.cFirst || function(what) { //eg str.cFirst(u)
+		return this.charAt(0)[(what === 'u') ? 'toUpperCase' : 'toLowerCase']() + this.slice(1); //lowercase or cap first letter
 	}
 	//BEGIN
 	Workspace.init(); //start everything

@@ -187,7 +187,6 @@ input[type=text], textarea, input[type=password]{
 	padding: 5px;
 	width: 45%;
 	border: 2px solid black;
-	height: 760px;
 }
 #graph-contributions{
 	background: url('/infinity/dev/images/broken_noise.png');
@@ -236,6 +235,37 @@ input[type=text], textarea, input[type=password]{
   border-left: 1px solid #666666;}
 ::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
 ::-webkit-scrollbar-corner       {  }
-canvas{
-    padding: 7px;
+/*SVG*/
+svg.graph-contributions {
+	height: 300px;
+    width: 100%;
+    background: url('/infinity/dev/images/broken_noise.png');
+}
+svg.graph-contributions .grid {
+	stroke: grey;
+	stroke-width: 1;
+}
+svg.graph-contributions .points {
+	stroke: grey;
+	stroke-width: 4;
+}
+svg.graph-contributions .inset {
+	fill: lightblue;
+}
+svg.graph-contributions .labels {
+	fill: darkgrey;
+	stroke: none;
+	font-family: Arial;
+	font-size: 12px;
+	kerning: 2;
+}
+svg.graph-contributions .lines {
+	stroke: lightblue;
+	stroke-width: 2;
+}
+svg.graph-contributions .labels.x-labels {
+	text-anchor: middle;
+}
+svg.graph-contributions .labels.y-labels {
+	text-anchor: end;
 }
