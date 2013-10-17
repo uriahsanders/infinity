@@ -10,12 +10,15 @@
 <body>
 	<div id="wrapper"></div>
 	<script>
-		var graph = new GraphLinear(); //create data for new graph
-		//graph.init(); //display graph
-		var json = graph.save(); //save graph as JSON
-		alert(json);
-		var graph2 = new Graph(); //access graph functions
-		graph2.expand(json); //recreate first graph from JSON
+		var graph = new GraphLinear({
+			example: true,
+			id: 'test-graph'
+		}); //create data for new graph
+		graph.init(); //display graph
+		//var json = graph.save(); //save graph as JSON
+		//alert(json);
+		//var graph2 = new Graph(); //access graph functions
+		//graph2.expand(json); //recreate first graph from JSON
 	</script>
 </body>
 </html>

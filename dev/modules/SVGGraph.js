@@ -34,18 +34,30 @@
 */
 var Graph = Graph || (function($) {
 	var Private = {};
-	Private.defaults = function(height, width, graphHeight, graphWidth) { //used in multiple places so needs external ref.
-		height = height || 300;
-		width = width || 550;
+	Private.count = 0;
+	var Graph = function(obj) {
+		this.setOptions(obj);
+		++Private.count;
+	};
+	Graph.prototype.defaults = function() {
 		return {
 			//default options
 			x: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			y: [10, 20, 30, 40, 50, 60, 70, 80],
-			height: graphHeight || height, //if graph height is sepcified go with that, else fill container
-			width:  graphWidth || width,
 			attachTo: 'body',
-			points: [2, 54, 12, 8, 5, 45, 32],
-			defaultStyle: true, //add at least basic styling
+			points: [2, 54, 12, 8, 5, 45, 32]
+		}
+	};
+	//important stuff you might want automatically
+	Graph.prototype.basics = function(height, width, graphHeight, graphWidth) {
+		height = graphHeight || height || 300;
+		width = graphWidth || width || 550;
+		//if user inputed a % or px, chop it off
+		//but if its a percentage they probably mean fill the graph
+		//height = (height.substring(height.length - 1) === '%') ? $('')
+		return {
+			Gheight: parseFloat(height),
+			Gwidth: parseFloat(width),
 			//Distances between lines
 			xDist: 90,
 			yDist: 30,
@@ -56,51 +68,72 @@ var Graph = Graph || (function($) {
 			//points
 			xOfPoints: [], //get x and y coordinates of points
 			yOfPoints: [],
-			style: { //default styling
-				"svg.graph": {
-					"height": height + "px",
-					"width": width + "px",
-					"background": "url('/infinity/dev/images/broken_noise.png')"
-				},
-				"svg.graph .grid": {
-					"stroke": "grey",
-					"stroke-width": "1"
-				},
-				"svg.graph .points": {
-					"stroke": "grey",
-					"stroke-width": "4"
-				},
-				"svg.graph .inset": {
-					"fill": "lightblue"
-				},
-				"svg.graph .labels": {
-					"fill": "darkgrey",
-					"stroke": "none",
-					"font-family": "Arial",
-					"font-size": "12px",
-					"kerning": "2"
-				},
-				"svg.graph .lines": {
-					"stroke": "lightblue",
-					"stroke-width": "2"
-				},
-				"svg.graph .labels.x-labels": {
-					"text-anchor": "middle"
-				},
-				"svg.graph .labels.y-labels": {
-					"text-anchor": "end"
-				}
-			}
+			id: 'SVGGraph' + Private.count
 		}
 	};
-	var Graph = function(obj) {
-		this.setOptions(obj);
+	Graph.prototype.getId = function() {
+		return '#' + this.obj.id;
+	};
+	Graph.prototype.styles = function(height, width, ID) {
+		height = height || 300;
+		width = width || 550;
+		var id = '#' + ID;
+		var styling = {};
+		styling.style = {};
+		styling.style[id] = {
+			"height": height,
+			"width": width,
+			"background": "url('/infinity/dev/images/broken_noise.png')"
+		};
+		styling.style[id + " .grid"] = {
+			"stroke": "grey",
+			"stroke-width": "1"
+		};
+		styling.style[id + " .points"] = {
+			"stroke": "grey",
+			"stroke-width": "4"
+		};
+		styling.style[id + " .inset"] = {
+			"fill": "lightblue"
+		};
+		styling.style[id + " .labels"] = {
+			"fill": "darkgrey",
+			"stroke": "none",
+			"font-family": "Arial",
+			"font-size": "12px",
+			"kerning": "2"
+		};
+		styling.style[id + " .lines"] = {
+			"stroke": "lightblue",
+			"stroke-width": "2"
+		};
+		styling.style[id + " .labels.x-labels"] = {
+			"text-anchor": "middle"
+		};
+		styling.style[id + " .labels.y-labels"] = {
+			"text-anchor": "end"
+		};
+		return styling;
 	};
 	//handle this.obj
 	Graph.prototype.setOptions = function(obj) {
+		//do basic setup automatically
+		if (obj && (obj.basic === true || typeof obj.basic === 'undefined')) {
+			this.obj = this.basics(obj.height, obj.width, obj.graphHeight, obj.graphWidth);
+		}
 		//merge with defaults
-		if (obj) this.obj = $.extend({}, Private.defaults(obj.height, obj.width, obj.graphHeight, obj.graphWidth), obj);
-		else this.obj = Private.defaults(); //just use defaults
+		if ((obj && obj.example === true) || typeof obj === 'undefined') { //if example chosen or no options given
+			obj = obj || {};
+			obj.id = obj.id || this.obj.id;
+			//everything user did not specify is filled with defaults + basics + style
+			//style needs id passed in so it can be replaced from basics().id
+			$.extend(this.obj, this.defaults(), this.styles(obj.height, obj.width, obj.id), obj);
+			this.obj.addStyle = true;
+		} else if (obj && obj.addStyle === true) { //only add styling
+			$.extend(this.obj, this.styles(obj.height, obj.width), obj);
+		} else if (obj) {
+			this.obj = obj; //only use given args
+		}
 		console.log('this.obj = \n' + JSON.stringify(this.obj) + '\n'); //output JSON
 	};
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
@@ -136,7 +169,10 @@ var GraphLinear = GraphLinear || (function($) {
 	GraphLinear.prototype.init = function(obj) {
 		console.log("Linear graph initialized.");
 		var self = this.obj; //shorthand from here on...
-		var SVG = '<svg class="graph">', //begin all groups
+		//correct values (atm has user inputed version, whereas G... is clean)
+		self.width = self.Gwidth;
+		self.height = self.Gheight;
+		var SVG = '<svg id="' + this.getId() + '"class="graph">', //begin all groups
 			xGrid = '<g class="grid x-grid" id="xGrid">',
 			yGrid = '<g class="grid y-grid" id="yGrid">',
 			points = '<g class="inset points">',
@@ -168,7 +204,10 @@ var GraphLinear = GraphLinear || (function($) {
 			//i fucked up and everything is 10 off)
 			var inc = self.height - ((self.points[i] + 10) * (self.yDist / 10)); //subtract from height to invert graph
 			//set our x coor depending on i due to offset (first and last are special) :/;
-			var x = (i === 0) ? i * self.xDist + self.xOffset + 5 : (i === 6 ? i * self.xDist : i * self.xDist);
+			var x =
+				(i === 0) ?
+				(i * self.xDist + self.xOffset + 5) :
+				((i === 60) ? (i * self.xDist) : (i * self.xDist));
 			points += '<circle cx="' + x + '" cy="' + inc + '" r="5"></circle>'; //cx is always on a vert. line
 			//store coordinates so we can easily connect them with lines
 			self.xOfPoints.push(x);
@@ -196,10 +235,18 @@ var GraphLinear = GraphLinear || (function($) {
 		if (self.attachTo !== 'body') self.attachTo = '#' + self.attachTo;
 		$(self.attachTo).append(SVG);
 		//STYLING
-		if (self.defaultStyle === true) {
+		if (self.addStyle === true) {
+			var l = 0;
 			for (var i in self.style) {
+				if (l == 0) alert(i + '\n' + JSON.stringify(self.style[i]));
 				$(i).css(self.style[i]);
+				l++;
 			}
+			$('#test-graph').css({
+				height: '300px',
+				width: '550px',
+				background: "url('/infinity/dev/images/broken_noise.png')"
+			});
 		}
 	};
 	return GraphLinear;
