@@ -45,8 +45,7 @@ var Graph = Graph || (function($) {
 			x: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			y: [10, 20, 30, 40, 50, 60, 70, 80],
 			attachTo: 'body',
-			points: [0, 26, 33, 74, 12, 49, 18],
-			grid: true
+			points: [0, 26, 33, 74, 12, 49, 18]
 		}
 	};
 	//important stuff you might want automatically
@@ -69,15 +68,18 @@ var Graph = Graph || (function($) {
 			Gheight: parseFloat(height),
 			Gwidth: parseFloat(width),
 			//Distances between lines
-			xDist: 90,
+			xDist: 60,
 			yDist: 30,
 			//leave space for labels:
 			xOffset: 25,
 			yOffset: 20,
+			mainOffset: 35, //to seperate everything from the ylabels
 			padding: 10, //keep labels from touching edges
 			//points
 			xOfPoints: [], //get x and y coordinates of points
 			yOfPoints: [],
+			grid: true,
+			noLines: false,
 			id: 'SVGGraph' + Private.count
 		}
 	};
@@ -197,14 +199,14 @@ var GraphLinear = GraphLinear || (function($) {
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y.length + 1; //+1 because line 1 is at origin
-		//(Throughout the following I subtract and add 5 where needed, idk why, but it just works...)
-		if (self.grid === true) {
+		//make sure they want the grid
+		if (self.grid === true && self.noLines === false) {
 			//save final x of xlines so ylines dont pass that boundary
 			//X-GRID LINES
-			for (var i = 1; i < xLines; ++i) {
+			for (var i = 0; i < xLines; ++i) {
 				//x1 and x2 must be the same (dist. from left), 
 				//start at very top (y1 = 0), all the way to the bottom (y = height)
-				var nxt = i * self.xDist;
+				var nxt = i * self.xDist + self.mainOffset;
 				xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.yOffset + self.padding) + '" y2="' + (self.height - self.yOffset - self.padding) + '"></line>';
 				if (i === xLines - 1) var finalX = nxt;
 			}
@@ -212,8 +214,16 @@ var GraphLinear = GraphLinear || (function($) {
 			for (var i = 1; i <= yLines; ++i) {
 				//y1 and y2 must be the same (dist. from top),
 				//ALL x1's & x2's must be the same so we start at same dist. from left & right
-				var nxt = (self.height) - i * (self.yDist);
-				yGrid += '<line x1="' + (self.xOffset + 5) + '" x2="' + finalX + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
+				var nxt = (self.height) - i * (self.yDist); 
+				//finalX need not be added to mainoffset because nxt already accounts for it mathematically
+				yGrid += '<line x1="' + self.mainOffset + '" x2="' + (finalX) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
+			}
+		}else{
+			//leave the first vert. and horiz. line for them for obvious styling purposes
+			//they still have the option to remove this with noLines
+			if(self.noLines === false){
+				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset + '" y1="' + (self.yOffset + self.padding) + '" y2="' + (self.height - self.yOffset - self.padding) + '"></line>';
+				yGrid += '<line x1="' + self.mainOffset + '" x2="' + ((xLines - 1) * self.xDist + self.mainOffset) + '" y1="' + (self.height - self.yDist) + '" y2="' + (self.height - self.yDist) + '"></line>';
 			}
 		}
 		//POINTS (INDIVIDUAL)
@@ -223,10 +233,7 @@ var GraphLinear = GraphLinear || (function($) {
 			//i fucked up and everything is 10 off)
 			var inc = self.height - ((self.points[i] + 10) * (self.yDist / 10)); //subtract from height to invert graph
 			//set our x coor depending on i due to offset (first and last are special) :/;
-			var x =
-				(i === 0) ?
-				(i * self.xDist + self.xOffset + 5) :
-				(i * self.xDist);
+			var x = i * self.xDist + self.mainOffset;
 			points += '<circle cx="' + x + '" cy="' + inc + '" r="5"></circle>'; //cx is always on a vert. line
 			//store coordinates so we can easily connect them with lines
 			self.xOfPoints.push(x);
