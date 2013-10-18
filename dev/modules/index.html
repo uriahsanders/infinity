@@ -13,7 +13,9 @@
 		var graph = new GraphLinear({
 			example: true,
 			id: 'test-graph',
-			xDist: 85
+			attachTo: 'wrapper',
+			id: '#mygraph',
+			xDist: 50
 		}); //create data for new graph
 		graph.init(); //display graph
 		//var json = graph.save(); //save graph as JSON

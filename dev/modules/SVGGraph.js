@@ -45,17 +45,27 @@ var Graph = Graph || (function($) {
 			x: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			y: [10, 20, 30, 40, 50, 60, 70, 80],
 			attachTo: 'body',
-			points: [0, 26, 33, 74, 12, 49, 18]
+			points: [0, 26, 33, 74, 12, 49, 18],
+			grid: true
 		}
 	};
 	//important stuff you might want automatically
 	Graph.prototype.basics = function(height, width, graphHeight, graphWidth) {
+		//basically, if no graph height/width is given we just make it equal the svg height/width
 		height = graphHeight || height || 300;
 		width = graphWidth || width || 550;
-		//if user inputed a % or px, chop it off
-		//but if its a percentage they probably mean fill the graph
-		//height = (height.substring(height.length - 1) === '%') ? $('')
+		//make sure we can take substring
+		height = height.toString();
+		width = width.toString();
+		//so we can let them use percentages
+		Private.attachTo = Private.attachTo || 'body';
+		var containerHeight = $(Private.attachTo).css('height');
+		var containerWidth = $(Private.attachTo).css('width');
+		//if its a percentage they probably mean fill the graph, so use it
+		height = (height.substring(height.length - 1) === '%') ? containerHeight : height;
+		width = (width.substring(width.length - 1) === '%') ? containerWidth : width;
 		return {
+			//if user inputed a % or px, chop it off with parseFloat
 			Gheight: parseFloat(height),
 			Gwidth: parseFloat(width),
 			//Distances between lines
@@ -64,24 +74,20 @@ var Graph = Graph || (function($) {
 			//leave space for labels:
 			xOffset: 25,
 			yOffset: 20,
-			padding: 7, //keep labels from touching edges
+			padding: 10, //keep labels from touching edges
 			//points
 			xOfPoints: [], //get x and y coordinates of points
 			yOfPoints: [],
 			id: 'SVGGraph' + Private.count
 		}
 	};
-	Graph.prototype.getId = function() {
-		return '#' + this.obj.id;
-	};
 	//create jquery css header
-	Graph.prototype.parseS = function(id, then){
-		return 'svg[id="'+id+'"] '+then;
+	Graph.prototype.parseS = function(id, then) {
+		return 'svg[id="' + id + '"] ' + then;
 	};
-	Graph.prototype.styles = function(height, width, ID) {
+	Graph.prototype.styles = function(height, width, id) {
 		height = height || 300;
 		width = width || 550;
-		var id = '#' + ID;
 		var styling = {};
 		styling.style = {};
 		styling.style[this.parseS(id, '')] = {
@@ -122,6 +128,11 @@ var Graph = Graph || (function($) {
 	//handle this.obj
 	Graph.prototype.setOptions = function(obj) {
 		obj = obj || {};
+		if (obj.attachTo) {
+			obj.attachTo = (obj.attachTo.charAt(0) === '#') ? obj.attachTo : '#' + obj.attachTo; //make hash optional
+			Private.attachTo = obj.attachTo; //for basics(), which cant access this.obj.attachTo in time
+		}
+		if (obj.id) obj.id = (obj.id.charAt(0) === '#') ? obj.id.substring(1) : obj.id; //make hash optional
 		//do basic setup automatically
 		if (obj.basic === true || typeof obj.basic === 'undefined') {
 			this.obj = this.basics(obj.height, obj.width, obj.graphHeight, obj.graphWidth);
@@ -176,7 +187,7 @@ var GraphLinear = GraphLinear || (function($) {
 		//correct values (atm has user inputed version, whereas G... is clean)
 		self.width = self.Gwidth;
 		self.height = self.Gheight;
-		var SVG = '<svg id="' + this.getId() + '"class="graph">', //begin all groups
+		var SVG = '<svg id="' + this.obj.id + '"class="graph">', //begin all groups
 			xGrid = '<g class="grid x-grid" id="xGrid">',
 			yGrid = '<g class="grid y-grid" id="yGrid">',
 			points = '<g class="inset points">',
@@ -184,22 +195,26 @@ var GraphLinear = GraphLinear || (function($) {
 			yLabels = '<g class="labels y-labels">',
 			lines = '<g class="lines">'; //connecting points
 		//*remember: xLines are vertical, yLines are horizontal
-		var xLines = self.x.length - 1;
+		var xLines = self.x.length;
 		var yLines = self.y.length + 1; //+1 because line 1 is at origin
 		//(Throughout the following I subtract and add 5 where needed, idk why, but it just works...)
-		//X-GRID LINES
-		for (var i = 1; i <= xLines; ++i) {
-			//x1 and x2 must be the same (dist. from left), 
-			//start at very top (y1 = 0), all the way to the bottom (y = height)
-			var nxt = i * self.xDist;
-			xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + self.yOffset + '" y2="' + (self.height - self.yOffset) + '"></line>';
-		}
-		//Y-GRID LINES
-		for (var i = 1; i <= yLines; ++i) {
-			//y1 and y2 must be the same (dist. from top),
-			//ALL x1's & x2's must be the same so we start at same dist. from left & right
-			var nxt = (self.height) - i * (self.yDist);
-			yGrid += '<line x1="' + (self.xOffset + 5) + '" x2="' + (self.width - self.xOffset + 15) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
+		if (self.grid === true) {
+			//save final x of xlines so ylines dont pass that boundary
+			//X-GRID LINES
+			for (var i = 1; i < xLines; ++i) {
+				//x1 and x2 must be the same (dist. from left), 
+				//start at very top (y1 = 0), all the way to the bottom (y = height)
+				var nxt = i * self.xDist;
+				xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.yOffset + self.padding) + '" y2="' + (self.height - self.yOffset - self.padding) + '"></line>';
+				if (i === xLines - 1) var finalX = nxt;
+			}
+			//Y-GRID LINES
+			for (var i = 1; i <= yLines; ++i) {
+				//y1 and y2 must be the same (dist. from top),
+				//ALL x1's & x2's must be the same so we start at same dist. from left & right
+				var nxt = (self.height) - i * (self.yDist);
+				yGrid += '<line x1="' + (self.xOffset + 5) + '" x2="' + finalX + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
+			}
 		}
 		//POINTS (INDIVIDUAL)
 		for (var i = 0; i < self.x.length; ++i) { //7 for days in week
@@ -211,7 +226,7 @@ var GraphLinear = GraphLinear || (function($) {
 			var x =
 				(i === 0) ?
 				(i * self.xDist + self.xOffset + 5) :
-				((i === 60) ? (i * self.xDist) : (i * self.xDist));
+				(i * self.xDist);
 			points += '<circle cx="' + x + '" cy="' + inc + '" r="5"></circle>'; //cx is always on a vert. line
 			//store coordinates so we can easily connect them with lines
 			self.xOfPoints.push(x);
@@ -233,10 +248,9 @@ var GraphLinear = GraphLinear || (function($) {
 			lines += '<line x1="' + self.xOfPoints[i] + '" x2="' + self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
 		}
 		//COMBINING
-		xGrid, yGrid, points, lines, xLabels, yLabels += '</g>'; //close all tags
+		xGrid += '</g>', yGrid += '</g>', points += '</g>', lines += '</g>', xLabels += '</g>', yLabels += '</g>'; //close all tags
 		SVG += xGrid + yGrid + points + lines + xLabels + yLabels + '</svg>'; //build html
 		//build with strings 'cause DselfM is sooooo slow
-		if (self.attachTo !== 'body') self.attachTo = '#' + self.attachTo;
 		$(self.attachTo).append(SVG);
 		//STYLING
 		if (self.addStyle === true) {

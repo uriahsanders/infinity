@@ -233,7 +233,9 @@ var Workspace = (function($, _, T) {
 			Public.gen.loading('#workspace-graphs'); //may take a while, so start loading screen
 			var graph = new GraphLinear({
 				example: true,
-				attachTo: 'workspace-info'
+				attachTo: 'workspace-info',
+				width: '100%',
+				xDist: 87
 			});
 			graph.init();
 		}
