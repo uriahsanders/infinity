@@ -157,6 +157,8 @@ var Workspace = (function($, _, T) {
 	};
 	//do all the starting stuff
 	Public.init = function() {
+		Workspace.graphs.contributions();
+		$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
 		if (Router.isURLDefault()) { // URL is standard
 			console.log('The workspace has been initiated.');
 			console.log("Initial functions starting...");
@@ -229,87 +231,11 @@ var Workspace = (function($, _, T) {
 		contributions: function() {
 			//linear graph listing contributions
 			Public.gen.loading('#workspace-graphs'); //may take a while, so start loading screen
-			var WIDTH = $('#workspace-graphs').css('width');
-			var SVG = '<svg class="graph-contributions">', //begin all groups
-				xGrid = '<g class="grid x-grid" id="xGrid">',
-				yGrid = '<g class="grid y-grid" id="yGrid">',
-				points = '<g class="inset points">',
-				xLabels = '<g class="labels x-labels">',
-				yLabels = '<g class="labels y-labels">',
-				lines = '<g class="lines">'; //connecting points
-			//*remember: xLines are vertical, yLines are horizontal
-			var data = {
-				//how many lines in each dimension? (GRID)
-				xLines: 6, //since we're dealing with days-a-week
-				yLines: 9, //max contributions a day shown is 80, each line is 10 contributions, first line is 0
-				//Dimensions of SVG for scale
-				height: 300, //match with CSS!
-				//slice off the 'px' for width (SVG is 100% width)
-				width: WIDTH.substring(0, WIDTH.length - 2),
-				//Distances between lines
-				xDist: 90,
-				yDist: 30,
-				//leave space for labels:
-				xOffset: 25,
-				yOffset: 20,
-				padding: 7, //keep labels from touching edges
-				//points
-				points: [],
-				xOfPoints: [], //get x and y coordinates of points
-				yOfPoints: [],
-				//graph info
-				dates: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-			}
-			//*Later get points from ajax, but for now:
-			data.points.push(0, 26, 33, 74, 12, 49, 18);
-			//(Throughout the following I subtract and add 5 where needed, idk why, but it just works...)
-			//X-GRID LINES
-			for (var i = 1; i <= data.xLines; ++i) {
-				//x1 and x2 must be the same (dist. from left), 
-				//start at very top (y1 = 0), all the way to the bottom (y = height)
-				var nxt = i * data.xDist;
-				xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + data.yOffset + '" y2="' + (data.height - data.yOffset) + '"></line>';
-			}
-			//Y-GRID LINES
-			for (var i = 1; i <= data.yLines; ++i) {
-				//y1 and y2 must be the same (dist. from top),
-				//ALL x1's & x2's must be the same so we start at same dist. from left & right
-				var nxt = i * data.yDist;
-				yGrid += '<line x1="' + (data.xOffset + 5) + '" x2="' + (data.width - data.xOffset) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
-			}
-			//POINTS (INDIVIDUAL)
-			for (var i = 0; i < data.dates.length; ++i) { //7 for days in week
-				//scale: every actual 30 should equal 10 in points (use yDist for if this changes)
-				//so cy should = 30 when point = 10 and so on... (points[i]+10 just fixes the points to match the scale... 
-				//i fucked up and everything is 10 off)
-				var inc = data.height - ((data.points[i]+10) * (data.yDist / 10)); //subtract from height to invert graph
-				//set our x coor depending on i due to offset (first and last are special) :/;
-				var x = (i === 0) ? i * data.xDist + data.xOffset + 5 : (i === 6 ? i * data.xDist - data.xOffset - 5 : i * data.xDist);
-				points += '<circle cx="' + x + '" cy="' + inc + '" r="5"></circle>'; //cx is always on a vert. line
-				//store coordinates so we can easily connect them with lines
-				data.xOfPoints.push(x);
-				data.yOfPoints.push(inc);
-				//xLABELS
-				xLabels += '<text x="' + x + '" y="' + (data.height - data.padding) + '">' + data.dates[i] + '</text>';
-			}
-			//yLABELS
-			for (var i = 1; i <= data.yLines; ++i) {
-				var x = (i != 1) ? data.xOffset : data.xOffset - 10; //clean it up: move 1 digit numbers 1 place to the left
-				//y subtracted from height to invert graph
-				yLabels += '<text x="' + x + '" y="' + ((data.height - (data.yDist * i - data.padding)) - 5) + '">' + (i * 10 - 10) + '</text>';
-			}
-			//LINES
-			for(var i = 0; i < data.points.length - 1; ++i){
-				var j = i + 1; //get next point coordinate
-				//to connect two points: x1 = (x of first point), x2 = (x of second point),
-				//y1 = (y of first point), y2 = (y of second point)
-				lines += '<line x1="' + data.xOfPoints[i] + '" x2="' + data.xOfPoints[j] + '" y1="' + data.yOfPoints[i] + '" y2="' + data.yOfPoints[j] + '"></line>';
-			}
-			//COMBINING
-			xGrid, yGrid, points, lines, xLabels, yLabels += '</g>'; //close all tags
-			SVG += xGrid + yGrid + points + lines + xLabels + yLabels + '</svg>'; //build html
-			//build with strings 'cause DOM is sooooo slow
-			$('#workspace-graphs').html(SVG);
+			var graph = new GraphLinear({
+				example: true,
+				attachTo: 'workspace-info'
+			});
+			graph.init();
 		}
 	};
 	return Public;
@@ -426,9 +352,6 @@ var Controller = (function($) {
 	"use strict";
 	console.log("(Controller): Controller now listening for events!");
 	Model.modify('test', true); //make sure MVC works
-	//instant UI changes:
-	$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
-
 	//start listening for changes
 	$(document).ready(function() {
 		//normal listeners
@@ -464,7 +387,6 @@ var Controller = (function($) {
 	}
 	//BEGIN
 	Workspace.init(); //start everything
-	Workspace.graphs.contributions();
 	//FOR TESTING IN DEV ONLY:
 	// var elDocument = new Document('task', 'uriah');
 	// var elTask = new Task('task', 'uriah');

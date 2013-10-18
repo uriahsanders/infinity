@@ -45,7 +45,7 @@ var Graph = Graph || (function($) {
 			x: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			y: [10, 20, 30, 40, 50, 60, 70, 80],
 			attachTo: 'body',
-			points: [2, 54, 12, 8, 5, 45, 32]
+			points: [0, 26, 33, 74, 12, 49, 18]
 		}
 	};
 	//important stuff you might want automatically
@@ -74,56 +74,60 @@ var Graph = Graph || (function($) {
 	Graph.prototype.getId = function() {
 		return '#' + this.obj.id;
 	};
+	//create jquery css header
+	Graph.prototype.parseS = function(id, then){
+		return 'svg[id="'+id+'"] '+then;
+	};
 	Graph.prototype.styles = function(height, width, ID) {
 		height = height || 300;
 		width = width || 550;
 		var id = '#' + ID;
 		var styling = {};
 		styling.style = {};
-		styling.style[id] = {
+		styling.style[this.parseS(id, '')] = {
 			"height": height,
 			"width": width,
 			"background": "url('/infinity/dev/images/broken_noise.png')"
 		};
-		styling.style[id + " .grid"] = {
+		styling.style[this.parseS(id, '.grid')] = {
 			"stroke": "grey",
 			"stroke-width": "1"
 		};
-		styling.style[id + " .points"] = {
+		styling.style[this.parseS(id, '.points')] = {
 			"stroke": "grey",
 			"stroke-width": "4"
 		};
-		styling.style[id + " .inset"] = {
+		styling.style[this.parseS(id, '.inset')] = {
 			"fill": "lightblue"
 		};
-		styling.style[id + " .labels"] = {
+		styling.style[this.parseS(id, '.labels')] = {
 			"fill": "darkgrey",
 			"stroke": "none",
 			"font-family": "Arial",
 			"font-size": "12px",
 			"kerning": "2"
 		};
-		styling.style[id + " .lines"] = {
+		styling.style[this.parseS(id, '.lines')] = {
 			"stroke": "lightblue",
 			"stroke-width": "2"
 		};
-		styling.style[id + " .labels.x-labels"] = {
+		styling.style[this.parseS(id, '.labels.x-labels')] = {
 			"text-anchor": "middle"
 		};
-		styling.style[id + " .labels.y-labels"] = {
+		styling.style[this.parseS(id, '.labels.y-labels')] = {
 			"text-anchor": "end"
 		};
 		return styling;
 	};
 	//handle this.obj
 	Graph.prototype.setOptions = function(obj) {
+		obj = obj || {};
 		//do basic setup automatically
-		if (obj && (obj.basic === true || typeof obj.basic === 'undefined')) {
+		if (obj.basic === true || typeof obj.basic === 'undefined') {
 			this.obj = this.basics(obj.height, obj.width, obj.graphHeight, obj.graphWidth);
 		}
 		//merge with defaults
-		if ((obj && obj.example === true) || typeof obj === 'undefined') { //if example chosen or no options given
-			obj = obj || {};
+		if ((obj && obj.example === true) || $.isEmptyObject(obj)) { //if example chosen or no options given
 			obj.id = obj.id || this.obj.id;
 			//everything user did not specify is filled with defaults + basics + style
 			//style needs id passed in so it can be replaced from basics().id
@@ -236,17 +240,9 @@ var GraphLinear = GraphLinear || (function($) {
 		$(self.attachTo).append(SVG);
 		//STYLING
 		if (self.addStyle === true) {
-			var l = 0;
 			for (var i in self.style) {
-				if (l == 0) alert(i + '\n' + JSON.stringify(self.style[i]));
 				$(i).css(self.style[i]);
-				l++;
 			}
-			$('#test-graph').css({
-				height: '300px',
-				width: '550px',
-				background: "url('/infinity/dev/images/broken_noise.png')"
-			});
 		}
 	};
 	return GraphLinear;
