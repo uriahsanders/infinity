@@ -1,36 +1,16 @@
-//Module for creating SVG graphs quickly and easily
+//Module for creating SVG graphs quickly and easily (HIGHLY flexible, everything is optional/changeable)
 /*
-	Example:
-	var graph = new GraphLinear({ //all parameters are optional, will merge with defaults
-		attachTo: '#wrapper',
-		classes: ['graph', 'forum', 'SVG', ...],
-		url: 'script.php',
-		data: 'graph=forum&type=linear', //can also be an object
-		lineColor: 'blue',
-		interactive: true,
-		pan: true,
-		x: ['Mon', 'Tue', 'Wed', 'Thu', ...],
-		y: [10, 20, 30, 40, ...],
-		length: '400px',
-		width: '500px'
-	});
-	var graph2 = new GraphLinear(); //no parameters so makes an example graph
-	if(page === 'forum'){
-		graph.init();
-		setInterval(graph.update, 60000); //update graph every minute
-	}else{
-		graph2.init();
-	}
-	var object = graph2.save(); //store condensed form of graph that can be expanded
-	//to expand an old graph:
-	var graph3 = new Graph();
-	graph3.expand({
-		src: mySavedJSON,
-		//other options
-	});
-	//for help:
-	graph.help();
-	//functions constructor, expand, and update can all be called with object for arguments (all the same)
+	Stuff it can do:
+	Create graphs of different types,
+	store any graph as JSON,
+	expand JSON into a graph,
+	update a graph
+
+	Coming soon:
+	being able to define styles in object,
+	bar graph, pie graph, and area graph,
+	animations on hover (show data under mouse),
+	have the graph draw itself into existence with animation at desired speed
 */
 var Graph = Graph || (function($) {
 	var Private = {};
@@ -169,7 +149,10 @@ var Graph = Graph || (function($) {
 		}
 	};
 	Graph.prototype.update = function(obj) { //recall script file to update graph with new obj
+		//reset options with new stuff
 		this.setOptions(obj);
+		//this.obj is now updated
+		this.expand(this.obj); //recreate graph
 	};
 	Graph.prototype.help = function() { // show a popup with help information
 		alert("Someday this will actually be helpful.");

@@ -235,7 +235,7 @@ var Workspace = (function($, _, T) {
 				example: true,
 				attachTo: 'workspace-info',
 				width: '100%',
-				xDist: 87
+				xDist: 80
 			});
 			graph.init();
 		}
