@@ -235,7 +235,10 @@ var Workspace = (function($, _, T) {
 				example: true,
 				attachTo: 'workspace-info',
 				width: '100%',
-				xDist: 80
+				height: 350,
+				xDist: 80,
+				mainOffset: 45,
+				xOffset: 35
 			});
 			graph.init();
 		}

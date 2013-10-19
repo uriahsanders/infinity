@@ -4,21 +4,31 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="SVGGraph.js"></script>
 </head>
 <body>
-	<div id="wrapper"></div>
+	<br>
+	<br>
+	<br>
+	<div id="wrapper"></div><br />
+	<div id="wrapper2"></div>
 	<script>
 		var graph = new GraphLinear({
 			example: true,
-			id: 'test-graph',
 			attachTo: 'wrapper',
-			id: '#mygraph',
-			width: 450,
-			grid: false
+			width: 500,
+			height: 400,
+			xOffset: 50,
+			mainOffset: 60,
+			id: 'testgraph'
 		}); //create data for new graph
 		graph.init(); //display graph
+		// var bar = new GraphBar({
+		// 	example: true,
+		// 	attachTo: 'wrapper2'
+		// });
+		// bar.init();
 		//var json = graph.save(); //save graph as JSON
 		//alert(json);
 		//var graph2 = new Graph(); //access graph functions
