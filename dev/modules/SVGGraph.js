@@ -68,6 +68,22 @@ var Graph = Graph || (function($) {
 	Graph.prototype.parseS = function(id, then) {
 		return 'svg[id="' + id + '"] ' + then;
 	};
+	//turn an id into jQuery selector format
+	Graph.prototype.id2selector = function(id) {
+		var stuff = id.split(' '); //split into components
+		id = stuff[0]; //only want the first word (id)
+		var selector = 'svg[id="';
+		if (id.charAt(0) === '#') { //make sure it's an id
+			selector += id.substring(1) + '"]';
+			//append everything else to the end
+			for (var i = 1; i < stuff.length; ++i) {
+				selector += ' ' + stuff[i];
+			}
+		} else {
+			return id;
+		}
+		return selector;
+	};
 	Graph.prototype.styles = function(height, width, id, styles, byCSS) {
 		//first way to style is by creating an object representing the CSS
 		byCSS = byCSS || {};
@@ -112,8 +128,9 @@ var Graph = Graph || (function($) {
 			"text-anchor": styles.yLabelAnchor || "end"
 		};
 		//for styling completely with your own object
-		for(var name in byCSS){
-			styling.style[name] = byCSS[name]; //make styling equal users array
+		for (var name in byCSS) {
+			//make sure id is in proper form
+			styling.style[this.id2selector(name)] = byCSS[name]; //make styling = users object
 		}
 		return styling;
 	};
@@ -141,7 +158,7 @@ var Graph = Graph || (function($) {
 		} else if (obj) {
 			this.obj = obj; //only use given args
 		}
-		console.log('this.obj = \n' + JSON.stringify(this.obj) + '\n'); //output JSON
+		console.log('(SVGGraph): this.obj = \n' + JSON.stringify(this.obj) + '\n'); //output JSON
 	};
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
 		return JSON.stringify(this.obj);
@@ -173,9 +190,10 @@ var Graph = Graph || (function($) {
 		//this.obj is now updated
 		this.expand(this.obj); //recreate graph
 	};
-	Graph.prototype.createGrid = function(xLines, yLines){
+	Graph.prototype.createGrid = function(xLines, yLines) {
 		var self = this.obj;
-		var xGrid = '', yGrid = '';
+		var xGrid = '',
+			yGrid = '';
 		//make sure they want the grid
 		if (self.grid === true && self.noLines === false) {
 			//save final x of xlines so ylines dont pass that boundary
@@ -192,14 +210,14 @@ var Graph = Graph || (function($) {
 			for (var i = 1; i <= yLines; ++i) {
 				//y1 and y2 must be the same (dist. from top),
 				//ALL x1's & x2's must be the same so we start at same dist. from left & right
-				var nxt = (self.height) - i * (self.yDist); 
+				var nxt = (self.height) - i * (self.yDist);
 				//finalX need not be added to mainoffset because nxt already accounts for it mathematically
 				yGrid += '<line x1="' + self.mainOffset + '" x2="' + (finalX) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
 			}
-		}else{
+		} else {
 			//leave the first vert. and horiz. line for them for obvious styling purposes
 			//they still have the option to remove this with noLines
-			if(self.noLines === false){
+			if (self.noLines === false) {
 				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset + '" y1="' + (self.yOffset + self.padding) + '" y2="' + (self.height - self.yOffset - self.padding) + '"></line>';
 				yGrid += '<line x1="' + self.mainOffset + '" x2="' + ((xLines - 1) * self.xDist + self.mainOffset) + '" y1="' + (self.height - self.yDist) + '" y2="' + (self.height - self.yDist) + '"></line>';
 			}
@@ -209,7 +227,7 @@ var Graph = Graph || (function($) {
 			yGrid: yGrid
 		};
 	};
-	Graph.prototype.applyStyling = function(){
+	Graph.prototype.applyStyling = function() {
 		//Add CSS as value for every key in style
 		if (this.obj.addStyle === true) {
 			for (var i in this.obj.style) {
@@ -218,27 +236,28 @@ var Graph = Graph || (function($) {
 		}
 	};
 	//initialize global tags
-	Graph.prototype.openTags = function(){
+	Graph.prototype.openTags = function() {
 		return {
 			SVG: '<svg id="' + this.obj.id + '"class="graph">', //begin all groups
 			xGrid: '<g class="grid x-grid" id="xGrid">',
 			yGrid: '<g class="grid y-grid" id="yGrid">',
 			xLabels: '<g class="labels x-labels">',
-			yLabels: '<g class="labels y-labels">' 
+			yLabels: '<g class="labels y-labels">'
 		}
 	};
 	//add X and Y labels to graph
-	Graph.prototype.addLabels = function(){
+	Graph.prototype.addLabels = function() {
 		//note: make ylabel padding for all single digit numbers
 		var self = this.obj;
-		var xLabels = '', yLabels = '';
+		var xLabels = '',
+			yLabels = '';
 		//xLABELS
-		for(var i = 0; i < self.x.length; ++i){
+		for (var i = 0; i < self.x.length; ++i) {
 			xLabels += '<text x="' + (i * self.xDist + self.mainOffset) + '" y="' + (self.height - self.padding) + '">' + self.x[i] + '</text>';
 		}
 		//yLABELS
 		for (var i = 1; i <= self.y + 1; ++i) {
-			var digit = (i * self.scale - self.scale);
+			var digit = (i * self.scale - self.scale); //get multiple of scale as number displayed
 			var x = (digit >= 10) ? self.xOffset : self.xOffset - 10; //clean it up: move 1 digit numbers 1 place to the left
 			//y subtracted from height to invert graph
 			yLabels += '<text x="' + x + '" y="' + ((self.height - (self.yDist * i - self.padding)) - 5) + '">' + digit + '</text>';
@@ -249,13 +268,13 @@ var Graph = Graph || (function($) {
 		}
 	};
 	//close all tags, append to DOM, and add styling
-	Graph.prototype.finishGraph = function(E){
+	Graph.prototype.finishGraph = function(E) {
 		//COMBINING DYNAMICALLY
-		for(var i in E){
+		for (var i in E) {
 			E.SVG += E[i] + '</g>';
 		}
 		//build with strings 'cause DOM is sooooo slow
-		$(this.obj.attachTo).append(E.SVG+'</svg>');
+		$(this.obj.attachTo).append(E.SVG + '</svg>');
 		//STYLING
 		this.applyStyling();
 	};
@@ -311,14 +330,14 @@ var GraphLinear = GraphLinear || (function($) {
 	};
 	return GraphLinear;
 })(jQuery);
-var GraphBar = GraphBar || (function($){
-	var GraphBar = function(obj){
+var GraphBar = GraphBar || (function($) {
+	var GraphBar = function(obj) {
 		Graph.call(this, obj);
 		this.obj.type = 'bar';
 	};
 	GraphBar.prototype = Object.create(Graph.prototype);
 	GraphBar.prototype.constructor = GraphBar;
-	GraphBar.prototype.init = function(){
+	GraphBar.prototype.init = function() {
 		console.log("Bar graph initialized.");
 		var self = this.obj; //shorthand from here on...
 		//correct values (atm has user inputed version, whereas G... is clean)
@@ -328,26 +347,26 @@ var GraphBar = GraphBar || (function($){
 	};
 	return GraphBar;
 })(jQuery);
-var GraphPie = GraphPie || (function($){
-	var GraphPie = function(obj){
+var GraphPie = GraphPie || (function($) {
+	var GraphPie = function(obj) {
 		Graph.call(this, obj);
 		this.obj.type = 'pie';
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
-	GraphPie.prototype.init = function(){
+	GraphPie.prototype.init = function() {
 
 	};
 	return GraphPie;
 })(jQuery);
-var GraphArea = GraphArea || (function($){
-	var GraphArea = function(obj){
+var GraphArea = GraphArea || (function($) {
+	var GraphArea = function(obj) {
 		Graph.call(this, obj);
 		this.obj.type = 'area';
 	};
 	GraphArea.prototype = Object.create(Graph.prototype);
 	GraphArea.prototype.constructor = GraphArea;
-	GraphArea.prototype.init = function(){
+	GraphArea.prototype.init = function() {
 
 	};
 	return GraphArea;
