@@ -11,7 +11,11 @@ function getGroups(){
     	$groups = array();
     	while($row = mysql_fetch_array($result)){
    	  	   $group = $row['group'];
-    	    array_push($groups, $group); //push all the groups into an array
+   	  	   if(@defined(LAST_GROUP) && LAST_GROUP != $group){
+   	  	   		array_push($groups, $group);	
+   	  	   }else{
+		   		array_push($groups, $group);
+		   }
     	}
     	if(isset($groups) && !empty($groups)){ //check if the groups array is set and not empty
     	    return json_encode($groups); //return json encoded array
@@ -30,6 +34,7 @@ function delete($item, $name){
     	$id = getID($name);
     	$result = mysql_query("DELETE FROM `groups` WHERE `group` = '".$name."' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete group
     	$result2 = mysql_query("DELETE FROM `group_members` WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete members
+    	return "success";
     }
     else if($item == "member" && isset($_POST['group'])){
     	$group = mysql_real_escape_string(htmlspecialchars($_POST['group']));
@@ -143,6 +148,7 @@ function search($query){
 }
 
 if(isset($_POST['group']) && isset($_POST['members'])){
+	define("LAST_GROUP", $_POST['group']); //define the last group made
     echo createGroup($_POST['group'], $_POST['members']);
 }else if(isset($_POST['get']) && $_POST['get'] == "groups"){
     echo getGroups();
