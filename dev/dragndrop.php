@@ -25,18 +25,20 @@ Members: <input type='text' id='memberInput' /><input type='submit' value='Submi
 </div>
 <script>
 $('#submit').click(function (){
-    if($('#groupInput').val() != "" && $('#memberInput').val() != ""){ //check if the input boxes are empty
+    if($('#groupInput').val() != "" && $('#memberInput').val()){ //check if the input boxes are empty
         $.post("dragndrop_script.php",{
-        group: $('#groupInput').val(),
-        members: $('#memberInput').val()
+        group: $('#groupInput').val(), //send the group name
+        members: $('#memberInput').val() //send the member name
         }, function(data){
-        	if(data != "error" && data != ""){ //check for errors 
+        	if(data != "error" && data != ""){ //check for errors
+        		var group = $('#groupInput').val(); 
             	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
-            	$('#groups').append("<div id='" + $('#groupInput') + "' class='group'>" + $('#groupInput').val() + "</div>"); //append the new group to groups
+            	$('#groups').append("<div id='" + group + "' class='group'>" + group + "</div><a id='" + group + "' class='showMembers'>Show Members</a><div id='" + group + "-members' style='display:none'></div> <a class='edit' id='" + group + "'>Edit Group</a>"); //append the new group to groups
             }else{
             	alert("There was a problem making the group: " + $('#groupInput').val());
             }
+            //console.log(data);
         });
     }else{
         alert("You must fill in all fields");
@@ -75,7 +77,7 @@ $('#show').toggle(function (){
                     			member: ui.draggable.attr("id"),
                     			do: "copy"
                     			}, function(data){
-                    				console.log(data);
+                    				//console.log(data);
                     				alert("Sucess");
                     			});
                     		}
@@ -104,10 +106,19 @@ $('#show').toggle(function (){
                         }, function(data){
                         	if(data != "error" && data != ""){
                         		alert("Succesfully deleted " + className + ": " + id);
+                        		if(className == "group"){
+                        			$('#' + id).remove(); //remove the group div
+                        			$('#' + id + '-members').remove(); //remove the div for members
+                        			//ill find a better way to do this later
+                        			$(document.getElementById(id)).remove(); //remove the showMembers link
+                        			$(document.getElementById(id)).remove(); //remove the edit link 
+                        		}else{
+                        			$('#' + id).remove(); //remove member div
+                        		}
                         	}else{
                         		alert("There was an error deleting " + className + ": " + id + ". Please try again later.");
                         	}
-                            //console.log(data);
+                            console.log(data);
                         });
                     }
                 });
@@ -115,7 +126,7 @@ $('#show').toggle(function (){
                 $('.showMembers').toggle(function (){
                 	var group = $(this).attr("id"); //get the group name
                 	$(this).text("Hide members");
-                	if($('#members').children().length <= 1){
+                	if($('#' + group + '-members').is(':empty')){ //check if the div is empty
                 		$.post("dragndrop_script.php", {
                 		get: "members", //send what you want to get
                 		group: group //send the group
@@ -145,7 +156,6 @@ $('#show').toggle(function (){
                 	$(this).text("Show members");
                 	$('#' + $(this).attr("id") + '-members').slideUp();
                 });
-                //known problems: error when deleting even though successful and not being able to copy members
                 $('.edit').toggle(function (){
                 	$(this).text("Save");
                 	$('#close').show();
@@ -163,11 +173,12 @@ $('#show').toggle(function (){
                 	name: $('#' + group).text() //new group name
                 	}, function(data){
                 		$('#' + group).attr("id", $('#' + group).text()); //change the group id to the new one
-                		console.log(data);
+                		//console.log(data);
                 	});
                 });
             }else{
                 $('#groups').text("You have no groups.");
+                $('#groups').slideDown();
             }
         });
     }else{
@@ -194,9 +205,9 @@ $('#searchLink').toggle(function (){
 				if(data != null && data != undefined && data != "error"){
 					$('#results').empty();
 					var results = jQuery.parseJSON(data);
-					console.log(results);
+					//console.log(results);
 					$('#results').slideDown();
-					if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>");
+					if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
 					for(var i = 0; i <= results.length; ++i){
 						if(results[i] == undefined) break;
 						$('#results').append("<div>" + results[i] + "</div>"); //append each result
