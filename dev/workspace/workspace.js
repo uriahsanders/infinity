@@ -236,7 +236,7 @@ var Workspace = (function($, _, T) {
 				attachTo: 'workspace-info',
 				width: '100%',
 				height: 350,
-				xDist: 80,
+				xDist: 75,
 				mainOffset: 45,
 				xOffset: 35
 			});

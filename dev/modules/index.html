@@ -6,33 +6,102 @@
 	<title>Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="SVGGraph.js"></script>
+	<style>
+		svg{
+			display: inline-block;
+		}
+	</style>
 </head>
 <body>
-	<br>
-	<br>
-	<br>
+	<h1>Example Graphs (View Page source to see initiation of SVGGraph Module)</h1>
 	<div id="wrapper"></div><br />
-	<div id="wrapper2"></div>
 	<script>
-		var graph = new GraphLinear({
-			example: true,
+		//BAR GRAPH
+		var graph = new GraphBar({
+			example: true, //load example points and styling (below overrides it)
+			title: 'Bar Graph, scale 10, attached to wrapper',
 			attachTo: 'wrapper',
 			width: 500,
 			height: 400,
 			xOffset: 50,
-			mainOffset: 60,
-			id: 'testgraph'
-		}); //create data for new graph
+			mainOffset: 60
+		}); //create JSON for new graph
 		graph.init(); //display graph
-		// var bar = new GraphBar({
-		// 	example: true,
-		// 	attachTo: 'wrapper2'
-		// });
-		// bar.init();
-		//var json = graph.save(); //save graph as JSON
-		//alert(json);
-		//var graph2 = new Graph(); //access graph functions
-		//graph2.expand(json); //recreate first graph from JSON
+		//LINEAR GRAPH
+		var graph2 = new GraphLinear({
+			example: true,
+			before: '<h2>You can also update an existing graph (make sure you specify an ID):</h2><button id="update">Update</button><br />',
+			id: 'updateThisGraph',
+			title: 'Linear Graph 1 (1 line), scale 100',
+			scale: 100,
+			width: 500,
+			height: 400,
+			xOffset: 50,
+			points: [101, 0, 432, 124, 76, 875, 433],
+			mainOffset: 60
+		});
+		graph2.init();
+		//EXPAND JSON INTO GRAPH
+		var json = $.parseJSON(graph.save()); //so i can modify title
+		json.title = 'You can still modify whatever you want when you expand';
+		$('#wrapper').append(graph.expand(json));
+		$('#wrapper').append('<h2>Graph1 as JSON, by using .save(); (call .expand() to convert it back into a graph, which is on the right, above):</h2>'+graph.save());
 	</script>
+	<h2>You can even change a graph of one type to another easily (graph.to('bar'))</h2>
+	<button id="turn">Turn below into a Bar graph</button><br />
+	<script>
+		$('#update').on('click', function(){
+			//UPDATE GRAPH
+			graph2.update({
+				example: true,
+				id: 'updateThisGraph',
+				multiplePoints: true,
+				points: [
+					[0, 26, 33, 74, 12, 49, 18],
+					[32, 46, 75, 38, 62, 76, 82]
+				],
+				title: 'Linear Graph 1 updated to have 2 lines, scale 16',
+				width: 500,
+				scale: 16,
+				height: 400,
+				xOffset: 50,
+				mainOffset: 60
+			});
+			$(this).attr('disabled', 'true');
+		});
+		var g = new GraphLinear({
+			example: true, //load example points and styling (below overrides it)
+			title: 'Everything is optional; view source to see the stuff i changed on this graph (You can disable any part of the grid btw)',
+			width: 1000,
+			height: 400,
+			xOffset: 50,
+			id: 'anId',
+			xDist: 120,
+			grid: false,
+			mainOffset: 60,
+			//one way to style a graph (using given properties)
+			styles: {
+				lineStroke: 'red',
+				pointStroke: 'blue',
+				strokeWidth: 1
+			},
+			//second way (using CSS):
+			byCSS: {
+				'#anId .grid': {
+					stroke: '#000'
+				},
+				'#anId .labels': {
+					fill: '#fff'
+				}
+			},
+			scale: 20
+		});
+		g.init();
+		$('#turn').on('click', function(){
+			g.to('bar');
+			$(this).attr('disabled', 'true');
+		});
+	</script>
+	<h2>Check the comments in SVGGraph.js at the top to see what it has and what Im working on.</h2>
 </body>
 </html>

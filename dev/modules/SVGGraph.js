@@ -4,15 +4,18 @@
 	Create graphs of different types,
 	store any graph as JSON,
 	expand JSON into a graph,
-	update a graph
+	update a graph,
+	style a graph,
+	change a graph into a different type,
+	create graphs with multiple lines
 
 	Coming soon: (* denotes current focus)
-	being able to define styles in object,
-	bar graph, pie graph, quadrant and area graph, *
+	pie, scatter, table, and area graph, *
 	animations on hover (show data under mouse),
 	have the graph draw itself into existence with animation at desired speed
 */
 var Graph = Graph || (function($) {
+	"use strict";
 	var Private = {};
 	Private.count = 0;
 	var Graph = function(obj) {
@@ -26,7 +29,7 @@ var Graph = Graph || (function($) {
 			y: 10,
 			attachTo: 'body',
 			points: [0, 26, 33, 74, 12, 49, 18]
-		}
+		};
 	};
 	//important stuff you might want automatically
 	Graph.prototype.basics = function(height, width, graphHeight, graphWidth) {
@@ -56,13 +59,24 @@ var Graph = Graph || (function($) {
 			yOffset: 20,
 			mainOffset: 35, //to seperate everything from the ylabels
 			padding: 10, //keep labels from touching edges
-			//points
+			//single points
 			xOfPoints: [], //get x and y coordinates of points
 			yOfPoints: [],
+			//multiple points
+			mxOfPoints: [],
+			myOfPoints: [],
+			multiplePoints: false,
 			grid: true,
+			xGrid: true,
+			yGrid: true,
 			noLines: false,
+			//add some html before append
+			before: '',
+			//after append:
+			after: '',
+			title: '', //title of graph to be written in SVG
 			id: 'SVGGraph' + Private.count
-		}
+		};
 	};
 	//create jquery css header
 	Graph.prototype.parseS = function(id, then) {
@@ -84,53 +98,72 @@ var Graph = Graph || (function($) {
 		}
 		return selector;
 	};
-	Graph.prototype.styles = function(height, width, id, styles, byCSS) {
+	Graph.prototype.styles = function(obj) {
 		//first way to style is by creating an object representing the CSS
-		byCSS = byCSS || {};
+		obj.byCSS = obj.byCSS || {};
 		//second way to style something is by modifying default styles
+		obj.styles = obj.styles || {};
+		var xAnchor = (obj.type === 'bar') ? 'start' : 'middle';
 		//which replaces defaults below
-		styles = styles || {};
-		height = height || '100%';
-		width = width || '100%';
+		var height = obj.height || '100%';
+		var width = obj.width || '100%';
 		var styling = {};
 		styling.style = {};
-		styling.style[this.parseS(id, '')] = {
+		styling.style[this.parseS(obj.id, '')] = {
 			"height": height,
 			"width": width,
-			"background": styles.background || "url('/infinity/dev/images/broken_noise.png')"
+			"background": obj.styles.background || "url('../images/broken_noise.png')"
 		};
-		styling.style[this.parseS(id, '.grid')] = {
-			"stroke": styles.gridStroke || "grey",
-			"stroke-width": styles.gridStrokeWidth || "1"
+		styling.style[this.parseS(obj.id, '.grid')] = {
+			"stroke": obj.styles.gridStroke || "grey",
+			"stroke-width": obj.styles.gridStrokeWidth || "1"
 		};
-		styling.style[this.parseS(id, '.points')] = {
-			"stroke": styles.pointStroke || "grey",
-			"stroke-width": styles.strokeWidth || "4"
+		styling.style[this.parseS(obj.id, '.points')] = {
+			"stroke": obj.styles.pointStroke || "grey",
+			"stroke-width": obj.styles.strokeWidth || "4"
 		};
-		styling.style[this.parseS(id, '.inset')] = {
-			"fill": styles.pointFill || "lightblue"
+		styling.style[this.parseS(obj.id, '.inset')] = {
+			"fill": obj.styles.pointFill || "lightblue"
 		};
-		styling.style[this.parseS(id, '.labels')] = {
-			"fill": styles.labelFill || "darkgrey",
-			"stroke": styles.labelStroke || "none",
-			"font-family": styles.labelFont || "Arial",
-			"font-size": styles.labelFontSize || "12px",
-			"kerning": styles.labelKerning || "2"
+		styling.style[this.parseS(obj.id, '.labels')] = {
+			"fill": obj.styles.labelFill || "darkgrey",
+			"stroke": obj.styles.labelStroke || "none",
+			"font-family": obj.styles.labelFont || "Arial",
+			"font-size": obj.styles.labelFontSize || "12px",
+			"kerning": obj.styles.labelKerning || "2"
 		};
-		styling.style[this.parseS(id, '.lines')] = {
-			"stroke": styles.lineStroke || "lightblue",
-			"stroke-width": styles.lineStokeWidth || "2"
+		styling.style[this.parseS(obj.id, '.lines')] = {
+			"stroke": obj.styles.lineStroke || "lightblue",
+			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
-		styling.style[this.parseS(id, '.labels.x-labels')] = {
-			"text-anchor": styles.xLabelAnchor || "middle"
+		styling.style[this.parseS(obj.id, '.line-of-1')] = {
+			"stroke": obj.styles.lineStroke || "green",
+			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
-		styling.style[this.parseS(id, '.labels.y-labels')] = {
-			"text-anchor": styles.yLabelAnchor || "end"
+		//when using multiple lines make them different colors automatically
+		var colors = ['red', 'blue', 'yellow', 'green', 'orange'];
+		for (var i = 1; i < colors.length; ++i) {
+			styling.style[this.parseS(obj.id, '.line-of-'+i)] = {
+				"stroke": obj.styles.lineStroke || colors[i],
+				"stroke-width": obj.styles.lineStokeWidth || "2"
+			};
+		}
+		styling.style[this.parseS(obj.id, '.rects')] = {
+			"stroke": obj.styles.lineStroke || "grey",
+			"stroke-width": obj.styles.lineStokeWidth || "2",
+			'fill': 'blue',
+			'opacity': 0.5
+		};
+		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
+			"text-anchor": obj.styles.xLabelAnchor || xAnchor
+		};
+		styling.style[this.parseS(obj.id, '.labels.y-labels')] = {
+			"text-anchor": obj.styles.yLabelAnchor || "end"
 		};
 		//for styling completely with your own object
-		for (var name in byCSS) {
+		for (var name in obj.byCSS) {
 			//make sure id is in proper form
-			styling.style[this.id2selector(name)] = byCSS[name]; //make styling = users object
+			styling.style[this.id2selector(name)] = obj.byCSS[name]; //make styling = users object
 		}
 		return styling;
 	};
@@ -147,14 +180,14 @@ var Graph = Graph || (function($) {
 			this.obj = this.basics(obj.height, obj.width, obj.graphHeight, obj.graphWidth);
 		}
 		//merge with defaults
-		if ((obj && obj.example === true) || $.isEmptyObject(obj)) { //if example chosen or no options given
+		if ((obj && obj.example === true) || !$.isEmptyObject(obj)) { //if example chosen or no options given
 			obj.id = obj.id || this.obj.id;
 			//everything user did not specify is filled with defaults + basics + style
 			//style needs id passed in so it can be replaced from basics().id
-			$.extend(this.obj, this.defaults(), this.styles(obj.height, obj.width, obj.id, obj.styles, obj.byCSS), obj);
+			$.extend(this.obj, this.defaults(), this.styles(obj), obj);
 			this.obj.addStyle = true;
 		} else if (obj && obj.addStyle === true) { //only add styling
-			$.extend(this.obj, this.styles(obj.height, obj.width, obj.id, obj.styles, obj.byCSS), obj);
+			$.extend(this.obj, this.styles(obj), obj);
 		} else if (obj) {
 			this.obj = obj; //only use given args
 		}
@@ -163,10 +196,11 @@ var Graph = Graph || (function($) {
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
 		return JSON.stringify(this.obj);
 	};
-	Graph.prototype.expand = function(obj) { //expand JSON into a graph (requires 'type' property of 'obj')
+	Graph.prototype.expand = function(obj, thing) { //expand JSON into a graph (requires 'type' property of 'obj')
 		var obj = (typeof obj === 'string') ? jQuery.parseJSON(obj) : obj; //if in string form parse it
 		var graph;
-		switch (obj.type) {
+		//alert(JSON.stringify(this.obj));
+		switch (this.obj.type) {
 			case 'linear':
 				graph = new GraphLinear(obj);
 				break;
@@ -182,13 +216,19 @@ var Graph = Graph || (function($) {
 			default:
 				console.log("(SVGGraph): Error, no graph type given; expansion could not complete.");
 		}
-		graph.init();
+		thing = thing || '';
+		graph.init(thing);
 	};
 	Graph.prototype.update = function(obj) { //recall script file to update graph with new obj
+		obj = obj || {};
 		//reset options with new stuff
-		this.setOptions(obj);
-		//this.obj is now updated
-		this.expand(this.obj); //recreate graph
+		this.expand(obj, 'update'); //recreate graph
+	};
+	//turn one type of graph into another  (can also make changes with obj)
+	Graph.prototype.to = function(what) {
+		//update graph as a new type
+		this.obj.type = what;
+		this.expand(this.obj, 'update');
 	};
 	Graph.prototype.createGrid = function(xLines, yLines) {
 		var self = this.obj;
@@ -198,27 +238,32 @@ var Graph = Graph || (function($) {
 		if (self.grid === true && self.noLines === false) {
 			//save final x of xlines so ylines dont pass that boundary
 			var finalY = (self.height) - yLines * (self.yDist);
+			var nxt;
 			//X-GRID LINES
-			for (var i = 0; i < xLines; ++i) {
-				//x1 and x2 must be the same (dist. from left), 
-				//start at very top (y1 = 0), all the way to the bottom (y = height)
-				var nxt = i * self.xDist + self.mainOffset;
-				xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + (finalY) + '"></line>';
-				if (i === xLines - 1) var finalX = nxt;
+			if (self.xGrid) {
+				for (var i = 0; i < xLines; ++i) {
+					//x1 and x2 must be the same (dist. from left), 
+					//start at very top (y1 = 0), all the way to the bottom (y = height)
+					nxt = i * self.xDist + self.mainOffset;
+					xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + (finalY) + '"></line>';
+				}
 			}
+			var finalX = (xLines - 1) * self.xDist + self.mainOffset;
 			//Y-GRID LINES
-			for (var i = 1; i <= yLines; ++i) {
-				//y1 and y2 must be the same (dist. from top),
-				//ALL x1's & x2's must be the same so we start at same dist. from left & right
-				var nxt = (self.height) - i * (self.yDist);
-				//finalX need not be added to mainoffset because nxt already accounts for it mathematically
-				yGrid += '<line x1="' + self.mainOffset + '" x2="' + (finalX) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
+			if (self.yGrid) {
+				for (var i = 1; i <= yLines; ++i) {
+					//y1 and y2 must be the same (dist. from top),
+					//ALL x1's & x2's must be the same so we start at same dist. from left & right
+					nxt = (self.height) - i * (self.yDist);
+					//finalX need not be added to mainoffset because nxt already accounts for it mathematically
+					yGrid += '<line x1="' + self.mainOffset + '" x2="' + (finalX) + '" y1="' + nxt + '" y2="' + nxt + '"></line>';
+				}
 			}
 		} else {
 			//leave the first vert. and horiz. line for them for obvious styling purposes
 			//they still have the option to remove this with noLines
 			if (self.noLines === false) {
-				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset + '" y1="' + (self.yOffset + self.padding) + '" y2="' + (self.height - self.yOffset - self.padding) + '"></line>';
+				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset + '" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + ((self.height) - yLines * (self.yDist)) + '"></line>';
 				yGrid += '<line x1="' + self.mainOffset + '" x2="' + ((xLines - 1) * self.xDist + self.mainOffset) + '" y1="' + (self.height - self.yDist) + '" y2="' + (self.height - self.yDist) + '"></line>';
 			}
 		}
@@ -242,12 +287,12 @@ var Graph = Graph || (function($) {
 			xGrid: '<g class="grid x-grid" id="xGrid">',
 			yGrid: '<g class="grid y-grid" id="yGrid">',
 			xLabels: '<g class="labels x-labels">',
-			yLabels: '<g class="labels y-labels">'
-		}
+			yLabels: '<g class="labels y-labels">',
+			title: '<g class="labels title">'
+		};
 	};
 	//add X and Y labels to graph
 	Graph.prototype.addLabels = function() {
-		//note: make ylabel padding for all single digit numbers
 		var self = this.obj;
 		var xLabels = '',
 			yLabels = '';
@@ -265,16 +310,33 @@ var Graph = Graph || (function($) {
 		return {
 			xLabels: xLabels,
 			yLabels: yLabels
-		}
+		};
+	};
+	Graph.prototype.addTitle = function(yLines) {
+		return '<text x="' + (this.obj.mainOffset) + '" y="' + ((this.obj.height) - yLines * (this.obj.yDist) - this.obj.yOffset) + '">' + this.obj.title + '</text>';
 	};
 	//close all tags, append to DOM, and add styling
-	Graph.prototype.finishGraph = function(E) {
+	Graph.prototype.finishGraph = function(xLines, yLines, E, thing) {
+		//build grid
+		E.xGrid += this.createGrid(xLines, yLines).xGrid;
+		E.yGrid += this.createGrid(xLines, yLines).yGrid;
+		//LABELS
+		E.xLabels += this.addLabels().xLabels;
+		E.yLabels += this.addLabels().yLabels;
+		E.title += this.addTitle(yLines); //build grid
 		//COMBINING DYNAMICALLY
 		for (var i in E) {
-			E.SVG += E[i] + '</g>';
+			if (i !== 'SVG') E.SVG += E[i] + '</g>';
 		}
-		//build with strings 'cause DOM is sooooo slow
-		$(this.obj.attachTo).append(E.SVG + '</svg>');
+		//"thing" will determine where to put the new graph
+		var finish = this.obj.before + E.SVG + '</svg>' + this.obj.after;
+		switch (thing) {
+			case 'update':
+				$(this.parseS(this.obj.id, '')).replaceWith(finish); //replace old graph with this one
+				break;
+			default:
+				$(this.obj.attachTo).append(finish);
+		}
 		//STYLING
 		this.applyStyling();
 	};
@@ -284,13 +346,15 @@ var Graph = Graph || (function($) {
 	return Graph;
 })(jQuery);
 var GraphLinear = GraphLinear || (function($) {
+	"use strict";
 	var GraphLinear = function(obj) { //extends "Graph"
+		obj = obj || {};
+		obj.type = 'linear';
 		Graph.call(this, obj);
-		this.obj.type = 'linear';
 	};
 	GraphLinear.prototype = Object.create(Graph.prototype);
 	GraphLinear.prototype.constructor = GraphLinear;
-	GraphLinear.prototype.init = function(obj) {
+	GraphLinear.prototype.init = function(thing) {
 		console.log("Linear graph initialized.");
 		var self = this.obj; //shorthand from here on...
 		//correct values (atm has user inputed version, whereas G... is clean)
@@ -302,71 +366,119 @@ var GraphLinear = GraphLinear || (function($) {
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
-		//build grid
-		E.xGrid += this.createGrid(xLines, yLines).xGrid;
-		E.yGrid += this.createGrid(xLines, yLines).yGrid;
-		//POINTS (INDIVIDUAL)
-		for (var i = 0; i < self.x.length; ++i) {
-			//i fucked up and everything is 10 off)
-			var inc = self.height - ((self.points[i] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
-			//set our x coor depending on i due to offset (first and last are special) :/;
-			var x = i * self.xDist + self.mainOffset;
-			E.points += '<circle cx="' + x + '" cy="' + inc + '" r="5"></circle>'; //cx is always on a vert. line
-			//store coordinates so we can easily connect them with lines
-			self.xOfPoints.push(x);
-			self.yOfPoints.push(inc);
+		var r = 5; //radius of circle
+		if (self.multiplePoints === false) { //single line graph
+			//POINTS (INDIVIDUAL)
+			var inc, x, j;
+			for (var i = 0; i < xLines; ++i) {
+				//i fucked up and everything is 10 off)
+				inc = self.height - ((self.points[i] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
+				//set our x coor depending on i due to offset (first and last are special) :/;
+				x = i * self.xDist + self.mainOffset;
+				E.points += '<circle cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+				//store coordinates so we can easily connect them with lines
+				self.xOfPoints.push(x);
+				self.yOfPoints.push(inc);
+			}
+			//LINES
+			for (var i = 0; i < self.points.length - 1; ++i) {
+				j = i + 1; //get next point coordinate
+				//to connect two points: x1 = (x of first point), x2 = (x of second point),
+				//y1 = (y of first point), y2 = (y of second point)
+				E.lines += '<line x1="' + self.xOfPoints[i] + '" x2="' + self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
+			}
+		} else {
+			var inc, x, j;
+			//we need to push the right # of empty arrays into the multi arrays for points
+			for (var i = 0; i < self.points.length; ++i) {
+				self.mxOfPoints.push([]);
+				self.myOfPoints.push([]);
+			}
+			//multiple points are in a multi-dimensional array, so treat it as such with multiple loops
+			for (var i = 0; i < self.points.length; ++i) {
+				//chain of index vars: i -> t
+				//POINTS (INDIVIDUAL)
+				for (var t = 0; t < self.points[i].length; ++t) {
+					//i fucked up and everything is 10 off)
+					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
+					//set our x coor depending on i due to offset (first and last are special) :/;
+					x = t * self.xDist + self.mainOffset;
+					E.points += '<circle cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+					//store coordinates so we can easily connect them with lines
+					self.mxOfPoints[i].push(x);
+					self.myOfPoints[i].push(inc);
+				}
+				//LINES
+				for (var t = 0; t < self.points[i].length - 1; ++t) {
+					j = t + 1; //get next point coordinate
+					//to connect two points: x1 = (x of first point), x2 = (x of second point),
+					//y1 = (y of first point), y2 = (y of second point)
+					//number class name for different colors
+					E.lines += '<line class="line-of-' + i + '" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] + '" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
+				}
+			}
 		}
-		//LINES
-		for (var i = 0; i < self.points.length - 1; ++i) {
-			var j = i + 1; //get next point coordinate
-			//to connect two points: x1 = (x of first point), x2 = (x of second point),
-			//y1 = (y of first point), y2 = (y of second point)
-			E.lines += '<line x1="' + self.xOfPoints[i] + '" x2="' + self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
-		}
-		//LABELS
-		E.xLabels += this.addLabels().xLabels;
-		E.yLabels += this.addLabels().yLabels;
-		this.finishGraph(E);
+		this.finishGraph(xLines, yLines, E, thing); //close tags, style, and append
 	};
 	return GraphLinear;
 })(jQuery);
 var GraphBar = GraphBar || (function($) {
+	"use strict";
 	var GraphBar = function(obj) {
+		obj = obj || {};
+		obj.type = 'bar';
 		Graph.call(this, obj);
-		this.obj.type = 'bar';
 	};
 	GraphBar.prototype = Object.create(Graph.prototype);
 	GraphBar.prototype.constructor = GraphBar;
-	GraphBar.prototype.init = function() {
+	GraphBar.prototype.init = function(thing) {
 		console.log("Bar graph initialized.");
-		var self = this.obj; //shorthand from here on...
-		//correct values (atm has user inputed version, whereas G... is clean)
+		var self = this.obj;
 		self.width = self.Gwidth;
 		self.height = self.Gheight;
-		var E = this.openTags(); //elements
+		var xLines = self.x.length + 1; //needs one more because each x label takes entire column
+		var yLines = self.y + 1;
+		var E = this.openTags();
+		E.rects = '<g class="rects">';
+		var inc; //increment
+		//more unique stuff for bar graph now:
+		//RECTS
+		for (var i = 0; i < xLines - 1; ++i) {
+			//height must = last section of "y"
+			//if i = 0, let inc = 1 so we can at least see at line at origin
+			inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
+			E.rects += '<rect x="' + (i * self.xDist + self.mainOffset) +
+				'" y="' + (self.height - self.padding - self.yOffset - (inc)) +
+				'" width="' + self.xDist + '" height="' + (inc) + '"/>';
+		}
+		this.finishGraph(xLines, yLines, E, thing);
 	};
 	return GraphBar;
 })(jQuery);
 var GraphPie = GraphPie || (function($) {
+	"use strict";
 	var GraphPie = function(obj) {
+		obj = obj || {};
+		obj.type = 'pie';
 		Graph.call(this, obj);
-		this.obj.type = 'pie';
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
-	GraphPie.prototype.init = function() {
+	GraphPie.prototype.init = function(thing) {
 
 	};
 	return GraphPie;
 })(jQuery);
 var GraphArea = GraphArea || (function($) {
+	"use strict";
 	var GraphArea = function(obj) {
+		obj = obj || {};
+		obj.type = 'area';
 		Graph.call(this, obj);
-		this.obj.type = 'area';
 	};
 	GraphArea.prototype = Object.create(Graph.prototype);
 	GraphArea.prototype.constructor = GraphArea;
-	GraphArea.prototype.init = function() {
+	GraphArea.prototype.init = function(thing) {
 
 	};
 	return GraphArea;
