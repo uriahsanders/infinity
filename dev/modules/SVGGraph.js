@@ -11,7 +11,6 @@
 
 	Coming soon: (* denotes current focus)
 	pie, scatter, table, and area graph, *
-	animations on hover (show data under mouse),
 	have the graph draw itself into existence with animation at desired speed,
 	legends
 */
@@ -360,13 +359,32 @@ var GraphLinear = GraphLinear || (function($) {
 		obj = obj || {};
 		obj.type = 'linear';
 		Graph.call(this, obj);
+
+		var pointHandle = function(action) {
+			var $nat = $(this).attr('id');
+			var matcher = $nat.split('-');
+			var id = matcher[0];
+			var num = matcher[1];
+			var thiz = this;
+			$('svg line[id^="' + id + '"]').each(function() {
+				if ($(this).attr('id').split('-')[1] === num) {
+					if (action === 'add') {
+						$(this).css('stroke-width', parseFloat($(this).css('stroke-width')) + .5);
+						$('#' + $(thiz).attr('class') + '-tooltip').show();
+					} else {
+						$(this).css('stroke-width', parseFloat($(this).css('stroke-width')) - .5);
+						$('#' + $(thiz).attr('class') + '-tooltip').hide();
+					}
+				}
+			});
+		}
 		//set click handlers for tooltips
 		$(document).ready(function() {
-			$(document).on('mouseover', 'svg circle', function(e) {
-				$('#' + $(this).attr('id') + '-tooltip').show();
+			$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
+				pointHandle.call(this, 'add');
 			});
-			$(document).on('mouseleave', 'svg circle', function(e) {
-				$('#' + $(this).attr('id') + '-tooltip').hide();
+			$(document).on('mouseleave', 'svg circle[id$="point"]', function(e) {
+				pointHandle.call(this, 'sub');
 			});
 		});
 	};
@@ -392,9 +410,9 @@ var GraphLinear = GraphLinear || (function($) {
 				inc = self.height - ((self.points[i] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
 				//set our x coor depending on i due to offset (first and last are special) :/;
 				x = i * self.xDist + self.mainOffset;
-				E.points += '<circle id="' + self.id + '-point-' + i + '"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+				E.points += '<circle id="' + self.id + '-0-point"class="' + self.id + '-point' + i + '"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
 				//TOOLTIPS
-				E.points += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">'+self.points[i]+'</text>';
+				E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">' + self.points[i] + '</text>';
 				//store coordinates so we can easily connect them with lines
 				self.xOfPoints.push(x);
 				self.yOfPoints.push(inc);
@@ -404,7 +422,7 @@ var GraphLinear = GraphLinear || (function($) {
 				j = i + 1; //get next point coordinate
 				//to connect two points: x1 = (x of first point), x2 = (x of second point),
 				//y1 = (y of first point), y2 = (y of second point)
-				E.lines += '<line x1="' + self.xOfPoints[i] + '" x2="' + self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
+				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' + self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
 			}
 		} else {
 			var inc, x, j;
@@ -421,10 +439,9 @@ var GraphLinear = GraphLinear || (function($) {
 					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale));
 					//set our x coor depending on i due to offset (first and last are special) :/;
 					x = t * self.xDist + self.mainOffset;
-					console.log('' +t + i);
-					E.points += '<circle id="' + self.id + '-point-' + t + i + '"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>';
+					E.points += '<circle id="' + self.id + '-' + i + '-point" class="' + self.id + '-point' + i + t + '" cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>';
 					//TOOLTIPS
-					E.points += '<text class="SVG-tooltip"id="' + self.id + '-point-' + t + i + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">'+self.points[i][t]+'</text>';
+					E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + t + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">' + self.points[i][t] + '</text>';
 					//store coordinates so we can easily connect them with lines
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
@@ -433,7 +450,7 @@ var GraphLinear = GraphLinear || (function($) {
 				for (var t = 0; t < self.points[i].length - 1; ++t) {
 					j = t + 1; //get next point coordinate
 					//number class name for different colors
-					E.lines += '<line class="line-of-' + i + '" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] + '" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
+					E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i + '" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] + '" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
 				}
 			}
 		}
@@ -480,7 +497,7 @@ var GraphBar = GraphBar || (function($) {
 			E.rects += '<rect id="' + self.id + '-point-' + i + '" x="' + x +
 				'" y="' + y +
 				'" width="' + self.xDist + '" height="' + (inc) + '"/>';
-			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i + '-tooltip" x="' + (x + (self.xDist)/2 - self.padding) + '" y="' + (y - self.yDist/2) + '">'+self.points[i]+'</text>';
+			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i + '-tooltip" x="' + (x + (self.xDist) / 2 - self.padding) + '" y="' + (y - self.yDist / 2) + '">' + self.points[i] + '</text>';
 		}
 		this.finishGraph(xLines, yLines, E, thing);
 	};
