@@ -6,11 +6,6 @@
 	<title>Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="SVGGraph.js"></script>
-	<style>
-		svg{
-			display: inline-block;
-		}
-	</style>
 </head>
 <body>
 	<h1>Example Graphs (View Page source to see initiation of SVGGraph Module)</h1>
@@ -21,6 +16,10 @@
 			example: true, //load example points and styling (below overrides it)
 			title: 'Bar Graph, scale 10, attached to wrapper',
 			attachTo: 'wrapper',
+			styles: {
+				tooltipFill: '#fff'
+			},
+			id: 'something',
 			width: 500,
 			height: 400,
 			xOffset: 50,
@@ -44,6 +43,7 @@
 		//EXPAND JSON INTO GRAPH
 		var json = $.parseJSON(graph.save()); //so i can modify title
 		json.title = 'You can still modify whatever you want when you expand';
+		json.id = 'diffId';
 		$('#wrapper').append(graph.expand(json));
 		$('#wrapper').append('<h2>Graph1 as JSON, by using .save(); (call .expand() to convert it back into a graph, which is on the right, above):</h2>'+graph.save());
 	</script>
@@ -83,7 +83,8 @@
 			styles: {
 				lineStroke: 'red',
 				pointStroke: 'blue',
-				strokeWidth: 1
+				strokeWidth: 2,
+				tooltipFill: 'red'
 			},
 			//second way (using CSS):
 			byCSS: {

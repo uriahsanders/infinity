@@ -12,7 +12,8 @@
 	Coming soon: (* denotes current focus)
 	pie, scatter, table, and area graph, *
 	animations on hover (show data under mouse),
-	have the graph draw itself into existence with animation at desired speed
+	have the graph draw itself into existence with animation at desired speed,
+	legends
 */
 var Graph = Graph || (function($) {
 	"use strict";
@@ -57,6 +58,7 @@ var Graph = Graph || (function($) {
 			//leave space for labels:
 			xOffset: 25,
 			yOffset: 20,
+			yStart: 0, // what number do we want to start from for y labels
 			mainOffset: 35, //to seperate everything from the ylabels
 			padding: 10, //keep labels from touching edges
 			//single points
@@ -143,7 +145,7 @@ var Graph = Graph || (function($) {
 		//when using multiple lines make them different colors automatically
 		var colors = ['red', 'blue', 'yellow', 'green', 'orange'];
 		for (var i = 1; i < colors.length; ++i) {
-			styling.style[this.parseS(obj.id, '.line-of-'+i)] = {
+			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
 				"stroke": obj.styles.lineStroke || colors[i],
 				"stroke-width": obj.styles.lineStokeWidth || "2"
 			};
@@ -153,6 +155,14 @@ var Graph = Graph || (function($) {
 			"stroke-width": obj.styles.lineStokeWidth || "2",
 			'fill': 'blue',
 			'opacity': 0.5
+		};
+		styling.style[this.parseS(obj.id, '.SVG-tooltip')] = {
+			"fill": obj.styles.tooltipFill || "darkgrey",
+			"stroke": obj.styles.tooltipStroke || "none",
+			"font-family": obj.styles.tooltipFont || "Arial",
+			"font-size": obj.styles.tooltipFontSize || "15px",
+			"kerning": obj.styles.tooltipKerning || "2",
+			"display": 'none'
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
 			"text-anchor": obj.styles.xLabelAnchor || xAnchor
@@ -184,7 +194,7 @@ var Graph = Graph || (function($) {
 			obj.id = obj.id || this.obj.id;
 			//everything user did not specify is filled with defaults + basics + style
 			//style needs id passed in so it can be replaced from basics().id
-			$.extend(this.obj, this.defaults(), this.styles(obj), obj);
+			$.extend(this.obj, this.defaults(), obj, this.styles(obj)); //ORDER MATTERS WITH $.EXTEND
 			this.obj.addStyle = true;
 		} else if (obj && obj.addStyle === true) { //only add styling
 			$.extend(this.obj, this.styles(obj), obj);
@@ -199,7 +209,6 @@ var Graph = Graph || (function($) {
 	Graph.prototype.expand = function(obj, thing) { //expand JSON into a graph (requires 'type' property of 'obj')
 		var obj = (typeof obj === 'string') ? jQuery.parseJSON(obj) : obj; //if in string form parse it
 		var graph;
-		//alert(JSON.stringify(this.obj));
 		switch (this.obj.type) {
 			case 'linear':
 				graph = new GraphLinear(obj);
@@ -302,7 +311,7 @@ var Graph = Graph || (function($) {
 		}
 		//yLABELS
 		for (var i = 1; i <= self.y + 1; ++i) {
-			var digit = (i * self.scale - self.scale); //get multiple of scale as number displayed
+			var digit = (i * self.scale - self.scale + self.yStart); //get multiple of scale as number displayed
 			var x = (digit >= 10) ? self.xOffset : self.xOffset - 10; //clean it up: move 1 digit numbers 1 place to the left
 			//y subtracted from height to invert graph
 			yLabels += '<text x="' + x + '" y="' + ((self.height - (self.yDist * i - self.padding)) - 5) + '">' + digit + '</text>';
@@ -351,6 +360,15 @@ var GraphLinear = GraphLinear || (function($) {
 		obj = obj || {};
 		obj.type = 'linear';
 		Graph.call(this, obj);
+		//set click handlers for tooltips
+		$(document).ready(function() {
+			$(document).on('mouseover', 'svg circle', function(e) {
+				$('#' + $(this).attr('id') + '-tooltip').show();
+			});
+			$(document).on('mouseleave', 'svg circle', function(e) {
+				$('#' + $(this).attr('id') + '-tooltip').hide();
+			});
+		});
 	};
 	GraphLinear.prototype = Object.create(Graph.prototype);
 	GraphLinear.prototype.constructor = GraphLinear;
@@ -369,13 +387,14 @@ var GraphLinear = GraphLinear || (function($) {
 		var r = 5; //radius of circle
 		if (self.multiplePoints === false) { //single line graph
 			//POINTS (INDIVIDUAL)
-			var inc, x, j;
+			var inc, x, j, tooltipOffset = 0;
 			for (var i = 0; i < xLines; ++i) {
-				//i fucked up and everything is 10 off)
 				inc = self.height - ((self.points[i] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
 				//set our x coor depending on i due to offset (first and last are special) :/;
 				x = i * self.xDist + self.mainOffset;
-				E.points += '<circle cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+				E.points += '<circle id="' + self.id + '-point-' + i + '"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+				//TOOLTIPS
+				E.points += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">'+self.points[i]+'</text>';
 				//store coordinates so we can easily connect them with lines
 				self.xOfPoints.push(x);
 				self.yOfPoints.push(inc);
@@ -394,16 +413,18 @@ var GraphLinear = GraphLinear || (function($) {
 				self.mxOfPoints.push([]);
 				self.myOfPoints.push([]);
 			}
-			//multiple points are in a multi-dimensional array, so treat it as such with multiple loops
+			//multiple points are in a multi-dimensional array, so treat it as such with double loops
 			for (var i = 0; i < self.points.length; ++i) {
 				//chain of index vars: i -> t
 				//POINTS (INDIVIDUAL)
 				for (var t = 0; t < self.points[i].length; ++t) {
-					//i fucked up and everything is 10 off)
-					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
+					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale));
 					//set our x coor depending on i due to offset (first and last are special) :/;
 					x = t * self.xDist + self.mainOffset;
-					E.points += '<circle cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+					console.log('' +t + i);
+					E.points += '<circle id="' + self.id + '-point-' + t + i + '"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>';
+					//TOOLTIPS
+					E.points += '<text class="SVG-tooltip"id="' + self.id + '-point-' + t + i + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">'+self.points[i][t]+'</text>';
 					//store coordinates so we can easily connect them with lines
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
@@ -411,8 +432,6 @@ var GraphLinear = GraphLinear || (function($) {
 				//LINES
 				for (var t = 0; t < self.points[i].length - 1; ++t) {
 					j = t + 1; //get next point coordinate
-					//to connect two points: x1 = (x of first point), x2 = (x of second point),
-					//y1 = (y of first point), y2 = (y of second point)
 					//number class name for different colors
 					E.lines += '<line class="line-of-' + i + '" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] + '" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
 				}
@@ -428,6 +447,15 @@ var GraphBar = GraphBar || (function($) {
 		obj = obj || {};
 		obj.type = 'bar';
 		Graph.call(this, obj);
+		//set click handlers for tooltips
+		$(document).ready(function() {
+			$(document).on('mouseover', 'svg rect', function(e) {
+				$('#' + $(this).attr('id') + '-tooltip').show();
+			});
+			$(document).on('mouseleave', 'svg rect', function(e) {
+				$('#' + $(this).attr('id') + '-tooltip').hide();
+			});
+		});
 	};
 	GraphBar.prototype = Object.create(Graph.prototype);
 	GraphBar.prototype.constructor = GraphBar;
@@ -440,16 +468,19 @@ var GraphBar = GraphBar || (function($) {
 		var yLines = self.y + 1;
 		var E = this.openTags();
 		E.rects = '<g class="rects">';
-		var inc; //increment
+		var inc, x, y; //increment
 		//more unique stuff for bar graph now:
 		//RECTS
 		for (var i = 0; i < xLines - 1; ++i) {
 			//height must = last section of "y"
 			//if i = 0, let inc = 1 so we can at least see at line at origin
 			inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
-			E.rects += '<rect x="' + (i * self.xDist + self.mainOffset) +
-				'" y="' + (self.height - self.padding - self.yOffset - (inc)) +
+			x = (i * self.xDist + self.mainOffset);
+			y = (self.height - self.padding - self.yOffset - (inc));
+			E.rects += '<rect id="' + self.id + '-point-' + i + '" x="' + x +
+				'" y="' + y +
 				'" width="' + self.xDist + '" height="' + (inc) + '"/>';
+			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i + '-tooltip" x="' + (x + (self.xDist)/2 - self.padding) + '" y="' + (y - self.yDist/2) + '">'+self.points[i]+'</text>';
 		}
 		this.finishGraph(xLines, yLines, E, thing);
 	};
