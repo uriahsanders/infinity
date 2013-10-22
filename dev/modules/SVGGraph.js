@@ -10,8 +10,7 @@
 	create graphs with multiple lines
 
 	Coming soon: (* denotes current focus)
-	pie, scatter, table, and area graph, *
-	have the graph draw itself into existence with animation at desired speed,
+	pie and area graph, *
 	legends
 */
 var Graph = Graph || (function($) {
@@ -67,6 +66,7 @@ var Graph = Graph || (function($) {
 			mxOfPoints: [],
 			myOfPoints: [],
 			multiplePoints: false,
+			interactive: true,
 			grid: true,
 			xGrid: true,
 			yGrid: true,
@@ -112,29 +112,29 @@ var Graph = Graph || (function($) {
 		styling.style = {};
 		styling.style[this.parseS(obj.id, '')] = {
 			"height": height,
-			"width": width,
-			"background": obj.styles.background || "url('../images/broken_noise.png')"
+			"width": width
 		};
 		styling.style[this.parseS(obj.id, '.grid')] = {
-			"stroke": obj.styles.gridStroke || "grey",
+			"stroke": obj.styles.gridStroke || "#000",
 			"stroke-width": obj.styles.gridStrokeWidth || "1"
 		};
 		styling.style[this.parseS(obj.id, '.points')] = {
 			"stroke": obj.styles.pointStroke || "grey",
-			"stroke-width": obj.styles.strokeWidth || "4"
+			"stroke-width": obj.styles.strokeWidth || "4",
+			"cursor": 'pointer'
 		};
 		styling.style[this.parseS(obj.id, '.inset')] = {
 			"fill": obj.styles.pointFill || "lightblue"
 		};
 		styling.style[this.parseS(obj.id, '.labels')] = {
-			"fill": obj.styles.labelFill || "darkgrey",
+			"fill": obj.styles.labelFill || "#000",
 			"stroke": obj.styles.labelStroke || "none",
 			"font-family": obj.styles.labelFont || "Arial",
 			"font-size": obj.styles.labelFontSize || "12px",
 			"kerning": obj.styles.labelKerning || "2"
 		};
 		styling.style[this.parseS(obj.id, '.lines')] = {
-			"stroke": obj.styles.lineStroke || "lightblue",
+			"stroke": obj.styles.lineStroke || "darkgrey",
 			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
 		styling.style[this.parseS(obj.id, '.line-of-1')] = {
@@ -142,7 +142,7 @@ var Graph = Graph || (function($) {
 			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
 		//when using multiple lines make them different colors automatically
-		var colors = ['red', 'blue', 'yellow', 'green', 'orange'];
+		var colors = ['red', 'blue', 'green', 'orange'];
 		for (var i = 1; i < colors.length; ++i) {
 			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
 				"stroke": obj.styles.lineStroke || colors[i],
@@ -153,21 +153,31 @@ var Graph = Graph || (function($) {
 			"stroke": obj.styles.lineStroke || "grey",
 			"stroke-width": obj.styles.lineStokeWidth || "2",
 			'fill': 'blue',
-			'opacity': 0.5
+			'opacity': 0.7
 		};
 		styling.style[this.parseS(obj.id, '.SVG-tooltip')] = {
-			"fill": obj.styles.tooltipFill || "darkgrey",
+			"fill": obj.styles.tooltipFill || "#000",
 			"stroke": obj.styles.tooltipStroke || "none",
 			"font-family": obj.styles.tooltipFont || "Arial",
-			"font-size": obj.styles.tooltipFontSize || "15px",
-			"kerning": obj.styles.tooltipKerning || "2",
-			"display": 'none'
+			"font-size": obj.styles.tooltipFontSize || "12px",
+			"display": 'none',
+			"opacity": '1'
+		};
+		styling.style[this.parseS(obj.id, '.SVG-tooltip-box')] = {
+			"display": 'none',
+			"opacity": "0.5"
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
 			"text-anchor": obj.styles.xLabelAnchor || xAnchor
 		};
 		styling.style[this.parseS(obj.id, '.labels.y-labels')] = {
 			"text-anchor": obj.styles.yLabelAnchor || "end"
+		};
+		styling.style['table[id="' + obj.id + '"]'] = {
+			"height": height,
+			"width": width,
+			"border-collapse": 'collapse',
+			"text-align": 'center'
 		};
 		//for styling completely with your own object
 		for (var name in obj.byCSS) {
@@ -253,7 +263,8 @@ var Graph = Graph || (function($) {
 					//x1 and x2 must be the same (dist. from left), 
 					//start at very top (y1 = 0), all the way to the bottom (y = height)
 					nxt = i * self.xDist + self.mainOffset;
-					xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + (finalY) + '"></line>';
+					xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.height - self.yOffset - self.padding) +
+						'" y2="' + (finalY) + '"></line>';
 				}
 			}
 			var finalX = (xLines - 1) * self.xDist + self.mainOffset;
@@ -271,8 +282,10 @@ var Graph = Graph || (function($) {
 			//leave the first vert. and horiz. line for them for obvious styling purposes
 			//they still have the option to remove this with noLines
 			if (self.noLines === false) {
-				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset + '" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + ((self.height) - yLines * (self.yDist)) + '"></line>';
-				yGrid += '<line x1="' + self.mainOffset + '" x2="' + ((xLines - 1) * self.xDist + self.mainOffset) + '" y1="' + (self.height - self.yDist) + '" y2="' + (self.height - self.yDist) + '"></line>';
+				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset +
+					'" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + ((self.height) - yLines * (self.yDist)) + '"></line>';
+				yGrid += '<line x1="' + self.mainOffset + '" x2="' + ((xLines - 1) * self.xDist + self.mainOffset) +
+					'" y1="' + (self.height - self.yDist) + '" y2="' + (self.height - self.yDist) + '"></line>';
 			}
 		}
 		return {
@@ -306,14 +319,16 @@ var Graph = Graph || (function($) {
 			yLabels = '';
 		//xLABELS
 		for (var i = 0; i < self.x.length; ++i) {
-			xLabels += '<text x="' + (i * self.xDist + self.mainOffset) + '" y="' + (self.height - self.padding) + '">' + self.x[i] + '</text>';
+			xLabels += '<text x="' + (i * self.xDist + self.mainOffset) + '" y="' +
+				(self.height - self.padding) + '">' + self.x[i] + '</text>';
 		}
 		//yLABELS
 		for (var i = 1; i <= self.y + 1; ++i) {
 			var digit = (i * self.scale - self.scale + self.yStart); //get multiple of scale as number displayed
 			var x = (digit >= 10) ? self.xOffset : self.xOffset - 10; //clean it up: move 1 digit numbers 1 place to the left
 			//y subtracted from height to invert graph
-			yLabels += '<text x="' + x + '" y="' + ((self.height - (self.yDist * i - self.padding)) - 5) + '">' + digit + '</text>';
+			yLabels += '<text x="' + x + '" y="' + ((self.height - (self.yDist * i - self.padding)) - 5) +
+				'">' + digit + '</text>';
 		}
 		return {
 			xLabels: xLabels,
@@ -321,7 +336,9 @@ var Graph = Graph || (function($) {
 		};
 	};
 	Graph.prototype.addTitle = function(yLines) {
-		return '<text x="' + (this.obj.mainOffset) + '" y="' + ((this.obj.height) - yLines * (this.obj.yDist) - this.obj.yOffset) + '">' + this.obj.title + '</text>';
+		return '<text x="' + (this.obj.mainOffset) + '" y="' +
+			((this.obj.height) - yLines * (this.obj.yDist) - this.obj.yOffset) +
+			'">' + this.obj.title + '</text>';
 	};
 	//close all tags, append to DOM, and add styling
 	Graph.prototype.finishGraph = function(xLines, yLines, E, thing) {
@@ -368,25 +385,31 @@ var GraphLinear = GraphLinear || (function($) {
 			var thiz = this;
 			$('svg line[id^="' + id + '"]').each(function() {
 				if ($(this).attr('id').split('-')[1] === num) {
+					var tooltip = '#' + $(thiz).attr('class') + '-tooltip';
+					var tooltipRect = '#' + $(thiz).attr('class') + '-tooltip-rect';
 					if (action === 'add') {
 						$(this).css('stroke-width', parseFloat($(this).css('stroke-width')) + .5);
-						$('#' + $(thiz).attr('class') + '-tooltip').show();
+						$(tooltip).show();
+						$(tooltipRect).show();
 					} else {
 						$(this).css('stroke-width', parseFloat($(this).css('stroke-width')) - .5);
-						$('#' + $(thiz).attr('class') + '-tooltip').hide();
+						$(tooltip).hide();
+						$(tooltipRect).hide();
 					}
 				}
 			});
 		}
 		//set click handlers for tooltips
-		$(document).ready(function() {
-			$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
-				pointHandle.call(this, 'add');
+		if(this.obj.interactive === true){
+			$(document).ready(function() {
+				$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
+					pointHandle.call(this, 'add');
+				});
+				$(document).on('mouseleave', 'svg circle[id$="point"]', function(e) {
+					pointHandle.call(this, 'sub');
+				});
 			});
-			$(document).on('mouseleave', 'svg circle[id$="point"]', function(e) {
-				pointHandle.call(this, 'sub');
-			});
-		});
+		}
 	};
 	GraphLinear.prototype = Object.create(Graph.prototype);
 	GraphLinear.prototype.constructor = GraphLinear;
@@ -410,9 +433,14 @@ var GraphLinear = GraphLinear || (function($) {
 				inc = self.height - ((self.points[i] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
 				//set our x coor depending on i due to offset (first and last are special) :/;
 				x = i * self.xDist + self.mainOffset;
-				E.points += '<circle id="' + self.id + '-0-point"class="' + self.id + '-point' + i + '"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+				E.points += '<circle id="' + self.id + '-0-point"class="' + self.id + '-point' + i +
+					'"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
 				//TOOLTIPS
-				E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">' + self.points[i] + '</text>';
+				E.points += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point' +
+					i + '-tooltip-rect"x="' + (x - self.padding * 2) + '"y="' + (inc - self.yDist - self.padding * 2) +
+					'"height="' + (self.yDist + self.padding / 2) + '"width="' + (50) + '"/>';
+				E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + '-tooltip" x="' +
+					(x - self.padding) + '" y="' + (inc - self.yDist) + '">' + self.points[i] + '</text></g>';
 				//store coordinates so we can easily connect them with lines
 				self.xOfPoints.push(x);
 				self.yOfPoints.push(inc);
@@ -422,7 +450,8 @@ var GraphLinear = GraphLinear || (function($) {
 				j = i + 1; //get next point coordinate
 				//to connect two points: x1 = (x of first point), x2 = (x of second point),
 				//y1 = (y of first point), y2 = (y of second point)
-				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' + self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
+				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
+					self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
 			}
 		} else {
 			var inc, x, j;
@@ -439,9 +468,15 @@ var GraphLinear = GraphLinear || (function($) {
 					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale));
 					//set our x coor depending on i due to offset (first and last are special) :/;
 					x = t * self.xDist + self.mainOffset;
-					E.points += '<circle id="' + self.id + '-' + i + '-point" class="' + self.id + '-point' + i + t + '" cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>';
+					E.points += '<circle id="' + self.id + '-' + i + '-point" class="' + self.id +
+						'-point' + i + t + '" cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>';
 					//TOOLTIPS
-					E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + t + '-tooltip" x="' + (x - self.padding) + '" y="' + (inc - 15) + '">' + self.points[i][t] + '</text>';
+					E.points += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point' +
+						i + t + '-tooltip-rect"x="' + (x - self.padding * 2) + '"y="' +
+						(inc - self.yDist - self.padding * 2) +
+						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (50) + '"/>';
+					E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + t +
+						'-tooltip" x="' + (x - self.padding) + '" y="' + (inc - self.yDist) + '">' + self.points[i][t] + '</text>';
 					//store coordinates so we can easily connect them with lines
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
@@ -450,7 +485,9 @@ var GraphLinear = GraphLinear || (function($) {
 				for (var t = 0; t < self.points[i].length - 1; ++t) {
 					j = t + 1; //get next point coordinate
 					//number class name for different colors
-					E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i + '" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] + '" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
+					E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i +
+						'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
+						'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
 				}
 			}
 		}
@@ -465,14 +502,18 @@ var GraphBar = GraphBar || (function($) {
 		obj.type = 'bar';
 		Graph.call(this, obj);
 		//set click handlers for tooltips
-		$(document).ready(function() {
-			$(document).on('mouseover', 'svg rect', function(e) {
-				$('#' + $(this).attr('id') + '-tooltip').show();
+		if(this.obj.interactive === true){
+			$(document).ready(function() {
+				$(document).on('mouseover', 'svg rect', function(e) {
+					$('#' + $(this).attr('id') + '-tooltip').show();
+					$('#' + $(this).attr('id') + '-tooltip-rect').show();
+				});
+				$(document).on('mouseleave', 'svg rect', function(e) {
+					$('#' + $(this).attr('id') + '-tooltip').hide();
+					$('#' + $(this).attr('id') + '-tooltip-rect').hide();
+				});
 			});
-			$(document).on('mouseleave', 'svg rect', function(e) {
-				$('#' + $(this).attr('id') + '-tooltip').hide();
-			});
-		});
+		}
 	};
 	GraphBar.prototype = Object.create(Graph.prototype);
 	GraphBar.prototype.constructor = GraphBar;
@@ -497,11 +538,43 @@ var GraphBar = GraphBar || (function($) {
 			E.rects += '<rect id="' + self.id + '-point-' + i + '" x="' + x +
 				'" y="' + y +
 				'" width="' + self.xDist + '" height="' + (inc) + '"/>';
-			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i + '-tooltip" x="' + (x + (self.xDist) / 2 - self.padding) + '" y="' + (y - self.yDist / 2) + '">' + self.points[i] + '</text>';
+			//tooltip box
+			E.rects += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point-' +
+				i + '-tooltip-rect"x="' + (x + self.padding / 2) + '"y="' + (y - self.yDist - self.padding * 2) +
+				'"height="' + (self.yDist + self.padding / 2) + '"width="' + (self.xDist - self.padding) + '"/>';
+			//tooltip text
+			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i +
+				'-tooltip" x="' + (x + (self.xDist) / 2 - self.padding) + '" y="' +
+				(y - self.yDist / 2 - self.padding) + '">' + self.points[i] + '</text></g>';
 		}
 		this.finishGraph(xLines, yLines, E, thing);
 	};
 	return GraphBar;
+})(jQuery);
+var GraphTable = GraphTable || (function($) {
+	"use strict";
+	var GraphTable = function(obj) {
+		obj = obj || {};
+		obj.type = 'table';
+		Graph.call(this, obj);
+	};
+	GraphTable.prototype = Object.create(Graph.prototype);
+	GraphTable.prototype.constructor = GraphTable;
+	GraphTable.prototype.init = function(thing) {
+		console.log("Table graph initialized.");
+		var self = this.obj;
+		var table = '<table class="SVG-table"id="' + self.id + '" border="1"cellpadding="5"><tr><th>#</th><th>' +
+			(self.xName || 'X') + '</th><th>' + (self.yName || 'Y') + '</th></tr>';
+		//within each row is [num | x | y] <td>'s
+		var row = '<tr>';
+		for (var i = 0; i < self.x.length; ++i) {
+			row += '<td>' + i + '</td><td>' + self.x[i] + '</td><td>' + self.points[i] + '</td></tr><tr>';
+		}
+		table += row + '</tr>';
+		$(this.obj.attachTo).append(table);
+		this.applyStyling();
+	};
+	return GraphTable;
 })(jQuery);
 var GraphPie = GraphPie || (function($) {
 	"use strict";

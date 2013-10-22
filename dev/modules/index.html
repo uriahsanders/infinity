@@ -16,9 +16,6 @@
 			example: true, //load example points and styling (below overrides it)
 			title: 'Bar Graph, scale 10, attached to wrapper',
 			attachTo: 'wrapper',
-			styles: {
-				tooltipFill: '#fff'
-			},
 			id: 'something',
 			width: 500,
 			height: 400,
@@ -36,7 +33,7 @@
 			width: 500,
 			height: 400,
 			xOffset: 50,
-			points: [101, 0, 432, 124, 76, 875, 433],
+			points: [101, 0, 432, 124, 76, 1000, 433],
 			mainOffset: 60
 		});
 		graph2.init();
@@ -89,12 +86,13 @@
 			//second way (using CSS):
 			byCSS: {
 				'#anId .grid': {
-					stroke: '#000'
+					stroke: 'red'
 				},
 				'#anId .labels': {
-					fill: '#fff'
+					fill: 'darkred'
 				}
 			},
+			after: '<br /><h2>You can make tables as well (You can also change tables to graphs and use all the other functions)</h2>',
 			scale: 20
 		});
 		g.init();
@@ -102,7 +100,8 @@
 			g.to('bar');
 			$(this).attr('disabled', 'true');
 		});
+		var table = new GraphTable();
+		table.init();
 	</script>
-	<h2>Check the comments in SVGGraph.js at the top to see what it has and what Im working on.</h2>
 </body>
 </html>
