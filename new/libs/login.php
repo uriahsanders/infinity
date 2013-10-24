@@ -66,7 +66,7 @@ if ($bcrypt->verify($pwd, $row[2]))
     $_SESSION['USR']     =     $row[1]; // just so it will be faster to retrieve username without calling a class
     $_SESSION['ADMIN']     =     (($row[3] == "1")?"1":"0");
 	include_once("status.php"); //set status
-	$Status->change_status("1");
+	$Status->changeMyStatus("1");
     header("Location: /lounge/");
     die();
 }

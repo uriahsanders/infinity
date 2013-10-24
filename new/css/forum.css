@@ -63,7 +63,7 @@
 	padding:0;
 }
 .tbl_post td:first-child {
-	width:200px;
+	width:140px;
 	vertical-align:top;
 }
 .tbl_post {
@@ -136,7 +136,7 @@
 	background:rgba(0, 255, 0, 0.5);
 }
 .post_usr img {
-	width:160px;
+	width:110px;
 	-webkit-box-shadow:0 0 1px 0px #FFF;
 	-moz-box-shadow:0 0 1px 0px #FFF;
 	box-shadow:0 0 1px 0px #FFF;
@@ -284,18 +284,54 @@ div[id^='forum_nav_'] {
 	padding: 6px 10px;
 	font-size: 60%;
 }
-div[id^='forum_nav_'] b{
+div[id^='forum_nav_'] span:first-child b{
 	display:inline-block;
 	transform:rotate(-90deg);
 	-ms-transform:rotate(-90deg);
 	-webkit-transform:rotate(-90deg);
 }
-div[id^='forum_nav_'] b:hover{
+div[id^='forum_nav_'] span:first-child b:hover{
 	cursor:pointer
 }
 div[id^='forum_nav_']:not(:first-child),#forum_nav i {
 	display:none;
+	position:relative;
 }
 .forum_nav_active {
 	background: rgba(255, 255, 255, 0.5) !important;
+}
+
+.post_msg_btm {
+	width: 100%;
+	background:#666;	
+}
+#forum_nav span:nth-child(2) {
+	position: absolute;
+	color: #fff;
+	background: url('/images/gray_sand.png');
+	z-index: -1;
+	right: 9px;
+	margin-top: 20px;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	box-shadow: 0 0 7px 0px #000;
+	height: 500px;
+	overflow-y: scroll;
+	display:none;
+}
+#forum_nav ul {	
+	list-style: none;
+	text-align: right;
+	white-space: nowrap;
+	padding: 0;
+-webkit-margin-before: 0;
+-webkit-margin-after: 0;
+}
+#forum_nav li {
+	padding: 1px 6px;
+}
+#forum_nav li b {
+	font-size:110%;
+}
+#forum_nav li:not(last-child) {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.37);
 }

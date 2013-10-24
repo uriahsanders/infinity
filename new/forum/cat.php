@@ -6,8 +6,14 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 		echo "<div class=\"forum_box\">";
 			$MyRank = $member->getUserRank(0,2); //get the current users rank
 			$forum = new forum; //new forum
+			$s = false;
+			if (isset($_POST['s']))
+				$s = true;
+			if ($s)
+				$res = $forum->Query("SELECT * FROM subforum WHERE ID = %d AND min_rank <= %d AND (visible=1 OR %d=%d)",$_POST['s'],$MyRank, array_search("Admin", $member->ranks), $MyRank);
+			else
+				$res = $forum->Query("SELECT * FROM subcat WHERE ID = %d AND min_rank <= %d AND (visible=1 OR %d=%d)",$_POST['f'],$MyRank, array_search("Admin", $member->ranks), $MyRank);
 			
-			$res = $forum->Query("SELECT * FROM subcat WHERE ID = %d AND min_rank <= %d AND (visible=1 OR %d=%d)",$_POST['f'],$MyRank, array_search("Admin", $member->ranks), $MyRank);
 			if (mysql_num_rows($res) === 0)
 				die("Wrong ID"); //so you can't access hidden/restricted categories with javascript manipulation
 			$name = mysql_fetch_array($res);
@@ -16,8 +22,11 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo "<span>&nbsp;</span>"; 
 			echo $name["name"]; // category name
 			echo "</div>";
-				
-			$res2 = $forum->Query("SELECT * FROM topics WHERE parent_ID=%d",$_POST['f']);
+			
+			if ($s)
+				$res2 = $forum->Query("SELECT * FROM topics WHERE parent_ID=%d AND sub=1",$_POST['s']);
+			else
+				$res2 = $forum->Query("SELECT * FROM topics WHERE parent_ID=%d AND sub=0",$_POST['f']);
 			if (mysql_num_rows($res2) > 0) // if any
 			{
 				echo "<div class=\"subcat\">";
@@ -32,7 +41,8 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				{
 					echo "<tr>";
 					echo "<td><a href=\"#t=$row2[ID]/".$forum->convertName($row2["title"])."\"><b>$row2[title]</b>";
-					$u = $forum->getUsrInfo($row2['by_'])["username"];
+					$i = $forum->getUsrInfo($row2['by_']);
+					$u = $i["username"];
 					echo "<br/><i><a href=\"/user/$u\">Started by: $u</a></i>";
 					echo "</a></td>"; //pring name and description
 					echo "<td>".$forum->getPostCount($row2["ID"])."</td>"; //show posts in th thread
@@ -46,10 +56,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo "</div>";
    		echo "</div>";
 		
-			//$script  = "<intput type=\"hidden\" value=\"".$name["name"]."\" id=\"hdn_cat\"/>";
-            $script = "<script>";
-			$script .= "var cat = 0;";
-			$script .= "</script>";
+			$script  = "<input type=\"hidden\" value=\"".base64_encode($name["name"])."|".$name["ID"]."\" class=\"hdn_cat\" />";
 			echo $script;
 }
     ?>

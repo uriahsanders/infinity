@@ -64,7 +64,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	//Poll server every minute to see if away or now available
 	Private.pollStatus = function() {
 		//if they chose to go away, dont make them available
-		if (++Private.idleTime > 1 && Public.getIcon() == 1) { //15 minutes
+		if (++Private.idleTime > 15 && Public.getIcon() == 1) { //15 minutes
 			Public.changeStatus(2, true, function(){
 				window.setTimeout(Private.pollStatus, 60000); //tell changeStatus to recall us afterwards
 			});

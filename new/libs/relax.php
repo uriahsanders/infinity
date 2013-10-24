@@ -64,6 +64,12 @@ function session_start_secure() //starting a secure session
 ///////////////////////////////////////////
 //  SQL with cleanQuery
 ///////////////////////////////////////////
+
+function _PDO()
+{
+	return new PDO("mysql:host=".SQL_SERVER.";dbname=".SQL_DB, SQL_USR, SQL_PWD);		
+}
+
 class SQL{ 
     private $SQL_USR = SQL_USR; //username to sql server
     private $SQL_PWD = SQL_PWD; //password
@@ -72,12 +78,13 @@ class SQL{
     public $CON;  //the connection will be here
     public $RESULTS; //results if you need em again
 	private $die_on_error = true; //kill on error, should ALWAYS be true
+	public $CLEAN = true;
 	//private $errors = false; //production mode
 	private $errors = true; //developing mode
 	
     function __construct() // at init
 	{ 
-        $this->CON = mysql_connect($this->SQL_SERVER, $this->SQL_USR, $this->SQL_PWD) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :""); //create connection
+        $this->CON = @mysql_connect($this->SQL_SERVER, $this->SQL_USR, $this->SQL_PWD) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :""); //create connection
         mysql_select_db($this->SQL_DB, $this->CON) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :""); //select db
     }
 	
@@ -89,13 +96,17 @@ class SQL{
 			array_shift($args);//shift to hide the first argument (the query)
 			for ($i = 0; $i < count($args); $i++) //loop all arguments
 			{ 
-				$args[$i] = $this->cleanQuery($args[$i]); //clean the arguments one by one
+				if (!$this->CLEAN) // if clean is off
+					$args[$i] = $args[$i]; // same
+				else
+					$args[$i] = $this->cleanQuery($args[$i]); //clean the arguments one by one
+
 			}
 			foreach($args as $key=>$value) //do an extra check if int, float or string
 				$args[$key] = ((preg_match('/^([0-9]*)$/',$value) || is_int($value))?intval($value):((preg_match('/^([0-9]*)\.([0-9]*)$/',$value) || is_float($value))?floatval($value) : "'".$value."'"));  
 			$query = call_user_func_array('sprintf', array_merge((array)$query, $args)); //merge the arguments with the query
         }
-		$this->RESULTS = mysql_query($query) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :"");  // execute the done query 
+		$this->RESULTS = @mysql_query($query) or (($this->die_on_error)? die((($this->errors)?mysql_error():"")) :"");  // execute the done query 
         return $this->RESULTS; //return the results
     }
     function cleanQuery($string, $xss = true, $br = false, $br2 = false) { //if you clean by yourseld call with this parameters
@@ -119,7 +130,7 @@ class SQL{
 ////////////////////////////////////////////////
 class member extends SQL{
 	public $ranks = array("Banned","Member","Trusted","VIP","MOD","GMOD","Admin"); //this will be changed from values from the database....
-	
+
 		function UpdateRanks() { // cant have __construct() because that will apperantly break the SQL __construct() :/
 			$ran = $this->Query("SELECT * FROM ranks"); //fix the ranks from db...
 			$this->ranks = array();
@@ -771,6 +782,6 @@ class forum extends member {
 ////////////////////////////////////////////
 //    auto run
 ////////////////////////////////////////////
-$member		= 	new member;
-$member->UpdateRanks(); //update the ranks from database so we hae the current once
+$member	= new member;
+$member->UpdateRanks();
 ?>

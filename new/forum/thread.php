@@ -8,7 +8,26 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
     	$forum = new forum; //new forum
 		
 		echo "<div class=\"forum_box\">";
-		$res = $forum->Query("	SELECT topics . * 
+		$res = $forum->Query("	SELECT topics.*, 
+												CASE WHEN 
+													sub=0 
+												THEN 
+													(SELECT subcat.name FROM subcat WHERE subcat.ID=topics.parent_ID) 
+												ELSE 
+													(SELECT subforum.name FROM subforum WHERE subforum.ID=topics.parent_ID) 
+												END 
+												AS 
+													cat_name,
+												CASE WHEN 
+													sub=1 
+												THEN 
+													(SELECT subforum.parent_ID FROM subforum WHERE subforum.ID=topics.parent_ID) 
+												END 
+												AS 
+													cat_ID,
+												(SELECT subcat.name FROM subcat WHERE subcat.ID=topics.parent_ID)
+												AS
+													cat_name2 
 								FROM topics, subcat
 								WHERE topics.ID =%d
 								AND topics.parent_ID = subcat.ID
@@ -80,6 +99,11 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<div class=\"post_msg\">";
 				echo $row2["msg"];
 				echo "</div>";
+				
+				echo "<div class=\"post_msg_btm\">";
+				echo "will add a menu here with post actions (only placeholder atm)";
+				echo "</div>";
+				
 				echo "</td></tr></table>";
 				echo "</div>";
 				echo "</div>";
@@ -88,55 +112,15 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			
 			echo "</div>";
 			
+			if (isset($row['cat_ID'])) //if subforum post, so we get right back on track
+				$script  = "<input type=\"hidden\" value=\"".base64_encode($row["cat_name"])."|".$row['cat_ID']."/".$forum->convertName($row["cat_name2"])."&s=".$row["parent_ID"]."\" class=\"hdn_cat\"/>";
+			else
+				$script  = "<input type=\"hidden\" value=\"".base64_encode($row["cat_name"])."|".$row["parent_ID"]."\" class=\"hdn_cat\"/>";
+			$script .= "<input type=\"hidden\" value=\"".base64_encode($row["title"])."|".$row["ID"]."\" class=\"hdn_thr\"/>";
+			echo $script;
+			
+			//var_dump($row);
 			
 			
-			
-			
-			
-			
-			/*$res2 = $forum->Query("SELECT * FROM subcat WHERE parent_ID = %d AND min_rank <= %d AND (visible=1 OR %d=%d) ORDER BY index_ desc;", $row["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
-			// get all the subcategories that the current users rank has access to and are visible, but show everything to admins and sort dy index...
-			
-			if (mysql_num_rows($res2) > 0) // if any
-			{
-				echo "<div class=\"subcat\">";
-				echo "<table class=\"tbl_subcat\">";
-				echo "<tr>";
-				echo "<td>[Name]</td>";// some titles
-				echo "<td>[Topics]</td>";
-				echo "<td>[Posts]</td>";
-				echo "<td>[Last Post]</td>";
-				
-				while($row2 = mysql_fetch_array($res2))
-				{
-					echo "<tr>";
-					echo "<td><a href=\"#f=$row2[ID]/".$forum->convertName($row2["name"])."\"><b>$row2[name]</b>";
-					if (strlen($row2["desc_"]) > 0)
-						echo "<br/><i>$row2[desc_]</i>";
-					$res3 = $forum->Query("SELECT * FROM subforum WHERE parent_ID = %d AND (visible=1 OR %d=%d) ORDER BY index_ desc;", $row2["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
-					if (mysql_num_rows($res3) > 0)
-					{
-						$subforum = "<i>";
-						while($row3 = mysql_fetch_array($res3))
-						{
-							$subforum .= "&nbsp;<a href=\"#f=$row2[ID]/".$forum->convertName($row2["name"])."&s=$row3[ID]/".$forum->convertName($row3["name"])."\">$row3[name]</a>,";
-						}
-						echo substr($subforum,0,-1)."</i>";
-					}
-					
-					
-					
-					echo "</a></td>"; //pring name and description
-					echo "<td>".$forum->getTopicCount($row2["ID"])."</td>"; //show how many topics in this subcat
-					echo "<td>".$forum->getPostCountByForum($row2["ID"])."</td>"; //show how many post are in this subcat
-					echo "<td>".$forum->getLastPostByForum($row2["ID"])."</td>"; //get last message
-					echo "</tr>";
-				}
-				echo "</table>";
-				echo "</div><br/>";
-			}
-			echo "</div>";
-		
-   echo "</div>";*/
 }
     ?>
