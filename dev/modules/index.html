@@ -75,6 +75,7 @@
 			id: 'anId',
 			xDist: 120,
 			grid: false,
+			showPoints: false,
 			mainOffset: 60,
 			//one way to style a graph (using given properties)
 			styles: {
@@ -92,15 +93,26 @@
 					fill: 'darkred'
 				}
 			},
-			after: '<br /><h2>You can make tables as well (You can also change tables to graphs and use all the other functions)</h2>',
 			scale: 20
 		});
 		g.init();
+		document.write("<br /><h2>You can make tables as well (You can also change tables to graphs and use all the other functions)</h2>");
 		$('#turn').on('click', function(){
 			g.to('bar');
 			$(this).attr('disabled', 'true');
 		});
-		var table = new GraphTable();
+		var table = new GraphTable({
+			example: true,
+			xName: 'Dates',
+			yName: 'Data',
+			height: 350,
+			width: 1000,
+			multiplePoints: true,
+			points: [
+				[0, 26, 33, 74, 12, 49, 18],
+				[32, 46, 75, 38, 62, 76, 82]
+			]
+		});
 		table.init();
 	</script>
 </body>

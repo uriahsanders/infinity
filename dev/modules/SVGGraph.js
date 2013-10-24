@@ -70,6 +70,9 @@ var Graph = Graph || (function($) {
 			grid: true,
 			xGrid: true,
 			yGrid: true,
+			xName: null,
+			yName: null,
+			showPoints: true,
 			noLines: false,
 			//add some html before append
 			before: '',
@@ -231,6 +234,9 @@ var Graph = Graph || (function($) {
 			case 'area':
 				graph = new GraphArea(obj);
 				break;
+			case 'table':
+				graph = new GraphTable(obj);
+				break;
 			default:
 				console.log("(SVGGraph): Error, no graph type given; expansion could not complete.");
 		}
@@ -322,6 +328,11 @@ var Graph = Graph || (function($) {
 			xLabels += '<text x="' + (i * self.xDist + self.mainOffset) + '" y="' +
 				(self.height - self.padding) + '">' + self.x[i] + '</text>';
 		}
+		//name of X-Axis:
+		// if (self.xName !== null) {
+		// 	xLabels += '<text x="' + (self.width/2 - self.mainOffset - self.padding - self.yOffset) + '" y="' +
+		// 		(self.height) + '">' + self.xName + '</text>';
+		// }
 		//yLABELS
 		for (var i = 1; i <= self.y + 1; ++i) {
 			var digit = (i * self.scale - self.scale + self.yStart); //get multiple of scale as number displayed
@@ -330,6 +341,11 @@ var Graph = Graph || (function($) {
 			yLabels += '<text x="' + x + '" y="' + ((self.height - (self.yDist * i - self.padding)) - 5) +
 				'">' + digit + '</text>';
 		}
+		//name of Y-Axis:
+		// if (self.yName !== null) {
+		// 	yLabels += '<text transform="rotate(-90)"x="' + (-self.height/2) + '" y="' + (self.yDist - self.padding) +
+		// 		'">' + self.yName + '</text>';
+		// }
 		return {
 			xLabels: xLabels,
 			yLabels: yLabels
@@ -355,15 +371,18 @@ var Graph = Graph || (function($) {
 		}
 		//"thing" will determine where to put the new graph
 		var finish = this.obj.before + E.SVG + '</svg>' + this.obj.after;
+		this.handleAppend(thing, finish);
+		//STYLING
+		this.applyStyling();
+	};
+	Graph.prototype.handleAppend = function(thing, finish) {
 		switch (thing) {
 			case 'update':
-				$(this.parseS(this.obj.id, '')).replaceWith(finish); //replace old graph with this one
+				$('#' + this.obj.id).replaceWith(finish); //replace old graph with this one
 				break;
 			default:
 				$(this.obj.attachTo).append(finish);
 		}
-		//STYLING
-		this.applyStyling();
 	};
 	Graph.prototype.help = function() { // show a popup with help information
 		alert("Someday this will actually be helpful.");
@@ -400,7 +419,7 @@ var GraphLinear = GraphLinear || (function($) {
 			});
 		}
 		//set click handlers for tooltips
-		if(this.obj.interactive === true){
+		if (this.obj.interactive === true) {
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
 					pointHandle.call(this, 'add');
@@ -413,6 +432,39 @@ var GraphLinear = GraphLinear || (function($) {
 	};
 	GraphLinear.prototype = Object.create(Graph.prototype);
 	GraphLinear.prototype.constructor = GraphLinear;
+	GraphLinear.prototype.buildPoints = function(arr) {
+		var inc, x, j, points, str, html, mult, num, i, r = 5,
+			self = this.obj;
+		//stuff that changes based on multiple points:
+		if (arr.length === 1) {
+			//only have "i" var
+			points = self.points[arr[0]];
+			str = arr[0];
+			i = arr[0];
+			mult = false;
+		} else if (arr.length === 2) {
+			//have "i" and then "t" var
+			points = self.points[arr[0]][arr[1]];
+			str = '' + arr[0] + arr[1]; //to get proper identifier
+			i = arr[1];
+			mult = true;
+		}
+		inc = self.height - ((points + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
+		x = i * self.xDist + self.mainOffset;
+		num = (mult === false) ? 0 : arr[0];
+		//circles
+		html = '<circle id="' + self.id + '-' + num + '-point"class="' + self.id + '-point' + str +
+			'"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
+		//TOOLTIPS
+		//rectangle
+		html += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point' +
+			str + '-tooltip-rect"x="' + (x - self.padding * 2) + '"y="' + (inc - self.yDist - self.padding * 2) +
+			'"height="' + (self.yDist + self.padding / 2) + '"width="' + (50) + '"/>';
+		//text
+		html += '<text class="SVG-tooltip"id="' + self.id + '-point' + str + '-tooltip" x="' +
+			(x - self.padding) + '" y="' + (inc - self.yDist) + '">' + points + '</text></g>';
+		return html;
+	};
 	GraphLinear.prototype.init = function(thing) {
 		console.log("Linear graph initialized.");
 		var self = this.obj; //shorthand from here on...
@@ -428,19 +480,14 @@ var GraphLinear = GraphLinear || (function($) {
 		var r = 5; //radius of circle
 		if (self.multiplePoints === false) { //single line graph
 			//POINTS (INDIVIDUAL)
-			var inc, x, j, tooltipOffset = 0;
+			var inc, x, j;
 			for (var i = 0; i < xLines; ++i) {
 				inc = self.height - ((self.points[i] + self.scale) * (self.yDist / self.scale)); //subtract from height to invert graph
 				//set our x coor depending on i due to offset (first and last are special) :/;
 				x = i * self.xDist + self.mainOffset;
-				E.points += '<circle id="' + self.id + '-0-point"class="' + self.id + '-point' + i +
-					'"cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>'; //cx is always on a vert. line
-				//TOOLTIPS
-				E.points += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point' +
-					i + '-tooltip-rect"x="' + (x - self.padding * 2) + '"y="' + (inc - self.yDist - self.padding * 2) +
-					'"height="' + (self.yDist + self.padding / 2) + '"width="' + (50) + '"/>';
-				E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + '-tooltip" x="' +
-					(x - self.padding) + '" y="' + (inc - self.yDist) + '">' + self.points[i] + '</text></g>';
+				if (self.showPoints === true) {
+					E.points += this.buildPoints([i]);
+				}
 				//store coordinates so we can easily connect them with lines
 				self.xOfPoints.push(x);
 				self.yOfPoints.push(inc);
@@ -468,19 +515,14 @@ var GraphLinear = GraphLinear || (function($) {
 					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale));
 					//set our x coor depending on i due to offset (first and last are special) :/;
 					x = t * self.xDist + self.mainOffset;
-					E.points += '<circle id="' + self.id + '-' + i + '-point" class="' + self.id +
-						'-point' + i + t + '" cx="' + x + '" cy="' + inc + '" r="' + r + '"></circle>';
-					//TOOLTIPS
-					E.points += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point' +
-						i + t + '-tooltip-rect"x="' + (x - self.padding * 2) + '"y="' +
-						(inc - self.yDist - self.padding * 2) +
-						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (50) + '"/>';
-					E.points += '<text class="SVG-tooltip"id="' + self.id + '-point' + i + t +
-						'-tooltip" x="' + (x - self.padding) + '" y="' + (inc - self.yDist) + '">' + self.points[i][t] + '</text>';
+					if (self.showPoints === true) {
+						E.points += this.buildPoints([i, t]);
+					}
 					//store coordinates so we can easily connect them with lines
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
 				}
+				console.log(E.points);
 				//LINES
 				for (var t = 0; t < self.points[i].length - 1; ++t) {
 					j = t + 1; //get next point coordinate
@@ -502,7 +544,7 @@ var GraphBar = GraphBar || (function($) {
 		obj.type = 'bar';
 		Graph.call(this, obj);
 		//set click handlers for tooltips
-		if(this.obj.interactive === true){
+		if (this.obj.interactive === true) {
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg rect', function(e) {
 					$('#' + $(this).attr('id') + '-tooltip').show();
@@ -567,11 +609,23 @@ var GraphTable = GraphTable || (function($) {
 			(self.xName || 'X') + '</th><th>' + (self.yName || 'Y') + '</th></tr>';
 		//within each row is [num | x | y] <td>'s
 		var row = '<tr>';
-		for (var i = 0; i < self.x.length; ++i) {
-			row += '<td>' + i + '</td><td>' + self.x[i] + '</td><td>' + self.points[i] + '</td></tr><tr>';
+		if (self.multiplePoints !== true) {
+			for (var i = 0; i < self.x.length; ++i) {
+				row += '<td>' + i + '</td><td>' + self.x[i] + '</td><td>' + self.points[i] + '</td></tr><tr>';
+			}
+		} else {
+			var data = [];
+			for (var i = 0; i < self.points.length; ++i) {
+				for (var t = 0; t < self.points[i].length; ++t) {
+					data.push('<td>' + self.points[i][t] + '</td>');
+				}
+			}
+			for (var i = 0; i < self.x.length; ++i) {
+				row += '<td>' + i + '</td><td>' + self.x[i] + '</td>'+data[i]+'</tr><tr>';
+			}
 		}
 		table += row + '</tr>';
-		$(this.obj.attachTo).append(table);
+		this.handleAppend(thing, table);
 		this.applyStyling();
 	};
 	return GraphTable;
