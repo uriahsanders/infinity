@@ -32,6 +32,16 @@
 			scale: 100,
 			width: 500,
 			height: 400,
+			byCSS: {
+				'#updateThisGraph .SVG-tooltip-box': {
+					fill: 'grey',
+					opacity: 0.7,
+					display: 'none'
+				},
+				'#updateThisGraph circle': {
+					opacity: 0.7
+				}
+			},
 			xOffset: 50,
 			points: [101, 0, 432, 124, 76, 1000, 433],
 			mainOffset: 60
@@ -70,12 +80,13 @@
 			example: true, //load example points and styling (below overrides it)
 			title: 'Everything is optional; view source to see the stuff i changed on this graph (You can disable any part of the grid btw)',
 			width: 1000,
-			height: 400,
+			height: 700,
 			xOffset: 50,
 			id: 'anId',
 			xDist: 120,
 			grid: false,
 			showPoints: false,
+			yDist: 60,
 			mainOffset: 60,
 			//one way to style a graph (using given properties)
 			styles: {
@@ -93,7 +104,7 @@
 					fill: 'darkred'
 				}
 			},
-			scale: 20
+			scale: 10
 		});
 		g.init();
 		document.write("<br /><h2>You can make tables as well (You can also change tables to graphs and use all the other functions)</h2>");

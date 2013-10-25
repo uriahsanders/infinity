@@ -126,6 +126,9 @@ var Graph = Graph || (function($) {
 			"stroke-width": obj.styles.strokeWidth || "4",
 			"cursor": 'pointer'
 		};
+		styling.style[this.parseS(obj.id, 'circle')] = {
+			"opacity": 0.7
+		};
 		styling.style[this.parseS(obj.id, '.inset')] = {
 			"fill": obj.styles.pointFill || "lightblue"
 		};
@@ -152,7 +155,7 @@ var Graph = Graph || (function($) {
 				"stroke-width": obj.styles.lineStokeWidth || "2"
 			};
 		}
-		styling.style[this.parseS(obj.id, '.rects')] = {
+		styling.style[this.parseS(obj.id, '.rect')] = {
 			"stroke": obj.styles.lineStroke || "grey",
 			"stroke-width": obj.styles.lineStokeWidth || "2",
 			'fill': 'blue',
@@ -168,7 +171,10 @@ var Graph = Graph || (function($) {
 		};
 		styling.style[this.parseS(obj.id, '.SVG-tooltip-box')] = {
 			"display": 'none',
-			"opacity": "0.5"
+			"opacity": "0.7",
+			"fill": 'blue',
+			"stroke": obj.styles.lineStroke || "grey",
+			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
 			"text-anchor": obj.styles.xLabelAnchor || xAnchor
@@ -245,6 +251,7 @@ var Graph = Graph || (function($) {
 	};
 	Graph.prototype.update = function(obj) { //recall script file to update graph with new obj
 		obj = obj || {};
+		obj.byCSS = this.obj.byCSS;
 		//reset options with new stuff
 		this.expand(obj, 'update'); //recreate graph
 	};
@@ -257,7 +264,8 @@ var Graph = Graph || (function($) {
 	Graph.prototype.createGrid = function(xLines, yLines) {
 		var self = this.obj;
 		var xGrid = '',
-			yGrid = '';
+			yGrid = '',
+			weird = self.yDist - 30;
 		//make sure they want the grid
 		if (self.grid === true && self.noLines === false) {
 			//save final x of xlines so ylines dont pass that boundary
@@ -269,7 +277,7 @@ var Graph = Graph || (function($) {
 					//x1 and x2 must be the same (dist. from left), 
 					//start at very top (y1 = 0), all the way to the bottom (y = height)
 					nxt = i * self.xDist + self.mainOffset;
-					xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.height - self.yOffset - self.padding) +
+					xGrid += '<line x1="' + nxt + '" x2="' + nxt + '" y1="' + (self.height - self.yOffset - self.padding - weird) +
 						'" y2="' + (finalY) + '"></line>';
 				}
 			}
@@ -289,7 +297,7 @@ var Graph = Graph || (function($) {
 			//they still have the option to remove this with noLines
 			if (self.noLines === false) {
 				xGrid += '<line x1="' + self.mainOffset + '" x2="' + self.mainOffset +
-					'" y1="' + (self.height - self.yOffset - self.padding) + '" y2="' + ((self.height) - yLines * (self.yDist)) + '"></line>';
+					'" y1="' + (self.height - self.yOffset - self.padding - weird) + '" y2="' + ((self.height) - yLines * (self.yDist)) + '"></line>';
 				yGrid += '<line x1="' + self.mainOffset + '" x2="' + ((xLines - 1) * self.xDist + self.mainOffset) +
 					'" y1="' + (self.height - self.yDist) + '" y2="' + (self.height - self.yDist) + '"></line>';
 			}
@@ -420,12 +428,15 @@ var GraphLinear = GraphLinear || (function($) {
 		}
 		//set click handlers for tooltips
 		if (this.obj.interactive === true) {
+			var thiz = this;
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
 					pointHandle.call(this, 'add');
+					$(this).css('opacity', 1);
 				});
 				$(document).on('mouseleave', 'svg circle[id$="point"]', function(e) {
 					pointHandle.call(this, 'sub');
+					$(this).css('opacity', thiz.obj.style[thiz.parseS(obj.id, 'circle')].opacity || 0.7);
 				});
 			});
 		}
@@ -458,7 +469,7 @@ var GraphLinear = GraphLinear || (function($) {
 		//TOOLTIPS
 		//rectangle
 		html += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point' +
-			str + '-tooltip-rect"x="' + (x - self.padding * 2) + '"y="' + (inc - self.yDist - self.padding * 2) +
+			str + '-tooltip-rect"rx="10"x="' + (x - self.padding * 2) + '"y="' + (inc - self.yDist - self.padding * 2) +
 			'"height="' + (self.yDist + self.padding / 2) + '"width="' + (50) + '"/>';
 		//text
 		html += '<text class="SVG-tooltip"id="' + self.id + '-point' + str + '-tooltip" x="' +
@@ -522,7 +533,6 @@ var GraphLinear = GraphLinear || (function($) {
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
 				}
-				console.log(E.points);
 				//LINES
 				for (var t = 0; t < self.points[i].length - 1; ++t) {
 					j = t + 1; //get next point coordinate
@@ -545,14 +555,17 @@ var GraphBar = GraphBar || (function($) {
 		Graph.call(this, obj);
 		//set click handlers for tooltips
 		if (this.obj.interactive === true) {
+			var thiz = this;
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg rect', function(e) {
 					$('#' + $(this).attr('id') + '-tooltip').show();
 					$('#' + $(this).attr('id') + '-tooltip-rect').show();
+					$(this).css('opacity', 0.8);
 				});
 				$(document).on('mouseleave', 'svg rect', function(e) {
 					$('#' + $(this).attr('id') + '-tooltip').hide();
 					$('#' + $(this).attr('id') + '-tooltip-rect').hide();
+					$(this).css('opacity', thiz.obj.style[thiz.parseS(obj.id, '.rect')].opacity || 0.7);
 				});
 			});
 		}
@@ -568,7 +581,9 @@ var GraphBar = GraphBar || (function($) {
 		var yLines = self.y + 1;
 		var E = this.openTags();
 		E.rects = '<g class="rects">';
-		var inc, x, y; //increment
+		var inc, x, y, weird; //increment
+		weird = self.yDist - 30;
+		console.log(weird);
 		//more unique stuff for bar graph now:
 		//RECTS
 		for (var i = 0; i < xLines - 1; ++i) {
@@ -577,17 +592,17 @@ var GraphBar = GraphBar || (function($) {
 			inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
 			x = (i * self.xDist + self.mainOffset);
 			y = (self.height - self.padding - self.yOffset - (inc));
-			E.rects += '<rect id="' + self.id + '-point-' + i + '" x="' + x +
-				'" y="' + y +
+			E.rects += '<rect class="rect"id="' + self.id + '-point-' + i + '" x="' + x +
+				'" y="' + (y - weird) +
 				'" width="' + self.xDist + '" height="' + (inc) + '"/>';
 			//tooltip box
 			E.rects += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point-' +
-				i + '-tooltip-rect"x="' + (x + self.padding / 2) + '"y="' + (y - self.yDist - self.padding * 2) +
+				i + '-tooltip-rect"rx="5"x="' + (x + self.padding / 2) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
 				'"height="' + (self.yDist + self.padding / 2) + '"width="' + (self.xDist - self.padding) + '"/>';
 			//tooltip text
 			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i +
 				'-tooltip" x="' + (x + (self.xDist) / 2 - self.padding) + '" y="' +
-				(y - self.yDist / 2 - self.padding) + '">' + self.points[i] + '</text></g>';
+				(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[i] + '</text></g>';
 		}
 		this.finishGraph(xLines, yLines, E, thing);
 	};
