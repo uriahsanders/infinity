@@ -55,6 +55,7 @@
 		$('#wrapper').append('<h2>Graph1 as JSON, by using .save(); (call .expand() to convert it back into a graph, which is on the right, above):</h2>'+graph.save());
 	</script>
 	<h2>You can even change a graph of one type to another easily (graph.to('bar'))</h2>
+	<h3>And it works perfectly at any scale!</h3>
 	<button id="turn">Turn below into a Bar graph</button><br />
 	<script>
 		$('#update').on('click', function(){
@@ -108,6 +109,7 @@
 		});
 		g.init();
 		document.write("<br /><h2>You can make tables as well (You can also change tables to graphs and use all the other functions)</h2>");
+
 		$('#turn').on('click', function(){
 			g.to('bar');
 			$(this).attr('disabled', 'true');

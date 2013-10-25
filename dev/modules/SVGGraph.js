@@ -7,11 +7,13 @@
 	update a graph,
 	style a graph,
 	change a graph into a different type,
-	create graphs with multiple lines
+	create graphs with multiple entries,
+	create graphs of any scale,
+	add interactivity,
+	extremely versatile: everything is optional/changeable
 
 	Coming soon: (* denotes current focus)
-	pie and area graph, *
-	legends
+	pie and area graph *
 */
 var Graph = Graph || (function($) {
 	"use strict";
@@ -409,7 +411,7 @@ var GraphLinear = GraphLinear || (function($) {
 			var matcher = $nat.split('-');
 			var id = matcher[0];
 			var num = matcher[1];
-			var thiz = this;
+			var thiz = this; //reference the point that called us
 			$('svg line[id^="' + id + '"]').each(function() {
 				if ($(this).attr('id').split('-')[1] === num) {
 					var tooltip = '#' + $(thiz).attr('class') + '-tooltip';
@@ -638,19 +640,19 @@ var GraphTable = GraphTable || (function($) {
 			var all = {}; //to hold formatted data
 			//now split array with '|'
 			var tick = 0;
-			for(var i = 0; i < data.length; ++i){ //add entries to all{} numerically
-				if(!all[tick]) all[tick] = []; //if arr hasnt been set set it
-				if(data[i] !== '|') all[tick].push(data[i]); //add next entry
+			for (var i = 0; i < data.length; ++i) { //add entries to all{} numerically
+				if (!all[tick]) all[tick] = []; //if arr hasnt been set set it
+				if (data[i] !== '|') all[tick].push(data[i]); //add next entry
 				else ++tick; //we are now in a new data layer
 			}
 			var tds; //build with 
 			for (var i = 0; i < self.x.length; ++i) {
-				if(i < self.points.length - 1) headers += '<th>'+(self.yName || 'Y')+' '+(i + 1)+'</th>'; //add headers numerically
+				if (i < self.points.length - 1) headers += '<th>' + (self.yName || 'Y') + ' ' + (i + 1) + '</th>'; //add headers numerically
 				tds = '';
-				for(var t = 0; t < self.points.length; ++t){
+				for (var t = 0; t < self.points.length; ++t) {
 					tds += all[t][i];
 				}
-				row += '<td>' + i + '</td><td>' + self.x[i] + '</td>'+tds +'</tr><tr>';
+				row += '<td>' + i + '</td><td>' + self.x[i] + '</td>' + tds + '</tr><tr>';
 			}
 		}
 		var table = '<table class="SVG-table"id="' + self.id + '" border="1"cellpadding="5"><tr><th>#</th><th>' +
@@ -671,7 +673,8 @@ var GraphPie = GraphPie || (function($) {
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
 	GraphPie.prototype.init = function(thing) {
-
+		console.log("Pie graph initialized.");
+		var self = this.obj;
 	};
 	return GraphPie;
 })(jQuery);
@@ -680,12 +683,16 @@ var GraphArea = GraphArea || (function($) {
 	var GraphArea = function(obj) {
 		obj = obj || {};
 		obj.type = 'area';
-		Graph.call(this, obj);
+		GraphLinear.call(this, obj);
 	};
-	GraphArea.prototype = Object.create(Graph.prototype);
+	GraphArea.prototype = Object.create(GraphLinear.prototype); //extend linear graph
 	GraphArea.prototype.constructor = GraphArea;
 	GraphArea.prototype.init = function(thing) {
-
+		console.log("Area graph initialized.");
+		var self = this.obj;
+		//use linear functions to make points on graph
+		//then connect them with a uniquely colored path instead of lines
+		//path is same color as lines would be
 	};
 	return GraphArea;
 })(jQuery);
