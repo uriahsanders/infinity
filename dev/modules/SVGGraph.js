@@ -620,8 +620,7 @@ var GraphTable = GraphTable || (function($) {
 	GraphTable.prototype.init = function(thing) {
 		console.log("Table graph initialized.");
 		var self = this.obj;
-		var table = '<table class="SVG-table"id="' + self.id + '" border="1"cellpadding="5"><tr><th>#</th><th>' +
-			(self.xName || 'X') + '</th><th>' + (self.yName || 'Y') + '</th></tr>';
+		var headers = '<th>' + (self.yName || 'Y') + '</th>'; //first header will always just be name of y
 		//within each row is [num | x | y] <td>'s
 		var row = '<tr>';
 		if (self.multiplePoints !== true) {
@@ -632,13 +631,30 @@ var GraphTable = GraphTable || (function($) {
 			var data = [];
 			for (var i = 0; i < self.points.length; ++i) {
 				for (var t = 0; t < self.points[i].length; ++t) {
-					data.push('<td>' + self.points[i][t] + '</td>');
+					data.push('<td>' + self.points[i][t] + '</td>'); //stick every single point into data[]
 				}
+				data.push('|'); //seperate each entry
 			}
+			var all = {}; //to hold formatted data
+			//now split array with '|'
+			var tick = 0;
+			for(var i = 0; i < data.length; ++i){ //add entries to all{} numerically
+				if(!all[tick]) all[tick] = []; //if arr hasnt been set set it
+				if(data[i] !== '|') all[tick].push(data[i]); //add next entry
+				else ++tick; //we are now in a new data layer
+			}
+			var tds; //build with 
 			for (var i = 0; i < self.x.length; ++i) {
-				row += '<td>' + i + '</td><td>' + self.x[i] + '</td>'+data[i]+'</tr><tr>';
+				if(i < self.points.length - 1) headers += '<th>'+(self.yName || 'Y')+' '+(i + 1)+'</th>'; //add headers numerically
+				tds = '';
+				for(var t = 0; t < self.points.length; ++t){
+					tds += all[t][i];
+				}
+				row += '<td>' + i + '</td><td>' + self.x[i] + '</td>'+tds +'</tr><tr>';
 			}
 		}
+		var table = '<table class="SVG-table"id="' + self.id + '" border="1"cellpadding="5"><tr><th>#</th><th>' +
+			(self.xName || 'X') + '</th>' + headers + '</tr>';
 		table += row + '</tr>';
 		this.handleAppend(thing, table);
 		this.applyStyling();
