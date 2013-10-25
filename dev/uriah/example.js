@@ -69,7 +69,7 @@ var Model = (function(){
 		scriptFile: 'forum_script.php',
 		page: 'Forum',
 		currentThread: null,
-		branch: 'Master',
+		rank: 'Admin',
 		filter: [],
 		num_results: null,
 		categories: ['general', 'food', 'fun', 'coding', ...]
@@ -86,13 +86,13 @@ var View = (function(){
 		notify: function(){
 			var changed = this.changed; //shorthand it
 			//tell the View that something was changed
-			switch(this.changed){
+			switch(changed){
 				//do something different depending on what was changed
 				//in the Model. For example:
 				case 'thread':
 					//since we're going with the Forum example
 					//below Forum holds main functions
-					Forum.changeThread(Model.changed); //pass in new value
+					Forum.changeThread(Model[changed]); //pass in new value
 					break;
 				//and so on for each possible change you want to account for
 			}
@@ -120,11 +120,25 @@ var Forum = (function(){ //you can do whatever you want in here, prototype or re
 	//continuing with forum example from above:
 	var Public = {};
 	var Private = {};
+	Public.init = function(){
+		//do your initial stuff here
+		//if your are making a single page App, you may want to
+		//define your pushState urls and such in here
+		//just read the URL and modify Model depending on URL
+		//the rest will take care of itself
+		//i like to handle that in its own function called Router
+		//then i just call it from init or the implementation below
+	};
 	Public.changeThread = function(to){
 		//do something to change the thread
 	};
 	//finish defining functions... :)
 	return Public;
+})();
+//now for your implementation:
+(function(){
+	"use strict";
+	Forum.init();
 })();
 //And thats all, folks
 //////////////////////////////////////////////////////////////////////////////////////////////////
