@@ -74,6 +74,7 @@ var Graph = Graph || (function($) {
 			yGrid: true,
 			xName: null,
 			yName: null,
+			special: null,
 			showPoints: true,
 			noLines: false,
 			//add some html before append
@@ -177,6 +178,10 @@ var Graph = Graph || (function($) {
 			"fill": 'blue',
 			"stroke": obj.styles.lineStroke || "grey",
 			"stroke-width": obj.styles.lineStokeWidth || "2"
+		};
+		styling.style[this.parseS(obj.id, '.area')] = {
+			"opacity": "0.7",
+			"fill": 'blue'
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
 			"text-anchor": obj.styles.xLabelAnchor || xAnchor
@@ -487,6 +492,8 @@ var GraphLinear = GraphLinear || (function($) {
 		var E = this.openTags(); //elements
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
+		var area = self.special === 'area';
+		if (area && self.multiplePoints === false) E.path = '<g class="area"><path d="';
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
@@ -506,12 +513,20 @@ var GraphLinear = GraphLinear || (function($) {
 				self.yOfPoints.push(inc);
 			}
 			//LINES
-			for (var i = 0; i < self.points.length - 1; ++i) {
-				j = i + 1; //get next point coordinate
-				//to connect two points: x1 = (x of first point), x2 = (x of second point),
-				//y1 = (y of first point), y2 = (y of second point)
-				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
-					self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
+			if (!area) {
+				for (var i = 0; i < self.points.length - 1; ++i) {
+					j = i + 1; //get next point coordinate
+					//to connect two points: x1 = (x of first point), x2 = (x of second point),
+					//y1 = (y of first point), y2 = (y of second point)
+					E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
+						self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
+				}
+			} else {
+				//PATHS
+				E.path += 'M' + self.xOfPoints[0] + ',' + self.yOfPoints[0] + ' ';
+				for (var i = 1; i < self.xOfPoints.length; ++i) {
+					E.path += 'L' + self.xOfPoints[i] + ',' + self.yOfPoints[i] + ' ';
+				}
 			}
 		} else {
 			var inc, x, j;
@@ -535,16 +550,23 @@ var GraphLinear = GraphLinear || (function($) {
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
 				}
-				//LINES
-				for (var t = 0; t < self.points[i].length - 1; ++t) {
-					j = t + 1; //get next point coordinate
-					//number class name for different colors
-					E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i +
-						'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
-						'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
+				if (!area) {
+					//LINES
+					for (var t = 0; t < self.points[i].length - 1; ++t) {
+						j = t + 1; //get next point coordinate
+						//number class name for different colors
+						E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i +
+							'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
+							'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
+					}
+				} else {
+					//PATHS
+					//things become infinitely more complicated for multiple points :/
+					
 				}
 			}
 		}
+		if (area && self.multiplePoints === false) E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + '"></path>';
 		this.finishGraph(xLines, yLines, E, thing); //close tags, style, and append
 	};
 	return GraphLinear;
@@ -677,22 +699,4 @@ var GraphPie = GraphPie || (function($) {
 		var self = this.obj;
 	};
 	return GraphPie;
-})(jQuery);
-var GraphArea = GraphArea || (function($) {
-	"use strict";
-	var GraphArea = function(obj) {
-		obj = obj || {};
-		obj.type = 'area';
-		GraphLinear.call(this, obj);
-	};
-	GraphArea.prototype = Object.create(GraphLinear.prototype); //extend linear graph
-	GraphArea.prototype.constructor = GraphArea;
-	GraphArea.prototype.init = function(thing) {
-		console.log("Area graph initialized.");
-		var self = this.obj;
-		//use linear functions to make points on graph
-		//then connect them with a uniquely colored path instead of lines
-		//path is same color as lines would be
-	};
-	return GraphArea;
 })(jQuery);
