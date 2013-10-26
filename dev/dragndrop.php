@@ -13,9 +13,27 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 </head>
 <body>
 <style>
-body {
-	margin: 0px;
-	padding: 0px;
+html, body{
+	margin:0;
+	padding:0;
+	width:100%;
+	min-width:1000px;
+	height: 100%;
+}
+.groupname{
+	display: inline-block;
+	border: 1px solid black;
+	margin: 5px;
+	padding: 10px;
+	text-align: center;
+	width: 25%;
+	height: 250px;
+	overflow-y: auto;
+}
+.membername{	
+	display: block;
+	padding: 5px;
+	cursor: pointer;
 }
 </style>
 <a id='create'>Create a group</a><br />
@@ -61,9 +79,10 @@ $('#show').toggle(function (){
         $.post("dragndrop_script.php", {
         get: "groups"
         }, function(data){
-        	//console.log(data);
+        	data = data.substring(0, data.length - 2);
+        	console.log(data);
             var response = jQuery.parseJSON(data); //parse the json
-            //console.log(response);
+            console.log(response);
             if(response.length > 0 && response[0] != "no groups"){ //check to see if response is empty
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
@@ -77,7 +96,8 @@ $('#show').toggle(function (){
                     			member: ui.draggable.attr("id"),
                     			do: "copy"
                     			}, function(data){
-                    				//console.log(data);
+                    				console.log(data);
+                    				$('#' + $(this).attr("id") + '-members').append(ui.draggable.attr("id"));
                     				alert("Sucess");
                     			});
                     		}
@@ -131,7 +151,8 @@ $('#show').toggle(function (){
                 		get: "members", //send what you want to get
                 		group: group //send the group
                 		}, function (data){
-                			//console.log(data);
+                			data = data.substring(0, data.length - 2);
+                			console.log(data);
                 			if(data != "error" && data != ""){ //check for errors
                 				var members = jQuery.parseJSON(data); //parse json
                 				if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
@@ -173,7 +194,7 @@ $('#show').toggle(function (){
                 	name: $('#' + group).text() //new group name
                 	}, function(data){
                 		$('#' + group).attr("id", $('#' + group).text()); //change the group id to the new one
-                		//console.log(data);
+                		console.log(data);
                 	});
                 });
             }else{
@@ -201,11 +222,12 @@ $('#searchLink').toggle(function (){
 			$.post("dragndrop_script.php", {
 			query: $('#query').val()
 			}, function(data){
+				data = data.substring(0, data.length - 2);
 				console.log(data);
 				if(data != null && data != undefined && data != "error"){
 					$('#results').empty();
 					var results = jQuery.parseJSON(data);
-					//console.log(results);
+					console.log(results);
 					$('#results').slideDown();
 					if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
 					for(var i = 0; i <= results.length; ++i){
