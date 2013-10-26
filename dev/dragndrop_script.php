@@ -11,11 +11,12 @@ function getGroups(){
     	$groups = array();
     	while($row = mysql_fetch_array($result)){
    	  	   $group = $row['group'];
-   	  	   if(@defined(LAST_GROUP) && LAST_GROUP != $group){
+   	  	   /*if(@defined(LAST_GROUP) && LAST_GROUP != $group){
    	  	   		array_push($groups, $group);	
    	  	   }else{
 		   		array_push($groups, $group);
-		   }
+		   }*/
+		   array_push($groups, $group);
     	}
     	if(isset($groups) && !empty($groups)){ //check if the groups array is set and not empty
     	    return json_encode($groups); //return json encoded array
