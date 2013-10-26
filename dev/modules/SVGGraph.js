@@ -522,10 +522,13 @@ var GraphLinear = GraphLinear || (function($) {
 						self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
 				}
 			} else {
-				//PATHS
-				E.path += 'M' + self.xOfPoints[0] + ',' + self.yOfPoints[0] + ' ';
+				//PATHS 
+				//building SVG path params
+				//handling seprately because Moveto is important
+				E.path += 'M' + self.xOfPoints[0] + ',' + (self.height - self.yDist) + ' '; //make sure origin is included
+				E.path += 'L' + self.xOfPoints[0] + ',' + self.yOfPoints[0] + ' '; //draw from origin to first point
 				for (var i = 1; i < self.xOfPoints.length; ++i) {
-					E.path += 'L' + self.xOfPoints[i] + ',' + self.yOfPoints[i] + ' ';
+					E.path += 'L' + self.xOfPoints[i] + ',' + self.yOfPoints[i] + ' '; //draw line to next point
 				}
 			}
 		} else {
@@ -541,12 +544,10 @@ var GraphLinear = GraphLinear || (function($) {
 				//POINTS (INDIVIDUAL)
 				for (var t = 0; t < self.points[i].length; ++t) {
 					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale));
-					//set our x coor depending on i due to offset (first and last are special) :/;
 					x = t * self.xDist + self.mainOffset;
 					if (self.showPoints === true) {
 						E.points += this.buildPoints([i, t]);
 					}
-					//store coordinates so we can easily connect them with lines
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
 				}
@@ -562,11 +563,14 @@ var GraphLinear = GraphLinear || (function($) {
 				} else {
 					//PATHS
 					//things become infinitely more complicated for multiple points :/
-					
+
 				}
 			}
 		}
-		if (area && self.multiplePoints === false) E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + '"></path>';
+		if (area && self.multiplePoints === false) {
+			//draw line to last point
+			E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
+		}
 		this.finishGraph(xLines, yLines, E, thing); //close tags, style, and append
 	};
 	return GraphLinear;
