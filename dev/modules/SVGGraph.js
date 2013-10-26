@@ -13,7 +13,9 @@
 	extremely versatile: everything is optional/changeable
 
 	Coming soon: (* denotes current focus)
-	pie and area graph *
+	pie graphs *,
+	legends,
+	bar graphs with multiple points,
 */
 var Graph = Graph || (function($) {
 	"use strict";
@@ -152,10 +154,13 @@ var Graph = Graph || (function($) {
 		};
 		//when using multiple lines make them different colors automatically
 		var colors = ['red', 'blue', 'green', 'orange'];
-		for (var i = 1; i < colors.length; ++i) {
+		for (var i = 0; i < colors.length; ++i) {
 			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
 				"stroke": obj.styles.lineStroke || colors[i],
 				"stroke-width": obj.styles.lineStokeWidth || "2"
+			};
+			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
+				"fill": colors[i]
 			};
 		}
 		styling.style[this.parseS(obj.id, '.rect')] = {
@@ -180,7 +185,7 @@ var Graph = Graph || (function($) {
 			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
 		styling.style[this.parseS(obj.id, '.area')] = {
-			"opacity": "0.7",
+			"opacity": "0.5",
 			"fill": 'blue'
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
@@ -381,9 +386,13 @@ var Graph = Graph || (function($) {
 		E.yLabels += this.addLabels().yLabels;
 		E.title += this.addTitle(yLines); //build grid
 		//COMBINING DYNAMICALLY
+		E.points = E.points || '';
 		for (var i in E) {
-			if (i !== 'SVG') E.SVG += E[i] + '</g>';
+			if(E[i] !== E.points){ //so we can add last to increase z-index
+				if (i !== 'SVG') E.SVG += E[i] + '</g>';
+			}
 		}
+		E.SVG += E.points;
 		//"thing" will determine where to put the new graph
 		var finish = this.obj.before + E.SVG + '</svg>' + this.obj.after;
 		this.handleAppend(thing, finish);
@@ -513,15 +522,14 @@ var GraphLinear = GraphLinear || (function($) {
 				self.yOfPoints.push(inc);
 			}
 			//LINES
-			if (!area) {
-				for (var i = 0; i < self.points.length - 1; ++i) {
-					j = i + 1; //get next point coordinate
-					//to connect two points: x1 = (x of first point), x2 = (x of second point),
-					//y1 = (y of first point), y2 = (y of second point)
-					E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
-						self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
-				}
-			} else {
+			for (var i = 0; i < self.points.length - 1; ++i) {
+				j = i + 1; //get next point coordinate
+				//to connect two points: x1 = (x of first point), x2 = (x of second point),
+				//y1 = (y of first point), y2 = (y of second point)
+				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
+					self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
+			}
+			if(area){
 				//PATHS 
 				//building SVG path params
 				//handling seprately because Moveto is important
@@ -530,6 +538,7 @@ var GraphLinear = GraphLinear || (function($) {
 				for (var i = 1; i < self.xOfPoints.length; ++i) {
 					E.path += 'L' + self.xOfPoints[i] + ',' + self.yOfPoints[i] + ' '; //draw line to next point
 				}
+				E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
 			}
 		} else {
 			var inc, x, j;
@@ -537,6 +546,10 @@ var GraphLinear = GraphLinear || (function($) {
 			for (var i = 0; i < self.points.length; ++i) {
 				self.mxOfPoints.push([]);
 				self.myOfPoints.push([]);
+			}
+			if (area) {
+				E.path = '<g class="area">';
+				var paths = [];
 			}
 			//multiple points are in a multi-dimensional array, so treat it as such with double loops
 			for (var i = 0; i < self.points.length; ++i) {
@@ -551,25 +564,28 @@ var GraphLinear = GraphLinear || (function($) {
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
 				}
-				if (!area) {
-					//LINES
-					for (var t = 0; t < self.points[i].length - 1; ++t) {
-						j = t + 1; //get next point coordinate
-						//number class name for different colors
-						E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i +
-							'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
-							'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
-					}
-				} else {
+				//LINES
+				for (var t = 0; t < self.points[i].length - 1; ++t) {
+					j = t + 1; //get next point coordinate
+					//number class name for different colors
+					E.lines += '<line id="' + self.id + '-' + i + '-line" class="line-of-' + i +
+						'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
+						'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
+				}
+				if(area){
 					//PATHS
-					//things become infinitely more complicated for multiple points :/
-
+					paths.push('<path class="path-of-' + i + '" d="');
+					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (self.height - self.yDist) + ' ';
+					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
+					for (var t = 0; t < self.points[i].length; ++t) {
+						paths[i] += 'L' + self.mxOfPoints[i][t] + ',' + self.myOfPoints[i][t] + ' ';
+					}
+					paths[i] += 'L' + self.mxOfPoints[i][self.mxOfPoints[i].length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
 				}
 			}
-		}
-		if (area && self.multiplePoints === false) {
-			//draw line to last point
-			E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
+			if (area) {
+				E.path += paths.join('');
+			}
 		}
 		this.finishGraph(xLines, yLines, E, thing); //close tags, style, and append
 	};

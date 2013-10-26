@@ -129,7 +129,7 @@
 		});
 		table.init();
 	</script>
-	<h2>This is an area graph.</h2>
+	<h2>This is an area graph. (3 lines)</h2>
 	<script>
 		var area = new GraphLinear({
 			example: true,
@@ -140,7 +140,7 @@
 			id: 'area',
 			byCSS: {
 				'#area .SVG-tooltip-box': {
-					fill: 'grey',
+					fill: 'darkgrey',
 					opacity: 0.7,
 					display: 'none'
 				},
@@ -148,7 +148,13 @@
 					opacity: 0.7
 				}
 			},
-			points: [12, 33, 72, 24, 87, 66, 30]
+
+			multiplePoints: true,
+			points: [
+				[0, 26, 33, 74, 12, 49, 18],
+				[32, 46, 75, 38, 62, 76, 82],
+				[12, 33, 25, 16, 87, 4, 19]
+			]
 		});
 		area.init();
 	</script>
