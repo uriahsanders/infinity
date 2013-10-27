@@ -13,7 +13,9 @@
 	extremely versatile: everything is optional/changeable
 
 	Coming soon: (* denotes current focus)
-	pie and area graph *
+	pie graphs *,
+	legends,
+	bar graphs with multiple points,
 */
 var Graph = Graph || (function($) {
 	"use strict";
@@ -74,6 +76,7 @@ var Graph = Graph || (function($) {
 			yGrid: true,
 			xName: null,
 			yName: null,
+			special: null,
 			showPoints: true,
 			noLines: false,
 			//add some html before append
@@ -151,10 +154,13 @@ var Graph = Graph || (function($) {
 		};
 		//when using multiple lines make them different colors automatically
 		var colors = ['red', 'blue', 'green', 'orange'];
-		for (var i = 1; i < colors.length; ++i) {
+		for (var i = 0; i < colors.length; ++i) {
 			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
 				"stroke": obj.styles.lineStroke || colors[i],
 				"stroke-width": obj.styles.lineStokeWidth || "2"
+			};
+			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
+				"fill": colors[i]
 			};
 		}
 		styling.style[this.parseS(obj.id, '.rect')] = {
@@ -177,6 +183,10 @@ var Graph = Graph || (function($) {
 			"fill": 'blue',
 			"stroke": obj.styles.lineStroke || "grey",
 			"stroke-width": obj.styles.lineStokeWidth || "2"
+		};
+		styling.style[this.parseS(obj.id, '.area')] = {
+			"opacity": "0.5",
+			"fill": 'blue'
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
 			"text-anchor": obj.styles.xLabelAnchor || xAnchor
@@ -376,9 +386,13 @@ var Graph = Graph || (function($) {
 		E.yLabels += this.addLabels().yLabels;
 		E.title += this.addTitle(yLines); //build grid
 		//COMBINING DYNAMICALLY
+		E.points = E.points || '';
 		for (var i in E) {
-			if (i !== 'SVG') E.SVG += E[i] + '</g>';
+			if(E[i] !== E.points){ //so we can add last to increase z-index
+				if (i !== 'SVG') E.SVG += E[i] + '</g>';
+			}
 		}
+		E.SVG += E.points;
 		//"thing" will determine where to put the new graph
 		var finish = this.obj.before + E.SVG + '</svg>' + this.obj.after;
 		this.handleAppend(thing, finish);
@@ -487,6 +501,8 @@ var GraphLinear = GraphLinear || (function($) {
 		var E = this.openTags(); //elements
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
+		var area = self.special === 'area';
+		if (area && self.multiplePoints === false) E.path = '<g class="area"><path d="';
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
@@ -513,6 +529,17 @@ var GraphLinear = GraphLinear || (function($) {
 				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
 					self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
 			}
+			if(area){
+				//PATHS 
+				//building SVG path params
+				//handling seprately because Moveto is important
+				E.path += 'M' + self.xOfPoints[0] + ',' + (self.height - self.yDist) + ' '; //make sure origin is included
+				E.path += 'L' + self.xOfPoints[0] + ',' + self.yOfPoints[0] + ' '; //draw from origin to first point
+				for (var i = 1; i < self.xOfPoints.length; ++i) {
+					E.path += 'L' + self.xOfPoints[i] + ',' + self.yOfPoints[i] + ' '; //draw line to next point
+				}
+				E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
+			}
 		} else {
 			var inc, x, j;
 			//we need to push the right # of empty arrays into the multi arrays for points
@@ -520,18 +547,20 @@ var GraphLinear = GraphLinear || (function($) {
 				self.mxOfPoints.push([]);
 				self.myOfPoints.push([]);
 			}
+			if (area) {
+				E.path = '<g class="area">';
+				var paths = [];
+			}
 			//multiple points are in a multi-dimensional array, so treat it as such with double loops
 			for (var i = 0; i < self.points.length; ++i) {
 				//chain of index vars: i -> t
 				//POINTS (INDIVIDUAL)
 				for (var t = 0; t < self.points[i].length; ++t) {
 					inc = self.height - ((self.points[i][t] + self.scale) * (self.yDist / self.scale));
-					//set our x coor depending on i due to offset (first and last are special) :/;
 					x = t * self.xDist + self.mainOffset;
 					if (self.showPoints === true) {
 						E.points += this.buildPoints([i, t]);
 					}
-					//store coordinates so we can easily connect them with lines
 					self.mxOfPoints[i].push(x);
 					self.myOfPoints[i].push(inc);
 				}
@@ -543,6 +572,19 @@ var GraphLinear = GraphLinear || (function($) {
 						'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
 						'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
 				}
+				if(area){
+					//PATHS
+					paths.push('<path class="path-of-' + i + '" d="');
+					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (self.height - self.yDist) + ' ';
+					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
+					for (var t = 0; t < self.points[i].length; ++t) {
+						paths[i] += 'L' + self.mxOfPoints[i][t] + ',' + self.myOfPoints[i][t] + ' ';
+					}
+					paths[i] += 'L' + self.mxOfPoints[i][self.mxOfPoints[i].length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
+				}
+			}
+			if (area) {
+				E.path += paths.join('');
 			}
 		}
 		this.finishGraph(xLines, yLines, E, thing); //close tags, style, and append
@@ -677,22 +719,4 @@ var GraphPie = GraphPie || (function($) {
 		var self = this.obj;
 	};
 	return GraphPie;
-})(jQuery);
-var GraphArea = GraphArea || (function($) {
-	"use strict";
-	var GraphArea = function(obj) {
-		obj = obj || {};
-		obj.type = 'area';
-		GraphLinear.call(this, obj);
-	};
-	GraphArea.prototype = Object.create(GraphLinear.prototype); //extend linear graph
-	GraphArea.prototype.constructor = GraphArea;
-	GraphArea.prototype.init = function(thing) {
-		console.log("Area graph initialized.");
-		var self = this.obj;
-		//use linear functions to make points on graph
-		//then connect them with a uniquely colored path instead of lines
-		//path is same color as lines would be
-	};
-	return GraphArea;
 })(jQuery);
