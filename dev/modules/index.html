@@ -61,7 +61,6 @@
 		$('#update').on('click', function(){
 			//UPDATE GRAPH
 			graph2.update({
-				example: true,
 				id: 'updateThisGraph',
 				multiplePoints: true,
 				points: [
@@ -78,7 +77,7 @@
 			$(this).attr('disabled', 'true');
 		});
 		var g = new GraphLinear({
-			example: true, //load example points and styling (below overrides it)
+			example: true, //load example points and data (below overrides it)
 			title: 'Everything is optional; view source to see the stuff i changed on this graph (You can disable any part of the grid btw)',
 			width: 1000,
 			height: 500,
@@ -92,7 +91,6 @@
 			//one way to style a graph (using given properties)
 			styles: {
 				lineStroke: 'red',
-				pointStroke: 'blue',
 				strokeWidth: 2,
 				tooltipFill: 'red'
 			},
@@ -101,8 +99,19 @@
 				'#anId .grid': {
 					stroke: 'red'
 				},
+				'#anId .rect': {
+					fill: 'grey',
+					opacity: 0.7,
+					stroke: 'red'
+				},
 				'#anId .labels': {
 					fill: 'darkred'
+				},
+				'#anId .SVG-tooltip-box': {
+					fill: 'grey',
+					opacity: 0.7,
+					display: 'none',
+					stroke: 'red'
 				}
 			},
 			scale: 10
@@ -115,7 +124,6 @@
 			$(this).attr('disabled', 'true');
 		});
 		var table = new GraphTable({
-			example: true,
 			xName: 'Dates',
 			yName: 'Data',
 			height: 350,
@@ -132,12 +140,12 @@
 	<h2>This is an area graph. (3 lines)</h2>
 	<script>
 		var area = new GraphLinear({
-			example: true,
 			special: 'area',
 			height: 350,
 			width: 700,
 			xDist: 100,
 			id: 'area',
+			pointRadius: 3,
 			byCSS: {
 				'#area .SVG-tooltip-box': {
 					fill: 'darkgrey',
@@ -145,18 +153,65 @@
 					display: 'none'
 				},
 				'#area circle': {
-					opacity: 0.7
+					opacity: 0.7,
+					stroke: '#000',
+					fill: 'lightblue'
 				}
 			},
-
 			multiplePoints: true,
 			points: [
-				[0, 26, 33, 74, 12, 49, 18],
+				[0, 26, 33, 74, 12, 49, 33],
 				[32, 46, 75, 38, 62, 76, 82],
-				[12, 33, 25, 16, 87, 4, 19]
+				[12, 33, 25, 16, 87, 20, 0]
 			]
 		});
 		area.init();
+	</script>
+	<h2>You probably want some example code:</h2>
+	<h4>
+		<pre>
+		var linear = new GraphLinear();
+		linear.init({
+			addStyling: true, //load default css
+			x: ['mon', 'tue', 'wed', 'thu', 'fri'], //the x axis
+			scale: 100, //each Y goes up by 100
+			points: [12, 164, 1000, 45, 982], //Y values
+			attachTo: 'main' //append to an id
+			//and anything you dont specify is defaulted for you!
+		});
+		</pre>
+	</h4>
+	<h2>And thats it!</h2>
+	<hr />
+	<h2>You can also create pie graphs. Isnt this amazing!</h2>
+	yeah...still working on it :P SCROLL ON!
+	<script>
+		var pie = new GraphPie({
+			width: 500,
+			height: 100,
+			id: 'pie'
+		});
+		//pie.init();
+	</script>
+	<hr />
+	<h2>Bar graphs with multiple points:</h2>
+	<script>
+		var barz = new GraphBar({
+			example: true, //load example points and styling (below overrides it)
+			id: 'barz',
+			width: 800,
+			height: 350,
+			xOffset: 50,
+			mainOffset: 60,
+			multiplePoints: true,
+			points: [
+				[0, 26, 33, 74, 12, 49, 33],
+				[32, 46, 75, 38, 62, 76, 82],
+				[12, 33, 25, 16, 87, 20, 0]
+			],
+			xDist: 30
+		});
+		barz.init();
 	</script>
 </body>
 </html>

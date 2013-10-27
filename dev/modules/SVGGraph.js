@@ -13,9 +13,10 @@
 	extremely versatile: everything is optional/changeable
 
 	Coming soon: (* denotes current focus)
-	pie graphs *,
+	pie graphs, scatter graphs,
 	legends,
-	bar graphs with multiple points,
+	bar graphs with multiple points, *
+	jquery plugin for UI
 */
 var Graph = Graph || (function($) {
 	"use strict";
@@ -79,6 +80,7 @@ var Graph = Graph || (function($) {
 			special: null,
 			showPoints: true,
 			noLines: false,
+			pointRadius: 5,
 			//add some html before append
 			before: '',
 			//after append:
@@ -161,6 +163,10 @@ var Graph = Graph || (function($) {
 			};
 			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
 				"fill": colors[i]
+			};
+			styling.style[this.parseS(obj.id, '.rect-of-' + i)] = {
+				"fill": colors[i],
+				"opacity": 0.7
 			};
 		}
 		styling.style[this.parseS(obj.id, '.rect')] = {
@@ -388,7 +394,7 @@ var Graph = Graph || (function($) {
 		//COMBINING DYNAMICALLY
 		E.points = E.points || '';
 		for (var i in E) {
-			if(E[i] !== E.points){ //so we can add last to increase z-index
+			if (E[i] !== E.points) { //so we can add last to increase z-index
 				if (i !== 'SVG') E.SVG += E[i] + '</g>';
 			}
 		}
@@ -460,7 +466,7 @@ var GraphLinear = GraphLinear || (function($) {
 	GraphLinear.prototype = Object.create(Graph.prototype);
 	GraphLinear.prototype.constructor = GraphLinear;
 	GraphLinear.prototype.buildPoints = function(arr) {
-		var inc, x, j, points, str, html, mult, num, i, r = 5,
+		var inc, x, j, points, str, html, mult, num, i, r = this.obj.pointRadius,
 			self = this.obj;
 		//stuff that changes based on multiple points:
 		if (arr.length === 1) {
@@ -507,6 +513,7 @@ var GraphLinear = GraphLinear || (function($) {
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
 		var r = 5; //radius of circle
+		var hmdist = self.height - self.yDist;
 		if (self.multiplePoints === false) { //single line graph
 			//POINTS (INDIVIDUAL)
 			var inc, x, j;
@@ -529,16 +536,16 @@ var GraphLinear = GraphLinear || (function($) {
 				E.lines += '<line id="' + self.id + '-0-line" x1="' + self.xOfPoints[i] + '" x2="' +
 					self.xOfPoints[j] + '" y1="' + self.yOfPoints[i] + '" y2="' + self.yOfPoints[j] + '"></line>';
 			}
-			if(area){
+			if (area) {
 				//PATHS 
 				//building SVG path params
 				//handling seprately because Moveto is important
-				E.path += 'M' + self.xOfPoints[0] + ',' + (self.height - self.yDist) + ' '; //make sure origin is included
+				E.path += 'M' + self.xOfPoints[0] + ',' + (hmdist) + ' '; //make sure origin is included
 				E.path += 'L' + self.xOfPoints[0] + ',' + self.yOfPoints[0] + ' '; //draw from origin to first point
 				for (var i = 1; i < self.xOfPoints.length; ++i) {
 					E.path += 'L' + self.xOfPoints[i] + ',' + self.yOfPoints[i] + ' '; //draw line to next point
 				}
-				E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
+				E.path += 'L' + self.xOfPoints[self.xOfPoints.length - 1] + ',' + (hmdist) + ' Z"></path>';
 			}
 		} else {
 			var inc, x, j;
@@ -572,15 +579,15 @@ var GraphLinear = GraphLinear || (function($) {
 						'" x1="' + self.mxOfPoints[i][t] + '" x2="' + self.mxOfPoints[i][j] +
 						'" y1="' + self.myOfPoints[i][t] + '" y2="' + self.myOfPoints[i][j] + '"></line>';
 				}
-				if(area){
+				if (area) {
 					//PATHS
 					paths.push('<path class="path-of-' + i + '" d="');
-					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (self.height - self.yDist) + ' ';
+					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (hmdist) + ' ';
 					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
 					for (var t = 0; t < self.points[i].length; ++t) {
 						paths[i] += 'L' + self.mxOfPoints[i][t] + ',' + self.myOfPoints[i][t] + ' ';
 					}
-					paths[i] += 'L' + self.mxOfPoints[i][self.mxOfPoints[i].length - 1] + ',' + (self.height - self.yDist) + ' Z"></path>';
+					paths[i] += 'L' + self.mxOfPoints[i][self.mxOfPoints[i].length - 1] + ',' + (hmdist) + ' Z"></path>';
 				}
 			}
 			if (area) {
@@ -627,26 +634,59 @@ var GraphBar = GraphBar || (function($) {
 		E.rects = '<g class="rects">';
 		var inc, x, y, weird; //increment
 		weird = self.yDist - 30;
-		console.log(weird);
 		//more unique stuff for bar graph now:
 		//RECTS
-		for (var i = 0; i < xLines - 1; ++i) {
-			//height must = last section of "y"
-			//if i = 0, let inc = 1 so we can at least see at line at origin
-			inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
-			x = (i * self.xDist + self.mainOffset);
-			y = (self.height - self.padding - self.yOffset - (inc));
-			E.rects += '<rect class="rect"id="' + self.id + '-point-' + i + '" x="' + x +
-				'" y="' + (y - weird) +
-				'" width="' + self.xDist + '" height="' + (inc) + '"/>';
-			//tooltip box
-			E.rects += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point-' +
-				i + '-tooltip-rect"rx="5"x="' + (x + self.padding / 2) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
-				'"height="' + (self.yDist + self.padding / 2) + '"width="' + (self.xDist - self.padding) + '"/>';
-			//tooltip text
-			E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i +
-				'-tooltip" x="' + (x + (self.xDist) / 2 - self.padding) + '" y="' +
-				(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[i] + '</text></g>';
+		if (self.multiplePoints === false) {
+			for (var i = 0; i < xLines - 1; ++i) {
+				//height must = last section of "y"
+				//if i = 0, let inc = 1 so we can at least see at line at origin
+				inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
+				x = (i * self.xDist + self.mainOffset);
+				y = (self.height - self.padding - self.yOffset - (inc));
+				E.rects += '<rect class="rect"id="' + self.id + '-point-' + i + '" x="' + x +
+					'" y="' + (y - weird) +
+					'" width="' + self.xDist + '" height="' + (inc) + '"/>';
+				//tooltip box
+				E.rects += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point-' +
+					i + '-tooltip-rect"rx="1"x="' + (x + self.padding / 2) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
+					'"height="' + (self.yDist + self.padding / 2) + '"width="' + (self.xDist - self.padding) + '"/>';
+				//tooltip text
+				E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + i +
+					'-tooltip" x="' + (x + (self.xDist) / 2 - self.padding) + '" y="' +
+					(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[i] + '</text></g>';
+			}
+		} else {
+			self.xDist = self.xDist * self.points.length; //add more dist so we can fit more bars
+			var xDist = self.xDist / self.points.length; //so now every time to use x fro graph must be a fraction of full dist
+			//okay, so we need to get the first point of each array
+			//then display them side by side and so on
+			//get longest array:
+			var max = 0;
+			for (var i = 0; i < self.points.length; ++i) {
+				if (max < self.points[i].length) max = self.points[i].length;
+			}
+			var j = 0;
+			var all;
+			for (var i = 0; i < max; ++i) {
+				for (var t = 0; t < self.points.length; ++t) {
+					all = t + j + i + i;
+					inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
+					x = ((all) * (xDist) + self.mainOffset);
+					y = (self.height - self.padding - self.yOffset - (inc));
+					E.rects += '<rect class="rect-of-'+t+'"id="' + self.id + '-point-' + (all) + '" x="' + x +
+						'" y="' + (y - weird) +
+						'" width="' + xDist + '" height="' + (inc) + '"/>';
+					//tooltip box
+					E.rects += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point-' +
+						(all) + '-tooltip-rect"rx="1"x="' + (x + self.padding / 2) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
+						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (xDist - self.padding) + '"/>';
+					//tooltip text
+					E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + (all) +
+						'-tooltip" x="' + (x + (xDist) / 2 - self.padding) + '" y="' +
+						(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[t][j] + '</text></g>';
+				}
+				++j;
+			}
 		}
 		this.finishGraph(xLines, yLines, E, thing);
 	};
@@ -717,6 +757,33 @@ var GraphPie = GraphPie || (function($) {
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
 		var self = this.obj;
+		var pie = '<svg>';
+		//constants
+		var START = 'M340,251';
+		var ARC = 'A154,154,0,0,1,';
+		var lineFrom = false;
+		var lineTo;
+		pie += '<g class="paths">';
+		// pie += '<path d="M340,251 L191,290 A154,154,0,0,1,340,97 Z"' +
+		// 	'stroke="#ffffff" stroke-width="1" fill="#990099"></path>' +
+		// 	'<path d="M340,251 L340,97 A154,154,0,0,1,379,399 Z"' +
+		// 	'stroke="#ffffff" stroke-width="1" fill="#3366cc"></path>' +
+		// 	'<path d="M340,251 L379,399 A154,154,0,0,1,300,400 Z"' +
+		// 	'stroke="#ffffff" stroke-width="1" fill="#000"></path>' +
+		// 	'<path d="M340,251 L300,399 A154,154,0,0,1,231,359 Z"' +
+		// 	'stroke="#ffffff" stroke-width="1" fill="#ff9900"></path>' +
+		// 	'<path d="M340,251 L231,359 A154,154,0,0,1,191,290 Z"' +
+		// 	' stroke="#ffffff" stroke-width="1" fill="#109618"></path>' +
+		// 	'';
+		for (var i = 0; i < self.points.length; ++i) {
+			if (!lineFrom) lineFrom = 191 + ',' + 290;
+			lineTo = 340 + ',' + 97;
+			pie += '<path d="' + START + ' L' + lineFrom + ' ' + ARC + lineTo + ' Z"></path>';
+			lineFrom = lineTo; //set so next path starts where this one left off
+		}
+		pie += '</g></svg>';
+		console.log(pie);
+		this.handleAppend('', pie);
 	};
 	return GraphPie;
 })(jQuery);
