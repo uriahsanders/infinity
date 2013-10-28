@@ -238,7 +238,7 @@ var Graph = Graph || (function($) {
 		} else if (obj) {
 			this.obj = obj; //only use given args
 		}
-		console.log('(SVGGraph): this.obj = \n' + JSON.stringify(this.obj) + '\n'); //output JSON
+		//console.log('(SVGGraph): this.obj = \n' + JSON.stringify(this.obj) + '\n'); //output JSON
 	};
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
 		return JSON.stringify(this.obj);
@@ -415,10 +415,14 @@ var Graph = Graph || (function($) {
 				$(this.obj.attachTo).append(finish);
 		}
 	};
-	Graph.prototype.addLegend = function() {
+	Graph.prototype.addLegend = function(thing) {
 		var self = this.obj;
+		//HACK!!!!!!!!!!!!!!!!!!1
+		//hack for to(), must change later:
+		var xDist = (thing === 'update') ? self.xDist / self.points.length : self.xDist;
+		if(thing === 'update' && this.obj.special === 'area') xDist *= self.points.length;
 		var legend = '<g class="legend">';
-		var x = (self.Gwidth - self.mainOffset - self.xDist * 2 + self.padding*2);
+		var x = (self.Gwidth - self.mainOffset - xDist * 2 + self.padding * 2);
 		var width = 30; //width of rect
 		var height = 30;
 		self.dataNames = self.dataNames || [];
@@ -426,7 +430,7 @@ var Graph = Graph || (function($) {
 		if (self.multiplePoints === false) {
 			legend += '<g class="legend-pair">';
 			legend += '<rect x="' + (x) +
-				'" y="' + (self.yOffset) + '"width="'+width+'"height="'+height+'"></rect>';
+				'" y="' + (self.yOffset) + '"width="' + width + '"height="' + height + '"></rect>';
 			legend += '<text x="' + (x + width + 5) +
 				'"y="' + (self.yOffset + height / 2) + '">' + (self.dataNames[0] || 'Data') + '</text>';
 			legend += '</g>';
@@ -436,7 +440,7 @@ var Graph = Graph || (function($) {
 				legend += '<g class="legend-pair">';
 				//RECT
 				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
-					'" y="' + (y) + '"width="'+width+'"height="'+height+'"></rect>';
+					'" y="' + (y) + '"width="' + width + '"height="' + height + '"></rect>';
 				//TEXT
 				legend += '<text x="' + (x + width + 5) +
 					'"y="' + (y + height / 2) + '">' + (self.dataNames[i] || 'Data' + (i === 0 ? '' : ' ' + i)) + '</text>';
@@ -539,7 +543,7 @@ var GraphLinear = GraphLinear || (function($) {
 		var E = this.openTags(); //elements
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
-		if (self.legend === true) E.legend = this.addLegend();
+		if (self.legend === true) E.legend = this.addLegend(thing);
 		var area = self.special === 'area';
 		if (area && self.multiplePoints === false) E.path = '<g class="area"><path d="';
 		//*remember: xLines are vertical, yLines are horizontal
@@ -582,6 +586,7 @@ var GraphLinear = GraphLinear || (function($) {
 			}
 		} else {
 			var inc, x, j;
+			if(thing === 'update' && area) self.xDist *= self.points.length;
 			//we need to push the right # of empty arrays into the multi arrays for points
 			for (var i = 0; i < self.points.length; ++i) {
 				self.mxOfPoints.push([]);
@@ -665,7 +670,7 @@ var GraphBar = GraphBar || (function($) {
 		var yLines = self.y + 1;
 		var E = this.openTags();
 		E.rects = '<g class="rects">';
-		if (self.legend === true) E.legend = this.addLegend();
+		if (self.legend === true) E.legend = this.addLegend(thing);
 		var inc, x, y, weird; //increment
 		weird = self.yDist - 30;
 		if (self.multiplePoints === false) {
@@ -690,8 +695,14 @@ var GraphBar = GraphBar || (function($) {
 			}
 		} else {
 			E.points += '<g class="lines">';
-			self.xDist = self.xDist * self.points.length; //add more dist so we can fit more bars
-			var xDist = self.xDist / self.points.length; //this way width/x is only a fraction of actual dist
+			//HACK!!!!!!!!!!!!!!
+			//hack for to(), must change later
+			if(thing !== 'update'){
+				var xDist = self.xDist;
+				self.xDist = self.xDist * self.points.length; //add more dist so we can fit more bars
+			}else{
+				var xDist = self.xDist / self.points.length;
+			}
 			//okay, so we need to get the first point of each array
 			//then display them side by side and so on
 			//get longest array:
@@ -789,7 +800,7 @@ var GraphTable = GraphTable || (function($) {
 			}
 			var tds; //build with 
 			for (var i = 0; i < self.x.length; ++i) {
-				if (i < self.points.length - 1) headers += '<th>' + (self.yName || 'Y') + ' ' + (i + 1) + '</th>'; //add headers numerically
+				if (i < self.points.length - 1) headers += '<th>' + (self.yName || 'Data') + ' ' + (i + 1) + '</th>'; //add headers numerically
 				tds = '';
 				for (var t = 0; t < self.points.length; ++t) {
 					tds += all[t][i];

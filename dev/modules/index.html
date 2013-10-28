@@ -198,13 +198,12 @@
 		//pie.init();
 	</script>
 	<hr />
-	<h2>Graph with multiple points and legend:</h2>
-	<button id="do-linear">Make Linear</button> | <button id="do-bar">Make Bar</button> | 
-	<button id="do-table">Make Table</button> | <button id="do-area">Make Area</button>
+	<h2>A more in depth example:</h2>
+	<button id="do-linear">Linear</button> | <button id="do-bar">Bar</button> | 
+	<button id="do-table">Table</button> | <button id="do-area">Area</button>
 	<br><br>
 	<script>
-		var barz = new GraphBar({
-			example: true, //load example points and styling (below overrides it)
+		var obj = {
 			id: 'barz',
 			width: 800,
 			height: 350,
@@ -216,12 +215,32 @@
 				[32, 46, 75, 38, 62, 76, 82],
 				[12, 33, 25, 16, 87, 20, 0]
 			],
+			pointRadius: 3,
+			byCSS: {
+				'#barz .SVG-tooltip-box': {
+					fill: 'darkgrey',
+					opacity: 0.7,
+					display: 'none'
+				},
+				'#barz circle': {
+					opacity: 0.7,
+					stroke: '#000',
+					fill: 'lightblue'
+				}
+			},
 			xDist: 30
-		});
+		}
+		var barz = new GraphBar(obj);
 		barz.init();
 		$(document).ready(function(){
 			$(document).on('click', 'button[id^="do-"]', function(){
-				barz.to($(this).attr('id').substring(3));
+				var l = $(this).attr('id').substring(3);
+				if(l === 'area'){
+					obj.special = 'area';
+					barz.to('linear');
+					barz.update(obj);
+				}
+				else barz.to(l);
 			});
 		});
 	</script>
