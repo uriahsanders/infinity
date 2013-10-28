@@ -13,9 +13,9 @@
 	extremely versatile: everything is optional/changeable
 
 	Coming soon: (* denotes current focus)
-	pie graphs, scatter graphs,
+	pie graphs, scatter graphs, *
 	legends,
-	bar graphs with multiple points, *
+	average lines for bar and scatter graphs,
 	jquery plugin for UI
 */
 var Graph = Graph || (function($) {
@@ -154,21 +154,6 @@ var Graph = Graph || (function($) {
 			"stroke": obj.styles.lineStroke || "green",
 			"stroke-width": obj.styles.lineStokeWidth || "2"
 		};
-		//when using multiple lines make them different colors automatically
-		var colors = ['red', 'blue', 'green', 'orange'];
-		for (var i = 0; i < colors.length; ++i) {
-			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
-				"stroke": obj.styles.lineStroke || colors[i],
-				"stroke-width": obj.styles.lineStokeWidth || "2"
-			};
-			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
-				"fill": colors[i]
-			};
-			styling.style[this.parseS(obj.id, '.rect-of-' + i)] = {
-				"fill": colors[i],
-				"opacity": 0.7
-			};
-		}
 		styling.style[this.parseS(obj.id, '.rect')] = {
 			"stroke": obj.styles.lineStroke || "grey",
 			"stroke-width": obj.styles.lineStokeWidth || "2",
@@ -206,6 +191,21 @@ var Graph = Graph || (function($) {
 			"border-collapse": 'collapse',
 			"text-align": 'center'
 		};
+		//when using multiple lines make them different colors automatically
+		var colors = ['red', 'blue', 'green', 'orange'];
+		for (var i = 0; i < colors.length; ++i) {
+			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
+				"stroke": obj.styles.lineStroke || colors[i],
+				"stroke-width": obj.styles.lineStokeWidth || "2"
+			};
+			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
+				"fill": colors[i]
+			};
+			styling.style[this.parseS(obj.id, '.rect-of-' + i)] = {
+				"fill": colors[i],
+				"opacity": 0.7
+			};
+		}
 		//for styling completely with your own object
 		for (var name in obj.byCSS) {
 			//make sure id is in proper form
@@ -634,15 +634,14 @@ var GraphBar = GraphBar || (function($) {
 		E.rects = '<g class="rects">';
 		var inc, x, y, weird; //increment
 		weird = self.yDist - 30;
-		//more unique stuff for bar graph now:
-		//RECTS
 		if (self.multiplePoints === false) {
 			for (var i = 0; i < xLines - 1; ++i) {
 				//height must = last section of "y"
 				//if i = 0, let inc = 1 so we can at least see at line at origin
-				inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
+				inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
 				x = (i * self.xDist + self.mainOffset);
 				y = (self.height - self.padding - self.yOffset - (inc));
+				//bars
 				E.rects += '<rect class="rect"id="' + self.id + '-point-' + i + '" x="' + x +
 					'" y="' + (y - weird) +
 					'" width="' + self.xDist + '" height="' + (inc) + '"/>';
@@ -667,19 +666,20 @@ var GraphBar = GraphBar || (function($) {
 			}
 			var j = 0;
 			var all;
-			for (var i = 0; i < max; ++i) {
-				for (var t = 0; t < self.points.length; ++t) {
-					all = t + j + i + i;
-					inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 1;
+			for (var i = 0; i < max; ++i) { //so we get throguh the length of every array
+				for (var t = 0; t < self.points.length; ++t) { //this lets us loop array td instead of lr with j
+					all = t + j + i + i; //lol wut?
+					inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
 					x = ((all) * (xDist) + self.mainOffset);
 					y = (self.height - self.padding - self.yOffset - (inc));
+					//bars
 					E.rects += '<rect class="rect-of-'+t+'"id="' + self.id + '-point-' + (all) + '" x="' + x +
 						'" y="' + (y - weird) +
 						'" width="' + xDist + '" height="' + (inc) + '"/>';
 					//tooltip box
-					E.rects += '<g><rect class="SVG-tooltip-box"id="' + self.id + '-point-' +
-						(all) + '-tooltip-rect"rx="1"x="' + (x + self.padding / 2) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
-						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (xDist - self.padding) + '"/>';
+					E.rects += '<g><rect class="rect-of-'+t+' SVG-tooltip-box "id="' + self.id + '-point-' +
+						(all) + '-tooltip-rect"rx="1"x="' + (x) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
+						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (xDist) + '"/>';
 					//tooltip text
 					E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + (all) +
 						'-tooltip" x="' + (x + (xDist) / 2 - self.padding) + '" y="' +
