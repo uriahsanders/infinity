@@ -198,7 +198,10 @@
 		//pie.init();
 	</script>
 	<hr />
-	<h2>Bar graphs with multiple points:</h2>
+	<h2>Graph with multiple points and legend:</h2>
+	<button id="do-linear">Make Linear</button> | <button id="do-bar">Make Bar</button> | 
+	<button id="do-table">Make Table</button> | <button id="do-area">Make Area</button>
+	<br><br>
 	<script>
 		var barz = new GraphBar({
 			example: true, //load example points and styling (below overrides it)
@@ -207,6 +210,7 @@
 			height: 350,
 			multiplePoints: true,
 			xGrid: false,
+			legend: true,
 			points: [
 				[0, 26, 33, 74, 12, 49, 33],
 				[32, 46, 75, 38, 62, 76, 82],
@@ -215,6 +219,11 @@
 			xDist: 30
 		});
 		barz.init();
+		$(document).ready(function(){
+			$(document).on('click', 'button[id^="do-"]', function(){
+				barz.to($(this).attr('id').substring(3));
+			});
+		});
 	</script>
 	<h2>Everything but Pie graphs can use the multiple points option, btw.</h2>
 	<hr>

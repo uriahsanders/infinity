@@ -71,6 +71,7 @@ var Graph = Graph || (function($) {
 			mxOfPoints: [],
 			myOfPoints: [],
 			multiplePoints: false,
+			legend: false,
 			interactive: true,
 			grid: true,
 			xGrid: true,
@@ -414,6 +415,37 @@ var Graph = Graph || (function($) {
 				$(this.obj.attachTo).append(finish);
 		}
 	};
+	Graph.prototype.addLegend = function() {
+		var self = this.obj;
+		var legend = '<g class="legend">';
+		var x = (self.Gwidth - self.mainOffset - self.xDist * 2 + self.padding*2);
+		var width = 30; //width of rect
+		var height = 30;
+		self.dataNames = self.dataNames || [];
+		legend += '<g class="legend-pair">';
+		if (self.multiplePoints === false) {
+			legend += '<g class="legend-pair">';
+			legend += '<rect x="' + (x) +
+				'" y="' + (self.yOffset) + '"width="'+width+'"height="'+height+'"></rect>';
+			legend += '<text x="' + (x + width + 5) +
+				'"y="' + (self.yOffset + height / 2) + '">' + (self.dataNames[0] || 'Data') + '</text>';
+			legend += '</g>';
+		} else {
+			var y = self.yOffset;
+			for (var i = 0; i < self.points.length; ++i) {
+				legend += '<g class="legend-pair">';
+				//RECT
+				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
+					'" y="' + (y) + '"width="'+width+'"height="'+height+'"></rect>';
+				//TEXT
+				legend += '<text x="' + (x + width + 5) +
+					'"y="' + (y + height / 2) + '">' + (self.dataNames[i] || 'Data' + (i === 0 ? '' : ' ' + i)) + '</text>';
+				legend += '</g>';
+				y += self.yDist + self.padding;
+			}
+		}
+		return legend + '</g>';
+	};
 	Graph.prototype.help = function() { // show a popup with help information
 		alert("Someday this will actually be helpful.");
 	};
@@ -507,6 +539,7 @@ var GraphLinear = GraphLinear || (function($) {
 		var E = this.openTags(); //elements
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
+		if (self.legend === true) E.legend = this.addLegend();
 		var area = self.special === 'area';
 		if (area && self.multiplePoints === false) E.path = '<g class="area"><path d="';
 		//*remember: xLines are vertical, yLines are horizontal
@@ -632,6 +665,7 @@ var GraphBar = GraphBar || (function($) {
 		var yLines = self.y + 1;
 		var E = this.openTags();
 		E.rects = '<g class="rects">';
+		if (self.legend === true) E.legend = this.addLegend();
 		var inc, x, y, weird; //increment
 		weird = self.yDist - 30;
 		if (self.multiplePoints === false) {
@@ -655,8 +689,9 @@ var GraphBar = GraphBar || (function($) {
 					(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[i] + '</text></g>';
 			}
 		} else {
+			E.points += '<g class="lines">';
 			self.xDist = self.xDist * self.points.length; //add more dist so we can fit more bars
-			var xDist = self.xDist / self.points.length; //so now every time to use x fro graph must be a fraction of full dist
+			var xDist = self.xDist / self.points.length; //this way width/x is only a fraction of actual dist
 			//okay, so we need to get the first point of each array
 			//then display them side by side and so on
 			//get longest array:
@@ -666,27 +701,52 @@ var GraphBar = GraphBar || (function($) {
 			}
 			var j = 0;
 			var all;
+			var avgs = []; //to store averages for average line
 			for (var i = 0; i < max; ++i) { //so we get throguh the length of every array
 				for (var t = 0; t < self.points.length; ++t) { //this lets us loop array td instead of lr with j
 					all = t + j + i + i; //lol wut?
 					inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
 					x = ((all) * (xDist) + self.mainOffset);
+					self.xOfPoints.push(x);
 					y = (self.height - self.padding - self.yOffset - (inc));
 					//bars
-					E.rects += '<rect class="rect-of-'+t+'"id="' + self.id + '-point-' + (all) + '" x="' + x +
+					E.rects += '<rect class="rect-of-' + t + '"id="' + self.id + '-point-' + (all) + '" x="' + x +
 						'" y="' + (y - weird) +
 						'" width="' + xDist + '" height="' + (inc) + '"/>';
 					//tooltip box
-					E.rects += '<g><rect class="rect-of-'+t+' SVG-tooltip-box "id="' + self.id + '-point-' +
+					E.rects += '<g><rect class="rect-of-' + t + ' SVG-tooltip-box "id="' + self.id + '-point-' +
 						(all) + '-tooltip-rect"rx="1"x="' + (x) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
 						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (xDist) + '"/>';
 					//tooltip text
 					E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + (all) +
 						'-tooltip" x="' + (x + (xDist) / 2 - self.padding) + '" y="' +
 						(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[t][j] + '</text></g>';
+					if (j === i) {
+						//grouping each X value
+						avgs.push(y - inc);
+					}
 				}
 				++j;
 			}
+			//AVERAGE LINES
+			/*var avgPts = [];
+			for (var i = 0; i < avgs.length; i += self.points.length) {
+				avgPts.push((function() {
+					var sums = 0;
+					//add up points tb then return avg.
+					for (var t = 0; t < self.points.length; ++t) {
+						sums += avgs[i + t];
+					}
+					return sums / self.points.length;
+				})());
+			}
+			//so now avgPts holds our avg points for every nth bar; lets draw line to each one from loop
+			console.log(avgPts);
+			for (var i = 0; i < avgPts.length; ++i) {
+				var j = i + 1;
+				E.points += '<line id="' + self.id + '-0-line" x1="' + (self.xOfPoints[i] + xDist + xDist/self.points.length) + '" x2="' +
+					(self.xOfPoints[j] + xDist) + '" y1="' + avgPts[i] + '" y2="' + avgPts[j] + '"></line>';
+			}*/
 		}
 		this.finishGraph(xLines, yLines, E, thing);
 	};
