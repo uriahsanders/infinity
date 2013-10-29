@@ -15,7 +15,6 @@
 	Coming soon: (* denotes current focus)
 	pie graphs, scatter graphs, *
 	average lines for bar and scatter graphs,
-	jquery plugin for UI
 */
 var Graph = Graph || (function($) {
 	"use strict";
@@ -416,13 +415,32 @@ var Graph = Graph || (function($) {
 	};
 	Graph.prototype.addLegend = function(thing) {
 		var self = this.obj;
+		var hoverHandle = function(what){
+			var to = (what === 'add') ? 1 : 0.7;
+			var clas = $(this).attr('class').substring(6);
+			$('line[class$="'+clas+'"], rect[class$="'+clas+'"]').each(function(){
+				$(this).css('opacity', to);
+			});
+		}
+		if(self.interactive === true && self.multiplePoints === true){
+			$(document).ready(function(){
+				$(document).on('mouseover', 'g[id^="legend-"]', function(){
+					hoverHandle.call(this, 'add');
+				});
+				$(document).on('mouseout', 'g[id^="legend-"]', function(){
+					var clas = $(this).attr('class').substring(6);
+					$('line[class$="'+clas+'"], rect[class$="'+clas+'"]').each(function(){
+						hoverHandle.call(this, 'take');
+					});
+				});
+			});
+		}
 		var xDist = self.xDist;
 		var legend = '<g class="legend">';
 		var x = self.legendX || (self.Gwidth - self.xDist);
 		var width = 30; //width of rect
 		var height = 30;
 		self.dataNames = self.dataNames || [];
-		legend += '<g class="legend-pair">';
 		if (self.multiplePoints === false) {
 			legend += '<g class="legend-pair">';
 			legend += '<rect x="' + (x) +
@@ -433,7 +451,7 @@ var Graph = Graph || (function($) {
 		} else {
 			var y = self.yOffset;
 			for (var i = 0; i < self.points.length; ++i) {
-				legend += '<g class="legend-pair">';
+				legend += '<g id="legend-'+i+'"class="legend-of-'+i+'">';
 				//RECT
 				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
 					'" y="' + (y) + '"width="' + width + '"height="' + height + '"></rect>';
@@ -444,7 +462,7 @@ var Graph = Graph || (function($) {
 				y += self.yDist + self.padding;
 			}
 		}
-		return legend + '</g>';
+		return legend;
 	};
 	Graph.prototype.help = function() { // show a popup with help information
 		alert("Someday this will actually be helpful.");
@@ -469,11 +487,11 @@ var GraphLinear = GraphLinear || (function($) {
 					var tooltipRect = '#' + $(thiz).attr('class') + '-tooltip-rect';
 					var s = parseFloat($(this).css('stroke-width'));
 					if (action === 'add') {
-						$(this).css('stroke-width', s + .5);
+						$(this).css('stroke-width', obj.lineStrokeWidth || 3);
 						$(tooltip).show();
 						$(tooltipRect).show();
 					} else {
-						$(this).css('stroke-width', s - .5);
+						$(this).css('stroke-width', obj.lineStrokeWidth - 1 || 2);
 						$(tooltip).hide();
 						$(tooltipRect).hide();
 					}
