@@ -416,14 +416,9 @@ var Graph = Graph || (function($) {
 	};
 	Graph.prototype.addLegend = function(thing) {
 		var self = this.obj;
-		//HACK!!!!!!!!!!!!!!!!!!1
-		//hack for to(), must change later:
-		var xDist = ((thing === 'update' && this.obj.special === 'area') || this.obj.type === 'bar') ?
-			self.xDist / self.points.length :
-			self.xDist;
-		if (thing === 'update' && this.obj.special === 'area') xDist *= self.points.length;
+		var xDist = self.xDist;
 		var legend = '<g class="legend">';
-		var x = (self.Gwidth - self.mainOffset - xDist * 2 + self.padding * 2);
+		var x = self.legendX || (self.Gwidth - self.xDist);
 		var width = 30; //width of rect
 		var height = 30;
 		self.dataNames = self.dataNames || [];
@@ -587,8 +582,6 @@ var GraphLinear = GraphLinear || (function($) {
 			}
 		} else {
 			var inc, x, j;
-			//HACK!!!!!!!!!!!
-			//if(thing === 'update' && area) self.xDist *= self.points.length;
 			//we need to push the right # of empty arrays into the multi arrays for points
 			for (var i = 0; i < self.points.length; ++i) {
 				self.mxOfPoints.push([]);
@@ -697,8 +690,6 @@ var GraphBar = GraphBar || (function($) {
 			}
 		} else {
 			E.points += '<g class="lines">';
-			//HACK!!!!!!!!!!!!!!
-			//hack for to(), must change later
 			var xDist = self.xDist / self.points.length;
 			//okay, so we need to get the first point of each array
 			//then display them side by side and so on
