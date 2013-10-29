@@ -6,6 +6,7 @@
 	<title>Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="SVGGraph.js"></script>
+	<script src="jquery.graphify.js"></script>
 </head>
 <body>
 	<h1>Example Graphs (View Page source to see initiation of SVGGraph Module)</h1>
@@ -199,56 +200,41 @@
 	</script>
 	<hr />
 	<h2>A more in depth example:</h2>
-	<button id="do-linear">Linear</button> | <button id="do-bar">Bar</button> | 
-	<button id="do-table">Table</button> | <button id="do-area">Area</button>
-	<br><br>
+	<div id="grapher"style="height: 350px;width:800px;"></div>
 	<script>
-		var obj = {
-			id: 'barz',
-			width: 800,
-			height: 350,
-			multiplePoints: true,
-			xGrid: false,
-			legend: true,
-			points: [
-				[0, 26, 33, 74, 12, 49, 33],
-				[32, 46, 75, 38, 62, 76, 82],
-				[12, 33, 25, 16, 87, 20, 0]
-			],
-			pointRadius: 3,
-			byCSS: {
-				'#barz .SVG-tooltip-box': {
-					fill: 'darkgrey',
-					opacity: 0.7,
-					display: 'none'
-				},
-				'#barz circle': {
-					opacity: 0.7,
-					stroke: '#000',
-					fill: 'lightblue'
-				}
-			},
-			xDist: 30
-		}
-		var barz = new GraphBar(obj);
-		barz.init();
 		$(document).ready(function(){
-			$(document).on('click', 'button[id^="do-"]', function(){
-				var l = $(this).attr('id').substring(3);
-				if(l === 'area'){
-					obj.special = 'area';
-					barz.to('linear');
-					barz.update(obj);
-				}
-				else barz.to(l);
+			$('#grapher').graphify({}, {
+				id: 'ggg',
+				width: 800,
+				height: 350,
+				multiplePoints: true,
+				xGrid: false,
+				legend: true,
+				points: [
+					[0, 26, 33, 74, 12, 49, 33],
+					[32, 46, 75, 38, 62, 76, 82],
+					[12, 33, 25, 16, 87, 20, 0]
+				],
+				pointRadius: 3,
+				byCSS: {
+					'#ggg .SVG-tooltip-box': {
+						fill: 'darkgrey',
+						opacity: 0.7,
+						display: 'none'
+					},
+					'#ggg circle': {
+						opacity: 0.7,
+						stroke: '#000',
+						fill: 'lightblue'
+					}
+				},
+				xDist: 90
 			});
 		});
 	</script>
+	<br><br>
 	<h2>Everything but Pie graphs can use the multiple points option, btw.</h2>
 	<hr>
 	<h2>Scatter graph:</h2>
-	<script>
-
-	</script>
 </body>
 </html>

@@ -14,7 +14,6 @@
 
 	Coming soon: (* denotes current focus)
 	pie graphs, scatter graphs, *
-	legends,
 	average lines for bar and scatter graphs,
 	jquery plugin for UI
 */
@@ -419,8 +418,10 @@ var Graph = Graph || (function($) {
 		var self = this.obj;
 		//HACK!!!!!!!!!!!!!!!!!!1
 		//hack for to(), must change later:
-		var xDist = (thing === 'update') ? self.xDist / self.points.length : self.xDist;
-		if(thing === 'update' && this.obj.special === 'area') xDist *= self.points.length;
+		var xDist = ((thing === 'update' && this.obj.special === 'area') || this.obj.type === 'bar') ?
+			self.xDist / self.points.length :
+			self.xDist;
+		if (thing === 'update' && this.obj.special === 'area') xDist *= self.points.length;
 		var legend = '<g class="legend">';
 		var x = (self.Gwidth - self.mainOffset - xDist * 2 + self.padding * 2);
 		var width = 30; //width of rect
@@ -461,7 +462,6 @@ var GraphLinear = GraphLinear || (function($) {
 		obj = obj || {};
 		obj.type = 'linear';
 		Graph.call(this, obj);
-
 		var pointHandle = function(action) {
 			var $nat = $(this).attr('id');
 			var matcher = $nat.split('-');
@@ -472,12 +472,13 @@ var GraphLinear = GraphLinear || (function($) {
 				if ($(this).attr('id').split('-')[1] === num) {
 					var tooltip = '#' + $(thiz).attr('class') + '-tooltip';
 					var tooltipRect = '#' + $(thiz).attr('class') + '-tooltip-rect';
+					var s = parseFloat($(this).css('stroke-width'));
 					if (action === 'add') {
-						$(this).css('stroke-width', parseFloat($(this).css('stroke-width')) + .5);
+						$(this).css('stroke-width', s + .5);
 						$(tooltip).show();
 						$(tooltipRect).show();
 					} else {
-						$(this).css('stroke-width', parseFloat($(this).css('stroke-width')) - .5);
+						$(this).css('stroke-width', s - .5);
 						$(tooltip).hide();
 						$(tooltipRect).hide();
 					}
@@ -586,7 +587,8 @@ var GraphLinear = GraphLinear || (function($) {
 			}
 		} else {
 			var inc, x, j;
-			if(thing === 'update' && area) self.xDist *= self.points.length;
+			//HACK!!!!!!!!!!!
+			//if(thing === 'update' && area) self.xDist *= self.points.length;
 			//we need to push the right # of empty arrays into the multi arrays for points
 			for (var i = 0; i < self.points.length; ++i) {
 				self.mxOfPoints.push([]);
@@ -697,12 +699,7 @@ var GraphBar = GraphBar || (function($) {
 			E.points += '<g class="lines">';
 			//HACK!!!!!!!!!!!!!!
 			//hack for to(), must change later
-			if(thing !== 'update'){
-				var xDist = self.xDist;
-				self.xDist = self.xDist * self.points.length; //add more dist so we can fit more bars
-			}else{
-				var xDist = self.xDist / self.points.length;
-			}
+			var xDist = self.xDist / self.points.length;
 			//okay, so we need to get the first point of each array
 			//then display them side by side and so on
 			//get longest array:
@@ -775,7 +772,7 @@ var GraphTable = GraphTable || (function($) {
 	GraphTable.prototype.init = function(thing) {
 		console.log("Table graph initialized.");
 		var self = this.obj;
-		var headers = '<th>' + (self.yName || 'Y') + '</th>'; //first header will always just be name of y
+		var headers = '<th>' + (self.yName || 'Data') + '</th>'; //first header will always just be name of y
 		//within each row is [num | x | y] <td>'s
 		var row = '<tr>';
 		if (self.multiplePoints !== true) {
