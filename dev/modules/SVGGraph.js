@@ -14,6 +14,7 @@
 
 	Coming soon: (* denotes current focus)
 	pie graphs, scatter graphs, *
+	x/y axis names,
 	average lines for bar and scatter graphs,
 */
 var Graph = Graph || (function($) {
@@ -191,7 +192,8 @@ var Graph = Graph || (function($) {
 			"text-align": 'center'
 		};
 		//when using multiple lines make them different colors automatically
-		var colors = ['red', 'blue', 'green', 'orange'];
+		var colors = obj.colors || ['red', 'blue', 'green', 'orange'];
+		if(obj.colors) obj.colors.push('#000'); //so bar spaces dont takeup colors
 		for (var i = 0; i < colors.length; ++i) {
 			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
 				"stroke": obj.styles.lineStroke || colors[i],
@@ -416,9 +418,15 @@ var Graph = Graph || (function($) {
 	Graph.prototype.addLegend = function(thing) {
 		var self = this.obj;
 		var hoverHandle = function(what){
-			var to = (what === 'add') ? 1 : 0.7;
+			var to = (what === 'add') ? 0.8 : 0.7;
 			var clas = $(this).attr('class').substring(6);
-			$('line[class$="'+clas+'"], rect[class$="'+clas+'"]').each(function(){
+			$('line[class$="'+clas+'"]').each(function(){
+				var op;
+				if(what === 'add') op = 1;
+				else op = 0.7;
+				$(this).css('opacity', op);
+			});
+			$('rect[class$="'+clas+'"]').each(function(){
 				$(this).css('opacity', to);
 			});
 		}
@@ -428,10 +436,7 @@ var Graph = Graph || (function($) {
 					hoverHandle.call(this, 'add');
 				});
 				$(document).on('mouseout', 'g[id^="legend-"]', function(){
-					var clas = $(this).attr('class').substring(6);
-					$('line[class$="'+clas+'"], rect[class$="'+clas+'"]').each(function(){
-						hoverHandle.call(this, 'take');
-					});
+					hoverHandle.call(this, 'take');
 				});
 			});
 		}
@@ -456,7 +461,7 @@ var Graph = Graph || (function($) {
 				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
 					'" y="' + (y) + '"width="' + width + '"height="' + height + '"></rect>';
 				//TEXT
-				legend += '<text x="' + (x + width + 5) +
+				legend += '<text class="legend-of-'+i+'"x="' + (x + width + 5) +
 					'"y="' + (y + height / 2) + '">' + (self.dataNames[i] || 'Data' + (i === 0 ? '' : ' ' + i)) + '</text>';
 				legend += '</g>';
 				y += self.yDist + self.padding;
@@ -708,7 +713,6 @@ var GraphBar = GraphBar || (function($) {
 			}
 		} else {
 			E.points += '<g class="lines">';
-			var xDist = self.xDist / self.points.length;
 			//okay, so we need to get the first point of each array
 			//then display them side by side and so on
 			//get longest array:
@@ -716,35 +720,47 @@ var GraphBar = GraphBar || (function($) {
 			for (var i = 0; i < self.points.length; ++i) {
 				if (max < self.points[i].length) max = self.points[i].length;
 			}
+			//add spaces between data sets
+			var spaces = [];
+			for(var i = 0; i < max; ++i){
+				spaces.push(0);
+			}
+			self.points.push(spaces);
+			var xDist = self.xDist / self.points.length;
 			var j = 0;
 			var all;
+			var ref;
 			var avgs = []; //to store averages for average line
 			for (var i = 0; i < max; ++i) { //so we get throguh the length of every array
 				for (var t = 0; t < self.points.length; ++t) { //this lets us loop array td instead of lr with j
-					all = t + j + i + i; //lol wut?
-					inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
-					x = ((all) * (xDist) + self.mainOffset);
-					self.xOfPoints.push(x);
-					y = (self.height - self.padding - self.yOffset - (inc));
-					//bars
-					E.rects += '<rect class="rect-of-' + t + '"id="' + self.id + '-point-' + (all) + '" x="' + x +
-						'" y="' + (y - weird) +
-						'" width="' + xDist + '" height="' + (inc) + '"/>';
-					//tooltip box
-					E.rects += '<g><rect class="rect-of-' + t + ' SVG-tooltip-box "id="' + self.id + '-point-' +
-						(all) + '-tooltip-rect"rx="1"x="' + (x) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
-						'"height="' + (self.yDist + self.padding / 2) + '"width="' + (xDist) + '"/>';
-					//tooltip text
-					E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + (all) +
-						'-tooltip" x="' + (x + (xDist) / 2 - self.padding) + '" y="' +
-						(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[t][j] + '</text></g>';
-					if (j === i) {
-						//grouping each X value
-						avgs.push(y - inc);
+					if(t  !== self.points.length - 1){ //skip over spaces array
+						all = t + j + (i*(self.points.length - 1)); // + (i/2)
+						ref = t + j + i*2;
+						inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
+						x = ((all) * (xDist) + self.mainOffset);
+						self.xOfPoints.push(x);
+						y = (self.height - self.padding - self.yOffset - (inc));
+						//bars
+						E.rects += '<rect class="rect-of-' + t + '"id="' + self.id + '-point-' + (ref) + '" x="' + x +
+							'" y="' + (y - weird) +
+							'" width="' + (xDist) + '" height="' + (inc) + '"/>';
+						//tooltip box
+						E.rects += '<g><rect class="rect-of-' + t + ' SVG-tooltip-box "id="' + self.id + '-point-' +
+							(ref) + '-tooltip-rect"rx="1"x="' + (x) + '"y="' + (y - weird - self.yDist - self.padding * 2) +
+							'"height="' + (self.yDist + self.padding / 2) + '"width="' + (xDist) + '"/>';
+						//tooltip text
+						E.rects += '<text class="SVG-tooltip"id="' + self.id + '-point-' + (ref) +
+							'-tooltip" x="' + (x + (xDist) / 2 - self.padding) + '" y="' +
+							(y - weird - self.yDist / 2 - self.padding) + '">' + self.points[t][j] + '</text></g>';
+						if (j === i) {
+							//grouping each X value
+							avgs.push(y - inc);
+						}
 					}
 				}
 				++j;
 			}
+			self.points.pop(); //remove spacing array
 			//AVERAGE LINES
 			/*var avgPts = [];
 			for (var i = 0; i < avgs.length; i += self.points.length) {

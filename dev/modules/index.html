@@ -10,6 +10,45 @@
 </head>
 <body>
 	<h1>Example Graphs (View Page source to see initiation of SVGGraph Module)</h1>
+	<h2>Example using the jQuery plugin (My first one!):</h2>
+	<div id="grapher"style="height: 350px;width:800px;"></div>
+	<script>
+		$(document).ready(function(){
+			$('#grapher').graphify({
+				obj: {
+					id: 'ggg',
+					width: 775,
+					height: 350,
+					multiplePoints: true,
+					xGrid: false,
+					legend: true,
+					points: [
+						[0, 26, 33, 74, 12, 49, 33],
+						[32, 46, 75, 38, 62, 76, 82],
+						[12, 33, 25, 16, 87, 20, 0]
+					],
+					pointRadius: 3,
+					byCSS: {
+						'#ggg .SVG-tooltip-box': {
+							fill: 'darkgrey',
+							opacity: 0.7,
+							display: 'none'
+						},
+						'#ggg circle': {
+							opacity: 0.7,
+							stroke: '#000',
+							fill: 'lightblue'
+						}
+					},
+					xDist: 90
+				}
+			});
+		});
+	</script>
+	<br><br><br>
+	<h3>More options/documentation/pie graphs coming soon to the plugin.</h3>
+	<hr>
+	<h2>Example for .expand() and .save():</h2>
 	<div id="wrapper"></div><br />
 	<script>
 		//BAR GRAPH
@@ -121,58 +160,11 @@
 			scale: 10
 		});
 		g.init();
-		document.write("<hr /><h2>You can make tables as well (You can also change tables to graphs and use all the other functions)</h2>");
-
 		$('#turn').on('click', function(){
 			g.to('bar');
 			$(this).attr('disabled', 'true');
 		});
-		var table = new GraphTable({
-			xName: 'Dates',
-			yName: 'Data',
-			height: 350,
-			width: 1000,
-			multiplePoints: true,
-			points: [
-				[0, 26, 33, 74, 12, 49, 18],
-				[32, 46, 75, 38, 62, 76, 82],
-				[12, 33, 25, 16, 87, 4, 19]
-			]
-		});
-		table.init();
-	</script>
-	<hr>
-	<h2>This is an area graph. (3 lines)</h2>
-	<script>
-		var area = new GraphLinear({
-			special: 'area',
-			height: 350,
-			width: 800,
-			xDist: 100,
-			id: 'area',
-			pointRadius: 3,
-			byCSS: {
-				'#area .SVG-tooltip-box': {
-					fill: 'darkgrey',
-					opacity: 0.7,
-					display: 'none'
-				},
-				'#area circle': {
-					opacity: 0.7,
-					stroke: '#000',
-					fill: 'lightblue'
-				}
-			},
-			legend: true,
-			multiplePoints: true,
-			points: [
-				[0, 26, 33, 74, 12, 49, 33],
-				[32, 46, 75, 38, 62, 76, 82],
-				[12, 33, 25, 16, 87, 20, 0]
-			]
-		});
-		area.init();
-	</script>
+		</script>
 	<h2>You probably want some example code by now:</h2>
 	<h4>
 		<pre>
@@ -187,7 +179,6 @@
 		linear.init();
 		</pre>
 	</h4>
-	<h2>And thats it! (Omit options to get a default example)</h2>
 	<hr />
 	<h2>You can also create pie graphs. Isnt this amazing!</h2>
 	yeah...still working on it :P SCROLL ON!
@@ -200,42 +191,5 @@
 		//pie.init();
 	</script>
 	<hr />
-	<h2>A more in depth example, using the jQuery plugin (My first one!):</h2>
-	<div id="grapher"style="height: 350px;width:800px;"></div>
-	<script>
-		$(document).ready(function(){
-			$('#grapher').graphify({}, {
-				id: 'ggg',
-				width: 800,
-				height: 350,
-				multiplePoints: true,
-				xGrid: false,
-				legend: true,
-				points: [
-					[0, 26, 33, 74, 12, 49, 33],
-					[32, 46, 75, 38, 62, 76, 82],
-					[12, 33, 25, 16, 87, 20, 0]
-				],
-				pointRadius: 3,
-				byCSS: {
-					'#ggg .SVG-tooltip-box': {
-						fill: 'darkgrey',
-						opacity: 0.7,
-						display: 'none'
-					},
-					'#ggg circle': {
-						opacity: 0.7,
-						stroke: '#000',
-						fill: 'lightblue'
-					}
-				},
-				xDist: 90
-			});
-		});
-	</script>
-	<br><br>
-	<h2>Everything but Pie graphs can use the multiple points option, btw.</h2>
-	<hr>
-	<h2>Scatter graph:</h2>
 </body>
 </html>
