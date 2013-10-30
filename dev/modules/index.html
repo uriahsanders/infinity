@@ -18,10 +18,11 @@
 				obj: {
 					id: 'ggg',
 					width: 775,
-					height: 350,
+					height: 375,
 					multiplePoints: true,
 					xGrid: false,
 					legend: true,
+					title: 'My first SVG Graph!',
 					points: [
 						[0, 26, 33, 74, 12, 49, 33],
 						[32, 46, 75, 38, 62, 76, 82],
@@ -45,11 +46,11 @@
 			});
 		});
 	</script>
-	<br><br><br>
+	<br><br><br><br><br>
 	<h3>More options/documentation/pie graphs coming soon to the plugin.</h3>
 	<hr>
 	<h2>Example for .expand() and .save():</h2>
-	<div id="wrapper"></div><br />
+	<div id="wrapper"></div>
 	<script>
 		//BAR GRAPH
 		var graph = new GraphBar({
@@ -164,19 +165,26 @@
 			g.to('bar');
 			$(this).attr('disabled', 'true');
 		});
-		</script>
+	</script>
+	<hr>
 	<h2>You probably want some example code by now:</h2>
 	<h4>
 		<pre>
-		var linear = new GraphLinear({
+		//define options:
+		var options = {
 			addStyling: true, //load default css
 			x: ['mon', 'tue', 'wed', 'thu', 'fri'], //the x axis
 			scale: 100, //each Y goes up by 100
 			points: [12, 164, 1000, 45, 982], //Y values
 			attachTo: 'main' //append to an id
 			//and anything you dont specify is defaulted for you!
-		});
+		};
+		var linear = new GraphLinear(options);
 		linear.init();
+
+		//or if you want to use the jquery plugin:
+		$('#main').graphify({obj:options});
+		//plugin also has other options that are defaulted if not specified
 		</pre>
 	</h4>
 	<hr />
