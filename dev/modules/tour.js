@@ -1,20 +1,6 @@
-//infinity-forum.org 2013
-/*
-    -Tiny script to produce a simple page introduction
-    Example:
-    Tour.createElement({
-        attachTo: '#main',
-        txt: 'My first tour!',
-        arrowDir: 'left',
-        style: 'color:red'
-    });
-    Tour.init({
-        page: 'workspace',
-        localstorage: true
-    });
-*/
+//Infinity-forum.org 2013
+//-Tiny script to produce a simple page introduction
 var Tour = Tour || (function($){ //dont overwrite if Tour variable already exists
-    //CLICK-HANDLERS
     $(document).ready(function() {
         //finish the tour (all elements can be recovered with resumeTour())
         $(document).on('mousedown', '.finish-tour', function() {
@@ -29,28 +15,21 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
             Private.goTo('previous');
         });
     });
-    //END CLICK-HANDLERS
-    //declaring the object name explicitly for for easier information hiding
-    var Public = {}; //main object, public data
-    var Private = {}; //stuff i only want access in here; will not return
-    //PROPERTIES
-    //public:
+    var Public = {};
+    var Private = {};
     Public.version = '2.0.0';
-    //private:
     Private.button_nextElement = '&nbsp; <button class="next-tour-element">Next</button>';
     Private.button_previousElement  = '&nbsp; <button class="previous-tour-element">Previous</button>';
     Private.count = 0; //number of tour elements
     Private.selector = 0; //the number of the tour element that is currently being displayed
-    //END PROPERTIES
-    //METHODS
-    //public:
     Public.init = function(options){ //actually start the tour
         var options = options || {}; //empty object if not set
+        var style = options.style || '';
         var pageSet = (typeof options.page === 'undefined') ? false : true; //is the page var defined?
         if(pageSet) var pageVisited = options.page + 'HasBeenVisited'; //unique localstorage variable for this page
         //start tour if page has not been visited/set or if localStorage is being ignored
         if(typeof localStorage[pageVisited] === 'undefined' || options.localstorage !== true || !pageSet){
-            $('<div id="tour_dim_screen"></div>').appendTo(document.body).hide().fadeIn(); //dim the screen
+            $('<div id="tour_dim_screen"style="'+style+'"></div>').appendTo(document.body).hide().fadeIn(); //dim the screen
             Private.fadeRelevant(); //fade in the first element
             //do some cleaning up:
             $('.tour_div0 .previous-tour-element').remove(); //remove the "previous" button from the first element
@@ -66,10 +45,11 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
         var options = options || {};
         var element = options.attachTo || 'div:first'; 
         var txt = options.txt || '';
+        var title = options.title || '';
         var arrow = options.arrowDir || 'none';
         var style = options.style || '';
         //specifically: 1.Number the element, 2.Set arrow direction, 3.Add styling, 4.Input the text, 5.Add the buttons
-        $(element).after('<div class="tour_div' + Private.count + ' tour_arrow-' + arrow + '" style="' + style + '">' + txt + '<br /><br />' +
+        $(element).after('<div class="tour_div' + Private.count + ' tour_arrow-' + arrow + '" style="' + style + '">' + title + txt + '<br /><br />' +
             Private.button_nextElement + Private.button_previousElement  +
             '&nbsp; <button class="finish-tour">Finish</button></div>');
         ++Private.count; //up the count so we know we just added one more element
@@ -82,7 +62,6 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
     Public.removeAllElements = function(){ //actually remove all elements from the DOM for good
         $('div[class^="tour_div"], #tour_dim_screen').remove();
     };
-    //private:
     Private.fadeRelevant = function(){ //only what matters :)
         $('div[class^="tour_div"]').fadeOut(); //fade out all tour elements if any are displayed
         $('.tour_div' + Private.selector).fadeIn(); //fade in the selected element
@@ -95,6 +74,5 @@ var Tour = Tour || (function($){ //dont overwrite if Tour variable already exist
     Private.endTour = function(){ //fade out but dont remove all Tour stuff
         $('div[class^="tour_div"], #tour_dim_screen').fadeOut();
     };
-    //END METHODS
-    return Public; //make the main object public
-})(jQuery); //allow $ use within function
+    return Public;
+})(jQuery);

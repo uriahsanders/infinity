@@ -244,28 +244,14 @@ var Graph = Graph || (function($) {
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
 		return JSON.stringify(this.obj);
 	};
+	Graph.prototype.genToFunc = function(str){
+		//turn generic string into function name
+		return 'Graph'+str.charAt(0).toUpperCase() + str.substring(1);
+	};
 	Graph.prototype.expand = function(obj, thing) { //expand JSON into a graph (requires 'type' property of 'obj')
 		var obj = (typeof obj === 'string') ? jQuery.parseJSON(obj) : obj; //if in string form parse it
 		var graph;
-		switch (this.obj.type) {
-			case 'linear':
-				graph = new GraphLinear(obj);
-				break;
-			case 'bar':
-				graph = new GraphBar(obj);
-				break;
-			case 'pie':
-				graph = new GraphPie(obj);
-				break;
-			case 'area':
-				graph = new GraphArea(obj);
-				break;
-			case 'table':
-				graph = new GraphTable(obj);
-				break;
-			default:
-				console.log("(SVGGraph): Error, no graph type given; expansion could not complete.");
-		}
+		var graph = new window[this.genToFunc(this.obj.type)](obj);
 		thing = thing || '';
 		graph.init(thing);
 	};
@@ -462,7 +448,7 @@ var Graph = Graph || (function($) {
 				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
 					'" y="' + (y) + '"width="' + width + '"height="' + height + '"></rect>';
 				//TEXT
-				legend += '<text class="legend-of-'+i+'"x="' + (x + width + 5) +
+				legend += '<text style="cursor:default;"class="legend-of-'+i+'"x="' + (x + width + 5) +
 					'"y="' + (y + height / 2) + '">' + (self.dataNames[i] || 'Data' + (i === 0 ? '' : ' ' + i)) + '</text>';
 				legend += '</g>';
 				y += self.yDist + self.padding;
@@ -716,9 +702,8 @@ var GraphBar = GraphBar || (function($) {
 			E.points += '<g class="lines">';
 			//okay, so we need to get the first point of each array
 			//then display them side by side and so on
-			//get longest array:
 			var max = 0;
-			for (var i = 0; i < self.points.length; ++i) {
+			for (var i = 0; i < self.points.length; ++i) { //get longest array of points:
 				if (max < self.points[i].length) max = self.points[i].length;
 			}
 			//add spaces between data sets
@@ -735,7 +720,7 @@ var GraphBar = GraphBar || (function($) {
 			for (var i = 0; i < max; ++i) { //so we get throguh the length of every array
 				for (var t = 0; t < self.points.length; ++t) { //this lets us loop array td instead of lr with j
 					if(t  !== self.points.length - 1){ //skip over spaces array
-						all = t + j + (i*(self.points.length - 1)); // + (i/2)
+						all = t + j + (i*(self.points.length - 1));
 						ref = t + j + i*2;
 						inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
 						x = ((all) * (xDist) + self.mainOffset);
@@ -890,7 +875,7 @@ var GraphPie = GraphPie || (function($) {
 		var opts = $.extend({
 			height: this.css('height'),
 			width: this.css('width'),
-			start: 'GraphLinear', //type of graph to start with
+			start: 'linear', //type of graph to start with
 			pos: 'top',
 			obj: {} //actual obj for module
 		}, options);
@@ -910,7 +895,8 @@ var GraphPie = GraphPie || (function($) {
 		})();
 		if (opts.pos === 'top') this.append(buttons + '<br/><br />');
 		//Initiation
-		var graph = new window[opts.start](opts.obj);
+		var SVG = new Graph();
+		var graph = new window[SVG.genToFunc(opts.start)](opts.obj);
 		graph.init();
 		if (opts.pos === 'bottom') this.append(buttons);
 		//click handlers
