@@ -200,7 +200,8 @@ var Graph = Graph || (function($) {
 				"stroke-width": obj.styles.lineStokeWidth || "2"
 			};
 			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
-				"fill": colors[i]
+				"fill": colors[i],
+				"opacity": 0.8
 			};
 			styling.style[this.parseS(obj.id, '.rect-of-' + i)] = {
 				"fill": colors[i],
@@ -418,15 +419,15 @@ var Graph = Graph || (function($) {
 	Graph.prototype.addLegend = function(thing) {
 		var self = this.obj;
 		var hoverHandle = function(what){
-			var to = (what === 'add') ? 0.8 : 0.7;
+			var to = (what === 'add') ? 1 : 0.7;
 			var clas = $(this).attr('class').substring(6);
 			$('line[class$="'+clas+'"]').each(function(){
-				var op;
-				if(what === 'add') op = 1;
-				else op = 0.7;
-				$(this).css('opacity', op);
+				$(this).css('opacity', to);
 			});
 			$('rect[class$="'+clas+'"]').each(function(){
+				$(this).css('opacity', to);
+			});
+			$('path[class$="'+clas+'"]').each(function(){
 				$(this).css('opacity', to);
 			});
 		}
@@ -879,4 +880,53 @@ var GraphPie = GraphPie || (function($) {
 		this.handleAppend('', pie);
 	};
 	return GraphPie;
+})(jQuery);
+
+//UI/jQuery plugin for displaying SVGGraph.js graphs with all their functionality
+(function($) {
+	$.fn.graphify = $.fn.graphify || function(options) { //extend jQuery
+		options = options || {};
+		//SETUP
+		var opts = $.extend({
+			height: this.css('height'),
+			width: this.css('width'),
+			start: 'GraphLinear', //type of graph to start with
+			pos: 'top',
+			obj: {} //actual obj for module
+		}, options);
+		var data = {
+			types: ['linear', 'bar', 'table', 'area']
+		};
+		opts.obj.attachTo = this.attr('id');
+		//UI
+		var buttons = (function() {
+			var btns = '';
+			for (var i = 0; i < data.types.length; ++i) {
+				btns += '<button id="' + this.id + '-graphify-button-' + i + '" class="' + data.types[i] + '">' +
+					data.types[i].charAt(0).toUpperCase() + data.types[i].substring(1) +
+					'</button>&emsp;';
+			}
+			return btns;
+		})();
+		if (opts.pos === 'top') this.append(buttons + '<br/><br />');
+		//Initiation
+		var graph = new window[opts.start](opts.obj);
+		graph.init();
+		if (opts.pos === 'bottom') this.append(buttons);
+		//click handlers
+		$(document).ready(function() {
+			$(document).on('click', 'button[id^="' + this.id + '-graphify-button-"]', function() {
+				var type = $(this).attr('class');
+				if(opts.obj.type !== type){ //dont repeat a chosen type
+					if (type !== 'area') graph.to($(this).attr('class'));
+					else { //area graphs are a subset of linear graphs...
+						opts.obj.special = 'area';
+						graph.to('linear');
+						graph.update(opts.obj);
+					}
+				}
+				opts.obj.type = type;
+			});
+		});
+	};
 })(jQuery);
