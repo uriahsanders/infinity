@@ -6,52 +6,53 @@
 	<title>Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="SVGGraph.js"></script>
+	<script src="tour.js"></script>
+	<script src="NOHTML.js"></script>
 </head>
 <body>
-	<h1>Example Graphs (View Page source to see initiation of SVGGraph Module)</h1>
-	<h2>Example using the jQuery plugin (My first one!):</h2>
-	<div id="grapher"style="height: 350px;width:800px;"></div>
 	<script>
-		$(document).ready(function(){
-			$('#grapher').graphify({
-				obj: {
-					id: 'ggg',
-					width: 775,
-					height: 375,
-					multiplePoints: true,
-					xGrid: false,
-					legend: true,
-					title: 'My first SVG Graph!',
-					points: [
-						[0, 26, 33, 74, 12, 49, 33],
-						[32, 46, 75, 38, 62, 76, 82],
-						[12, 33, 25, 16, 87, 20, 0]
-					],
-					pointRadius: 3,
-					byCSS: {
-						'#ggg .SVG-tooltip-box': {
-							fill: 'darkgrey',
-							opacity: 0.7,
-							display: 'none'
-						},
-						'#ggg circle': {
-							opacity: 0.7,
-							stroke: '#000',
-							fill: 'lightblue'
-						}
-					},
-					xDist: 90
-				}
-			});
+		var _ = NOHTML;
+		_.h(1, 'Example Graphs (View Page source to see initiation of SVGGraph Module)');
+		_.h(2, 'Example using the jQuery plugin (My first one!):');
+		_.create('div', {
+			id: 'grapher',
+			style: 'height:350px;width:800px;'
 		});
-	</script>
-	<br><br><br><br><br>
-	<h3>More options/documentation/pie graphs coming soon to the plugin.</h3>
-	<hr>
-	<h2>Example for .expand() and .save():</h2>
-	<div id="wrapper"></div>
-	<script>
-		//BAR GRAPH
+		$('#grapher').graphify({
+			obj: {
+				id: 'ggg',
+				width: 775,
+				height: 375,
+				multiplePoints: true,
+				xGrid: false,
+				legend: true,
+				title: 'My first SVG Graph!',
+				points: [
+					[0, 26, 33, 74, 12, 49, 33],
+					[32, 46, 75, 38, 62, 76, 82],
+					[12, 33, 25, 16, 87, 20, 0]
+				],
+				pointRadius: 3,
+				byCSS: {
+					'#ggg .SVG-tooltip-box': {
+						fill: 'darkgrey',
+						opacity: 0.7,
+						display: 'none'
+					},
+					'#ggg circle': {
+						opacity: 0.7,
+						stroke: '#000',
+						fill: 'lightblue'
+					}
+				},
+				xDist: 90
+			}
+		});
+		_.br(5);
+		_.h(3, 'More options/documentation/pie graphs coming soon to the plugin.');
+		_.hr();
+		_.h(2, 'Example for .expand() and .save():');
+		_.div('', 'wrapper');
 		var graph = new GraphBar({
 			example: true, //load example points and styling (below overrides it)
 			title: 'Bar Graph, scale 10, attached to wrapper',
@@ -64,9 +65,28 @@
 		}); //create JSON for new graph
 		graph.init(); //display graph
 		//LINEAR GRAPH
+		_.h(2, 'You can also update an existing graph (make sure you specify an ID):');
+		_.button('Update', 'update', function(){
+			//UPDATE GRAPH
+			graph2.update({
+				id: 'updateThisGraph',
+				multiplePoints: true,
+				points: [
+					[0, 26, 33, 74, 12, 49, 18],
+					[32, 46, 75, 38, 62, 76, 82]
+				],
+				title: 'Linear Graph 1 updated to have 2 lines, scale 16',
+				width: 500,
+				scale: 16,
+				height: 400,
+				xOffset: 50,
+				mainOffset: 60
+			});
+			$(this).attr('disabled', 'true');
+		});
+		_.br();
 		var graph2 = new GraphLinear({
 			example: true,
-			before: '<h2>You can also update an existing graph (make sure you specify an ID):</h2><button id="update">Update</button><br />',
 			id: 'updateThisGraph',
 			title: 'Linear Graph 1 (1 line), scale 100',
 			scale: 100,
@@ -92,33 +112,20 @@
 		json.title = 'You can still modify whatever you want when you expand';
 		json.id = 'diffId';
 		json.noLines = true;
-		$('#wrapper').append(graph.expand(json));
-		$('#wrapper').append('<hr /><h2>Graph1 as JSON, by using .save(); (call .expand() to convert it back into a graph, which is on the right, above):</h2>'+graph.save());
-		$('#wrapper').append('<h3>Use .save() and .expand() to save graphs in databases and restore them on the client.</h3><hr />');
-	</script>
-	<hr>
-	<h2>You can even change a graph of one type to another easily (graph.to('bar'))</h2>
-	<h3>And it works perfectly at any scale!</h3>
-	<button id="turn">Turn below into a Bar graph</button><br />
-	<script>
-		$('#update').on('click', function(){
-			//UPDATE GRAPH
-			graph2.update({
-				id: 'updateThisGraph',
-				multiplePoints: true,
-				points: [
-					[0, 26, 33, 74, 12, 49, 18],
-					[32, 46, 75, 38, 62, 76, 82]
-				],
-				title: 'Linear Graph 1 updated to have 2 lines, scale 16',
-				width: 500,
-				scale: 16,
-				height: 400,
-				xOffset: 50,
-				mainOffset: 60
-			});
+		graph.expand(json);
+		_.hr(1, '#wrapper');
+		_.h(2, 'Graph1 as JSON, by using .save(); (call .expand() to convert it back into a graph, which is on the right, above):', '',  '#wrapper');
+		_.print(graph.save(), '', '#wrapper');
+		_.hr(1, '#wrapper');
+		_.hr();
+		_.h(3, 'Use .save() and .expand() to save graphs in databases and restore them on the client.')
+		_.hr();
+		_.h(2, 'You can even change a graph of one type to another easily (graph.to("bar"))');
+		_.button('Turn below into a Bar graph', 'turn', function(){
+			g.to('bar');
 			$(this).attr('disabled', 'true');
 		});
+		_.br();
 		var g = new GraphLinear({
 			example: true, //load example points and data (below overrides it)
 			title: 'Everything is optional; view source to see the stuff i changed on this graph (You can disable any part of the grid btw)',
@@ -160,13 +167,9 @@
 			scale: 10
 		});
 		g.init();
-		$('#turn').on('click', function(){
-			g.to('bar');
-			$(this).attr('disabled', 'true');
-		});
+		_.hr();
+		_.h(2, 'You probably want some example code by now:');
 	</script>
-	<hr>
-	<h2>You probably want some example code by now:</h2>
 	<h4>
 		<pre>
 		//define options:
@@ -187,16 +190,6 @@
 		</pre>
 	</h4>
 	<hr />
-	<h2>You can also create pie graphs. Isnt this amazing!</h2>
-	yeah...still working on it :P SCROLL ON!
-	<script>
-		var pie = new GraphPie({
-			width: 500,
-			height: 100,
-			id: 'pie'
-		});
-		//pie.init();
-	</script>
-	<hr />
+	<h2>Still working on pie graphs!</h2>
 </body>
 </html>

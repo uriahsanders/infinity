@@ -22,8 +22,8 @@ var NOHTML = NOHTML || (function($) {
 		options = obj.options || '';
 		//split into common html components
 		if (type !== '') type = 'type="' + type + '"';
-		if (classes !== '') classes = 'class="' + classes.join(' ') + '"';
-		if (style !== '') style = 'style="' + style.join(';') + '"';
+		if (classes !== '') classes = 'class="' + classes + '"';
+		if (style !== '') style = 'style="' + style + '"';
 		if (id !== '') id = 'id="' + id + '"';
 		element = '<' + what + ' ' + id + type + classes + style;
 		//do unique tag handling
@@ -72,13 +72,20 @@ var NOHTML = NOHTML || (function($) {
 		Private.attachTo('<div id="' + id + '">' + txt + '</div>', attch);
 	};
 	//headers
-	Public.h = function(num, txt, id) {
-		Private.attachTo('<' + h + num + ' id="' + id + '">' + txt + '</' + h + num + '>');
+	Public.h = function(num, txt, id, attch) {
+		Private.attachTo('<h' + num + ' id="' + id + '">' + txt + '</h' + num + '>', attch);
 	};
 	//breaks/hr's
-	Public.br = function(type, num) {
-		for (var i = 0; i <= num; ++i) {
-			Private.attachTo('<' + type + 'r />');
+	Public.br = function(num, attch) {
+		num = num || 1;
+		for (var i = 0; i < num; ++i) {
+			Private.attachTo('<br />', attch);
+		}
+	};
+	Public.hr = function(num, attch) {
+		num = num || 1;
+		for (var i = 0; i < num; ++i) {
+			Private.attachTo('<hr />', attch);
 		}
 	};
 	//input forms
@@ -116,7 +123,7 @@ var NOHTML = NOHTML || (function($) {
 	Public.disable = function(id) {
 		$('#' + id).attr('disabled', 'disabled');
 	};
-	Public.button = function(txt, id, attch, func) {
+	Public.button = function(txt, id, func, attch) {
 		Private.attachTo('<button id="' + id + '">' + txt + '</button>', attch);
 		$(document).on('click', '#' + id, function() { //onclick:
 			func();
