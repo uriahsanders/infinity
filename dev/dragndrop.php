@@ -20,18 +20,20 @@ html, body {
 	min-width:1000px;
 	height: 100%;
 }
-.groupname {
+.group {
 	display: inline-block;
 	border: 1px solid black;
+	border-radius: 10px;
 	margin: 5px;
 	padding: 10px;
 	text-align: center;
 	width: 25%;
 	height: 250px;
 	overflow-y: auto;
+	background: rgba(0, 0, 0, .3);
 }
 
-.membername {	
+.member {	
 	display: block;
 	padding: 5px;
 	cursor: pointer;
@@ -77,6 +79,20 @@ border-top: 1px solid #666666;
 border-left: 1px solid #666666;}
 ::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
 ::-webkit-scrollbar-corner       {  }
+
+a {
+	opacity: .7;
+	-webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    cursor: pointer;
+}
+
+a:hover {
+	opacity: 1;
+}
 </style>
 <a id='create'>Create a group</a><br />
 <div id='form' style='display:none'>
@@ -94,7 +110,23 @@ $('#submit').click(function (){
         		var group = $('#groupInput').val(); 
             	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
-            	$('#groups').append("<div id='" + group + "' class='group'>" + group + "</div><a id='" + group + "' class='showMembers'>Show Members</a><div id='" + group + "-members' style='display:none'></div> <a class='edit' id='" + group + "'>Edit Group</a>"); //append the new group to groups
+            	$('#groups').append("<div id='" + response[i] + "' class='group'><span id='" + group + "' class='name'>" + group + "</span><br ><span class='group-toolbar'><a id='" + group + "' class='showMembers'>Show Members</a> <a id='" + group + "' class='edit'>Edit</a></span></div>"); //append the new group to groups
+            	$('#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false}); //make each div draggable 
+                $('#' + response[i]).droppable({
+                    drop: function (event, ui){
+                    	if(ui.draggable.attr("class").startsWith("member")){
+                    		$.post("dragndrop_script.php", {
+                    		group: $(this).attr("id"),
+                    		member: ui.draggable.attr("id"),
+                    		do: "copy"
+                    		}, function(data){
+                    			console.log(data);
+                    			$('#' + $(this).attr("id")).append("<span class='member'>" + ui.draggable.attr("id") + "</span>");
+                    			alert("Sucess");
+                    		});
+                    	}
+                    }
+               });
             }else{
             	alert("There was a problem making the group: " + $('#groupInput').val());
             }
@@ -128,8 +160,8 @@ $('#show').toggle(function (){
             if(response.length > 0 && response[0] != "no groups"){ //check to see if response is empty
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
-                    $('#groups').append("<div id='" + response[i] + "' class='group'>" + response[i] + "</div><a id='" + response[i] + "' class='showMembers'>Show Members</a><div id='" + response[i] + "-members' style='display:none'></div> <a class='edit' id='" + response[i] + "'>Edit Group</a>"); //make a div for each group and append it to groups
-                    $('#' + response[i]).draggable({cursor: "move"}); //make each div draggable 
+                    $('#groups').append("<div id='" + response[i] + "' class='group'><span id='" + response[i] + "' class='name'>" + response[i] + "</span><br ><span class='group-toolbar'><a id='" + response[i] + "' class='showMembers'>Show Members</a> <a id='" + response[i] + "' class='edit'>Edit</a></span></div>"); //make a div for each group and append it to groups
+                    $('#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false}); //make each div draggable 
                     $('#' + response[i]).droppable({
                     	drop: function (event, ui){
                     		if(ui.draggable.attr("class").startsWith("member")){
@@ -139,7 +171,7 @@ $('#show').toggle(function (){
                     			do: "copy"
                     			}, function(data){
                     				console.log(data);
-                    				$('#' + $(this).attr("id") + '-members').append(ui.draggable.attr("id"));
+                    				$('span#' + $(this).attr("id")).append("<span class='member'>" + ui.draggable.attr('id') + "</span>");
                     				alert("Sucess");
                     			});
                     		}
@@ -170,7 +202,6 @@ $('#show').toggle(function (){
                         		alert("Succesfully deleted " + className + ": " + id);
                         		if(className == "group"){
                         			$('#' + id).remove(); //remove the group div
-                        			$('#' + id + '-members').remove(); //remove the div for members
                         			//ill find a better way to do this later
                         			$(document.getElementById(id)).remove(); //remove the showMembers link
                         			$(document.getElementById(id)).remove(); //remove the edit link 
@@ -188,54 +219,50 @@ $('#show').toggle(function (){
                 $('.showMembers').toggle(function (){
                 	var group = $(this).attr("id"); //get the group name
                 	$(this).text("Hide members");
-                	if($('#' + group + '-members').is(':empty')){ //check if the div is empty
-                		$.post("dragndrop_script.php", {
-                		get: "members", //send what you want to get
-                		group: group //send the group
-                		}, function (data){
-                			data = data.substring(0, data.length - 2);
-                			console.log(data);
-                			if(data != "error" && data != ""){ //check for errors
-                				var members = jQuery.parseJSON(data); //parse json
-                				if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
-                					for(var i = 0; i <= members.length; ++i){
-                						if(members[i] == undefined) break;
-                						$('#' + group + '-members').append("<div id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</div>"); //make a div for each member
-                						$('#' + members[i]).draggable({move: "true"}); //make each member div draggable
-                					}
-                					$('#' + group + '-members').slideDown();
-                				}else{
-                					$('#' + group + '-members').text("There are no members in this group.");
-                					$('#' + group + '-members').slideDown();
+                	$.post("dragndrop_script.php", {
+                	get: "members", //send what you want to get
+                	group: group //send the group
+                	}, function (data){
+                		data = data.substring(0, data.length - 2);
+                		console.log(data);
+                		if(data != "error" && data != ""){ //check for errors
+                			var members = jQuery.parseJSON(data); //parse json
+                			console.log(members);
+                			if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
+                				for(var i = 0; i <= members.length; ++i){
+                					if(members[i] == undefined) break;
+                					$('#' + group).append("<div id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</div>"); //make a span for each member
+                					$('#' + members[i]).draggable({move: "true", scroll: false}); //make each member span draggable
                 				}
                 			}else{
-                				alert("There was a problem getting the members for group: " + group + ". Please try again later.");
+                				$('#' + group).append("<span class='member'>There are no members for this group.</span>");
                 			}
-                		});
-                	}else{
-                		$('#' + group + '-members').slideDown();
-                	}
+                		}else{
+                			alert("There was a problem getting the members for group: " + group + ". Please try again later.");
+                		}
+                	});
                 }, function (){
                 	$(this).text("Show members");
-                	$('#' + $(this).attr("id") + '-members').slideUp();
+                	$('#' + $(this).attr("id")).find('div.member').fadeOut();
                 });
+                //code for editing
                 $('.edit').toggle(function (){
                 	$(this).text("Save");
                 	$('#close').show();
                 	var group = $(this).attr("id");
                 	$('#' + group).draggable("disable"); //disable dragging so its easier to edit
-                	$('#' + group).attr("contenteditable", "true"); //make div editable
+                	$('span.name:contains("' + group +'")').attr("contenteditable", "true"); //make div editable
                 }, function (){
                 	$(this).text("Edit Group");
                 	var group = $(this).attr("id");
                 	$('#' + group).draggable("enable"); //enable dragging
-                	$('#' + group).attr("contenteditable", "false"); //turn editing off
+                	$('span.name:contains("' + group +'")').attr("contenteditable", "true"); //turn editing off
                 	$.post("dragndrop_script.php", {
                 	edit: "group", //what your editing
                 	group: group, //old group name
-                	name: $('#' + group).text() //new group name
+                	name: $('span#' + group).text() //new group name
                 	}, function(data){
-                		$('#' + group).attr("id", $('#' + group).text()); //change the group id to the new one
+                		$('#' + group).attr("id", $('span#' + group).text()); //change the group id to the new one
                 		console.log(data);
                 	});
                 });

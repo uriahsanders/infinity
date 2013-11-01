@@ -14,7 +14,6 @@ function getGroups($con){
     $query = $con->prepare("SELECT * FROM `groups` WHERE `creator` = '".$_SESSION['ID']."'");
     $query->execute();
     $row = $query->fetchAll(PDO::FETCH_OBJ);
-    //return json_encode($row[0]->group);\
     if(isset($row) && !empty($row)){
    		for($i = 0; $i <= count($row) - 1; $i++){
     		@array_push($groups, $row[$i]->group);
@@ -26,8 +25,6 @@ function getGroups($con){
 }
 
 function delete($item, $name, $con){
-    $item = mysql_real_escape_string(htmlspecialchars($item));
-    $name = mysql_real_escape_string(htmlspecialchars($name));
     if($item == "group"){
     	$id = getID($name, $con);
     	$query = $con->prepare("DELETE FROM `groups` WHERE `group` = '".$name."' AND `creator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete group
@@ -37,8 +34,7 @@ function delete($item, $name, $con){
     	return "success";
     }
     else if($item == "member" && isset($_POST['group'])){
-    	$group = mysql_real_escape_string(htmlspecialchars($_POST['group']));
-    	$id = getID($group, $con);
+    	$id = getID($_POST['group'], $con);
     	$query = $con->prepare("DELETE FROM `group_members` WHERE `member` = '".$name."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete members
     	$query->execute();
     	if($query){
@@ -52,8 +48,6 @@ function delete($item, $name, $con){
 }
 
 function createGroup($group, $members, $con){
-    $group = mysql_real_escape_string(htmlspecialchars($group));
-    $members = mysql_real_escape_string(htmlspecialchars($members));
     $query = $con->prepare("INSERT INTO groups (`group`, `creator`) VALUES ('".$group."', '".$_SESSION['ID']."')")or die(mysql_error()); //insert all the info for the group
     $query->execute();
     if($query){
@@ -71,7 +65,6 @@ function createGroup($group, $members, $con){
 }
 
 function getMembers($group, $con){
-	$group = mysql_real_escape_string(htmlspecialchars($group));
 	$id = getID($group, $con);
    	$result = $con->prepare("SELECT * FROM `group_members` WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //get the member
    	$result->execute();
@@ -82,12 +75,14 @@ function getMembers($group, $con){
    	for($i = 0; $i <= count($row) - 1; $i++){
    		@array_push($members, $row[$i]->member);
    	}
-   	return json_encode($members);
+   	if(isset($members) && !empty($members)){
+   		return json_encode($members);
+   	}else{
+   		return json_encode(array("no members"));
+   	}
 }
 
 function editInfo($type, $name, $group, $con){
-	$group = mysql_real_escape_string(htmlspecialchars($group));
-	$name = mysql_real_escape_string(htmlspecialchars($name));
 	if($type == "member"){
 		$id = getID($group, $con);
 		$query = $con->prepare("UPDATE `group_members` SET `member` = '".$name."' WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //update member name
@@ -112,7 +107,6 @@ function editInfo($type, $name, $group, $con){
 }
 
 function getID($group, $con){
-	$group = mysql_real_escape_string(htmlspecialchars($group));
 	$query = $con->prepare("SELECT * FROM `groups` WHERE `group` = '".$group."' AND creator = '".$_SESSION['ID']."'");
 	$query->execute();
 	$row = $query->fetch(PDO::FETCH_OBJ);
@@ -120,8 +114,6 @@ function getID($group, $con){
 }
 
 function copyMember($group, $member, $con){
-	$group = mysql_real_escape_string(htmlspecialchars($group));
-	$member = mysql_real_escape_string(htmlspecialchars($member));
 	$id = getID($group, $con);
 	$result = $con->prepare("INSERT INTO `group_members` (`groupCreator`, `groupId`, `member`) VALUES ('".$_SESSION['ID']."', '".$id."', '".$member."')")or die(mysql_error()); //insert the info for the member
 	$result->execute();
@@ -133,7 +125,6 @@ function copyMember($group, $member, $con){
 }
 
 function search($query, $con){
-	$query = mysql_real_escape_string(htmlspecialchars($query));
 	$results = array();
 	$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' OR `group` LIKE '%".$query."' OR `group` LIKE '".$query."%' AND `creator` = '".$_SESSION['ID']."' ORDER BY id DESC");
 	$sql->execute();
@@ -141,16 +132,11 @@ function search($query, $con){
 	for($i = 0; $i <= count($row) - 1; $i++){
 		@array_push($results, $row[$i]->group);
 	}
-	return json_encode($results);
-	/*foreach($con->query("SELECT * FROM `groups` WHERE `group` LIKE '".$query."' OR `group` = '".$query."' OR `group` LIKE '%".$query."' OR `group` LIKE '".$query."%' AND `creator` = '".$_SESSION['ID']."' ORDER BY id DESC") as $row){
-		$group = $row['group'];
-		array_push($results, $group); //put all results into an array
-	}
 	if(isset($results) && !empty($results)){
-		return json_encode($results); //return results
+		return json_encode($results);
 	}else{
 		return json_encode(array("No results."));
-	}*/
+	}
 }
 
 if(isset($_POST['group']) && isset($_POST['members'])){
