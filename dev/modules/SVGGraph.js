@@ -1,17 +1,7 @@
 //Module for creating SVG graphs quickly and easily (HIGHLY flexible, everything is optional/changeable)
 /*
-	Stuff it can do:
-	Create graphs of different types,
-	store any graph as JSON,
-	expand JSON into a graph,
-	update a graph,
-	style a graph,
-	change a graph into a different type,
-	create graphs with multiple entries,
-	create graphs of any scale,
-	add interactivity,
-	extremely versatile: everything is optional/changeable
-
+	See example page: index.html
+	--------------------------------------
 	Coming soon: (* denotes current focus)
 	pie graphs, scatter graphs, *
 	x/y axis names,
@@ -193,7 +183,7 @@ var Graph = Graph || (function($) {
 		};
 		//when using multiple lines make them different colors automatically
 		var colors = obj.colors || ['red', 'blue', 'green', 'orange'];
-		if(obj.colors) obj.colors.push('#000'); //so bar spaces dont takeup colors
+		if (obj.colors) obj.colors.push(''); //so bar spaces dont takeup colors
 		for (var i = 0; i < colors.length; ++i) {
 			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
 				"stroke": obj.styles.lineStroke || colors[i],
@@ -244,9 +234,9 @@ var Graph = Graph || (function($) {
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
 		return JSON.stringify(this.obj);
 	};
-	Graph.prototype.genToFunc = function(str){
+	Graph.prototype.genToFunc = function(str) {
 		//turn generic string into function name
-		return 'Graph'+str.charAt(0).toUpperCase() + str.substring(1);
+		return 'Graph' + str.charAt(0).toUpperCase() + str.substring(1);
 	};
 	Graph.prototype.expand = function(obj, thing) { //expand JSON into a graph (requires 'type' property of 'obj')
 		var obj = (typeof obj === 'string') ? jQuery.parseJSON(obj) : obj; //if in string form parse it
@@ -372,13 +362,16 @@ var Graph = Graph || (function($) {
 	};
 	//close all tags, append to DOM, and add styling
 	Graph.prototype.finishGraph = function(xLines, yLines, E, thing) {
-		//build grid
-		E.xGrid += this.createGrid(xLines, yLines).xGrid;
-		E.yGrid += this.createGrid(xLines, yLines).yGrid;
-		//LABELS
-		E.xLabels += this.addLabels().xLabels;
-		E.yLabels += this.addLabels().yLabels;
-		E.title += this.addTitle(yLines); //build grid
+		if (this.obj.type !== 'pie') {
+			//build grid
+			E.xGrid += this.createGrid(xLines, yLines).xGrid;
+			E.yGrid += this.createGrid(xLines, yLines).yGrid;
+			//LABELS
+			E.xLabels += this.addLabels().xLabels;
+			E.yLabels += this.addLabels().yLabels;
+		}
+		E.title += this.addTitle(yLines);
+		if (this.obj.legend === true) E.legend = this.addLegend(thing);
 		//COMBINING DYNAMICALLY
 		E.points = E.points || '';
 		for (var i in E) {
@@ -404,25 +397,25 @@ var Graph = Graph || (function($) {
 	};
 	Graph.prototype.addLegend = function(thing) {
 		var self = this.obj;
-		var hoverHandle = function(what){
+		var hoverHandle = function(what) {
 			var to = (what === 'add') ? 1 : 0.7;
 			var clas = $(this).attr('class').substring(6);
-			$('line[class$="'+clas+'"]').each(function(){
+			$('line[class$="' + clas + '"]').each(function() {
 				$(this).css('opacity', to);
 			});
-			$('rect[class$="'+clas+'"]').each(function(){
+			$('rect[class$="' + clas + '"]').each(function() {
 				$(this).css('opacity', to);
 			});
-			$('path[class$="'+clas+'"]').each(function(){
+			$('path[class$="' + clas + '"]').each(function() {
 				$(this).css('opacity', to);
 			});
 		}
-		if(self.interactive === true && self.multiplePoints === true){
-			$(document).ready(function(){
-				$(document).on('mouseover', 'g[id^="legend-"]', function(){
+		if (self.interactive === true && self.multiplePoints === true) {
+			$(document).ready(function() {
+				$(document).on('mouseover', 'g[id^="legend-"]', function() {
 					hoverHandle.call(this, 'add');
 				});
-				$(document).on('mouseout', 'g[id^="legend-"]', function(){
+				$(document).on('mouseout', 'g[id^="legend-"]', function() {
 					hoverHandle.call(this, 'take');
 				});
 			});
@@ -443,12 +436,12 @@ var Graph = Graph || (function($) {
 		} else {
 			var y = self.yOffset;
 			for (var i = 0; i < self.points.length; ++i) {
-				legend += '<g id="legend-'+i+'"class="legend-of-'+i+'">';
+				legend += '<g id="legend-' + i + '"class="legend-of-' + i + '">';
 				//RECT
 				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
 					'" y="' + (y) + '"width="' + width + '"height="' + height + '"></rect>';
 				//TEXT
-				legend += '<text style="cursor:default;"class="legend-of-'+i+'"x="' + (x + width + 5) +
+				legend += '<text style="cursor:default;"class="legend-of-' + i + '"x="' + (x + width + 5) +
 					'"y="' + (y + height / 2) + '">' + (self.dataNames[i] || 'Data' + (i === 0 ? '' : ' ' + i)) + '</text>';
 				legend += '</g>';
 				y += self.yDist + self.padding;
@@ -549,7 +542,6 @@ var GraphLinear = GraphLinear || (function($) {
 		var E = this.openTags(); //elements
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
-		if (self.legend === true) E.legend = this.addLegend(thing);
 		var area = self.special === 'area';
 		if (area && self.multiplePoints === false) E.path = '<g class="area"><path d="';
 		//*remember: xLines are vertical, yLines are horizontal
@@ -675,7 +667,6 @@ var GraphBar = GraphBar || (function($) {
 		var yLines = self.y + 1;
 		var E = this.openTags();
 		E.rects = '<g class="rects">';
-		if (self.legend === true) E.legend = this.addLegend(thing);
 		var inc, x, y, weird; //increment
 		weird = self.yDist - 30;
 		if (self.multiplePoints === false) {
@@ -708,7 +699,7 @@ var GraphBar = GraphBar || (function($) {
 			}
 			//add spaces between data sets
 			var spaces = [];
-			for(var i = 0; i < max; ++i){
+			for (var i = 0; i < max; ++i) {
 				spaces.push(0);
 			}
 			self.points.push(spaces);
@@ -719,9 +710,9 @@ var GraphBar = GraphBar || (function($) {
 			var avgs = []; //to store averages for average line
 			for (var i = 0; i < max; ++i) { //so we get throguh the length of every array
 				for (var t = 0; t < self.points.length; ++t) { //this lets us loop array td instead of lr with j
-					if(t  !== self.points.length - 1){ //skip over spaces array
-						all = t + j + (i*(self.points.length - 1));
-						ref = t + j + i*2;
+					if (t !== self.points.length - 1) { //skip over spaces array
+						all = t + j + (i * (self.points.length - 1));
+						ref = t + j + i * 2;
 						inc = (self.points[t][j] !== 0) ? ((self.points[t][j] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
 						x = ((all) * (xDist) + self.mainOffset);
 						self.xOfPoints.push(x);
@@ -833,36 +824,86 @@ var GraphPie = GraphPie || (function($) {
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
+	GraphPie.prototype.lineTo = function(x, y) {
+		return 'L' + x + ',' + y;
+	};
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
 		var self = this.obj;
-		var pie = '<svg>';
+		var E = this.openTags();
+		E.pie = '<g class="paths">';
 		//constants
 		var START = 'M340,251';
 		var ARC = 'A154,154,0,0,1,';
 		var lineFrom = false;
 		var lineTo;
-		pie += '<g class="paths">';
-		// pie += '<path d="M340,251 L191,290 A154,154,0,0,1,340,97 Z"' +
-		// 	'stroke="#ffffff" stroke-width="1" fill="#990099"></path>' +
-		// 	'<path d="M340,251 L340,97 A154,154,0,0,1,379,399 Z"' +
-		// 	'stroke="#ffffff" stroke-width="1" fill="#3366cc"></path>' +
-		// 	'<path d="M340,251 L379,399 A154,154,0,0,1,300,400 Z"' +
-		// 	'stroke="#ffffff" stroke-width="1" fill="#000"></path>' +
-		// 	'<path d="M340,251 L300,399 A154,154,0,0,1,231,359 Z"' +
-		// 	'stroke="#ffffff" stroke-width="1" fill="#ff9900"></path>' +
-		// 	'<path d="M340,251 L231,359 A154,154,0,0,1,191,290 Z"' +
-		// 	' stroke="#ffffff" stroke-width="1" fill="#109618"></path>' +
-		// 	'';
-		for (var i = 0; i < self.points.length; ++i) {
-			if (!lineFrom) lineFrom = 191 + ',' + 290;
-			lineTo = 340 + ',' + 97;
-			pie += '<path d="' + START + ' L' + lineFrom + ' ' + ARC + lineTo + ' Z"></path>';
-			lineFrom = lineTo; //set so next path starts where this one left off
+		// E.pie += '<path d="M200,200 L200,20 A180,180 0 0,1 377,231 z"' +
+		// 	'style="fill:#ff0000;' +
+		// 	'fill-opacity: 1;' +
+		// 	'stroke:black;' +
+		// 	'stroke-width: 1"/>' +
+		// 	'<path d="M200,200 L377,231 A180,180 0 0,1 138,369 z"' +
+		// 	'style="fill:#00ff00;' +
+		// 	'fill-opacity: 1;' +
+		// 	'stroke:black;' +
+		// 	'stroke-width: 1"/>' +
+		// 	'<path d="M200,200 L138,369 A180,180 0 0,1 20,194 z"' +
+		// 	'style="fill:#0000ff;' +
+		// 	'fill-opacity: 1;' +
+		// 	'stroke:black;' +
+		// 	'stroke-width: 1"/>' +
+		// 	'<path d="M200,200 L20,194 A180,180 0 0,1 75,71 z"' +
+		// 	'style="fill:#ff00ff;' +
+		// 	'fill-opacity: 1;' +
+		// 	'stroke:black;' +
+		// 	'stroke-width: 1"/>' +
+		// 	'<path d="M200,200 L75,71 A180,180 0 0,1 200,20 z"' +
+		// 	'style="fill:#ffff00;' +
+		// 	'fill-opacity: 1;' +
+		// 	'stroke:black;' +
+		// 	'stroke-width: 1"/>';
+		var points = [20, 30, 40, 22, 67];
+		var max = 0; //sum of all points
+		for(var i = 0; i < points.length; ++i){
+			max += points[i];
 		}
-		pie += '</g></svg>';
-		console.log(pie);
-		this.handleAppend('', pie);
+		//var howMuchOfPie = points[0]/max;
+		var howMuchOfPie = 1 / 3;
+		var fullPie = 2 * Math.PI;
+		var howMuchOfPieInRadians = howMuchOfPie * fullPie;
+		var howMuchUp = Math.sin(howMuchOfPieInRadians);
+		var howMuchLeft = Math.cos(howMuchOfPieInRadians);
+		var center = 200;
+		var radius = center - 20; //leave padding for pie
+		var CENTER = 'M' + center + ',' + center;
+		var ARC = 'A' + radius + ',' + radius;
+		var STD = '0 0,1'; //arc options
+		var HORZ = center - (radius * howMuchLeft); //x component of line
+		var VERT = center - (radius * howMuchUp); //y component of line
+		var sizing = 20;
+		var LINETO = this.lineTo(sizing, center); //intiial starting point
+		console.log(max);
+		//first path
+		E.pie += '<path d="' + CENTER + ' ' + LINETO + ' ' + ARC + ' ' + STD + ' ' + HORZ + ',' + VERT + ' Z"/>';
+		//second path
+		var l = this.lineTo(HORZ, VERT);
+		howMuchOfPie = howMuchOfPie + 1/2;
+		fullPie = 2 * Math.PI;
+		howMuchOfPieInRadians = howMuchOfPie * fullPie;
+		howMuchUp = Math.sin(howMuchOfPieInRadians);
+		howMuchLeft = Math.cos(howMuchOfPieInRadians);
+		HORZ = center - (radius * howMuchLeft); //x component of line
+		VERT = center - (radius * howMuchUp); //y component of line
+		E.pie += '<path d="' + CENTER + ' ' + l + ' ' + ARC + ' ' + STD + ' ' + HORZ + ',' + VERT + ' Z"/>';
+		// for (var i = 0; i < self.points.length; ++i) {
+		// 	if (!lineFrom) lineFrom = 191 + ',' + 290;
+		// 	lineTo = 340 + ',' + 97;
+		// 	E.pie += '<path d="' + START + ' L' + lineFrom + ' ' + ARC + lineTo + ' Z"></path>';
+		// 	lineFrom = lineTo; //set so next path starts where this one left off
+		// }
+		var xLines = self.x.length + 1; //needs one more because each x label takes entire column
+		var yLines = self.y + 1;
+		this.finishGraph(xLines, yLines, E, thing);
 	};
 	return GraphPie;
 })(jQuery);
@@ -880,14 +921,14 @@ var GraphPie = GraphPie || (function($) {
 			obj: {} //actual obj for module
 		}, options);
 		var data = {
-			types: ['linear', 'bar', 'table', 'area']
+			types: ['linear', 'bar', 'table', 'area', 'pie']
 		};
 		opts.obj.attachTo = this.attr('id');
 		//UI
 		var buttons = (function() {
 			var btns = '';
 			for (var i = 0; i < data.types.length; ++i) {
-				btns += '<button id="' + this.id + '-graphify-button-' + i + '" class="' + data.types[i] + '">' +
+				btns += '<button id="' + opts.obj.id + '-graphify-button-' + data.types[i] + '">' +
 					data.types[i].charAt(0).toUpperCase() + data.types[i].substring(1) +
 					'</button>&emsp;';
 			}
@@ -901,10 +942,10 @@ var GraphPie = GraphPie || (function($) {
 		if (opts.pos === 'bottom') this.append(buttons);
 		//click handlers
 		$(document).ready(function() {
-			$(document).on('click', 'button[id^="' + this.id + '-graphify-button-"]', function() {
-				var type = $(this).attr('class');
-				if(opts.obj.type !== type){ //dont repeat a chosen type
-					if (type !== 'area') graph.to($(this).attr('class'));
+			$(document).on('click', 'button[id^="' + opts.obj.id + '-graphify-button-"]', function() {
+				var type = $(this).attr('id').split('-')[3];
+				if (opts.obj.type !== type) { //dont repeat a chosen type
+					if (type !== 'area') graph.to(type);
 					else { //area graphs are a subset of linear graphs...
 						opts.obj.special = 'area';
 						graph.to('linear');
