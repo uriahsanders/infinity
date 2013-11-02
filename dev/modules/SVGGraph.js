@@ -3,7 +3,9 @@
 	See example page: index.html
 	--------------------------------------
 	Coming soon: (* denotes current focus)
-	pie graphs, scatter graphs, *
+	scatter graphs,
+	3d pie graphs,
+	pie graph tooltips, *
 	x/y axis names,
 	average lines for bar and scatter graphs,
 */
@@ -168,6 +170,9 @@ var Graph = Graph || (function($) {
 		styling.style[this.parseS(obj.id, '.area')] = {
 			"opacity": "0.5",
 			"fill": 'blue'
+		};
+		styling.style[this.parseS(obj.id, '.slice')] = {
+			"opacity": "0.7"
 		};
 		styling.style[this.parseS(obj.id, '.labels.x-labels')] = {
 			"text-anchor": obj.styles.xLabelAnchor || xAnchor
@@ -400,8 +405,8 @@ var Graph = Graph || (function($) {
 		var hoverHandle = function(what) {
 			var to = (what === 'add') ? 1 : 0.7;
 			var clas = $(this).attr('class').substring(6);
-			var selector = '[class$="' + clas + '"][id^="'+self.id+'"]';
-			$('line'+selector+', rect'+selector+', path'+selector).each(function() {
+			var selector = '[class$="' + clas + '"][id^="' + $(this).attr('id').split('-')[1] + '"]';
+			$('line' + selector + ', rect' + selector + ', path' + selector).each(function() {
 				$(this).css('opacity', to);
 			});
 		}
@@ -421,8 +426,8 @@ var Graph = Graph || (function($) {
 		var width = 30; //width of rect
 		var height = 30;
 		self.dataNames = self.dataNames || [];
-		if (self.multiplePoints === false) {
-			legend += '<g class="legend-pair">';
+		if (self.multiplePoints === false && self.type !== 'pie') {
+			legend += '<g class="legend-' + self.id + '"class="legend-of-0">';
 			legend += '<rect x="' + (x) +
 				'" y="' + (self.yOffset) + '"width="' + width + '"height="' + height + '"></rect>';
 			legend += '<text x="' + (x + width + 5) +
@@ -431,7 +436,7 @@ var Graph = Graph || (function($) {
 		} else {
 			var y = self.yOffset;
 			for (var i = 0; i < self.points.length; ++i) {
-				legend += '<g id="legend-' + i + '"class="legend-of-' + i + '">';
+				legend += '<g id="legend-' + self.id + '"class="legend-of-' + i + '">';
 				//RECT
 				legend += '<rect class="rect-of-' + i + '"x="' + (x) +
 					'" y="' + (y) + '"width="' + width + '"height="' + height + '"></rect>';
@@ -538,7 +543,7 @@ var GraphLinear = GraphLinear || (function($) {
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
 		var area = self.special === 'area';
-		if (area && self.multiplePoints === false) E.path = '<g class="area"><path id="'+self.id+'"d="';
+		if (area && self.multiplePoints === false) E.path = '<g class="area"><path id="' + self.id + '"d="';
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
@@ -611,7 +616,7 @@ var GraphLinear = GraphLinear || (function($) {
 				}
 				if (area) {
 					//PATHS
-					paths.push('<path id="'+self.id+'"class="path-of-' + i + '" d="');
+					paths.push('<path id="' + self.id + '"class="path-of-' + i + '" d="');
 					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (hmdist) + ' ';
 					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
 					for (var t = 0; t < self.points[i].length; ++t) {
@@ -816,12 +821,24 @@ var GraphPie = GraphPie || (function($) {
 		obj = obj || {};
 		obj.type = 'pie';
 		Graph.call(this, obj);
+		if (this.obj.interactive === true) {
+			var thiz = this;
+			$(document).ready(function() {
+				$(document).on('mouseover', 'svg path', function(e) {
+					//$('#' + $(this).attr('id') + '-tooltip').show();
+					//$('#' + $(this).attr('id') + '-tooltip-rect').show();
+					$(this).css('opacity', 1);
+				});
+				$(document).on('mouseleave', 'svg path', function(e) {
+					//$('#' + $(this).attr('id') + '-tooltip').hide();
+					//$('#' + $(this).attr('id') + '-tooltip-rect').hide();
+					$(this).css('opacity', 0.8);
+				});
+			});
+		}
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
-	GraphPie.prototype.addLegend = function(){
-		//pie legends are special because each "point" has a slice
-	};
 	GraphPie.prototype.lineTo = function(x, y) {
 		return 'L' + x + ',' + y;
 	};
@@ -857,7 +874,7 @@ var GraphPie = GraphPie || (function($) {
 				howMuchLeft = Math.cos(howMuchOfPieInRadians);
 				HORZ = center - (radius * howMuchLeft); //x component of line
 				VERT = center - (radius * howMuchUp); //y component of line
-				E.pie += '<path id="'+self.id+'"class="path-of-' + i +
+				E.pie += '<path id="' + self.id + '"class="path-of-' + i +
 					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
 			}
 			var xLines = self.x.length + 1; //needs one more because each x label takes entire column
