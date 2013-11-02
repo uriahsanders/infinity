@@ -829,81 +829,42 @@ var GraphPie = GraphPie || (function($) {
 	};
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
-		var self = this.obj;
-		var E = this.openTags();
-		E.pie = '<g class="paths">';
-		//constants
-		var START = 'M340,251';
-		var ARC = 'A154,154,0,0,1,';
-		var lineFrom = false;
-		var lineTo;
-		// E.pie += '<path d="M200,200 L200,20 A180,180 0 0,1 377,231 z"' +
-		// 	'style="fill:#ff0000;' +
-		// 	'fill-opacity: 1;' +
-		// 	'stroke:black;' +
-		// 	'stroke-width: 1"/>' +
-		// 	'<path d="M200,200 L377,231 A180,180 0 0,1 138,369 z"' +
-		// 	'style="fill:#00ff00;' +
-		// 	'fill-opacity: 1;' +
-		// 	'stroke:black;' +
-		// 	'stroke-width: 1"/>' +
-		// 	'<path d="M200,200 L138,369 A180,180 0 0,1 20,194 z"' +
-		// 	'style="fill:#0000ff;' +
-		// 	'fill-opacity: 1;' +
-		// 	'stroke:black;' +
-		// 	'stroke-width: 1"/>' +
-		// 	'<path d="M200,200 L20,194 A180,180 0 0,1 75,71 z"' +
-		// 	'style="fill:#ff00ff;' +
-		// 	'fill-opacity: 1;' +
-		// 	'stroke:black;' +
-		// 	'stroke-width: 1"/>' +
-		// 	'<path d="M200,200 L75,71 A180,180 0 0,1 200,20 z"' +
-		// 	'style="fill:#ffff00;' +
-		// 	'fill-opacity: 1;' +
-		// 	'stroke:black;' +
-		// 	'stroke-width: 1"/>';
-		var points = [20, 30, 40, 22, 67];
-		var max = 0; //sum of all points
-		for(var i = 0; i < points.length; ++i){
-			max += points[i];
+		if(this.obj.multiplePoints === false){
+			var self = this.obj;
+			var E = this.openTags();
+			E.pie = '<g class="paths">';
+			var fullPie = 2 * Math.PI; //360 deg
+			var max = 0; //sum of all points
+			var center = 200;
+			var radius = center - 20; //leave padding for pie
+			var CENTER = 'M' + center + ',' + center;
+			var ARC = 'A' + radius + ',' + radius;
+			var STD = '0 0,1'; //arc options
+			var HORZ; //x component of line
+			var VERT; //y component of line
+			var sizing = 20;
+			var LINETO = this.lineTo(sizing, center); //intiial starting point
+			var howMuchOfPie = 0;
+			var howMuchOfPieInRadians;
+			var howMuchUp;
+			var howMuchLeft;
+			for(var i = 0; i < self.points.length; ++i){
+				max += self.points[i];
+			}
+			for(var i = 0; i < self.points.length; ++i){
+				if(i !== 0) LINETO = this.lineTo(HORZ, VERT);
+				howMuchOfPie += self.points[i]/max;
+				howMuchOfPieInRadians = howMuchOfPie * fullPie;
+				howMuchUp = Math.sin(howMuchOfPieInRadians);
+				howMuchLeft = Math.cos(howMuchOfPieInRadians);
+				HORZ = center - (radius * howMuchLeft); //x component of line
+				VERT = center - (radius * howMuchUp); //y component of line
+				E.pie += '<path d="' + CENTER + ' ' + LINETO + ' ' + ARC + ' ' + STD + ' ' + HORZ + ',' + VERT + ' Z"/>';
+			}
+			var xLines = self.x.length + 1; //needs one more because each x label takes entire column
+			var yLines = self.y + 1;
+			this.finishGraph(xLines, yLines, E, thing);
 		}
-		//var howMuchOfPie = points[0]/max;
-		var howMuchOfPie = 1 / 3;
-		var fullPie = 2 * Math.PI;
-		var howMuchOfPieInRadians = howMuchOfPie * fullPie;
-		var howMuchUp = Math.sin(howMuchOfPieInRadians);
-		var howMuchLeft = Math.cos(howMuchOfPieInRadians);
-		var center = 200;
-		var radius = center - 20; //leave padding for pie
-		var CENTER = 'M' + center + ',' + center;
-		var ARC = 'A' + radius + ',' + radius;
-		var STD = '0 0,1'; //arc options
-		var HORZ = center - (radius * howMuchLeft); //x component of line
-		var VERT = center - (radius * howMuchUp); //y component of line
-		var sizing = 20;
-		var LINETO = this.lineTo(sizing, center); //intiial starting point
-		console.log(max);
-		//first path
-		E.pie += '<path d="' + CENTER + ' ' + LINETO + ' ' + ARC + ' ' + STD + ' ' + HORZ + ',' + VERT + ' Z"/>';
-		//second path
-		var l = this.lineTo(HORZ, VERT);
-		howMuchOfPie = howMuchOfPie + 1/2;
-		fullPie = 2 * Math.PI;
-		howMuchOfPieInRadians = howMuchOfPie * fullPie;
-		howMuchUp = Math.sin(howMuchOfPieInRadians);
-		howMuchLeft = Math.cos(howMuchOfPieInRadians);
-		HORZ = center - (radius * howMuchLeft); //x component of line
-		VERT = center - (radius * howMuchUp); //y component of line
-		E.pie += '<path d="' + CENTER + ' ' + l + ' ' + ARC + ' ' + STD + ' ' + HORZ + ',' + VERT + ' Z"/>';
-		// for (var i = 0; i < self.points.length; ++i) {
-		// 	if (!lineFrom) lineFrom = 191 + ',' + 290;
-		// 	lineTo = 340 + ',' + 97;
-		// 	E.pie += '<path d="' + START + ' L' + lineFrom + ' ' + ARC + lineTo + ' Z"></path>';
-		// 	lineFrom = lineTo; //set so next path starts where this one left off
-		// }
-		var xLines = self.x.length + 1; //needs one more because each x label takes entire column
-		var yLines = self.y + 1;
-		this.finishGraph(xLines, yLines, E, thing);
 	};
 	return GraphPie;
 })(jQuery);
@@ -923,6 +884,8 @@ var GraphPie = GraphPie || (function($) {
 		var data = {
 			types: ['linear', 'bar', 'table', 'area', 'pie']
 		};
+		//if graph has multiple datasets we can not make a pie graph:
+		if(opts.obj.multiplePoints === true) data.types.pop();
 		opts.obj.attachTo = this.attr('id');
 		//UI
 		var buttons = (function() {

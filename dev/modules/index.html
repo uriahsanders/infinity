@@ -51,6 +51,19 @@
 		_.br(5);
 		_.h(3, 'More options/documentation/pie graphs coming soon to the plugin.');
 		_.hr();
+		_.h(2, 'This is a pie graph: (Can also be displayed with the plugin, but only when we have one dataset)');
+		_.h(4, '[The above graph obviously had multiple datasets so there was no "pie" button]');
+		_.br();
+		_.create('div', {
+			id: 'piehold',
+			style: 'height:400px;'
+		});
+		var pie = new GraphPie({
+			example: true,
+			attachTo: 'piehold'
+		});
+		pie.init();
+		_.hr();
 		_.h(2, 'Example for .expand() and .save():');
 		_.div('', 'wrapper');
 		var graph = new GraphBar({
@@ -60,8 +73,6 @@
 			id: 'something',
 			width: 500,
 			height: 400,
-			xOffset: 50,
-			mainOffset: 60
 		}); //create JSON for new graph
 		graph.init(); //display graph
 		//LINEAR GRAPH
@@ -79,8 +90,6 @@
 				width: 500,
 				scale: 16,
 				height: 400,
-				xOffset: 50,
-				mainOffset: 60
 			});
 			$(this).attr('disabled', 'true');
 		});
@@ -107,7 +116,6 @@
 			mainOffset: 60
 		});
 		graph2.init();
-		//EXPAND JSON INTO GRAPH
 		var json = $.parseJSON(graph.save()); //so i can modify title
 		json.title = 'You can still modify whatever you want when you expand';
 		json.id = 'diffId';
@@ -131,13 +139,11 @@
 			title: 'Everything is optional; view source to see the stuff i changed on this graph (You can disable any part of the grid btw)',
 			width: 1000,
 			height: 500,
-			xOffset: 50,
 			id: 'anId',
 			xDist: 120,
 			grid: false,
 			showPoints: false,
 			yDist: 40,
-			mainOffset: 60,
 			//one way to style a graph (using given properties)
 			styles: {
 				lineStroke: 'red',
@@ -170,26 +176,26 @@
 		_.hr();
 		_.h(2, 'You probably want some example code by now:');
 	</script>
+	<!-- Not written in NOHTML for "pre" tags -->
 	<h4>
-		<pre>
-		//define options:
-		var options = {
-			addStyling: true, //load default css
-			x: ['mon', 'tue', 'wed', 'thu', 'fri'], //the x axis
-			scale: 100, //each Y goes up by 100
-			points: [12, 164, 1000, 45, 982], //Y values
-			attachTo: 'main' //append to an id
-			//and anything you dont specify is defaulted for you!
-		};
-		var linear = new GraphLinear(options);
-		linear.init();
+	<pre>
+	//define options:
+	var options = {
+		addStyling: true, //load default css
+		x: ['mon', 'tue', 'wed', 'thu', 'fri'], //the x axis
+		scale: 100, //each Y goes up by 100
+		points: [12, 164, 1000, 45, 982], //Y values
+		attachTo: 'main' //append to an id
+		//and anything you dont specify is defaulted for you!
+	};
+	
+	var linear = new GraphLinear(options);
+	linear.init();
 
-		//or if you want to use the jquery plugin:
-		$('#main').graphify({obj:options});
-		//plugin also has other options that are defaulted if not specified
+	//or if you want to use the jquery plugin:
+	$('#main').graphify({obj:options});
+	//plugin also has other options that are defaulted if not specified
 		</pre>
 	</h4>
-	<hr />
-	<h2>Still working on pie graphs!</h2>
 </body>
 </html>

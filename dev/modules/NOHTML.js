@@ -2,7 +2,7 @@
 /*	
 	JS script to allow linear format of programming, similar to the command line in nature
 	so beginners can focus less on html/css, and more on JS
-	omit _.start() and _.end() to use as a general framework (like jQuery!)
+	omit _.start() and _.end() to use as a general framework
 */
 var NOHTML = NOHTML || (function($) {
 	"use strict";
