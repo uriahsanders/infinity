@@ -182,7 +182,7 @@ var Graph = Graph || (function($) {
 			"text-align": 'center'
 		};
 		//when using multiple lines make them different colors automatically
-		var colors = obj.colors || ['red', 'blue', 'green', 'orange'];
+		var colors = obj.colors || ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'brown'];
 		if (obj.colors) obj.colors.push(''); //so bar spaces dont takeup colors
 		for (var i = 0; i < colors.length; ++i) {
 			styling.style[this.parseS(obj.id, '.line-of-' + i)] = {
@@ -400,13 +400,8 @@ var Graph = Graph || (function($) {
 		var hoverHandle = function(what) {
 			var to = (what === 'add') ? 1 : 0.7;
 			var clas = $(this).attr('class').substring(6);
-			$('line[class$="' + clas + '"]').each(function() {
-				$(this).css('opacity', to);
-			});
-			$('rect[class$="' + clas + '"]').each(function() {
-				$(this).css('opacity', to);
-			});
-			$('path[class$="' + clas + '"]').each(function() {
+			var selector = '[class$="' + clas + '"][id^="'+self.id+'"]';
+			$('line'+selector+', rect'+selector+', path'+selector).each(function() {
 				$(this).css('opacity', to);
 			});
 		}
@@ -543,7 +538,7 @@ var GraphLinear = GraphLinear || (function($) {
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
 		var area = self.special === 'area';
-		if (area && self.multiplePoints === false) E.path = '<g class="area"><path d="';
+		if (area && self.multiplePoints === false) E.path = '<g class="area"><path id="'+self.id+'"d="';
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
@@ -616,7 +611,7 @@ var GraphLinear = GraphLinear || (function($) {
 				}
 				if (area) {
 					//PATHS
-					paths.push('<path class="path-of-' + i + '" d="');
+					paths.push('<path id="'+self.id+'"class="path-of-' + i + '" d="');
 					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (hmdist) + ' ';
 					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
 					for (var t = 0; t < self.points[i].length; ++t) {
@@ -824,12 +819,15 @@ var GraphPie = GraphPie || (function($) {
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
+	GraphPie.prototype.addLegend = function(){
+		//pie legends are special because each "point" has a slice
+	};
 	GraphPie.prototype.lineTo = function(x, y) {
 		return 'L' + x + ',' + y;
 	};
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
-		if(this.obj.multiplePoints === false){
+		if (this.obj.multiplePoints === false) {
 			var self = this.obj;
 			var E = this.openTags();
 			E.pie = '<g class="paths">';
@@ -848,18 +846,19 @@ var GraphPie = GraphPie || (function($) {
 			var howMuchOfPieInRadians;
 			var howMuchUp;
 			var howMuchLeft;
-			for(var i = 0; i < self.points.length; ++i){
+			for (var i = 0; i < self.points.length; ++i) {
 				max += self.points[i];
 			}
-			for(var i = 0; i < self.points.length; ++i){
-				if(i !== 0) LINETO = this.lineTo(HORZ, VERT);
-				howMuchOfPie += self.points[i]/max;
+			for (var i = 0; i < self.points.length; ++i) {
+				if (i !== 0) LINETO = this.lineTo(HORZ, VERT);
+				howMuchOfPie += self.points[i] / max;
 				howMuchOfPieInRadians = howMuchOfPie * fullPie;
 				howMuchUp = Math.sin(howMuchOfPieInRadians);
 				howMuchLeft = Math.cos(howMuchOfPieInRadians);
 				HORZ = center - (radius * howMuchLeft); //x component of line
 				VERT = center - (radius * howMuchUp); //y component of line
-				E.pie += '<path d="' + CENTER + ' ' + LINETO + ' ' + ARC + ' ' + STD + ' ' + HORZ + ',' + VERT + ' Z"/>';
+				E.pie += '<path id="'+self.id+'"class="path-of-' + i +
+					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
 			}
 			var xLines = self.x.length + 1; //needs one more because each x label takes entire column
 			var yLines = self.y + 1;
@@ -885,7 +884,7 @@ var GraphPie = GraphPie || (function($) {
 			types: ['linear', 'bar', 'table', 'area', 'pie']
 		};
 		//if graph has multiple datasets we can not make a pie graph:
-		if(opts.obj.multiplePoints === true) data.types.pop();
+		if (opts.obj.multiplePoints === true) data.types.pop();
 		opts.obj.attachTo = this.attr('id');
 		//UI
 		var buttons = (function() {
