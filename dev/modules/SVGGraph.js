@@ -466,17 +466,19 @@ var GraphLinear = GraphLinear || (function($) {
 			var id = matcher[0];
 			var num = matcher[1];
 			var thiz = this; //reference the point that called us
-			$('svg line[id^="' + id + '"]').each(function() {
+			$('svg line[id^="' + id + '"], svg path[id^="'+id+'"]').each(function() {
 				if ($(this).attr('id').split('-')[1] === num) {
 					var tooltip = '#' + $(thiz).attr('class') + '-tooltip';
 					var tooltipRect = '#' + $(thiz).attr('class') + '-tooltip-rect';
 					var s = parseFloat($(this).css('stroke-width'));
 					if (action === 'add') {
 						$(this).css('stroke-width', obj.lineStrokeWidth || 3);
+						$(this).css('opacity', 1);
 						$(tooltip).show();
 						$(tooltipRect).show();
 					} else {
 						$(this).css('stroke-width', obj.lineStrokeWidth - 1 || 2);
+						$(this).css('opacity', 0.7);
 						$(tooltip).hide();
 						$(tooltipRect).hide();
 					}
@@ -616,7 +618,7 @@ var GraphLinear = GraphLinear || (function($) {
 				}
 				if (area) {
 					//PATHS
-					paths.push('<path id="' + self.id + '"class="path-of-' + i + '" d="');
+					paths.push('<path id="' + self.id + '-'+i+'-path"class="path-of-' + i + '" d="');
 					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (hmdist) + ' ';
 					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
 					for (var t = 0; t < self.points[i].length; ++t) {
@@ -817,6 +819,7 @@ var GraphTable = GraphTable || (function($) {
 })(jQuery);
 var GraphPie = GraphPie || (function($) {
 	"use strict";
+	var Private = {};
 	var GraphPie = function(obj) {
 		obj = obj || {};
 		obj.type = 'pie';
@@ -824,15 +827,15 @@ var GraphPie = GraphPie || (function($) {
 		if (this.obj.interactive === true) {
 			var thiz = this;
 			$(document).ready(function() {
-				$(document).on('mouseover', 'svg path', function(e) {
+				$(document).on('mouseover', 'svg path[id^="'+thiz.obj.id+'"]', function(e) {
 					$(this).css('opacity', 1);
 				});
-				$(document).on('mouseleave', 'svg path', function(e) {
+				$(document).on('mouseleave', 'svg path[id^="'+thiz.obj.id+'"]', function(e) {
 					$(this).css('opacity', 0.7);
 				});
 				//rely on jQuery tooltip until i can make a good one :P
 				$(function() {
-					$('svg[id="'+thiz.obj.id+'"]').tooltip({
+					$('svg[id="' + thiz.obj.id + '"]').tooltip({
 						show: {
 							delay: 250
 						}
@@ -843,10 +846,10 @@ var GraphPie = GraphPie || (function($) {
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
-	GraphPie.prototype.lineTo = function(x, y) {
+	Private.lineTo = function(x, y) {
 		return 'L' + x + ',' + y;
 	};
-	GraphPie.prototype.percent = function(dec) {
+	Private.percent = function(dec) {
 		return dec * 100 + '%';
 	};
 	GraphPie.prototype.init = function(thing) {
@@ -865,7 +868,7 @@ var GraphPie = GraphPie || (function($) {
 			var HORZ; //x component of line
 			var VERT; //y component of line
 			var sizing = 20;
-			var LINETO = this.lineTo(sizing, center); //intiial starting point
+			var LINETO = Private.lineTo(sizing, center); //intiial starting point
 			var howMuchOfPie = 0;
 			var howMuchOfPieInRadians;
 			var howMuchUp;
@@ -876,7 +879,7 @@ var GraphPie = GraphPie || (function($) {
 				max += self.points[i];
 			}
 			for (var i = 0; i < self.points.length; ++i) {
-				if (i !== 0) LINETO = this.lineTo(HORZ, VERT);
+				if (i !== 0) LINETO = Private.lineTo(HORZ, VERT);
 				howMuchOfPie += self.points[i] / max;
 				howMuchOfPieInRadians = howMuchOfPie * fullPie;
 				howMuchUp = Math.sin(howMuchOfPieInRadians);
@@ -884,14 +887,16 @@ var GraphPie = GraphPie || (function($) {
 				HORZ = center - (radius * howMuchLeft); //x component of line
 				VERT = center - (radius * howMuchUp); //y component of line
 				//path
-				E.pie += '<path title="' + self.points[i] + ' (' + (this.percent(self.points[i] / max)) +
+				E.pie += '<path title="' + self.points[i] + ' (' + (Private.percent(self.points[i] / max)) +
 					')"id="' + self.id + '-point-' + i + '"class="path-of-' + i +
 					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
+				//unique tooltip for pie is a div
+				//see constructor for implementation
 			}
 			//add percentages to names for legend
 			if (self.dataNames) {
 				for (var i = 0; i < self.dataNames.length; ++i) {
-					self.dataNames[i] += ' (' + this.percent(self.points[i] / max) + ')';
+					self.dataNames[i] += ' (' + Private.percent(self.points[i] / max) + ')';
 				}
 			}
 			this.finishGraph(0, 0, E, thing);
