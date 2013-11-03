@@ -196,7 +196,7 @@ var Graph = Graph || (function($) {
 			};
 			styling.style[this.parseS(obj.id, '.path-of-' + i)] = {
 				"fill": colors[i],
-				"opacity": 0.8
+				"opacity": 0.7
 			};
 			styling.style[this.parseS(obj.id, '.rect-of-' + i)] = {
 				"fill": colors[i],
@@ -365,7 +365,7 @@ var Graph = Graph || (function($) {
 			((this.obj.height) - yLines * (this.obj.yDist) - this.obj.yOffset) +
 			'">' + this.obj.title + '</text>';
 	};
-	//close all tags, append to DOM, and add styling
+	//close all tags, append to DOM, and add styling (SVG only
 	Graph.prototype.finishGraph = function(xLines, yLines, E, thing) {
 		if (this.obj.type !== 'pie') {
 			//build grid
@@ -825,14 +825,18 @@ var GraphPie = GraphPie || (function($) {
 			var thiz = this;
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg path', function(e) {
-					//$('#' + $(this).attr('id') + '-tooltip').show();
-					//$('#' + $(this).attr('id') + '-tooltip-rect').show();
 					$(this).css('opacity', 1);
 				});
 				$(document).on('mouseleave', 'svg path', function(e) {
-					//$('#' + $(this).attr('id') + '-tooltip').hide();
-					//$('#' + $(this).attr('id') + '-tooltip-rect').hide();
-					$(this).css('opacity', 0.8);
+					$(this).css('opacity', 0.7);
+				});
+				//rely on jQuery tooltip until i can make a good one :P
+				$(function() {
+					$('svg[id="'+thiz.obj.id+'"]').tooltip({
+						show: {
+							delay: 250
+						}
+					});
 				});
 			});
 		}
@@ -841,6 +845,9 @@ var GraphPie = GraphPie || (function($) {
 	GraphPie.prototype.constructor = GraphPie;
 	GraphPie.prototype.lineTo = function(x, y) {
 		return 'L' + x + ',' + y;
+	};
+	GraphPie.prototype.percent = function(dec) {
+		return dec * 100 + '%';
 	};
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
@@ -863,6 +870,8 @@ var GraphPie = GraphPie || (function($) {
 			var howMuchOfPieInRadians;
 			var howMuchUp;
 			var howMuchLeft;
+			var x;
+			var y;
 			for (var i = 0; i < self.points.length; ++i) {
 				max += self.points[i];
 			}
@@ -874,12 +883,18 @@ var GraphPie = GraphPie || (function($) {
 				howMuchLeft = Math.cos(howMuchOfPieInRadians);
 				HORZ = center - (radius * howMuchLeft); //x component of line
 				VERT = center - (radius * howMuchUp); //y component of line
-				E.pie += '<path id="' + self.id + '"class="path-of-' + i +
+				//path
+				E.pie += '<path title="' + self.points[i] + ' (' + (this.percent(self.points[i] / max)) +
+					')"id="' + self.id + '-point-' + i + '"class="path-of-' + i +
 					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
 			}
-			var xLines = self.x.length + 1; //needs one more because each x label takes entire column
-			var yLines = self.y + 1;
-			this.finishGraph(xLines, yLines, E, thing);
+			//add percentages to names for legend
+			if (self.dataNames) {
+				for (var i = 0; i < self.dataNames.length; ++i) {
+					self.dataNames[i] += ' (' + this.percent(self.points[i] / max) + ')';
+				}
+			}
+			this.finishGraph(0, 0, E, thing);
 		}
 	};
 	return GraphPie;
