@@ -110,7 +110,7 @@ $('#submit').click(function (){
         		var group = $('#groupInput').val(); 
             	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
-            	$('#groups').append("<div id='" + response[i] + "' class='group'><span id='" + group + "' class='name'>" + group + "</span><br ><span class='group-toolbar'><a id='" + group + "' class='showMembers'>Show Members</a> <a id='" + group + "' class='edit'>Edit</a></span></div>"); //append the new group to groups
+            	$('#groups').append("<div id='" + group + "' class='group'><span id='" + group + "' class='name'>" + group + "</span><br ><span class='group-toolbar'><a id='" + group + "' class='showMembers'>Show Members</a> <a id='" + group + "' class='edit'>Edit</a></span></div>"); //append the new group to groups
             	$('#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false}); //make each div draggable 
                 $('#' + response[i]).droppable({
                     drop: function (event, ui){
@@ -218,6 +218,7 @@ $('#show').toggle(function (){
                 //code for showing members
                 $('.showMembers').toggle(function (){
                 	var group = $(this).attr("id"); //get the group name
+                	$('#' + group).draggable("disable");
                 	$(this).text("Hide members");
                 	$.post("dragndrop_script.php", {
                 	get: "members", //send what you want to get
@@ -243,7 +244,8 @@ $('#show').toggle(function (){
                 	});
                 }, function (){
                 	$(this).text("Show members");
-                	$('#' + $(this).attr("id")).find('div.member').fadeOut();
+                	$('#' + $(this).attr("id")).find('.member').fadeOut();
+                	$('#' + group).draggable("enable");
                 });
                 //code for editing
                 $('.edit').toggle(function (){
