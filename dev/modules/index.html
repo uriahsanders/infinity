@@ -10,16 +10,6 @@
 	<script src="NOHTML.js"></script>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  	<style>
-		.pie-tooltip{
-			padding: 8px;
-			position: absolute;
-			z-index: 9999;
-			max-width: 300px;
-			-webkit-box-shadow: 0 0 5px #aaa;
-			box-shadow: 0 0 5px #aaa;
-		}
-  	</style>
 </head>
 <body>
 	<script>
@@ -31,6 +21,7 @@
 			style: 'height:350px;width:800px;'
 		});
 		$('#grapher').graphify({
+			options: true,
 			obj: {
 				id: 'ggg',
 				width: 775,
@@ -60,7 +51,7 @@
 				xDist: 90
 			}
 		});
-		_.br(5);
+		_.br(20);
 		_.h(3, 'More options/documentation/pie graphs coming soon to the plugin.');
 		_.hr();
 		_.h(2, 'This is a pie graph: (Can also be displayed with the plugin, but only when we have one dataset)');
@@ -75,7 +66,9 @@
 			attachTo: 'piehold',
 			points: [18, 44, 65, 22, 51],
 			legend: true,
-			dataNames: ['One', 'Two', 'Three', 'Four', 'Five']
+			dataNames: ['One', 'Two', 'Three', 'Four', 'Five'],
+			pieSize: 200,
+			shadow: true
 		});
 		pie.init();
 		_.hr();

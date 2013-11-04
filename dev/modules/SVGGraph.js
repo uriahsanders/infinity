@@ -4,8 +4,7 @@
 	--------------------------------------
 	Coming soon: (* denotes current focus)
 	scatter graphs,
-	3d pie graphs,
-	pie graph tooltips, *
+	3d pie graphs, *
 	x/y axis names,
 	average lines for bar and scatter graphs,
 */
@@ -73,6 +72,7 @@ var Graph = Graph || (function($) {
 			showPoints: true,
 			noLines: false,
 			pointRadius: 5,
+			pieSize: 200,
 			//add some html before append
 			before: '',
 			//after append:
@@ -268,7 +268,7 @@ var Graph = Graph || (function($) {
 			yGrid = '',
 			weird = self.yDist - 30;
 		//make sure they want the grid
-		if (self.grid === true && self.noLines === false) {
+		if (self.grid && !self.noLines) {
 			//save final x of xlines so ylines dont pass that boundary
 			var finalY = (self.height) - yLines * (self.yDist);
 			var nxt;
@@ -310,7 +310,7 @@ var Graph = Graph || (function($) {
 	};
 	Graph.prototype.applyStyling = function() {
 		//Add CSS as value for every key in style
-		if (this.obj.addStyle === true) {
+		if (this.obj.addStyle) {
 			for (var i in this.obj.style) {
 				$(i).css(this.obj.style[i]);
 			}
@@ -319,7 +319,7 @@ var Graph = Graph || (function($) {
 	//initialize global tags
 	Graph.prototype.openTags = function() {
 		return {
-			SVG: '<svg id="' + this.obj.id + '"class="graph">', //begin all groups
+			SVG: '<svg id="' + this.obj.id + '"class="graph"style="' + (this.obj.css || '') + '">', //begin all groups
 			xGrid: '<g class="grid x-grid" id="xGrid">',
 			yGrid: '<g class="grid y-grid" id="yGrid">',
 			xLabels: '<g class="labels x-labels">',
@@ -376,7 +376,7 @@ var Graph = Graph || (function($) {
 			E.yLabels += this.addLabels().yLabels;
 		}
 		E.title += this.addTitle(yLines);
-		if (this.obj.legend === true) E.legend = this.addLegend(thing);
+		if (this.obj.legend) E.legend = this.addLegend(thing);
 		//COMBINING DYNAMICALLY
 		E.points = E.points || '';
 		for (var i in E) {
@@ -410,7 +410,7 @@ var Graph = Graph || (function($) {
 				$(this).css('opacity', to);
 			});
 		}
-		if (self.interactive === true && self.multiplePoints === true) {
+		if (self.interactive && self.multiplePoints) {
 			$(document).ready(function() {
 				$(document).on('mouseover', 'g[id^="legend-"]', function() {
 					hoverHandle.call(this, 'add');
@@ -426,7 +426,7 @@ var Graph = Graph || (function($) {
 		var width = 30; //width of rect
 		var height = 30;
 		self.dataNames = self.dataNames || [];
-		if (self.multiplePoints === false && self.type !== 'pie') {
+		if (!self.multiplePoints && self.type !== 'pie') {
 			legend += '<g class="legend-' + self.id + '"class="legend-of-0">';
 			legend += '<rect x="' + (x) +
 				'" y="' + (self.yOffset) + '"width="' + width + '"height="' + height + '"></rect>';
@@ -466,7 +466,7 @@ var GraphLinear = GraphLinear || (function($) {
 			var id = matcher[0];
 			var num = matcher[1];
 			var thiz = this; //reference the point that called us
-			$('svg line[id^="' + id + '"], svg path[id^="'+id+'"]').each(function() {
+			$('svg line[id^="' + id + '"], svg path[id^="' + id + '"]').each(function() {
 				if ($(this).attr('id').split('-')[1] === num) {
 					var tooltip = '#' + $(thiz).attr('class') + '-tooltip';
 					var tooltipRect = '#' + $(thiz).attr('class') + '-tooltip-rect';
@@ -486,7 +486,7 @@ var GraphLinear = GraphLinear || (function($) {
 			});
 		}
 		//set click handlers for tooltips
-		if (this.obj.interactive === true) {
+		if (this.obj.interactive) {
 			var thiz = this;
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
@@ -545,13 +545,13 @@ var GraphLinear = GraphLinear || (function($) {
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
 		var area = self.special === 'area';
-		if (area && self.multiplePoints === false) E.path = '<g class="area"><path id="' + self.id + '"d="';
+		if (area && !self.multiplePoints) E.path = '<g class="area"><path id="' + self.id + '"d="';
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
 		var r = 5; //radius of circle
 		var hmdist = self.height - self.yDist;
-		if (self.multiplePoints === false) { //single line graph
+		if (!self.multiplePoints) { //single line graph
 			//POINTS (INDIVIDUAL)
 			var inc, x, j;
 			for (var i = 0; i < xLines; ++i) {
@@ -618,7 +618,7 @@ var GraphLinear = GraphLinear || (function($) {
 				}
 				if (area) {
 					//PATHS
-					paths.push('<path id="' + self.id + '-'+i+'-path"class="path-of-' + i + '" d="');
+					paths.push('<path id="' + self.id + '-' + i + '-path"class="path-of-' + i + '" d="');
 					paths[i] += 'M' + self.mxOfPoints[i][0] + ',' + (hmdist) + ' ';
 					paths[i] += 'L' + self.mxOfPoints[i][0] + ',' + self.myOfPoints[i][0] + ' ';
 					for (var t = 0; t < self.points[i].length; ++t) {
@@ -642,7 +642,7 @@ var GraphBar = GraphBar || (function($) {
 		obj.type = 'bar';
 		Graph.call(this, obj);
 		//set click handlers for tooltips
-		if (this.obj.interactive === true) {
+		if (this.obj.interactive) {
 			var thiz = this;
 			$(document).ready(function() {
 				$(document).on('mouseover', 'svg rect', function(e) {
@@ -671,7 +671,7 @@ var GraphBar = GraphBar || (function($) {
 		E.rects = '<g class="rects">';
 		var inc, x, y, weird; //increment
 		weird = self.yDist - 30;
-		if (self.multiplePoints === false) {
+		if (!self.multiplePoints) {
 			for (var i = 0; i < xLines - 1; ++i) {
 				//height must = last section of "y"
 				//if i = 0, let inc = 1 so we can at least see at line at origin
@@ -779,7 +779,7 @@ var GraphTable = GraphTable || (function($) {
 		var headers = '<th>' + (self.yName || 'Data') + '</th>'; //first header will always just be name of y
 		//within each row is [num | x | y] <td>'s
 		var row = '<tr>';
-		if (self.multiplePoints !== true) {
+		if (!self.multiplePoints) {
 			for (var i = 0; i < self.x.length; ++i) {
 				row += '<td>' + i + '</td><td>' + self.x[i] + '</td><td>' + self.points[i] + '</td></tr><tr>';
 			}
@@ -824,13 +824,13 @@ var GraphPie = GraphPie || (function($) {
 		obj = obj || {};
 		obj.type = 'pie';
 		Graph.call(this, obj);
-		if (this.obj.interactive === true) {
+		if (this.obj.interactive) {
 			var thiz = this;
 			$(document).ready(function() {
-				$(document).on('mouseover', 'svg path[id^="'+thiz.obj.id+'"]', function(e) {
+				$(document).on('mouseover', 'svg path[id^="' + thiz.obj.id + '"]', function(e) {
 					$(this).css('opacity', 1);
 				});
-				$(document).on('mouseleave', 'svg path[id^="'+thiz.obj.id+'"]', function(e) {
+				$(document).on('mouseleave', 'svg path[id^="' + thiz.obj.id + '"]', function(e) {
 					$(this).css('opacity', 0.7);
 				});
 				//rely on jQuery tooltip until i can make a good one :P
@@ -854,13 +854,13 @@ var GraphPie = GraphPie || (function($) {
 	};
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
-		if (this.obj.multiplePoints === false) {
+		if (!this.obj.multiplePoints) {
 			var self = this.obj;
 			var E = this.openTags();
 			E.pie = '<g class="paths">';
 			var fullPie = 2 * Math.PI; //360 deg
 			var max = 0; //sum of all points
-			var center = 200;
+			var center = self.pieSize || 200;
 			var radius = center - 20; //leave padding for pie
 			var CENTER = 'M' + center + ',' + center;
 			var ARC = 'A' + radius + ',' + radius;
@@ -875,6 +875,10 @@ var GraphPie = GraphPie || (function($) {
 			var howMuchLeft;
 			var x;
 			var y;
+			if (self.shadow) {
+				E.pie += '<defs><filter id="dropshadow" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter></defs>' +
+					'<circle cx="' + (center + 5) + '" cy="' + (center + 5) + '" r="' + radius + '"style="fill: black; fill-opacity:0.6; stroke:none;filter:url(#dropshadow)"/>';
+			}
 			for (var i = 0; i < self.points.length; ++i) {
 				max += self.points[i];
 			}
@@ -890,8 +894,6 @@ var GraphPie = GraphPie || (function($) {
 				E.pie += '<path title="' + self.points[i] + ' (' + (Private.percent(self.points[i] / max)) +
 					')"id="' + self.id + '-point-' + i + '"class="path-of-' + i +
 					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
-				//unique tooltip for pie is a div
-				//see constructor for implementation
 			}
 			//add percentages to names for legend
 			if (self.dataNames) {
@@ -920,36 +922,60 @@ var GraphPie = GraphPie || (function($) {
 		var data = {
 			types: ['linear', 'bar', 'table', 'area', 'pie']
 		};
+		var id = opts.obj.id;
 		//if graph has multiple datasets we can not make a pie graph:
-		if (opts.obj.multiplePoints === true) data.types.pop();
-		opts.obj.attachTo = this.attr('id');
+		if (opts.obj.multiplePoints) data.types.pop();
+		var wrapper = this.attr('id') + '-wrapper';
+		this.append('<div id="' + wrapper + '"style="border:1px solid #000;padding:10px;"></div>');
+		opts.obj.attachTo = wrapper;
 		//UI
 		var buttons = (function() {
 			var btns = '';
 			for (var i = 0; i < data.types.length; ++i) {
-				btns += '<button id="' + opts.obj.id + '-graphify-button-' + data.types[i] + '">' +
+				btns += '<button id="' + id + '-graphify-button-' + data.types[i] + '">' +
 					data.types[i].charAt(0).toUpperCase() + data.types[i].substring(1) +
 					'</button>&emsp;';
 			}
 			return btns;
 		})();
-		if (opts.pos === 'top') this.append(buttons + '<br/><br />');
+		if (opts.pos === 'top') $('#' + wrapper).append(buttons + '<br/><br />');
 		//Initiation
 		var SVG = new Graph();
 		var graph = new window[SVG.genToFunc(opts.start)](opts.obj);
 		graph.init();
 		if (opts.pos === 'bottom') this.append(buttons);
+		if(opts.options){
+			var formID = id + 'graphify-form';
+			var checked = (opts.obj.legend) ? 'checked' : '';
+			var form = ['<div id="' + formID + '"><hr />',
+				'<input type="text"value="' + opts.obj.title + '"placeholder="Title" />&emsp;',
+				'<input type="checkbox" '+checked+'/>Legend&emsp;',
+				'Type: <select name="" id=""><option value="">Linear</option></select>&emsp;',
+				'Grid: <select name="" id=""><option value="">Full</option></select>&emsp;',
+				'Scale: <input style="width:20px"value="10" />',
+				'<br />',
+				'X-axis: <input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+				'<br />',
+				'<button>New Dataset</button><br />',
+				'<span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 1"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+				'<br /><span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 2"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+				'<br /><span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 3"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+				'<br /><button>Update</button> | <button>Restore</button>',
+				'</div>'
+			].join('');
+			//NOTE: also allow them to specify colors
+			$('#' + wrapper).append(form);
+		}
 		//click handlers
 		$(document).ready(function() {
-			$(document).on('click', 'button[id^="' + opts.obj.id + '-graphify-button-"]', function() {
+			//changing graph type
+			$(document).on('click', 'button[id^="' + id + '-graphify-button-"]', function() {
 				var type = $(this).attr('id').split('-')[3];
-				if (opts.obj.type !== type) { //dont repeat a chosen type
-					if (type !== 'area') graph.to(type);
-					else { //area graphs are a subset of linear graphs...
-						opts.obj.special = 'area';
-						graph.to('linear');
-						graph.update(opts.obj);
-					}
+				if (type !== 'area') graph.to(type);
+				else { //area graphs are a subset of linear graphs...
+					opts.obj.special = 'area';
+					graph.to('linear');
+					graph.update(opts.obj);
 				}
 				opts.obj.type = type;
 			});
