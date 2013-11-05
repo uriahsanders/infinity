@@ -4,8 +4,8 @@
 	--------------------------------------
 	Coming soon: (* denotes current focus)
 	scatter graphs,
-	3d pie graphs, *
 	x/y axis names,
+	finish plugin, *
 	average lines for bar and scatter graphs,
 */
 var Graph = Graph || (function($) {
@@ -425,15 +425,9 @@ var Graph = Graph || (function($) {
 		var x = self.legendX || (self.Gwidth - self.xDist);
 		var width = 30; //width of rect
 		var height = 30;
-		self.dataNames = self.dataNames || [];
-		if (!self.multiplePoints && self.type !== 'pie') {
-			legend += '<g class="legend-' + self.id + '"class="legend-of-0">';
-			legend += '<rect x="' + (x) +
-				'" y="' + (self.yOffset) + '"width="' + width + '"height="' + height + '"></rect>';
-			legend += '<text x="' + (x + width + 5) +
-				'"y="' + (self.yOffset + height / 2) + '">' + (self.dataNames[0] || 'Data') + '</text>';
-			legend += '</g>';
-		} else {
+		if(self.type === 'pie') self.dataNames = self.dataNames || self.x || [];
+		else self.dataNames = self.dataNames || [];
+		if (self.multiplePoints || self.type === 'pie') {
 			var y = self.yOffset;
 			for (var i = 0; i < self.points.length; ++i) {
 				legend += '<g id="legend-' + self.id + '"class="legend-of-' + i + '">';
@@ -495,7 +489,7 @@ var GraphLinear = GraphLinear || (function($) {
 				});
 				$(document).on('mouseleave', 'svg circle[id$="point"]', function(e) {
 					pointHandle.call(this, 'sub');
-					$(this).css('opacity', thiz.obj.style['svg[id="'+thiz.obj.id+'"] circle'].opacity || 0.7);
+					$(this).css('opacity', thiz.obj.style['svg[id="' + thiz.obj.id + '"] circle'].opacity || 0.7);
 				});
 			});
 		}
@@ -653,7 +647,7 @@ var GraphBar = GraphBar || (function($) {
 				$(document).on('mouseleave', 'svg rect', function(e) {
 					$('#' + $(this).attr('id') + '-tooltip').hide();
 					$('#' + $(this).attr('id') + '-tooltip-rect').hide();
-					$(this).css('opacity', thiz.obj.style['svg[id="'+thiz.obj.id+'"] .rect'].opacity || 0.7);
+					$(this).css('opacity', thiz.obj.style['svg[id="' + thiz.obj.id + '"] .rect'].opacity || 0.7);
 				});
 			});
 		}
@@ -834,12 +828,10 @@ var GraphPie = GraphPie || (function($) {
 					$(this).css('opacity', 0.7);
 				});
 				//rely on jQuery tooltip until i can make a good one :P
-				$(function() {
-					$('svg[id="' + thiz.obj.id + '"]').tooltip({
-						show: {
-							delay: 250
-						}
-					});
+				$('svg[id="' + thiz.obj.id + '"]').tooltip({
+					show: {
+						delay: 250
+					}
 				});
 			});
 		}
@@ -850,7 +842,7 @@ var GraphPie = GraphPie || (function($) {
 		return 'L' + x + ',' + y;
 	};
 	Private.percent = function(dec) {
-		return dec * 100 + '%';
+		return Math.round(dec * 100) + '%';
 	};
 	GraphPie.prototype.init = function(thing) {
 		console.log("Pie graph initialized.");
@@ -891,7 +883,7 @@ var GraphPie = GraphPie || (function($) {
 				HORZ = center - (radius * howMuchLeft); //x component of line
 				VERT = center - (radius * howMuchUp); //y component of line
 				//path
-				E.pie += '<path title="' + self.points[i] + ' (' + (Private.percent(self.points[i] / max)) +
+				E.pie += '<path title="' + self.points[i] + ' (' + Private.percent(self.points[i] / max) +
 					')"id="' + self.id + '-point-' + i + '"class="path-of-' + i +
 					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
 			}
@@ -909,7 +901,7 @@ var GraphPie = GraphPie || (function($) {
 
 //UI/jQuery plugin for displaying SVGGraph.js graphs with all their functionality
 (function($) {
-	$.fn.graphify = $.fn.graphify || function(options) { //extend jQuery
+	$.fn.graphify = $.fn.graphify || function(options) {
 		options = options || {};
 		//SETUP
 		var opts = $.extend({
@@ -923,48 +915,59 @@ var GraphPie = GraphPie || (function($) {
 			types: ['linear', 'bar', 'table', 'area', 'pie']
 		};
 		var id = opts.obj.id;
-		//if graph has multiple datasets we can not make a pie graph:
-		if (opts.obj.multiplePoints) data.types.pop();
-		var wrapper = this.attr('id') + '-wrapper';
-		this.append('<div id="' + wrapper + '"style="border:1px solid #000;padding:10px;"></div>');
-		opts.obj.attachTo = wrapper;
-		//UI
-		var buttons = (function() {
-			var btns = '';
-			for (var i = 0; i < data.types.length; ++i) {
-				btns += '<button id="' + id + '-graphify-button-' + data.types[i] + '">' +
-					data.types[i].charAt(0).toUpperCase() + data.types[i].substring(1) +
-					'</button>&emsp;';
-			}
-			return btns;
-		})();
-		if (opts.pos === 'top') $('#' + wrapper).append(buttons + '<br/><br />');
-		//Initiation
-		var SVG = new Graph();
-		var graph = new window[SVG.genToFunc(opts.start)](opts.obj);
-		graph.init();
-		if (opts.pos === 'bottom') this.append(buttons);
-		if(opts.options){
-			var formID = id + 'graphify-form';
-			var checked = (opts.obj.legend) ? 'checked' : '';
-			var form = ['<div id="' + formID + '"><hr />',
-				'<input type="text"value="' + opts.obj.title + '"placeholder="Title" />&emsp;',
-				'<input type="checkbox" '+checked+'/>Legend&emsp;',
-				'Type: <select name="" id=""><option value="">Linear</option></select>&emsp;',
-				'Grid: <select name="" id=""><option value="">Full</option></select>&emsp;',
-				'Scale: <input style="width:20px"value="10" />',
-				'<br />',
-				'X-axis: <input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
-				'<br />',
-				'<button>New Dataset</button><br />',
-				'<span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 1"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
-				'<br /><span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 2"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
-				'<br /><span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 3"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
-				'<br /><button>Update</button> | <button>Restore</button>',
-				'</div>'
-			].join('');
-			//NOTE: also allow them to specify colors (maybe pie shadow?) allow pie graph dataNames, allow sizing options
-			$('#' + wrapper).append(form);
+		var SVG = new Graph(); //so we can use general functions
+		switch (options.action) {
+			case 'save':
+
+				break;
+			case 'expand':
+
+				break;
+			case 'update':
+
+				break;
+			default:
+				//if graph has multiple datasets we can not make a pie graph:
+				if (opts.obj.multiplePoints) data.types.pop();
+				var wrapper = this.attr('id') + '-wrapper';
+				this.append('<div id="' + wrapper + '"style="border:1px solid grey;padding:10px;"></div>');
+				opts.obj.attachTo = wrapper;
+				//UI
+				var buttons = (function() {
+					var btns = '';
+					for (var i = 0; i < data.types.length; ++i) {
+						btns += '<button id="' + id + '-graphify-button-' + data.types[i] + '">' +
+							data.types[i].charAt(0).toUpperCase() + data.types[i].substring(1) +
+							'</button>&emsp;';
+					}
+					return btns;
+				})();
+				if (opts.pos === 'top') $('#' + wrapper).append(buttons + '<br/><br />');
+				var graph = new window[SVG.genToFunc(opts.start)](opts.obj);
+				graph.init();
+				if (opts.pos === 'bottom') this.append(buttons);
+				if (opts.options) {
+					var formID = id + 'graphify-form';
+					var checked = (opts.obj.legend) ? 'checked' : '';
+					var form = ['<div id="' + formID + '"><hr />',
+						'<input type="text"value="' + opts.obj.title + '"placeholder="Title" />&emsp;',
+						'<input type="checkbox" ' + checked + '/>Legend&emsp;',
+						'Type: <select name="" id=""><option value="">Linear</option></select>&emsp;',
+						'Grid: <select name="" id=""><option value="">Full</option></select>&emsp;',
+						'Scale: <input style="width:20px"value="10" />',
+						'<br />',
+						'X-axis: <input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/><input style="width:20px"/> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+						'<br />',
+						'<button>New Dataset</button><br />',
+						'<span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 1"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+						'<br /><span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 2"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+						'<br /><span style="font-weight:bold;cursor:pointer;">-</span> <input type="text"placeholder="Dataset 3"style="width:75px" /> <input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /><input style="width:20px" /> <span style="font-weight:bold;cursor:pointer;">+ | -</span>',
+						'<br /><button id="' + id + '-graphify-update">Update</button> | <button id="' + id + '-graphify-restore">Restore</button>',
+						'</div>'
+					].join('');
+					//NOTE: also allow them to specify colors (maybe pie shadow?) allow pie graph dataNames, allow sizing options
+					$('#' + wrapper).append(form);
+				}
 		}
 		//click handlers
 		$(function() {
