@@ -13,10 +13,10 @@ var Graph = Graph || (function($) {
 	var Private = {};
 	Private.count = 0;
 	var Graph = function(obj) {
-		this.setOptions(obj);
+		Private.setOptions.call(this, obj);
 		++Private.count;
 	};
-	Graph.prototype.defaults = function() {
+	Private.defaults = function() {
 		return {
 			//default options
 			x: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -26,7 +26,7 @@ var Graph = Graph || (function($) {
 		};
 	};
 	//important stuff you might want automatically
-	Graph.prototype.basics = function(height, width, graphHeight, graphWidth) {
+	Private.basics = function(height, width, graphHeight, graphWidth) {
 		//basically, if no graph height/width is given we just make it equal the svg height/width
 		height = graphHeight || height || 300;
 		width = graphWidth || width || 550;
@@ -82,11 +82,11 @@ var Graph = Graph || (function($) {
 		};
 	};
 	//create jquery css header
-	Graph.prototype.parseS = function(id, then) {
+	Private.parseS = function(id, then) {
 		return 'svg[id="' + id + '"] ' + then;
 	};
 	//turn an id into jQuery selector format
-	Graph.prototype.id2selector = function(id) {
+	Private.id2selector = function(id) {
 		var stuff = id.split(' '); //split into components
 		id = stuff[0]; //only want the first word (id)
 		var selector = 'svg[id="';
@@ -101,7 +101,7 @@ var Graph = Graph || (function($) {
 		}
 		return selector;
 	};
-	Graph.prototype.styles = function(obj) {
+	Private.styles = function(obj) {
 		//first way to style is by creating an object representing the CSS
 		obj.byCSS = obj.byCSS || {};
 		//second way to style something is by modifying default styles
@@ -211,7 +211,7 @@ var Graph = Graph || (function($) {
 		return styling;
 	};
 	//handle this.obj
-	Graph.prototype.setOptions = function(obj) {
+	Private.setOptions = function(obj) {
 		obj = obj || {};
 		if (obj.attachTo) {
 			obj.attachTo = (obj.attachTo.charAt(0) === '#') ? obj.attachTo : '#' + obj.attachTo; //make hash optional (attchTo)
@@ -220,17 +220,17 @@ var Graph = Graph || (function($) {
 		if (obj.id) obj.id = (obj.id.charAt(0) === '#') ? obj.id.substring(1) : obj.id; //make hash optional (id)
 		//do basic setup automatically
 		if (obj.basic === true || typeof obj.basic === 'undefined') {
-			this.obj = this.basics(obj.height, obj.width, obj.graphHeight, obj.graphWidth);
+			this.obj = Private.basics(obj.height, obj.width, obj.graphHeight, obj.graphWidth);
 		}
 		//merge with defaults
 		if ((obj && obj.example === true) || !$.isEmptyObject(obj)) { //if example chosen or no options given
 			obj.id = obj.id || this.obj.id;
 			//everything user did not specify is filled with defaults + basics + style
 			//style needs id passed in so it can be replaced from basics().id
-			$.extend(this.obj, this.defaults(), obj, this.styles(obj)); //ORDER MATTERS WITH $.EXTEND
+			$.extend(this.obj, Private.defaults(), obj, Private.styles(obj)); //ORDER MATTERS WITH $.EXTEND
 			this.obj.addStyle = true;
 		} else if (obj && obj.addStyle === true) { //only add styling
-			$.extend(this.obj, this.styles(obj), obj);
+			$.extend(this.obj, Private.styles(obj), obj);
 		} else if (obj) {
 			this.obj = obj; //only use given args
 		}
@@ -411,7 +411,7 @@ var Graph = Graph || (function($) {
 			});
 		}
 		if (self.interactive && self.multiplePoints) {
-			$(document).ready(function() {
+			$(function() {
 				$(document).on('mouseover', 'g[id^="legend-"]', function() {
 					hoverHandle.call(this, 'add');
 				});
@@ -488,14 +488,14 @@ var GraphLinear = GraphLinear || (function($) {
 		//set click handlers for tooltips
 		if (this.obj.interactive) {
 			var thiz = this;
-			$(document).ready(function() {
+			$(function() {
 				$(document).on('mouseover', 'svg circle[id$="point"]', function(e) {
 					pointHandle.call(this, 'add');
 					$(this).css('opacity', 1);
 				});
 				$(document).on('mouseleave', 'svg circle[id$="point"]', function(e) {
 					pointHandle.call(this, 'sub');
-					$(this).css('opacity', thiz.obj.style[thiz.parseS(obj.id, 'circle')].opacity || 0.7);
+					$(this).css('opacity', thiz.obj.style['svg[id="'+thiz.obj.id+'"] circle'].opacity || 0.7);
 				});
 			});
 		}
@@ -644,7 +644,7 @@ var GraphBar = GraphBar || (function($) {
 		//set click handlers for tooltips
 		if (this.obj.interactive) {
 			var thiz = this;
-			$(document).ready(function() {
+			$(function() {
 				$(document).on('mouseover', 'svg rect', function(e) {
 					$('#' + $(this).attr('id') + '-tooltip').show();
 					$('#' + $(this).attr('id') + '-tooltip-rect').show();
@@ -653,7 +653,7 @@ var GraphBar = GraphBar || (function($) {
 				$(document).on('mouseleave', 'svg rect', function(e) {
 					$('#' + $(this).attr('id') + '-tooltip').hide();
 					$('#' + $(this).attr('id') + '-tooltip-rect').hide();
-					$(this).css('opacity', thiz.obj.style[thiz.parseS(obj.id, '.rect')].opacity || 0.7);
+					$(this).css('opacity', thiz.obj.style['svg[id="'+thiz.obj.id+'"] .rect'].opacity || 0.7);
 				});
 			});
 		}
@@ -826,7 +826,7 @@ var GraphPie = GraphPie || (function($) {
 		Graph.call(this, obj);
 		if (this.obj.interactive) {
 			var thiz = this;
-			$(document).ready(function() {
+			$(function() {
 				$(document).on('mouseover', 'svg path[id^="' + thiz.obj.id + '"]', function(e) {
 					$(this).css('opacity', 1);
 				});
@@ -963,11 +963,11 @@ var GraphPie = GraphPie || (function($) {
 				'<br /><button>Update</button> | <button>Restore</button>',
 				'</div>'
 			].join('');
-			//NOTE: also allow them to specify colors
+			//NOTE: also allow them to specify colors (maybe pie shadow?) allow pie graph dataNames, allow sizing options
 			$('#' + wrapper).append(form);
 		}
 		//click handlers
-		$(document).ready(function() {
+		$(function() {
 			//changing graph type
 			$(document).on('click', 'button[id^="' + id + '-graphify-button-"]', function() {
 				var type = $(this).attr('id').split('-')[3];
