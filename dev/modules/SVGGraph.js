@@ -425,8 +425,7 @@ var Graph = Graph || (function($) {
 		var x = self.legendX || (self.Gwidth - self.xDist);
 		var width = 30; //width of rect
 		var height = 30;
-		if(self.type === 'pie') self.dataNames = self.dataNames || self.x || [];
-		else self.dataNames = self.dataNames || [];
+		self.dataNames = self.dataNames || [];
 		if (self.multiplePoints || self.type === 'pie') {
 			var y = self.yOffset;
 			for (var i = 0; i < self.points.length; ++i) {
@@ -827,17 +826,18 @@ var GraphPie = GraphPie || (function($) {
 				$(document).on('mouseleave', 'svg path[id^="' + thiz.obj.id + '"]', function(e) {
 					$(this).css('opacity', 0.7);
 				});
-				//rely on jQuery tooltip until i can make a good one :P
-				$('svg[id="' + thiz.obj.id + '"]').tooltip({
-					show: {
-						delay: 250
-					}
-				});
 			});
 		}
 	};
 	GraphPie.prototype = Object.create(Graph.prototype);
 	GraphPie.prototype.constructor = GraphPie;
+	Private.bindToolTip = function() {
+		$('svg[id="' + this.obj.id + '"]').tooltip({
+			show: {
+				delay: 250
+			}
+		});
+	};
 	Private.lineTo = function(x, y) {
 		return 'L' + x + ',' + y;
 	};
@@ -888,12 +888,14 @@ var GraphPie = GraphPie || (function($) {
 					'" d="' + CENTER + LINETO + ARC + ' ' + STD + HORZ + ',' + VERT + 'Z"/>';
 			}
 			//add percentages to names for legend
+			self.dataNames = self.x.slice(0);
 			if (self.dataNames) {
 				for (var i = 0; i < self.dataNames.length; ++i) {
 					self.dataNames[i] += ' (' + Private.percent(self.points[i] / max) + ')';
 				}
 			}
 			this.finishGraph(0, 0, E, thing);
+			Private.bindToolTip.call(this);
 		}
 	};
 	return GraphPie;
