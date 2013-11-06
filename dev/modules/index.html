@@ -6,7 +6,6 @@
 	<title>Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="SVGGraph.js"></script>
-	<script src="tour.js"></script>
 	<script src="NOHTML.js"></script>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -14,14 +13,15 @@
 <body>
 	<script>
 		var _ = NOHTML;
-		_.h(1, 'Example Graphs (View Page source to see initiation of SVGGraph Module)');
+		_.h(1, 'SVGGraph.js: Create customizable graphs of multiple types easily.');
 		_.h(2, 'Example using the jQuery plugin:');
 		_.create('div', {
 			id: 'grapher',
 			style: 'height:350px;width:800px;'
 		});
 		$('#grapher').graphify({
-			options: true,
+			//options: true,
+			start: 'bar',
 			obj: {
 				id: 'ggg',
 				width: 775,
@@ -51,7 +51,7 @@
 				xDist: 90
 			}
 		});
-		_.br(17);
+		_.br(7);
 		_.hr();
 		_.h(2, 'Single dataset example:');
 		_.h(4, '[The above graph had multiple datasets so there was no "pie" button]');
@@ -84,7 +84,8 @@
 					'#lol .SVG-tooltip-box': {
 						fill: 'grey',
 						opacity: 0.7,
-						display: 'none'
+						display: 'none',
+						stroke: 'black'
 					}
 				}
 			}
@@ -92,6 +93,23 @@
 		_.br(7);
 		_.hr();
 		_.h(2, 'Features:');
+		_.print('Can return a graph as JSON using <b>graph.save()</b><br>');
+		_.print('Can expand JSON into a graph with <b>graph.expand(json)</b><br>');
+		_.print('Can update a graph with <b>graph.update(newOptions)</b><br>');
+		_.print('Can change a graph of one type to another like <b>linearGraph.to("bar")</b><br>');
+		_.print('Every single inch of the graph is customizable in the options.<br>');
+		_.print('Can style a graph with <b>syling</b> or <b>byCSS</b> options.');
+		_.br();
+		_.hr();
+		_.h(2, 'Important stuff thats coming soon:');
+		_.print('Addition to the plugin that allows users to modify a graph on the fly. (UI)');
+		_.br(2);
+		_.print('Thats all the biggesh stuff. Smaller changes can be found elsewhere.');
+		_.br();
+		_.hr();
+		_.h(2, 'Requires:');
+		_.print('jQuery <br />');
+		_.print('jQuery UI for pie graph tooltips (Temporary)');
 		_.br();
 		_.hr();
 		_.h(2, 'Example code:');
@@ -99,14 +117,10 @@
 	<!-- Not written in NOHTML for "pre" tags -->
 	<h4>
 	<pre>
-	//define options:
+	//define options: (Anything you dont specify is defaulted for you!)
 	var options = {
-		addStyling: true, //load default css
 		x: ['mon', 'tue', 'wed', 'thu', 'fri'], //the x axis
-		scale: 100, //each Y goes up by 100
-		points: [12, 164, 1000, 45, 982], //Y values
-		attachTo: 'main' //append to an id
-		//and anything you dont specify is defaulted for you!
+		points: [12, 164, 1000, 45, 982] //Y values
 	};
 	
 	var linear = new GraphLinear(options); //create object for linear graphs
@@ -117,5 +131,10 @@
 	//plugin also has other options that are defaulted if not specified
 		</pre>
 	</h4>
+	<script>
+		_.hr();
+		_.h(2, 'Written with NOHTML.js. (View source)');
+		_.br();
+	</script>
 </body>
 </html>

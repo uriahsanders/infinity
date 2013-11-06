@@ -1,7 +1,7 @@
 //Infinity-forum.org 2013
 //-Tiny script to produce a simple page introduction
 var Tour = Tour || (function($){ //dont overwrite if Tour variable already exists
-    $(document).ready(function() {
+    $(function() {
         //finish the tour (all elements can be recovered with resumeTour())
         $(document).on('mousedown', '.finish-tour', function() {
             Private.endTour();

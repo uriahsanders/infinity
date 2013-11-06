@@ -234,7 +234,6 @@ var Graph = Graph || (function($) {
 		} else if (obj) {
 			this.obj = obj; //only use given args
 		}
-		//console.log('(SVGGraph): this.obj = \n' + JSON.stringify(this.obj) + '\n'); //output JSON
 	};
 	Graph.prototype.save = function() { //save a graph as stringified JSON (can expand later)
 		return JSON.stringify(this.obj);
@@ -384,12 +383,13 @@ var Graph = Graph || (function($) {
 				if (i !== 'SVG') E.SVG += E[i] + '</g>';
 			}
 		}
-		E.SVG += E.points;
+		E.SVG += E.points + '</svg>';
 		//"thing" will determine where to put the new graph
-		var finish = this.obj.before + E.SVG + '</svg>' + this.obj.after;
+		var finish = this.obj.before + E.SVG + this.obj.after;
 		this.handleAppend(thing, finish);
 		//STYLING
 		this.applyStyling();
+		return E.SVG;
 	};
 	Graph.prototype.handleAppend = function(thing, finish) {
 		switch (thing) {
@@ -529,7 +529,6 @@ var GraphLinear = GraphLinear || (function($) {
 		return html;
 	};
 	GraphLinear.prototype.init = function(thing) {
-		console.log("Linear graph initialized.");
 		var self = this.obj; //shorthand from here on...
 		//correct values (atm has user inputed version, whereas G... is clean)
 		self.width = self.Gwidth;
@@ -538,7 +537,7 @@ var GraphLinear = GraphLinear || (function($) {
 		E.lines = '<g class="lines">'; //connecting points
 		E.points = '<g class="inset points">';
 		var area = self.special === 'area';
-		if (area && !self.multiplePoints) E.path = '<g class="area"><path id="' + self.id + '"d="';
+		if (area && !self.multiplePoints) E.path = '<g class="area"><path id="' + self.id + '-0-path"class="path-of-0"d="';
 		//*remember: xLines are vertical, yLines are horizontal
 		var xLines = self.x.length;
 		var yLines = self.y + 1; //+1 because line 1 is at origin
@@ -654,7 +653,6 @@ var GraphBar = GraphBar || (function($) {
 	GraphBar.prototype = Object.create(Graph.prototype);
 	GraphBar.prototype.constructor = GraphBar;
 	GraphBar.prototype.init = function(thing) {
-		console.log("Bar graph initialized.");
 		var self = this.obj;
 		self.width = self.Gwidth;
 		self.height = self.Gheight;
@@ -668,7 +666,7 @@ var GraphBar = GraphBar || (function($) {
 			for (var i = 0; i < xLines - 1; ++i) {
 				//height must = last section of "y"
 				//if i = 0, let inc = 1 so we can at least see at line at origin
-				inc = (i !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
+				inc = (self.points[i] !== 0) ? ((self.points[i] + self.scale) * (self.yDist / self.scale)) - self.yDist : 2;
 				x = (i * self.xDist + self.mainOffset);
 				y = (self.height - self.padding - self.yOffset - (inc));
 				//bars
@@ -767,7 +765,6 @@ var GraphTable = GraphTable || (function($) {
 	GraphTable.prototype = Object.create(Graph.prototype);
 	GraphTable.prototype.constructor = GraphTable;
 	GraphTable.prototype.init = function(thing) {
-		console.log("Table graph initialized.");
 		var self = this.obj;
 		var headers = '<th>' + (self.yName || 'Data') + '</th>'; //first header will always just be name of y
 		//within each row is [num | x | y] <td>'s
@@ -845,7 +842,6 @@ var GraphPie = GraphPie || (function($) {
 		return Math.round(dec * 100) + '%';
 	};
 	GraphPie.prototype.init = function(thing) {
-		console.log("Pie graph initialized.");
 		if (!this.obj.multiplePoints) {
 			var self = this.obj;
 			var E = this.openTags();
@@ -918,17 +914,19 @@ var GraphPie = GraphPie || (function($) {
 		};
 		var id = opts.obj.id;
 		var SVG = new Graph(); //so we can use general functions
+		var graph;
 		switch (options.action) {
 			case 'save':
-
+				graph = new window[SVG.genToFunc(opts.start)](opts.obj);
+				return graph.save();
 				break;
 			case 'expand':
-
+				SVG.expand(opts.obj);
 				break;
 			case 'update':
 
 				break;
-			default:
+			default: //jsut make graph
 				//if graph has multiple datasets we can not make a pie graph:
 				if (opts.obj.multiplePoints) data.types.pop();
 				var wrapper = this.attr('id') + '-wrapper';
@@ -945,7 +943,7 @@ var GraphPie = GraphPie || (function($) {
 					return btns;
 				})();
 				if (opts.pos === 'top') $('#' + wrapper).append(buttons + '<br/><br />');
-				var graph = new window[SVG.genToFunc(opts.start)](opts.obj);
+				graph = new window[SVG.genToFunc(opts.start)](opts.obj);
 				graph.init();
 				if (opts.pos === 'bottom') this.append(buttons);
 				if (opts.options) {
