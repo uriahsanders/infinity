@@ -273,7 +273,7 @@ var Model = (function() {
 	//all data: notify view when stuff changes (All Public)
 	return {
 		//DEV
-		scriptFile: 'workspace_script.php',
+		scriptFile: 'script.php',
 		test: false,
 		//defaults
 		page: 'Stream',
@@ -380,13 +380,16 @@ var Controller = (function($) {
 	Model.modify('test', true); //make sure MVC works
 	//start listening for changes
 	$(document).ready(function() {
-		//normal listeners
+		//change pages
 		$(document).on('click', 'span[id^="tiny-page-"]', function() { //changing pages
 			Model.modify('page', $(this).attr('id').substring(10));
 		});
+		//Top context boxes
 		$(document).on('click', 'a[id^="top-bar-option"]', function(){
-			var id = $(this).attr('id');
-			$('#'+(id).substring(15)).slideToggle();
+			var id = '#' + $(this).attr('id').substring(15);
+			$('.shown').not(id).fadeOut();
+			$(id).addClass('shown');
+			$(id).slideToggle();
 		});
 		//jquery UI stuff
 		$('#search').autocomplete({ //use categories so that they know what they're getting

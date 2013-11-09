@@ -1,3 +1,10 @@
+<?php
+    $_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
+    include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
+    $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
+    //include_once($_SERVER['DOCUMENT_ROOT']."/member/check_auth.php");
+    //include_once($_SERVER['DOCUMENT_ROOT'].'/libs/loading.php'); //temp
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,34 +23,14 @@
 	<link rel="alternate" type="application/rss+xml" title="" href="" />
 </head>
 <body>
-	<!-- 
-		Okay, so, here's what I'm thinking....
-		an open space design, with nothing in the way but a top toolbar
-		Use a bunch of select boxes for different options and such
-		perhaps a few links
-		top bar will remain fixed and carry all the required content to
-		do anything on the page
-		CMS stuff will appear at the bottom half of the screen
-		it will slide up/down to come in
-		dark, transparent theme
-		that brings the question of where the CMS buttons will be located...
-		I think it would look kind of sexy to have them going down the left side of the screen
-		Hold them in arrays and have them change when you change views
-		they can each have a little tooltip saying what its for
-		Other than that, we just have the main area
-		Content can be displayed there to take up all remaining space,
-		so long as the design remains constant
-		In the top toolbar you should be able to store stuff you want open at once
-		in some sort of context/select box for later easy reference
-	-->
 	<!-- Top toolbar -->
 	<div id="content">
 		<nav id="top-bar">
 			<ul id="top-bar-options">
 				<li id="top-bar-option-" class="top-bar-option link b"><a>Infinity-Forum</a></li>
 				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"id="status"/></li>
-				<li class="top-bar-option link i">
-					<a id="top-bar-option-project_select">Infinity</a>
+				<li class="top-bar-option">
+					<a id="top-bar-option-project_select" class="link i">Infinity</a>
 					<div id="project_select"class="ctx">
 						<a class="link">Project 2</a> <hr class="hr-fancy" />
 						<a class="link">Project 3</a> <hr class="hr-fancy" />
@@ -51,8 +38,8 @@
 						<a class="link">Project 5</a>
 					</div>
 				</li><span class="b i">/</span>
-				<li class="top-bar-option link i">
-					<a id="top-bar-option-branch_select">Master</a>
+				<li class="top-bar-option">
+					<a id="top-bar-option-branch_select" class="link i">Master</a>
 					<div id="branch_select"class="ctx">
 						<a class="link">Branch 2</a> <hr class="hr-fancy" />
 						<a class="link">Branch 3</a> <hr class="hr-fancy" />
@@ -60,8 +47,8 @@
 						<a class="link">Branch 5</a>
 					</div>
 				</li><span class="b i">/</span>
-				<li class="top-bar-option link i">
-					<a id="top-bar-option-quick_add">Quick Add</a>
+				<li class="top-bar-option">
+					<a id="top-bar-option-quick_add" class="link i">Quick Add</a>
 					<div id="quick_add"class="ctx">
 						<a class="link">Document</a> <hr class="hr-fancy" />
 						<a class="link">Task</a> <hr class="hr-fancy" />
@@ -83,12 +70,11 @@
 		<!-- Side CMS bar -->
 		<div id="side-bar">
 			<ul id="side-bar-options">
-				<li id="side-bar-option-" class="side-bar-option link">m</li>
-				<li id="side-bar-option-" class="side-bar-option link">r</li>
-				<li id="side-bar-option-" class="side-bar-option link">st</li>
-				<hr class="hr-std">
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/w-msgs.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/w-reqs.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/w-cog.png" height="20px"width="20px"></li>
 				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/chat.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link" style="color:black;font-weight:bolder;">(6)</li>
+				<li id="side-bar-option-" class="side-bar-option link b" style="color:black;">(6)</li>
 			</ul>
 		</div>
 		<!-- Main area -->
@@ -120,6 +106,8 @@
 			<div id="unique_content">
 			<!-- Statistics -->
 			<div id="workspace-info">
+				Welcome, <a class="link">Uriah Sanders</a>
+				<hr class="hr-fancy">
 				<span class="header">Contributions this Week:</span><br>
 				<div id="workspace-graphs">
 					
@@ -127,7 +115,7 @@
 			</div>
 			<!-- Unique content -->
 			<div id="entries">
-				<textarea style="float:left;"placeholder="Write a message" name="" id="" cols="50" rows="2"></textarea> <button style="margin-top:7px;">Post</button>
+				<textarea style="float:left;" name="" id="" cols="50" rows="2"></textarea> <button style="margin-top:7px;">Post</button>
 				<div class="entry">
 					<div class="entry-media">
 						<div class="entry-img">
@@ -381,6 +369,8 @@
 		</div>
 		</div>
 	</div>
+	<!-- Token -->
+	<input type="hidden" id="token" value=<?php echo "\"".$_SESSION['token']."\""; ?>/>
 	<!-- Scripts -->
 	<script src="workspace.js"></script>
 </body>
