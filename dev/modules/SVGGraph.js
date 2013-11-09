@@ -910,7 +910,7 @@ var GraphPie = GraphPie || (function($) {
 			obj: {} //actual obj for module
 		}, options);
 		var data = {
-			types: ['linear', 'bar', 'table', 'area', 'pie']
+			types: ['linear', 'area', 'bar', 'table', 'pie']
 		};
 		var id = opts.obj.id;
 		var SVG = new Graph(); //so we can use general functions
@@ -930,7 +930,7 @@ var GraphPie = GraphPie || (function($) {
 				//if graph has multiple datasets we can not make a pie graph:
 				if (opts.obj.multiplePoints) data.types.pop();
 				var wrapper = this.attr('id') + '-wrapper';
-				this.append('<div id="' + wrapper + '"style="border:1px solid grey;padding:10px;"></div>');
+				this.append('<div id="' + wrapper + '"style="padding:10px;"></div>');
 				opts.obj.attachTo = wrapper;
 				//UI
 				var buttons = (function() {

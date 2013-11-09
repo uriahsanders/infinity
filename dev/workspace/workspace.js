@@ -10,7 +10,10 @@ Status.isIdle = false;
 /*
 	Okay now for the real stuff :P
 */
-//ELEMENTS
+var cFirst = cFirst || function(str, what) {
+		return str.charAt(0)[(what === 'u') ? 'toUpperCase' : 'toLowerCase']() + str.slice(1); //lowercase or cap first letter
+	}
+	//ELEMENTS
 var Element = (function() {
 	"use strict";
 	var Element = function(type, name, creator) {
@@ -27,14 +30,18 @@ var Element = (function() {
 			num: this.num
 		};
 	};
+	Element.prototype.generic = function(type, name, creator) { //common way to start element extension
+		++Model['num_' + type + 's'];
+		Element.call(this, type, name, creator);
+		console.log("This element is a " + cFirst(type, 'u') + " named " + this.name + ", created by " + this.creator);
+		console.log('---------------------------------------------------------------------------------------------');
+	};
 	return Element;
 })();
 var Document = (function() { //extends Element
 	"use strict";
 	var Document = function(name, creator) {
-		++Model.num_documents;
-		Element.call(this, 'document', name, creator);
-		console.log("This element is a Document named " + this.name + ", created by " + this.creator);
+		this.generic.call(this, 'document', name, creator);
 	};
 	Document.prototype = Object.create(Element.prototype);
 	Document.prototype.constructor = Document;
@@ -43,9 +50,7 @@ var Document = (function() { //extends Element
 var Task = (function() {
 	"use strict";
 	var Task = function(name, creator) {
-		++Model.num_tasks;
-		Element.call(this, 'task', name, creator);
-		console.log("This element is a Task named " + this.name + ", created by " + this.creator);
+		this.generic.call(this, 'task', name, creator);
 	};
 	Task.prototype = Object.create(Element.prototype);
 	Task.prototype.constructor = Task;
@@ -54,9 +59,7 @@ var Task = (function() {
 var Table = (function() {
 	"use strict";
 	var Table = function(name, creator) {
-		++Model.num_tables;
-		Element.call(this, 'table', name, creator);
-		console.log("This element is a Table named " + this.name + ", created by " + this.creator);
+		this.generic.call(this, 'table', name, creator);
 	};
 	Table.prototype = Object.create(Element.prototype);
 	Table.prototype.constructor = Table;
@@ -65,9 +68,7 @@ var Table = (function() {
 var Note = (function() {
 	"use strict";
 	var Note = function(name, creator) {
-		++Model.num_notes;
-		Element.call(this, 'note', name, creator);
-		console.log("This element is a Note named " + this.name + ", created by " + this.creator);
+		this.generic.call(this, 'note', name, creator);
 	};
 	Note.prototype = Object.create(Element.prototype);
 	Note.prototype.constructor = Note;
@@ -76,9 +77,7 @@ var Note = (function() {
 var Event = (function() {
 	"use strict";
 	var Event = function(name, creator) {
-		++Model.num_events;
-		Element.call(this, 'event', name, creator);
-		console.log("This element is a Event named " + this.name + ", created by " + this.creator);
+		this.generic.call(this, 'event', name, creator);
 	};
 	Event.prototype = Object.create(Element.prototype);
 	Event.prototype.constructor = Event;
@@ -108,6 +107,7 @@ var Workspace = (function($, _, T) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
+	var self = this;
 	Public.ajax = function(query, after, obj) { //data to send; what to do after; special args;
 		//standard function for server communication
 		after = after || 2;
@@ -158,11 +158,11 @@ var Workspace = (function($, _, T) {
 	//do all the starting stuff
 	Public.init = function() {
 		Workspace.graphs.contributions();
-		$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
+		//$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
 		if (Router.isURLDefault()) { // URL is standard
 			console.log('The workspace has been initiated.');
 			console.log("Initial functions starting...");
-			$('#tiny-page-' + Model['page'].cFirst('l')).css('display', 'none'); //fade out "Stream" link
+			$('#tiny-page-' + cFirst(Model['page'], 'l')).css('display', 'none'); //fade out "Stream" link
 			Router.goTo(Model['page']);
 			console.log("Finished.");
 		} else { //URL has special path
@@ -208,7 +208,7 @@ var Workspace = (function($, _, T) {
 
 		},
 		changePage: function() {
-			$('#page-title').text(Model['page'].cFirst('u')); //change title
+			$('#page-title').text(cFirst(Model['page'], 'u')); //change title
 			$('span[id^="tiny-page-"]').show(); //show all links
 			$('#tiny-page-' + Model['page']).hide(); //hide link that we just clicked
 			Router.goTo(Model['page']);
@@ -231,16 +231,37 @@ var Workspace = (function($, _, T) {
 		contributions: function() {
 			//linear graph listing contributions
 			Public.gen.loading('#workspace-graphs'); //may take a while, so start loading screen
-			var graph = new GraphLinear({
-				example: true,
-				attachTo: 'workspace-info',
-				width: '100%',
-				height: 350,
-				xDist: 75,
-				mainOffset: 45,
-				xOffset: 35
+			$('#workspace-info').graphify({
+				obj: {
+					id: 'contributionsGraph',
+					attachTo: 'workspace-info',
+					width: '100%',
+					height: 350,
+					mainOffset: 45,
+					xOffset: 35,
+					legend: true,
+					pieSize: 175,
+					legendX: 350,
+					shadow: true,
+					xDist: 65,
+					example: true,
+					xName: 'Dates',
+					yName: 'Amount',
+					colors: ['grey', 'red', 'blue', 'green', 'yellow', 'orange', 'brown'],
+					byCSS: {
+						'#contributionsGraph .SVG-tooltip-box': {
+							fill: 'darkgrey',
+							opacity: 0.7,
+							display: 'none'
+						},
+						'#contributionsGraph .rect': {
+							fill: 'grey',
+							opacity: 0.7,
+							stroke: 'black'
+						}
+					}
+				}
 			});
-			graph.init();
 		}
 	};
 	return Public;
@@ -363,7 +384,10 @@ var Controller = (function($) {
 		$(document).on('click', 'span[id^="tiny-page-"]', function() { //changing pages
 			Model.modify('page', $(this).attr('id').substring(10));
 		});
-
+		$(document).on('click', 'a[id^="top-bar-option"]', function(){
+			var id = $(this).attr('id');
+			$('#'+(id).substring(15)).slideToggle();
+		});
 		//jquery UI stuff
 		$('#search').autocomplete({ //use categories so that they know what they're getting
 			source: function(request, response) {
@@ -386,14 +410,10 @@ var Controller = (function($) {
 //START
 (function() {
 	"use strict";
-	//JS additions
-	String.prototype.cFirst = String.prototype.cFirst || function(what) { //eg str.cFirst(u)
-		return this.charAt(0)[(what === 'u') ? 'toUpperCase' : 'toLowerCase']() + this.slice(1); //lowercase or cap first letter
-	}
 	//BEGIN
 	Workspace.init(); //start everything
 	//FOR TESTING IN DEV ONLY:
-	// var elDocument = new Document('task', 'uriah');
+	// var elDocument = new Document('document', 'uriah');
 	// var elTask = new Task('task', 'uriah');
 	// var elTable = new Table('table', 'uriah');
 	// var elNote = new Note('note', 'uriah');

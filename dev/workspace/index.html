@@ -41,14 +41,41 @@
 		<nav id="top-bar">
 			<ul id="top-bar-options">
 				<li id="top-bar-option-" class="top-bar-option link b"><a>Infinity-Forum</a></li>
-				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"/></li>
-				<li id="top-bar-option-" class="top-bar-option link i">Infinity</li><span class="b i">/</span>
-				<li id="top-bar-option-" class="top-bar-option link i">Master</li><span class="b i">/</span>
-				<li id="top-bar-option-" class="top-bar-option link i">Quick Add</li><span class="b i">/</span>
-				<li id="top-bar-option-" class="top-bar-option link i">Actions</li>
+				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"id="status"/></li>
+				<li class="top-bar-option link i">
+					<a id="top-bar-option-project_select">Infinity</a>
+					<div id="project_select"class="ctx">
+						<a class="link">Project 2</a> <hr class="hr-fancy" />
+						<a class="link">Project 3</a> <hr class="hr-fancy" />
+						<a class="link">Project 4</a> <hr class="hr-fancy" />
+						<a class="link">Project 5</a>
+					</div>
+				</li><span class="b i">/</span>
+				<li class="top-bar-option link i">
+					<a id="top-bar-option-branch_select">Master</a>
+					<div id="branch_select"class="ctx">
+						<a class="link">Branch 2</a> <hr class="hr-fancy" />
+						<a class="link">Branch 3</a> <hr class="hr-fancy" />
+						<a class="link">Branch 4</a> <hr class="hr-fancy" />
+						<a class="link">Branch 5</a>
+					</div>
+				</li><span class="b i">/</span>
+				<li class="top-bar-option link i">
+					<a id="top-bar-option-quick_add">Quick Add</a>
+					<div id="quick_add"class="ctx">
+						<a class="link">Document</a> <hr class="hr-fancy" />
+						<a class="link">Task</a> <hr class="hr-fancy" />
+						<a class="link">Event</a> <hr  class="hr-fancy"/>
+						<a class="link">Table</a> <hr class="hr-fancy">
+						<a class="link">Graph</a> <hr class="hr-fancy">
+						<a class="link">Note</a> <hr class="hr-fancy">
+						<a class="link">File</a> <hr class="hr-fancy">
+						<a class="link">Suggestion</a>
+					</div>
+				</li>
 			</ul>
 			<ul id="top-bar-options" class="right">
-				<li id="top-bar-option-" class="top-bar-option link i"><a>RSS</a></li>
+				<li id="top-bar-option-rss" class="top-bar-option link i"><a>RSS</a></li>
 				<li id="top-bar-option-" class="top-bar-option link i"><a>General</a></li>
 				<li class="top-bar-option link"><a>Logout</a></li>
 			</ul>
@@ -56,10 +83,9 @@
 		<!-- Side CMS bar -->
 		<div id="side-bar">
 			<ul id="side-bar-options">
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/documents.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/tasks.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/events.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/tables.png" height="20px"width="20px"></li>
+				<li id="side-bar-option-" class="side-bar-option link">m</li>
+				<li id="side-bar-option-" class="side-bar-option link">r</li>
+				<li id="side-bar-option-" class="side-bar-option link">st</li>
 				<hr class="hr-std">
 				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/chat.png" height="20px"width="20px"></li>
 				<li id="side-bar-option-" class="side-bar-option link" style="color:black;font-weight:bolder;">(6)</li>
@@ -67,6 +93,7 @@
 		</div>
 		<!-- Main area -->
 		<div id="main">
+			<!-- Page Links -->
 			<span id="page-title">Stream</span>&nbsp;
 			<div id="all-pages">
 				<span id="tiny-page-stream" class="link">Stream</span>
@@ -76,9 +103,11 @@
 				<span id="tiny-page-tasks" class="link">Tasks</span>
 				<span id="tiny-page-events" class="link">Events</span>
 				<span id="tiny-page-tables" class="link">Tables</span>
+				<span id="tiny-page-graphs" class="link">Graphs</span>
 				<span id="tiny-page-files" class="link">Files</span>
 				<span id="tiny-page-notes" class="link">Notes</span>
 				<span id="tiny-page-suggested" class="link">Suggested</span>
+				<!-- Search -->
 				&emsp;
 				<input 
 					id="search"
@@ -87,23 +116,10 @@
 					placeholder="Search..."
 				/>
 			</div>
-			<hr class="hr-std">
+			<br><br>
+			<div id="unique_content">
+			<!-- Statistics -->
 			<div id="workspace-info">
-				<span class="link header">Mail: 3</span> &emsp; <span class="link header">Requests: 7</span> &emsp; <span class="link header">Suggestions: 4</span>
-				<hr class="hr-fancy">
-				<span class="header">Statistics:</span><br><br>
-				<div id="statistics">
-					<strong>Creator:</strong> <span class="link">Uriah Sanders</span>,<br><br>
-					<strong>Created:</strong> 2013-09-18,<br><br>
-					<strong>Launched:</strong> Yes,<br><br>
-					<strong>Members:</strong> 23,<br><br>
-					<strong>Members online:</strong> 7,<br><br>
-					<strong>Branches:</strong> 8,<br><br>
-					<strong>Popularity:</strong> 1129,<br><br>
-					<strong>Duration:</strong> 1 year, 6 months, 13 days
-				</div>
-				<br>
-				<hr class="hr-fancy">
 				<span class="header">Contributions this Week:</span><br>
 				<div id="workspace-graphs">
 					
@@ -111,7 +127,7 @@
 			</div>
 			<!-- Unique content -->
 			<div id="entries">
-				<textarea style="float:left;" name="" id="" cols="50" rows="2"></textarea> <button style="margin-top:7px;">Post</button>
+				<textarea style="float:left;"placeholder="Write a message" name="" id="" cols="50" rows="2"></textarea> <button style="margin-top:7px;">Post</button>
 				<div class="entry">
 					<div class="entry-media">
 						<div class="entry-img">
@@ -362,6 +378,7 @@
 				</div>
 				</div>
 			</div>
+		</div>
 		</div>
 	</div>
 	<!-- Scripts -->
