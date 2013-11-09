@@ -1,13 +1,13 @@
 html, body{
-	margin:0;
+	 margin:0;
     padding:0;
     background: #474747;
-    background: url('/infinity/dev/images/dark_stripes.png');
-    color: grey;
+    background: url('/images/dark_stripes.png');
+    color: #fff;
+    font-family: sans-serif;
     width:100%;
     min-width:1000px;
     height: 100%;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 #workspace-info table{
 	border: 1px solid #000;
@@ -52,6 +52,7 @@ html, body{
 }
 #page-title{
 	font-size: 300%;
+	font-style: italic;
 }
 #page-nav{
 	font-size: 300%;
@@ -183,7 +184,7 @@ input[type=text], textarea, input[type=password]{
 #entries{
 	/*background: url('/infinity/dev/images/broken_noise.png');*/
 	padding: 5px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	/*border: 2px solid black;*/
 	width: 50%;
 	height: 100%;
@@ -252,37 +253,42 @@ input[type=text], textarea, input[type=password]{
   border-left: 1px solid #666666;}
 ::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
 ::-webkit-scrollbar-corner       {  }
-/*SVG*/
-svg.graph-contributions {
-	height: 300px;
+.ui-tooltip {
+    padding: 5px;
+    color: white;
+    background: black;
+    opacity: .6;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    box-shadow: 0 0 7px black;
+  }
+  .dim, #dim{
     width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,.7);
+    display: none;
+}
+.cms_popup{
+    position:fixed;
+    z-index: 100;  
+    top: 500px;  
+    left: 50%;  
+    margin: -300px 0 0 -300px;  
+    width: 50%;  
+    height: 50%;
+    padding: 10px;  
+    border: 1px solid #666666;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
     background: url('/infinity/dev/images/broken_noise.png');
-}
-svg.graph-contributions .grid {
-	stroke: grey;
-	stroke-width: 1;
-}
-svg.graph-contributions .points {
-	stroke: grey;
-	stroke-width: 4;
-}
-svg.graph-contributions .inset {
-	fill: lightblue;
-}
-svg.graph-contributions .labels {
-	fill: darkgrey;
-	stroke: none;
-	font-family: Arial;
-	font-size: 12px;
-	kerning: 2;
-}
-svg.graph-contributions .lines {
-	stroke: lightblue;
-	stroke-width: 2;
-}
-svg.graph-contributions .labels.x-labels {
-	text-anchor: middle;
-}
-svg.graph-contributions .labels.y-labels {
-	text-anchor: end;
+    text-align: center;
+    overflow-y: auto;
+    display: none;
+    position: absolute;
 }

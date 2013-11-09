@@ -110,6 +110,7 @@ var Workspace = (function($, _, T) {
 	var self = this;
 	Public.ajax = function(query, after, obj) { //data to send; what to do after; special args;
 		//standard function for server communication
+		obj = obj || {};
 		after = after || 2;
 		obj.datatype = obj.datatype || '';
 		$.ajax({
@@ -225,13 +226,23 @@ var Workspace = (function($, _, T) {
 		//stick a loading symbol in a place
 		loading: function(id) {
 
+		},
+		//get popup info from server
+		popup: function(type) {
+			Public.ajax('signal=getPopup&type=' + type, function(data) {
+				$(document.body).append(data);
+				$('.dim').fadeIn();
+				$('.cms_popup').fadeIn();
+			}, {
+				type: 'GET'
+			});
 		}
 	};
 	Public.graphs = {
 		contributions: function() {
 			//linear graph listing contributions
 			Public.gen.loading('#workspace-graphs'); //may take a while, so start loading screen
-			$('#workspace-info').graphify({
+			$('#workspace-graphs').graphify({
 				obj: {
 					id: 'contributionsGraph',
 					attachTo: 'workspace-info',
@@ -277,6 +288,7 @@ var Model = (function() {
 		test: false,
 		//defaults
 		page: 'Stream',
+		mainEvent: 'click', //main event to use for controller
 		current: null, //#id of whatever user has open
 		project: null,
 		branch: 'Master',
@@ -292,6 +304,7 @@ var Model = (function() {
 		CMS: [
 
 		],
+		popup: null, //is there a popup box open? What is it?
 		//How many of each element we have OPEN
 		num_documents: 0,
 		num_tasks: 0,
@@ -311,7 +324,7 @@ var Model = (function() {
 			//notify view
 			View.changed = what; //tell view our most recent change
 			View.notify(); //we just pushed
-			console.log('(Model): -modified: Model.' + what);
+			console.log('(Model): -modified: Model.' + what + ' to: "' + value + '"');
 		},
 		//change a dynamically added Model property
 		tickle: function(cat, thing, what, newValue) {
@@ -359,14 +372,18 @@ var View = (function($) {
 			}
 		} else {
 			//work with constant Model variables
+			var main = Model[Public.changed]; //current value we are working with
 			switch (Public.changed) {
 				//main view stuff: depending on what changed, do something
 				case 'test':
 					console.log('(View): Testing...MVC works! Model.test = ' + Model['test']);
 					break;
 				case 'page':
-					console.log("(View): Page changed to '" + Model['page'] + "'");
+					//console.log("(View): Page changed to '" + Model['page'] + "'");
 					Workspace.gen.changePage();
+					break;
+				case 'popup':
+					Workspace.gen.popup(main);
 					break;
 			}
 		}
@@ -379,19 +396,41 @@ var Controller = (function($) {
 	console.log("(Controller): Controller now listening for events!");
 	Model.modify('test', true); //make sure MVC works
 	//start listening for changes
-	$(document).ready(function() {
+	$(function() {
+		//tooltips
+		$(document).tooltip({
+			show: {
+				delay: 250
+			}
+		});
 		//change pages
-		$(document).on('click', 'span[id^="tiny-page-"]', function() { //changing pages
+		$(document).on(Model.mainEvent, 'span[id^="tiny-page-"]', function() { //changing pages
 			Model.modify('page', $(this).attr('id').substring(10));
 		});
 		//Top context boxes
-		$(document).on('click', 'a[id^="top-bar-option"]', function(){
+		$(document).on(Model.mainEvent, 'a[id^="top-bar-option"]', function() {
 			var id = '#' + $(this).attr('id').substring(15);
 			$('.shown').not(id).fadeOut();
 			$(id).addClass('shown');
 			$(id).slideToggle();
 		});
-		//jquery UI stuff
+		//side options
+		$(document).on(Model.mainEvent, 'li[id^="side-bar-option-"]', function() {
+			var id = $(this).attr('id').substring(16);
+			if(id !== 'chat'){
+				Model.modify('popup', $(this).attr('id').substring(16));
+			}
+		});
+		//dim screen
+		$(document).on(Model.mainEvent, '.dim, .close', function() {
+			$('.cms_popup').fadeOut('normal', function() {
+				$('.dim').fadeOut('normal', function() {
+					$('.dim').remove();
+					$('.cms_popup').remove();
+				});
+			});
+		});
+		//autocomplete
 		$('#search').autocomplete({ //use categories so that they know what they're getting
 			source: function(request, response) {
 				response(

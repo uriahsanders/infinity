@@ -11,11 +11,11 @@
 	<meta charset="UTF-8">
 	<title>Infinity workspace</title>
 	<!-- Stylesheets -->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 	<link href="workspace.css" rel="stylesheet">
 	<!-- Libs -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 	<script src="../modules/NOHTML.js"></script>
 	<script src="../modules/tour.js"></script>
 	<script src="../modules/SVGGraph.js"></script>
@@ -70,11 +70,11 @@
 		<!-- Side CMS bar -->
 		<div id="side-bar">
 			<ul id="side-bar-options">
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/w-msgs.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/w-reqs.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/w-cog.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link"><img src="/images/chat.png" height="20px"width="20px"></li>
-				<li id="side-bar-option-" class="side-bar-option link b" style="color:black;">(6)</li>
+				<li id="side-bar-option-messages" class="side-bar-option link"><img src="/images/w-msgs.png"title="Messages" height="20px"width="20px"></li>
+				<li id="side-bar-option-requests" class="side-bar-option link"><img src="/images/w-reqs.png"title="Requests" height="20px"width="20px"></li>
+				<li id="side-bar-option-options" class="side-bar-option link"><img src="/images/w-cog.png"title="Options" height="20px"width="20px"></li>
+				<li id="side-bar-option-chat" class="side-bar-option link"><img src="/images/chat.png"title="Chat" height="20px"width="20px"></li>
+				<li id="side-bar-option-current" class="side-bar-option link b"title="Current" style="color:black;">(6)</li>
 			</ul>
 		</div>
 		<!-- Main area -->
@@ -109,9 +109,8 @@
 				Welcome, <a class="link">Uriah Sanders</a>
 				<hr class="hr-fancy">
 				<span class="header">Contributions this Week:</span><br>
-				<div id="workspace-graphs">
-					
-				</div>
+				<div id="workspace-graphs"></div>
+				&emsp;<a class="link i b">View more statistics</a>
 			</div>
 			<!-- Unique content -->
 			<div id="entries">

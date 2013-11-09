@@ -186,6 +186,10 @@ var Graph = Graph || (function($) {
 			"border-collapse": 'collapse',
 			"text-align": 'center'
 		};
+		styling.style['.SVG-table tr:not(:first-child)'] = {
+			opacity: 0.7,
+			cursor: 'pointer'
+		};
 		//when using multiple lines make them different colors automatically
 		var colors = obj.colors || ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'brown'];
 		if (obj.colors) obj.colors.push(''); //so bar spaces dont takeup colors
@@ -761,6 +765,17 @@ var GraphTable = GraphTable || (function($) {
 		obj = obj || {};
 		obj.type = 'table';
 		Graph.call(this, obj);
+		if (this.obj.interactive) {
+			var thiz = this;
+			$(function() {
+				$(document).on('mouseover','.SVG-table tr:not(:first-child)', function(){
+					$(this).css('opacity', 1);
+				});
+				$(document).on('mouseleave','.SVG-table tr:not(:first-child)', function(){
+					$(this).css('opacity', 0.7);
+				});
+			});
+		}
 	};
 	GraphTable.prototype = Object.create(Graph.prototype);
 	GraphTable.prototype.constructor = GraphTable;
