@@ -9,7 +9,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 <link href='/infinity/dev/css/dark.css' rel='stylesheet' type='text/css' />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src='/infinity/dev/js/jquery-1.8.3.min.js'></script>
-<script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
+<script src='http://code.jquery.com/ui/1.9.1/jquery-ui.js'></script>
 </head>
 <body>
 <style>
@@ -29,13 +29,12 @@ html, body {
 	text-align: center;
 	width: 25%;
 	height: 250px;
-	overflow-y: auto;
 	background: rgba(0, 0, 0, .3);
+	overflow: hidden;
 }
 
 .member {	
 	display: block;
-	padding: 5px;
 	cursor: pointer;
 }
 
@@ -49,6 +48,10 @@ html, body {
 	float: left;
 	width: 16%;
 	padding: 5px;
+	text-align: center;
+}
+
+#contacts {
 	text-align: center;
 }
 
@@ -94,10 +97,13 @@ a:hover {
 	opacity: 1;
 }
 </style>
-<a id='create'>Create a group</a><br />
-<div id='form' style='display:none'>
+<div id="control">
+<div id='form'>
 Group: <input type='text' id='groupInput' /><br />
 Members: <input type='text' id='memberInput' /><input type='submit' value='Submit' id='submit' />
+</div>
+<div id='searchForm'><input type='text' id='query' /><input type='submit' id='searchButton' value='Search' /></div><div id='results'></div>
+<div id="contacts">Contacts</div>
 </div>
 <script>
 $('#submit').click(function (){
@@ -111,7 +117,7 @@ $('#submit').click(function (){
             	alert("Succesfully created group: " + $('#groupInput').val());
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
             	$('#groups').append("<div id='" + group + "' class='group'><span id='" + group + "' class='name'>" + group + "</span><br ><span class='group-toolbar'><a id='" + group + "' class='showMembers'>Show Members</a> <a id='" + group + "' class='edit'>Edit</a></span></div>"); //append the new group to groups
-            	$('#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false}); //make each div draggable 
+            	$('span#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false, helper: "clone"}); //make each div draggable 
                 $('#' + response[i]).droppable({
                     drop: function (event, ui){
                     	if(ui.draggable.attr("class").startsWith("member")){
@@ -136,19 +142,35 @@ $('#submit').click(function (){
         alert("You must fill in all fields");
     }
 });
+$('#searchButton').click(function (){
+	if($('#query').val() != ""){
+		$.post("dragndrop_script.php", {
+		query: $('#query').val()
+		}, function(data){
+			data = data.substring(0, data.length - 2);
+			console.log(data);
+			if(data != null && data != undefined && data != "error"){
+				$('#results').empty();
+				var results = jQuery.parseJSON(data);
+				console.log(results);
+				$('#results').slideDown();
+				if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
+				for(var i = 0; i <= results.length; ++i){
+					if(results[i] == undefined) break;
+					$('#results').append("<div>" + results[i] + "</div>"); //append each result
+				}
+			}else{
+				$('#results').append("There was an error trying to search for " + $('#query').val());
+			}
+		});
+	}else{
+		alert("Please fill in the search feild.");
+	}
+});
 </script>
-<a id='show'>Show groups</a>
 <div id='groups' style='display:none'><div id='trash' style='display:none'>trash</div></div>
 <script>
-$('#create').toggle(function (){
-    $(this).text("Hide form");
-    $('#form').slideToggle();
-}, function (){
-    $(this).text("Create a group");
-    $('#form').slideToggle();
-});
-$('#show').toggle(function (){
-    $(this).text("Hide groups");
+$(document).ready(function (){
     if($('#groups').children().length <= 1){ //check if the groups were already retrieved
         $.post("dragndrop_script.php", {
         get: "groups"
@@ -161,7 +183,7 @@ $('#show').toggle(function (){
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
                     $('#groups').append("<div id='" + response[i] + "' class='group'><span id='" + response[i] + "' class='name'>" + response[i] + "</span><br ><span class='group-toolbar'><a id='" + response[i] + "' class='showMembers'>Show Members</a> <a id='" + response[i] + "' class='edit'>Edit</a></span></div>"); //make a div for each group and append it to groups
-                    $('#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false}); //make each div draggable 
+                    $('span#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false, revert: "invalid", helper: "clone"}); //make each div draggable 
                     $('#' + response[i]).droppable({
                     	drop: function (event, ui){
                     		if(ui.draggable.attr("class").startsWith("member")){
@@ -178,14 +200,15 @@ $('#show').toggle(function (){
                     	}
                     });
                 }
-                $('#groups').slideDown();
+                $('#groups').fadeIn();
                 $('#trash').show();
                 //code for making trash can
                 $('#trash').droppable({
                     drop: function (event, ui){
                         var id = ui.draggable.attr("id"); //get the id of the dropped div
                         var className = ui.draggable.attr("class"); //get the class name of the dropped div
-                        if(className.startsWith("group")){
+                        console.log(ui.draggable);
+                        if(className.startsWith("name")){
                         	className = "group";
                         	group = ""; //group isnt needed so set it to null
                         }
@@ -218,7 +241,7 @@ $('#show').toggle(function (){
                 //code for showing members
                 $('.showMembers').toggle(function (){
                 	var group = $(this).attr("id"); //get the group name
-                	$('#' + group).draggable("disable");
+                	$('span#' + group).draggable("disable");
                 	$(this).text("Hide members");
                 	$.post("dragndrop_script.php", {
                 	get: "members", //send what you want to get
@@ -232,8 +255,8 @@ $('#show').toggle(function (){
                 			if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
                 				for(var i = 0; i <= members.length; ++i){
                 					if(members[i] == undefined) break;
-                					$('#' + group).append("<div id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</div>"); //make a span for each member
-                					$('#' + members[i]).draggable({move: "true", scroll: false}); //make each member span draggable
+                					$('#' + group).append("<span id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</span>"); //make a span for each member
+                					$('#' + members[i]).draggable({move: "true", scroll: false, helper: "clone"}); //make each member span draggable
                 				}
                 			}else{
                 				$('#' + group).append("<span class='member'>There are no members for this group.</span>");
@@ -252,71 +275,31 @@ $('#show').toggle(function (){
                 	$(this).text("Save");
                 	$('#close').show();
                 	var group = $(this).attr("id");
-                	$('#' + group).draggable("disable"); //disable dragging so its easier to edit
+                	$('span#' + group).draggable("disable"); //disable dragging so its easier to edit
                 	$('span.name:contains("' + group +'")').attr("contenteditable", "true"); //make div editable
                 }, function (){
                 	$(this).text("Edit Group");
                 	var group = $(this).attr("id");
-                	$('#' + group).draggable("enable"); //enable dragging
-                	$('span.name:contains("' + group +'")').attr("contenteditable", "true"); //turn editing off
+                	$('span#' + group).draggable("enable"); //enable dragging
+                	$('span.name:contains("' + group +'")').attr("contenteditable", "false"); //turn editing off
                 	$.post("dragndrop_script.php", {
                 	edit: "group", //what your editing
                 	group: group, //old group name
                 	name: $('span#' + group).text() //new group name
                 	}, function(data){
                 		$('#' + group).attr("id", $('span#' + group).text()); //change the group id to the new one
+                		$('span#' + group).attr("id", $('span#' + group).text());
                 		console.log(data);
                 	});
                 });
             }else{
                 $('#groups').text("You have no groups.");
-                $('#groups').slideDown();
+                $('#groups').fadeIn();
             }
         });
     }else{
         $('#groups').slideDown();
     }
-}, function (){
-    $(this).text("Show groups");
-    $('#groups').slideUp();
-});
-</script>
-<div></div>
-<a id='searchLink'>Search</a>
-<div style='display:none' id='searchForm'><input type='text' id='query' /><input type='submit' id='searchButton' value='Search' /></div><div id='results'></div>
-<script>
-$('#searchLink').toggle(function (){
-	$(this).text("Hide Search Form");
-	$('#searchForm').slideToggle();
-	$('#searchButton').click(function (){
-		if($('#query').val() != ""){
-			$.post("dragndrop_script.php", {
-			query: $('#query').val()
-			}, function(data){
-				data = data.substring(0, data.length - 2);
-				console.log(data);
-				if(data != null && data != undefined && data != "error"){
-					$('#results').empty();
-					var results = jQuery.parseJSON(data);
-					console.log(results);
-					$('#results').slideDown();
-					if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
-					for(var i = 0; i <= results.length; ++i){
-						if(results[i] == undefined) break;
-						$('#results').append("<div>" + results[i] + "</div>"); //append each result
-					}
-				}else{
-					$('#results').append("There was an error trying to search for " + $('#query').val());
-				}
-			});
-		}else{
-			alert("Please fill in the search feild.");
-		}
-	});
-}, function (){
-	$(this).text("Search");
-	$('#searchForm').slideToggle();
-	$('#results').slideUp();
 });
 </script>
 </body>
