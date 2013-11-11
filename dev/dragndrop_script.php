@@ -121,7 +121,7 @@ function editInfo($type, $name, $group, $con){
 		$id = getID($group, $con);
 		$query = $con->prepare("UPDATE `groups` SET `group` = :group WHERE `creator` = :SID AND `id` = :ID")or die(mysql_error()); //update group name
 		$query->execute(array(
-		":group" => $group,
+		":group" => $name,
 		":SID" => $_SESSION['ID'],
 		":ID" => $id
 		));
