@@ -9,7 +9,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 <link href='/infinity/dev/css/dark.css' rel='stylesheet' type='text/css' />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src='/infinity/dev/js/jquery-1.8.3.min.js'></script>
-<script src='http://code.jquery.com/ui/1.9.1/jquery-ui.js'></script>
+<script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 </head>
 <body>
 <style>
@@ -152,12 +152,12 @@ $('#searchButton').click(function (){
 			if(data != null && data != undefined && data != "error"){
 				$('#results').empty();
 				var results = jQuery.parseJSON(data);
-				console.log(results);
+				//console.log(results);
 				$('#results').slideDown();
-				if(results[0] != "No results.") $('#results').append("<p>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
+				if(results[0] != "No results.") $('#results').append("<p style='text-align:left'>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
 				for(var i = 0; i <= results.length; ++i){
 					if(results[i] == undefined) break;
-					$('#results').append("<div>" + results[i] + "</div>"); //append each result
+					$('#results').append("<div style='text-align:left'>" + results[i] + "</div>"); //append each result
 				}
 			}else{
 				$('#results').append("There was an error trying to search for " + $('#query').val());
@@ -176,9 +176,9 @@ $(document).ready(function (){
         get: "groups"
         }, function(data){
         	data = data.substring(0, data.length - 2);
-        	console.log(data);
+        	//console.log(data);
             var response = jQuery.parseJSON(data); //parse the json
-            console.log(response);
+            //console.log(response);
             if(response.length > 0 && response[0] != "no groups"){ //check to see if response is empty
                 for(var i = 0; i <= response.length; ++i){
                 	if(response[i] == undefined) break; //check if theres nothing left in the array
@@ -186,14 +186,14 @@ $(document).ready(function (){
                     $('span#' + response[i]).draggable({cursor: "move", cancel: ".edit, .showMembers", scroll: false, revert: "invalid", helper: "clone"}); //make each div draggable 
                     $('#' + response[i]).droppable({
                     	drop: function (event, ui){
-                    		if(ui.draggable.attr("class").startsWith("member")){
+                    		if(ui.draggable.attr("class").startsWith("member")){ //check if dropped object is a member
                     			$.post("dragndrop_script.php", {
                     			group: $(this).attr("id"),
                     			member: ui.draggable.attr("id"),
                     			do: "copy"
                     			}, function(data){
-                    				console.log(data);
-                    				$('span#' + $(this).attr("id")).append("<span class='member'>" + ui.draggable.attr('id') + "</span>");
+                    				//console.log(data);
+                    				$('span#' + $(this).attr("id")).append("<span id='" + ui.draggable.attr("id") + "' class='member'>" + ui.draggable.attr('id') + "</span>"); //add the new member to the group div
                     				alert("Sucess");
                     			});
                     		}
@@ -207,7 +207,6 @@ $(document).ready(function (){
                     drop: function (event, ui){
                         var id = ui.draggable.attr("id"); //get the id of the dropped div
                         var className = ui.draggable.attr("class"); //get the class name of the dropped div
-                        console.log(ui.draggable);
                         if(className.startsWith("name")){
                         	className = "group";
                         	group = ""; //group isnt needed so set it to null
@@ -234,7 +233,7 @@ $(document).ready(function (){
                         	}else{
                         		alert("There was an error deleting " + className + ": " + id + ". Please try again later.");
                         	}
-                            console.log(data);
+                            //console.log(data);
                         });
                     }
                 });
@@ -248,15 +247,15 @@ $(document).ready(function (){
                 	group: group //send the group
                 	}, function (data){
                 		data = data.substring(0, data.length - 2);
-                		console.log(data);
+                		//console.log(data);
                 		if(data != "error" && data != ""){ //check for errors
                 			var members = jQuery.parseJSON(data); //parse json
-                			console.log(members);
+                			//console.log(members);
                 			if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
                 				for(var i = 0; i <= members.length; ++i){
                 					if(members[i] == undefined) break;
                 					$('#' + group).append("<span id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</span>"); //make a span for each member
-                					$('#' + members[i]).draggable({move: "true", scroll: false, helper: "clone"}); //make each member span draggable
+                					$('span#' + members[i]).draggable({move: "true", scroll: false, helper: "clone", revert: "invalid"}); //make each member span draggable
                 				}
                 			}else{
                 				$('#' + group).append("<span class='member'>There are no members for this group.</span>");
@@ -267,8 +266,8 @@ $(document).ready(function (){
                 	});
                 }, function (){
                 	$(this).text("Show members");
-                	$('#' + $(this).attr("id")).find('.member').fadeOut();
-                	$('#' + group).draggable("enable");
+                	$('#' + $(this).attr("id")).find('.member').fadeOut(); //find all members and then fade them out
+                	$('span#' + $(this).attr("id")).draggable("enable");
                 });
                 //code for editing
                 $('.edit').toggle(function (){
@@ -288,8 +287,8 @@ $(document).ready(function (){
                 	name: $('span#' + group).text() //new group name
                 	}, function(data){
                 		$('#' + group).attr("id", $('span#' + group).text()); //change the group id to the new one
-                		$('span#' + group).attr("id", $('span#' + group).text());
-                		console.log(data);
+                		$('span#' + group).attr("id", $('span#' + group).text()); //change the span group id to the new one
+                		//console.log(data);
                 	});
                 });
             }else{
@@ -297,9 +296,23 @@ $(document).ready(function (){
                 $('#groups').fadeIn();
             }
         });
-    }else{
-        $('#groups').slideDown();
     }
+	$.post("dragndrop_script.php", {
+	get: "contacts"
+	}, function (data){
+		data = data.substring(0, data.length - 2);
+		//console.log(data);
+		contacts = jQuery.parseJSON(data);
+		//console.log(contacts);
+		if(contacts.length > 0 && contacts[0] != "No contacts"){
+			for(var i = 0; i < contacts.length; ++i){
+				$('#contacts').append("<span id='" + contacts[i] + "' class='member'>" + contacts[i] + "</span>");
+				$('#' + contacts[i]).draggable({move: "true", scroll: false, helper: "clone", revert: "invalid"});
+			}
+		}else{
+			$('#contacts').append("You have no contacts.");
+		}
+	});
 });
 </script>
 </body>

@@ -162,9 +162,11 @@ function copyMember($group, $member, $con){
 
 function search($query, $con){
 	$results = array();
-	$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` LIKE :query OR `group` = :query OR `group` LIKE '%".$query."' OR `group` LIKE '".$query."%' AND `creator` = :SID ORDER BY id DESC");
+	$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` LIKE :query OR `group` = :query OR `group` LIKE :percentFront OR `group` LIKE :percentBack AND `creator` = :SID ORDER BY id DESC");
 	$sql->execute(array(
 	":query" => $query,
+	":percentFront" => '%' . $query,
+	":percentBack" => $query . '%',
 	":SID" => $_SESSION['ID']
 	));
 	$row = $sql->fetchAll(PDO::FETCH_OBJ);
@@ -175,6 +177,23 @@ function search($query, $con){
 		return json_encode($results);
 	}else{
 		return json_encode(array("No results."));
+	}
+}
+
+function getContacts($con){
+	$query = $con->prepare("SELECT * FROM friends WHERE `id` = :SID");
+	$query->execute(array(
+	":SID" => $_SESSION['ID']
+	));
+	$contacts = array();
+	$row = $query->fetchAll(PDO::FETCH_OBJ);
+	for($i = 0; $i < count($row); $i++){
+		array_push($contacts, id2user($row[$i]->friend));
+	}
+	if(isset($contacts) && !empty($contacts)){
+		return json_encode($contacts);
+	}else{
+		return json_encode("No contacts");
 	}
 }
 
@@ -189,10 +208,12 @@ if(isset($_POST['group']) && isset($_POST['members'])){
 	echo copyMember($_POST['group'], $_POST['member'], $con);
 }else if(isset($_POST['query'])){
 	echo search($_POST['query'], $con);
-}else if(isset($_POST['del']) && isset($_POST['name']) && $_POST['del'] == "group" || $_POST['del'] == "member"){
+}else if(isset($_POST['del']) && isset($_POST['name']) && @$_POST['del'] == "group" || @$_POST['del'] == "member"){
     echo delete($_POST['del'], $_POST['name'], $con);
-}else if(isset($_POST['edit']) && isset($_POST['group']) && isset($_POST['name']) && $_POST['edit'] == "member" || $_POST['edit'] == "group"){
+}else if(isset($_POST['edit']) && isset($_POST['group']) && isset($_POST['name']) && @$_POST['edit'] == "member" || @$_POST['edit'] == "group"){
 	echo editInfo($_POST['edit'], $_POST['name'], $_POST['group'], $con);
+}else if(isset($_POST['get']) && $_POST['get'] == "contacts"){
+	echo getContacts($con);
 }else{
     die("error"); //if no requirements are met return error
 }
