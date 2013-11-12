@@ -103,7 +103,7 @@ var Router = (function() {
 })();
 //END
 //FUNCTIONS
-var Workspace = (function($, _, T) {
+var Workspace = (function($) {
 	"use strict";
 	//define functions for use in View
 	var Public = {}, Private = {};
@@ -117,7 +117,7 @@ var Workspace = (function($, _, T) {
 			url: obj.url || Model.scriptFile,
 			async: obj.async || true,
 			cache: obj.cache || false,
-			type: obj.type || 'POST',
+			type: obj.type || 'GET',
 			datatype: obj.datatype,
 			data: obj.query || query,
 			success: function(data) {
@@ -158,6 +158,9 @@ var Workspace = (function($, _, T) {
 	};
 	//do all the starting stuff
 	Public.init = function() {
+		Workspace.ajax('signal=init', function(data) {
+			Model.modify('firstTime', data);
+		});
 		Workspace.graphs.contributions();
 		//$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
 		if (Router.isURLDefault()) { // URL is standard
@@ -193,7 +196,6 @@ var Workspace = (function($, _, T) {
 				window.setTimeout(Public.updateEverything, 60000); //wait one minute
 			}, {
 				cache: false,
-				type: 'GET',
 				datatype: 'json',
 				err: function() {
 					window.setTimeout(Public.updateEverything, 60000);
@@ -206,14 +208,32 @@ var Workspace = (function($, _, T) {
 	Public.gen = {
 		//if they havent created any projects yet, throw a big-ass screen in their face
 		welcome: function() {
-
+			console.log("You havent created any projects yet.");
+			var welcome = [
+				'<div id="welcome">',
+				'<br /><br /><br /><br /><br /><span id="page-title">Welcome to the Workspace</span>',
+				'<hr class="hr-fancy"/><br /><span>You don\'t have a workspace yet.</span>',
+				'<br /><span class="b i">You should.</span>',
+				'<br /><br /><br />',
+				'<a id="cat"class="ctx-head b i">General</a><div id="cat-ctx"style="left:47.5%"class="ctx">',
+				'<a class="entry-cat">General</a><hr class="hr-fancy" /><a class="entry-cat">cat 2</a><hr class="hr-fancy" /><a class="entry-cat">cat 3</a>',
+				'</div><br />',
+				'<input type="text"placeholder="Name" /><br />',
+				'<textarea name="" id="" cols="50" rows="12"placeholder="Description (optional)"></textarea><br />',
+				'<button>Let\'s do this</button>',
+				'</div>'
+			].join('');
+			//$('body').append(welcome);
 		},
-		changePage: function() {
+		changePage: function(page) {
 			$('#page-title').text(cFirst(Model['page'], 'u')); //change title
 			$('span[id^="tiny-page-"]').show(); //show all links
 			$('#tiny-page-' + Model['page']).hide(); //hide link that we just clicked
 			Router.goTo(Model['page']);
 			//do ajax request
+			Public.ajax('signal=changePage&page=' + page, function(data) {
+				$('#unique_content').html(data);
+			});
 		},
 		//introduce to page
 		tour: function() {
@@ -229,12 +249,10 @@ var Workspace = (function($, _, T) {
 		},
 		//get popup info from server
 		popup: function(type) {
-			Public.ajax('signal=getPopup&type=' + type, function(data) {
+			Public.ajax('signal=popup&type=' + type, function(data) {
 				$(document.body).append(data);
 				$('.dim').fadeIn();
 				$('.cms_popup').fadeIn();
-			}, {
-				type: 'GET'
 			});
 		}
 	};
@@ -276,7 +294,7 @@ var Workspace = (function($, _, T) {
 		}
 	};
 	return Public;
-})(jQuery, NOHTML, Tour);
+})(jQuery);
 //END
 //MVC
 var Model = (function() {
@@ -288,6 +306,7 @@ var Model = (function() {
 		test: false,
 		//defaults
 		page: 'Stream',
+		firstTime: null,
 		mainEvent: 'click', //main event to use for controller
 		current: null, //#id of whatever user has open
 		project: null,
@@ -380,10 +399,13 @@ var View = (function($) {
 					break;
 				case 'page':
 					//console.log("(View): Page changed to '" + Model['page'] + "'");
-					Workspace.gen.changePage();
+					Workspace.gen.changePage(main);
 					break;
 				case 'popup':
 					Workspace.gen.popup(main);
+					break;
+				case 'firstTime':
+					if (main === 'false') Workspace.gen.welcome();
 					break;
 			}
 		}
@@ -410,14 +432,22 @@ var Controller = (function($) {
 		//Top context boxes
 		$(document).on(Model.mainEvent, 'a[id^="top-bar-option"]', function() {
 			var id = '#' + $(this).attr('id').substring(15);
-			$('.shown').not(id).fadeOut();
+			$('.shown').not(id).slideUp();
 			$(id).addClass('shown');
 			$(id).slideToggle();
+		});
+		//other context boxes
+		$(document).on(Model.mainEvent, '.ctx-head', function() {
+			var id = '#' + $(this).attr('id') + '-ctx';
+			$(id).slideToggle();
+		});
+		$(document).on(Model.mainEvent, 'a[class^="entry-"]', function() {
+			$('#'+$(this).attr('class').substring(6)).text($(this).text());
 		});
 		//side options
 		$(document).on(Model.mainEvent, 'li[id^="side-bar-option-"]', function() {
 			var id = $(this).attr('id').substring(16);
-			if(id !== 'chat'){
+			if (id !== 'chat' && id !== 'current') {
 				Model.modify('popup', $(this).attr('id').substring(16));
 			}
 		});
@@ -435,7 +465,6 @@ var Controller = (function($) {
 			source: function(request, response) {
 				response(
 					Workspace.ajax('signal=search-autocomplete', 2, { //return result
-						type: 'GET',
 						url: Model.scriptFile,
 						datatype: 'json'
 					})

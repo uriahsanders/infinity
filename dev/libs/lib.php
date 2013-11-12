@@ -375,4 +375,9 @@ function getRealIp() {
         }
     }
 }
+//temporary:
+function PDO() //this will later be in the relax.php
+{
+    return new PDO("mysql:host=".SQL_SERVER.";dbname=".SQL_DB, SQL_USR, SQL_PWD); //we only have it to make our coding easier with the connection and to use the defines for credentials
+}
 ?>

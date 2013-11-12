@@ -1,41 +1,41 @@
 <?php
-	$_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
-    include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
-    if(isset($_POST['token']) && $_POST['token'] != $_SESSION['token']){
-        //CSRF defense; end immediately and log
-        die();
+	include_once('workspace.php');
+    //generate UI html
+    function form($type, $arr){
+        switch($type){
+            case 'popup':
+                return '<div class="dim"></div>
+                <div class="cms_popup">
+                    <div class="cms_popup_head">
+                        <b style="font-size:1em;">'.$arr['title'].'</b>
+                    </div>
+                    <br /><br />
+                    <div class="cms_popup_body">
+                        '.$arr['desc'].'
+                    </div>
+                    <br /><br />
+                    <button class="close">Close</button>
+                </div>';
+                break;
+        }
     }
-    interface Security{
-
+    //CSRF defense; end immediately and log
+    if(isset($_REQUEST['token']) && $_REQUEST['token'] != $_SESSION['token']){
+        die(Workspace::suspect('Invalid token.'));
     }
-    class Person extends SQL implements Security{
-        public $DATA = [];
-    }
-    class Observer extends Person{
-
-    }
-    class Member extends Observer{
-
-    }
-    class Supervisor extends Member{
-
-    }
-	class Manager extends Supervisor{
-
-	}
-	class Creator extends Manager{
-
-	}
-	if(isset($_POST['signal'])){
-		switch($_POST['signal']){
-
-		}
-	}
-	if(isset($_GET['signal'])){
-        $type = $_GET['type'];
-        $desc = '';
-		switch($_GET['signal']){
-            case 'getPopup':
+    $workspace = new Workspace();
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //GET
+    if(isset($_GET['signal'])){
+        $g = $_GET;
+        switch($g['signal']){
+            case 'init':
+                //check if they have already created a workspace
+                die($workspace->workspace_exists());
+                break;
+            case 'popup':
+                $workspace->verify_params($g, ['type']);
+                $desc = '';
                 switch($type){
                     case 'messages':
                         $desc .= '';
@@ -50,19 +50,46 @@
                         $desc .= '';
                         break;
                 }
-                $popup = '<div class="dim"></div>
-                <div class="cms_popup">
-                    <div class="cms_popup_head">
-                        <b style="font-size:1em;">'.ucfirst($type).'</b>
-                    </div>
-                    <br /><br />
-                    <div class="cms_popup_body">
-                        '.$desc.'
-                    </div>
-                    <br /><br />
-                    <button class="close">Close</button>
-                </div>';
-                die($popup);
+                die(form('popup', [
+                    'title' => ucfirst($g['type']),
+                     'desc' => $desc
+                ]));
                 break;
-		}
-	}
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //POST (create)
+    if(isset($_POST['signal'])){
+        $p = $_POST;
+        switch($p['signal']){
+            case 'createWorkspace':
+                $workspace->verify_params($p, ['name', 'category', 'description']);
+                $workspace->create_workspace([
+                    'name' => $p['name'],
+                    'creator' => $_SESSION['ID'],
+                    'date' => $workspace->getDate(),
+                    'popularity' => 0,
+                    'category' => $p['category'],
+                    'description' => $p['description'],
+                    'launched' => 0
+                ]);
+                break;
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PUT (update)
+    if(isset($_PUT['signal'])){
+        $p = $_PUT;
+        switch($p['signal']){
+
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //DELETE
+    if(isset($_DELETE['signal'])){
+        $d = $_DELETE;
+        switch($d['signal']){
+
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 <?php
     $_SERVER['DOCUMENT_ROOT'] .= '/infinity/dev'; //uriah
     include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
-    $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
+    $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));    
     //include_once($_SERVER['DOCUMENT_ROOT']."/member/check_auth.php");
     //include_once($_SERVER['DOCUMENT_ROOT'].'/libs/loading.php'); //temp
 ?>
@@ -27,7 +27,16 @@
 	<div id="content">
 		<nav id="top-bar">
 			<ul id="top-bar-options">
-				<li id="top-bar-option-" class="top-bar-option link b"><a>Infinity-Forum</a></li>
+				<li class="top-bar-option">
+					<a id="top-bar-option-infinity-ctx" class="link i b">Infinity-Forum</a>
+					<div id="infinity-ctx"class="ctx">
+						<a href="/">Start</a> <hr class="hr-fancy" />
+						<a href="/lounge">Lounge</a> <hr class="hr-fancy" />
+						<a href="/projects">Projects</a> <hr class="hr-fancy" />
+						<a href="/forum">Forum</a> <hr class="hr-fancy" />
+						<a href="/help">Help</a>
+					</div>
+				</li>
 				<li id="top-bar-option-" class="top-bar-option"><input type="text"placeholder="My Status"id="status"/></li>
 				<li class="top-bar-option">
 					<a id="top-bar-option-project_select" class="link i">Infinity</a>
@@ -62,9 +71,9 @@
 				</li>
 			</ul>
 			<ul id="top-bar-options" class="right">
-				<li id="top-bar-option-rss" class="top-bar-option link i"><a>RSS</a></li>
-				<li id="top-bar-option-" class="top-bar-option link i"><a>General</a></li>
-				<li class="top-bar-option link"><a>Logout</a></li>
+				<li id="top-bar-option" class="top-bar-option"><img style="width: 18px;height: 18px;padding-right: 3px;display: inline-block;"src="/images/status/1.png" class="status_icon" alt="status" title="status"><span></li>
+				<li id="top-bar-option" class="top-bar-option"><img style="width: 18px;height: 18px;padding-right: 3px;display: inline-block;"src="/images/s.png" alt="settings" title="settings" border="0"></li>
+				<li id="top-bar-option" class="top-bar-option"><a href="/lounge/logout"><img style="width: 18px;height: 18px;padding-right: 3px;display: inline-block;"src="/images/logout.png" alt="logout" title="logout" border="0"></a></li>
 			</ul>
 		</nav>
 		<!-- Side CMS bar -->
@@ -73,6 +82,7 @@
 				<li id="side-bar-option-messages" class="side-bar-option link"><img src="/images/w-msgs.png"title="Messages" height="20px"width="20px"></li>
 				<li id="side-bar-option-requests" class="side-bar-option link"><img src="/images/w-reqs.png"title="Requests" height="20px"width="20px"></li>
 				<li id="side-bar-option-options" class="side-bar-option link"><img src="/images/w-cog.png"title="Options" height="20px"width="20px"></li>
+				<hr class="hr-fancy">
 				<li id="side-bar-option-chat" class="side-bar-option link"><img src="/images/chat.png"title="Chat" height="20px"width="20px"></li>
 				<li id="side-bar-option-current" class="side-bar-option link b"title="Current" style="color:black;">(6)</li>
 			</ul>
@@ -106,7 +116,7 @@
 			<div id="unique_content">
 			<!-- Statistics -->
 			<div id="workspace-info">
-				Welcome, <a class="link">Uriah Sanders</a>
+				Welcome, <a class="link"><?php echo $_SESSION['usr']; ?></a>
 				<hr class="hr-fancy">
 				<span class="header">Contributions this Week:</span><br>
 				<div id="workspace-graphs"></div>
