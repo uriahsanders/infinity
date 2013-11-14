@@ -128,7 +128,7 @@ var Workspace = (function($) {
 						location.reload(obj.reload || false);
 						break;
 					case 1: //refresh page (ajax)
-						Model.modify('page', Model.page);
+						Model.modify(['page'], Model.page);
 						break;
 					case 2: //return response
 						return (obj.datatype === 'json') ? jQuery.parseJSON(data) : data;
@@ -159,7 +159,7 @@ var Workspace = (function($) {
 	//do all the starting stuff
 	Public.init = function() {
 		Workspace.ajax('signal=init', function(data) {
-			Model.modify('firstTime', data);
+			Model.modify(['firstTime'], data);
 		});
 		Workspace.graphs.contributions();
 		//$('#entries').css('height', $('#workspace-info').css('height')); //info height is dynamic but entires still needs to match it
@@ -299,8 +299,18 @@ var Workspace = (function($) {
 //MVC
 var Model = (function() {
 	"use strict";
-	//all data: notify view when stuff changes (All Public)
-	return {
+	var Private = {};
+	//change a property from array
+	Private.recursive = function(props, to, obj, i) {
+		obj = obj || Model; //initial obj
+		i = i || 0;
+		if (i < props.length - 1) { //skip final dimension (property of obj) so we can work with object
+			this.recursive(props, to, obj[props[i]], i+1); //new obj = Model['data'], then Model['data']['data2'] ---> so on
+		}else {
+			obj[props[props.length - 1]] = to; //its an object so pass by reference and change
+		}
+	};
+	var Public = {
 		//DEV
 		scriptFile: 'script.php',
 		test: false,
@@ -335,25 +345,18 @@ var Model = (function() {
 		tasks: {},
 		tables: {},
 		notes: {},
-		events: {},
-		//functions for modifications:
-		modify: function(what, value) { //change a constant Model property
-			//change data
-			this[what] = value;
-			//notify view
-			View.changed = what; //tell view our most recent change
-			View.notify(); //we just pushed
-			console.log('(Model): -modified: Model.' + what + ' to: "' + value + '"');
-		},
-		//change a dynamically added Model property
-		tickle: function(cat, thing, what, newValue) {
-			this[cat][thing][what] = newValue;
-			// * astrid to tell view it is dynamic
-			View.changed = '*' + cat + '-' + thing + '-' + what;
-			View.notify();
-			console.log('(Model): -tickled: Model.' + cat + '.' + thing + '.' + what);
-		}
+		events: {}
 	};
+	//change some data
+	Public.modify = function(what, value) {
+		//change data
+		Private.recursive(what, value);
+		//notify view
+		View.changed = what.join('-'); //tell view our most recent change
+		View.notify(); //we just pushed
+		console.log('(Model): -modified: Model.' + what + ' to: "' + value + '"');
+	};
+	return Public;
 })();
 //UI: change interface when model changes (calls, but does not define functions)
 var View = (function($) {
@@ -416,7 +419,7 @@ var View = (function($) {
 var Controller = (function($) {
 	"use strict";
 	console.log("(Controller): Controller now listening for events!");
-	Model.modify('test', true); //make sure MVC works
+	Model.modify(['test'], true); //make sure MVC works
 	//start listening for changes
 	$(function() {
 		//tooltips
@@ -427,7 +430,7 @@ var Controller = (function($) {
 		});
 		//change pages
 		$(document).on(Model.mainEvent, 'span[id^="tiny-page-"]', function() { //changing pages
-			Model.modify('page', $(this).attr('id').substring(10));
+			Model.modify(['page'], $(this).attr('id').substring(10));
 		});
 		//Top context boxes
 		$(document).on(Model.mainEvent, 'a[id^="top-bar-option"]', function() {
@@ -442,13 +445,13 @@ var Controller = (function($) {
 			$(id).slideToggle();
 		});
 		$(document).on(Model.mainEvent, 'a[class^="entry-"]', function() {
-			$('#'+$(this).attr('class').substring(6)).text($(this).text());
+			$('#' + $(this).attr('class').substring(6)).text($(this).text());
 		});
 		//side options
 		$(document).on(Model.mainEvent, 'li[id^="side-bar-option-"]', function() {
 			var id = $(this).attr('id').substring(16);
 			if (id !== 'chat' && id !== 'current') {
-				Model.modify('popup', $(this).attr('id').substring(16));
+				Model.modify(['popup'], $(this).attr('id').substring(16));
 			}
 		});
 		//dim screen
