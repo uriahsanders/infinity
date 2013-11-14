@@ -305,8 +305,8 @@ var Model = (function() {
 		obj = obj || Model; //initial obj
 		i = i || 0;
 		if (i < props.length - 1) { //skip final dimension (property of obj) so we can work with object
-			this.recursive(props, to, obj[props[i]], i+1); //new obj = Model['data'], then Model['data']['data2'] ---> so on
-		}else {
+			this.recursive(props, to, obj[props[i]], i + 1); //new obj = Model['data'], then Model['data']['data2'] ---> so on
+		} else {
 			obj[props[props.length - 1]] = to; //its an object so pass by reference and change
 		}
 	};
@@ -364,53 +364,19 @@ var View = (function($) {
 	var Public = {};
 	Public.changed = null;
 	Public.notify = function() {
-		//work with a dynamically added element in the Model
-		if (Public.changed.charAt(0) === '*') {
-			//do lots of hard stuff in here to parse Public.changed
-			//to do the appropriate action
-			var changed = Public.changed.substring(1).split('-'); //remove astrid and get pieces
-			var type = changed[0]; //type of element, eg: documents, tasks, etc.
-			var num = changed[1].substring(changed[0].length - 1); //get the index #
-			var what = changed[2]; //exactly what was changed?
-			switch (type) { //we need to do something different depending on the element
-				//then, do something for each one depending on the actual property changed (var what)
-				case 'documents':
-
-					break;
-				case 'tasks':
-
-					break;
-				case 'tables':
-
-					break;
-				case 'notes':
-
-					break;
-				case 'events':
-
-					break;
-				default:
-					console.err.log("(View): There is no such element: " + type);
-			}
+		var c = Public.changed;
+		var main = Model[c]; //current value we are working with
+		if (c === 'test') {
+			console.log('(View): Testing...MVC works! Model.test = ' + Model['test']);
+		} else if (c === 'page') {
+			//console.log("(View): Page changed to '" + Model['page'] + "'");
+			Workspace.gen.changePage(main);
+		} else if (c === 'popup') {
+			Workspace.gen.popup(main);
+		} else if (c === 'firstTime') {
+			if (main === 'false') Workspace.gen.welcome();
 		} else {
-			//work with constant Model variables
-			var main = Model[Public.changed]; //current value we are working with
-			switch (Public.changed) {
-				//main view stuff: depending on what changed, do something
-				case 'test':
-					console.log('(View): Testing...MVC works! Model.test = ' + Model['test']);
-					break;
-				case 'page':
-					//console.log("(View): Page changed to '" + Model['page'] + "'");
-					Workspace.gen.changePage(main);
-					break;
-				case 'popup':
-					Workspace.gen.popup(main);
-					break;
-				case 'firstTime':
-					if (main === 'false') Workspace.gen.welcome();
-					break;
-			}
+			//no match... do something
 		}
 	};
 	return Public;
