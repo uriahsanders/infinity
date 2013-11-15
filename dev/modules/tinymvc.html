@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="tinymvc.js"></script>
+</head>
+<body>
+	<h1>View Page Source to see what happened</h1>
+	<script>
+		//Example :D
+		Model.create({
+			test: null,
+			workspace: {
+				documents: {
+					attributes: {
+						title: null
+					}
+				}
+			},
+			color: 'red'
+		});
+		var model = Model.data; //shorthand
+		View.create(function(name, val){
+			if(name === 'test') alert('test = ' + val);
+			//reference next JSON object with a "-"
+			else if(name === 'workspace-documents-attributes-title'){
+				alert('changed title to: ' + val);
+			}
+		});
+		Controller.create(function(){
+			//stick event handlers in here
+			if(model.color === 'red') Model.modify(['test'], true);
+			Model.modify(['workspace', 'documents', 'attributes', 'title'], 'hi!');
+		});
+	</script>
+</body>
+</html>

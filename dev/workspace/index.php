@@ -19,6 +19,7 @@
 	<script src="../modules/NOHTML.js"></script>
 	<script src="../modules/tour.js"></script>
 	<script src="../modules/SVGGraph.js"></script>
+	<script src="../modules/tinymvc.js"></script>
 	<!-- RSS -->
 	<link rel="alternate" type="application/rss+xml" title="" href="" />
 </head>
