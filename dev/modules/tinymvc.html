@@ -21,7 +21,6 @@
 			},
 			color: 'red'
 		});
-		var model = Model.data; //shorthand
 		View.create(function(name, val){
 			if(name === 'test') alert('test = ' + val);
 			//reference next JSON object with a "-"
@@ -29,11 +28,20 @@
 				alert('changed title to: ' + val);
 			}
 		});
-		Controller.create(function(){
+		Controller.create(function(model){
 			//stick event handlers in here
 			if(model.color === 'red') Model.modify(['test'], true);
 			Model.modify(['workspace', 'documents', 'attributes', 'title'], 'hi!');
 		});
+		//doesnt do anything in this examples, but
+		//heres how to make a router
+		Router.create({
+			"url1": function(){
+				//do something
+			}
+			//...
+		});
+		Router.goTo('url1'); //will run above function for url1
 	</script>
 </body>
 </html>

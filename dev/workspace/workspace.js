@@ -46,7 +46,7 @@
 		events: {}
 	});
 	var model = Model.data;
-	View.create(function(name, value) {
+	View.create(function(name, value, states) {
 		if (name === 'test') {
 			console.log('(View): Testing...MVC works! Model.test = ' + value);
 		} else if (name === 'page') {
@@ -189,7 +189,7 @@
 			var queryString;
 			var essentials = ['page', 'project', 'branch', 'filter', 'numResults', 'limiter', 'current'];
 			for (var i = 0; i <= essentials.length; ++i) {
-				queryString += essentials[i] + '=' + data[essentials[i]];
+				queryString += essentials[i] + '=' + model[essentials[i]];
 				if (i !== essentials.length) queryString += '&';
 			}
 			return queryString;
@@ -264,10 +264,10 @@
 				//$('body').append(welcome);
 			},
 			changePage: function(page) {
-				$('#page-title').text(cFirst(data['page'], 'u')); //change title
+				$('#page-title').text(cFirst(model['page'], 'u')); //change title
 				$('span[id^="tiny-page-"]').show(); //show all links
-				$('#tiny-page-' + data['page']).hide(); //hide link that we just clicked
-				Router.goTo(data['page']);
+				$('#tiny-page-' + model['page']).hide(); //hide link that we just clicked
+				Router.goTo(model['page']);
 				//do ajax request
 				Public.ajax('signal=changePage&page=' + page, function(data) {
 					$('#unique_content').html(data);

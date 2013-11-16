@@ -52,7 +52,7 @@
                 }
                 die(form('popup', [
                     'title' => ucfirst($g['type']),
-                     'desc' => $desc
+                    'desc' => $desc
                 ]));
                 break;
         }
