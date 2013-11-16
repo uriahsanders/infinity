@@ -5,6 +5,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/config.php');
 
 try{
 	$con = new PDO("mysql:host=" . SQL_SERVER . ";dbname=" . SQL_DB, SQL_USR, SQL_PWD); //make the pdo connection
+	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 }catch(PDOException $e){ //check for an error
 	die($e->getMessage());
 }
@@ -39,7 +40,11 @@ function delete($item, $name, $con){
     	":ID" => $id,
     	":SID" => $_SESSION['ID']
     	));
-    	return "success";
+    	if($query && $query2){
+    		return "success";
+    	}else{
+    		return "error";
+    	}
     }
     else if($item == "member" && isset($_POST['group'])){
     	$id = getID($_POST['group'], $con);
@@ -58,25 +63,14 @@ function delete($item, $name, $con){
     }
 }
 
-function createGroup($group, $members, $con){
-    $query = $con->prepare("INSERT INTO groups (`group`, `creator`) VALUES ('".$group."', '".$_SESSION['ID']."')")or die(mysql_error()); //insert all the info for the group
+function createGroup($group, $con){
+    $query = $con->prepare("INSERT INTO groups (`group`, `creator`) VALUES (:group, :SID)")or die(mysql_error()); //insert all the info for the group
     $query->execute(array(
     ":group" => $group,
     ":SID" => $_SESSION['ID']
     ));
     if($query){
-        $id = getID($group, $con);
-        $query2 = $con->prepare("INSERT INTO `group_members` (`groupId`,`member`,`groupCreator`) VALUES (:ID, :member, :SID)")or die(mysql_error()); //insert all the info for the members
-        $query2->execute(array(
-        ":ID" => $id,
-        ":member" => $members,
-        ":SID" => $_SESSION['ID']
-        ));
-        if($query2){
-        	return "Successfully created group and inserted members";
-        }else{
-        	return "error inserting members";
-        }
+        return "sucess";
     }else{
         return "error";
     }
@@ -90,8 +84,11 @@ function getMembers($group, $con){
    	":SID" => $_SESSION['ID']
    	));
    	$members = array();
-   	$query = $con->prepare("SELECT * FROM `group_members` WHERE `groupId` = '".$id."' AND `groupCreator` = '".$_SESSION['ID']."'"); //get the members
-   	$query->execute();
+   	$query = $con->prepare("SELECT * FROM `group_members` WHERE `groupId` = :ID AND `groupCreator` = :SID"); //get the members
+   	$query->execute(array(
+   	":ID" => $id,
+   	":SID" => $_SESSION['ID']
+   	));
    	$row = $query->fetchAll(PDO::FETCH_OBJ);
    	for($i = 0; $i <= count($row) - 1; $i++){
    		@array_push($members, $row[$i]->member);
@@ -136,23 +133,31 @@ function editInfo($type, $name, $group, $con){
 }
 
 function getID($group, $con){
-	$query = $con->prepare("SELECT * FROM `groups` WHERE `group` = :group AND creator = :SID");
-	$query->execute(array(
-	":group" => $group,
-	":SID" => $_SESSION['ID']
-	));
-	$row = $query->fetch(PDO::FETCH_OBJ);
-	return $row->id;
+	try{
+		$query = $con->prepare("SELECT * FROM `groups` WHERE `group` = :group AND creator = :SID");
+		$query->execute(array(
+		":group" => $group,
+		":SID" => $_SESSION['ID']
+		));
+		$row = $query->fetch(PDO::FETCH_OBJ);
+		return $row->id;
+	}catch(PDOException $e){
+		return $e->getMessage();
+	}
 }
 
 function copyMember($group, $member, $con){
 	$id = getID($group, $con);
-	$result = $con->prepare("INSERT INTO `group_members` (`groupCreator`, `groupId`, `member`) VALUES (:SID, :ID, :member)")or die(mysql_error()); //insert the info for the member
-	$result->execute(array(
-	":SID" => $_SESSION['ID'],
-	":ID" => $id,
-	":member" => $member
-	));
+	try{
+		$result = $con->prepare("INSERT INTO `group_members` (`groupCreator`, `groupId`, `member`) VALUES (:SID, :ID, :member)"); //insert the info for the member
+		$result->execute(array(
+		":SID" => $_SESSION['ID'],
+		":ID" => $id,
+		":member" => $member
+		));
+	}catch(PDOException $e){
+		return $e->getMessage();
+	}
 	if($result){
 		return "success";
 	}else{
@@ -160,23 +165,43 @@ function copyMember($group, $member, $con){
 	}
 }
 
-function search($query, $con){
-	$results = array();
-	$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` LIKE :query OR `group` = :query OR `group` LIKE :percentFront OR `group` LIKE :percentBack AND `creator` = :SID ORDER BY id DESC");
-	$sql->execute(array(
-	":query" => $query,
-	":percentFront" => '%' . $query,
-	":percentBack" => $query . '%',
-	":SID" => $_SESSION['ID']
-	));
-	$row = $sql->fetchAll(PDO::FETCH_OBJ);
-	for($i = 0; $i <= count($row) - 1; $i++){
-		@array_push($results, $row[$i]->group);
-	}
-	if(isset($results) && !empty($results)){
-		return json_encode($results);
+function search($query, $what, $con){
+	if($what == "groups"){
+		$results = array();
+		$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` LIKE :query OR `group` = :query OR `group` LIKE :percentFront OR `group` LIKE :percentBack AND `creator` = :SID ORDER BY id DESC");
+		$sql->execute(array(
+		":query" => $query,
+		":percentFront" => '%' . $query,
+		":percentBack" => $query . '%',
+		":SID" => $_SESSION['ID']
+		));
+		$row = $sql->fetchAll(PDO::FETCH_OBJ);
+		for($i = 0; $i <= count($row) - 1; $i++){
+			@array_push($results, $row[$i]->group);
+		}
+		if(isset($results) && !empty($results)){
+			return json_encode($results);
+		}else{
+			return json_encode(array("No results."));
+		}
 	}else{
-		return json_encode(array("No results."));
+		$contacts = array();
+		$query = $con->prepare("SELECT * FROM `friends` WHERE `friend` LIKE :contact OR `friend` = :contact OR `friend` LIKE :percentFront OR `friend` LIKE :percentBack OR `friend` AND `id` = :SID");
+		$query->execute(array(
+		":SID" => $_SESSION['ID'],
+		":contact" => $query,
+		":percentFront" => '%' . $query,
+		":percentBack" => $query . '%'
+		));
+		$row = $query->fetchAll(PDO::FETCH_OBJ);
+		for($i = 0; $i < count($row); $i++){
+			array_push($contacts, id2user($row[$i]->friend));
+		}
+		if(isset($contacts) && !empty($contacts)){
+			return json_encode($contacts);
+		}else{
+			return json_encode(array("No results."));
+		}
 	}
 }
 
@@ -193,21 +218,21 @@ function getContacts($con){
 	if(isset($contacts) && !empty($contacts)){
 		return json_encode($contacts);
 	}else{
-		return json_encode("No contacts");
+		return json_encode(array("No contacts"));
 	}
 }
 
-if(isset($_POST['group']) && isset($_POST['members'])){
+if(isset($_POST['group']) && isset($_POST['do']) && $_POST['do'] == "create"){
 	define("LAST_GROUP", $_POST['group']); //define the last group made
-    echo createGroup($_POST['group'], $_POST['members'], $con);
+    echo createGroup($_POST['group'], $con);
 }else if(isset($_POST['get']) && $_POST['get'] == "groups"){
     echo getGroups($con);
-}else if(isset($_POST['get']) && $_POST['get'] == "members" && isset($_POST['group'])){
+}else if(isset($_POST['get']) && isset($_POST['group']) && $_POST['get'] == "members"){
     echo getMembers($_POST['group'], $con);
-}else if(isset($_POST['group']) && isset($_POST['member']) && isset($_POST['do']) == "copy"){
+}else if(isset($_POST['group']) && isset($_POST['member']) && isset($_POST['do']) && $_POST['do'] == "copy"){
 	echo copyMember($_POST['group'], $_POST['member'], $con);
-}else if(isset($_POST['query'])){
-	echo search($_POST['query'], $con);
+}else if(isset($_POST['query']) && isset($_POST['what'])){
+	echo search($_POST['query'], $_POST['what'], $con);
 }else if(isset($_POST['del']) && isset($_POST['name']) && @$_POST['del'] == "group" || @$_POST['del'] == "member"){
     echo delete($_POST['del'], $_POST['name'], $con);
 }else if(isset($_POST['edit']) && isset($_POST['group']) && isset($_POST['name']) && @$_POST['edit'] == "member" || @$_POST['edit'] == "group"){
