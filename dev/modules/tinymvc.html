@@ -5,13 +5,19 @@
 	<title>Document</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="tinymvc.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushPhp.min.js"></script>
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreDefault.min.css" />
 </head>
 <body>
-	<h1>View Page Source to see what happened</h1>
+	<h1>View Terminal to see what happened.</h1>
+	<h1>View Page Source to see the code. (It's simple)</h1>
+	<br>
+	<button id="click">Click Me!</button>
 	<script>
-		//Example :D
+		/*Example :D*/
 		Model.create({
-			test: null,
+			test: 'dddd',
 			workspace: {
 				documents: {
 					attributes: {
@@ -19,29 +25,53 @@
 					}
 				}
 			},
-			color: 'red'
+			color: 'red',
+			buttonHasBeenClicked: false
 		});
 		View.create(function(name, val){
-			if(name === 'test') alert('test = ' + val);
-			//reference next JSON object with a "-"
-			else if(name === 'workspace-documents-attributes-title'){
-				alert('changed title to: ' + val);
+			switch(name){
+				case 'test':
+					console.log('test changed to ' + val);
+					break;
+				//you can reference next level with hyphen
+				case 'workspace-documents-attributes-title':
+					console.log('changed title to: ' + val);
+					break;
+				case 'buttonHasBeenClicked':
+					if(val === true) alert('You clicked the button!');
 			}
 		});
 		Controller.create(function(model){
-			//stick event handlers in here
-			if(model.color === 'red') Model.modify(['test'], true);
-			Model.modify(['workspace', 'documents', 'attributes', 'title'], 'hi!');
+			//get a model var
+			if(model.color === 'red') Model.modify(['test'], false);
+			//may be more comfortable to get data with tinyMVC syntax (arrays or hyphens) :)
+			var something = Model.get('workspace-documents-attributes-title');
+			var something = model.workspace.documents.attributes.title; //works as well
+			//you can always use either an array or hyphens, your choice
+			Model.modify(['workspace', 'documents', 'attributes', 'title'], 'Array test'); //works!
+			Model.modify('workspace-documents-attributes-title', 'Hyphen test'); //works!
+			Model.cascade({ //modify multiple things at once
+				'workspace-documents-attributes-title': 'Changing multiple vars!',
+				'test': true
+			});
+			//a more practical example
+			$(document).on('click', '#click', function(){
+				Model.modify('buttonHasBeenClicked', true);
+			});
 		});
 		//doesnt do anything in this examples, but
 		//heres how to make a router
 		Router.create({
-			"url1": function(){
-				//do something
+			type: 'pushState', //use pushState url's
+			paths: {
+				"url1": function(){
+					//do something
+					Model.modify(['test'], false);
+				}
+				//...
 			}
-			//...
 		});
-		Router.goTo('url1'); //will run above function for url1
+		Router.goTo('url1'); //will run above function for url1, and pushState
 	</script>
 </body>
 </html>
