@@ -53,12 +53,21 @@ html, body {
 
 #contacts {
 	text-align: center;
+	height: 100%;
 }
 
-#toolbar{
+#toolbar {
 	border-bottom: 1px solid black;
 	padding: 5px;
 	text-align: center;
+}
+
+#trash {
+	display: block;
+	padding 2px;
+	position: fixed;
+	bottom: 0;
+	right: 0;
 }
 
 ::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
@@ -103,7 +112,7 @@ a:hover {
 	opacity: 1;
 }
 </style>
-<div id='toolbar'><input type='text' placeholder="Search Groups" id='' /><input type='submit' value='Search' id='searchGroups' /> <a id='view'>View All</a></div>
+<div id='toolbar'><input type='text' placeholder="Search Groups" id='groupQuery' /><input type='submit' value='Search' id='searchGroups' /> <a onclick='window.location.reload();'>View All</a></div>
 <div id="control">
 <div id='form'>
 Create Group: <br/><input type='text' id='groupInput' placeholder="Group Name" /><input type='submit' value='Submit' id='submit' />
@@ -124,7 +133,7 @@ $('#submit').click(function (){
             	$('#form').find('input[type=text]').val(''); //clear the input boxes
             	$('#groups').append("<div id='" + group + "' class='group'><span id='" + group + "' class='name'>" + group + "</span><br ><span class='group-toolbar'><a id='" + group + "' class='showMembers'>Show Members</a> <a id='" + group + "' class='edit'>Edit</a></span></div>"); //append the new group to groups
             	$('span#' + group).draggable({cursor: "move", scroll: false, revert: "invalid", helper: "clone"});
-                $('#' + group).droppable({
+                $('div#' + group).droppable({
                     drop: function (event, ui){
                     	var group = $(this).attr("id");
                     	if(ui.draggable.attr("class").startsWith("member")){
@@ -158,14 +167,13 @@ $('#searchContacts').click(function (){
 			data = data.substring(0, data.length - 2);
 			console.log(data);
 			if(data != null && data != undefined && data != "error"){
-				$('#results').empty();
+				$('#contacts').empty();
 				var results = jQuery.parseJSON(data);
 				//console.log(results);
-				$('#results').slideDown();
-				if(results[0] != "No results.") $('#results').append("<p style='text-align:left'>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
+				if(results[0] != "No results.") $('#contacts').append("<p style='text-align:center'>Found " + results.length + " result(s)</p>"); //if results[0] doesnt equal no results append the amount of results returned
 				for(var i = 0; i <= results.length; ++i){
 					if(results[i] == undefined) break;
-					$('#results').append("<div style='text-align:left'>" + results[i] + "</div>"); //append each result
+					$('#contacts').append("<div style='text-align:center'>" + results[i] + "</div>"); //append each result
 				}
 			}else{
 				$('#results').append("There was an error trying to search for " + $('#query').val());
@@ -176,20 +184,27 @@ $('#searchContacts').click(function (){
 	}
 });
 $('#searchGroups').click(function (){
-	if($('#id').val() != ""){
+	if($('#groupQuery').val() != ""){
 		$.post("dragndrop_script.php", {
-		query: $('#id').val(),
+		query: $('#groupQuery').val(),
 		what: "groups"
 		}, function (data){
 			data = data.substring(0, data.length - 2);
 			console.log(data);
+			$('#groups').empty();
+			var results = jQuery.parseJSON(data);
+			console.log(results);
+			if(results[0] != "No results.") $('#groups').append("<p>Found " + results.length + " result(s).</p>");
+			for(var i = 0; i < results.length; i++){
+				$('#groups').append("<div>" + results[i] + "</div>")
+			}
 		});
 	}else{
 		alert("Please fill in the search field.");
 	}
 });
 </script>
-<div id='groups' style='display:none'><div id='trash' style='display:none'>trash</div></div>
+<div id='groups' style='display:none'><div id='trash' style='display:none'><img src='images/trash.png' width='50' height='50'></img></div></div>
 <script>
 $(document).ready(function (){
     if($('#groups').children().length <= 1){ //check if the groups were already retrieved
@@ -201,8 +216,7 @@ $(document).ready(function (){
             var response = jQuery.parseJSON(data); //parse the json
             //console.log(response);
             if(response.length > 0 && response[0] != "no groups"){ //check to see if response is empty
-                for(var i = 0; i <= response.length; ++i){
-                	if(response[i] == undefined) break; //check if theres nothing left in the array
+                for(var i = 0; i < response.length; ++i){
                     $('#groups').append("<div id='" + response[i] + "' class='group'><span id='" + response[i] + "' class='name'>" + response[i] + "</span><br ><span class='group-toolbar'><a id='" + response[i] + "' class='showMembers'>Show Members</a> <a id='" + response[i] + "' class='edit'>Edit</a></span></div>"); //make a div for each group and append it to groups
                     $('span#' + response[i]).draggable({cursor: "move", scroll: false, revert: "invalid", helper: "clone"}); //make each div draggable 
                     $('div#' + response[i]).droppable({
