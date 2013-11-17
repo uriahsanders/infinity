@@ -82,8 +82,6 @@ var Router = Router || (function() {
 		create: function(obj) {
 			this.paths = obj.paths || {};
 			this.parseFunc = obj.parseFunc || function() {};
-			this.defaultURL = obj.url || Model.data.url || window.location;
-			var thiz = this;
 		},
 		//change URL and do something after
 		goTo: function(param) {
@@ -92,7 +90,7 @@ var Router = Router || (function() {
 		//run function for current url
 		run: function() {
 			var param = window.location.hash.substring(2);
-			if (this.paths && this.paths[param]) this.paths[param](); //run func for this hash
+			if (this.paths[param]) this.paths[param](); //run func for this hash
 			if (this.parseFunc) this.parseFunc(param);
 		}
 	};

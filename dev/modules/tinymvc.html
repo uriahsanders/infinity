@@ -75,7 +75,6 @@
 		//doesnt do anything in this examples, but
 		//heres how to make a router
 		Router.create({
-			type: 'pushState', //use pushState url's
 			//two ways to do something depending on the url:
 			paths: {
 				//an object with a different function for each url
@@ -100,8 +99,8 @@
 				}
 			}
 		});
-		Router.run();
 		//Router.goTo('start'); //will run above function for url1, and pushState
+		Router.run();
 	</script>
 </body>
 </html>
