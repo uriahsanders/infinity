@@ -769,7 +769,14 @@ class forum extends member {
 		return mysql_num_rows($res) + $a;
 	}
 }
-
+//perform a function for each index in an array
+function doForAllInArray(&$arr, $funcs){
+	foreach($arr as $key => $value){
+		foreach($funcs as $func){
+			$arr[$key] = call_user_func($func, $value);
+		}
+	}
+}
 
 
 
