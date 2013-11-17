@@ -14,6 +14,10 @@
 	<h1>View Page Source to see the code. (It's simple)</h1>
 	<br>
 	<button id="click">Click Me!</button>
+	<br>
+	<button id="one">URL 1</button>
+	<button id="two">URL 2</button>
+	<button id="three">URL 3</button>
 	<script>
 		/*Example :D*/
 		Model.create({
@@ -58,20 +62,46 @@
 			$(document).on('click', '#click', function(){
 				Model.modify('buttonHasBeenClicked', true);
 			});
+			$(document).on('click', '#one', function(){
+				Router.goTo('url1');
+			});
+			$(document).on('click', '#two', function(){
+				Router.goTo('url2');
+			});
+			$(document).on('click', '#three', function(){
+				Router.goTo('url3');
+			});
 		});
 		//doesnt do anything in this examples, but
 		//heres how to make a router
 		Router.create({
 			type: 'pushState', //use pushState url's
+			//two ways to do something depending on the url:
 			paths: {
-				"url1": function(){
+				//an object with a different function for each url
+				"start": function(){
 					//do something
-					Model.modify(['test'], false);
+					Model.modify('test', 'Starting!!!');
 				}
 				//...
+			},
+			//or a function that takes url as parameter and calls with Router.goTo()
+			parseFunc: function(url){
+				switch(url){
+					case 'url1':
+						alert("Welcome to page 1.");
+						break;
+					case 'url2':
+						alert("Welcome to page 2.");
+						break;
+					case 'url3':
+						alert("Welcome to page 3.");
+						break;
+				}
 			}
 		});
-		Router.goTo('url1'); //will run above function for url1, and pushState
+		Router.run();
+		//Router.goTo('start'); //will run above function for url1, and pushState
 	</script>
 </body>
 </html>

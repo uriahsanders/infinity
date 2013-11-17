@@ -15,7 +15,7 @@ var Model = Model || (function() {
 			this.data = data;
 		},
 		get: function(what) { //get something from Model
-			if(typeof what === 'string') what = what.split('-');
+			if (typeof what === 'string') what = what.split('-');
 			return propFromArray(what, false, false);
 		},
 		//add an element to the Model wihout calling view
@@ -25,14 +25,14 @@ var Model = Model || (function() {
 		//change an element in the Model (add and call view if non-existant)
 		modify: function(what, value) {
 			//call what as either an array or string broken with -'s
-			if(typeof what === 'string') what = what.split('-');
+			if (typeof what === 'string') what = what.split('-');
 			propFromArray(what, value);
 			Model.lastChanged = what.join('-');
 			View.notify();
 		},
-		cascade: function(obj){
+		cascade: function(obj) {
 			//call a bunch of modifies() from a hash, arrays not allowed in this one :(
-			for(var i in obj) this.modify(i.split('-'), obj[i]);
+			for (var i in obj) this.modify(i.split('-'), obj[i]);
 		},
 		//get the Model obj
 		retrieve: function() {
@@ -80,27 +80,26 @@ var Router = Router || (function() {
 	return {
 		//define object with key for path and value for function
 		create: function(obj) {
-			this.paths = obj.paths;
-			this.type = obj.type;
+			this.paths = obj.paths || {};
+			this.parseFunc = obj.parseFunc || function() {};
 			this.defaultURL = obj.url || Model.data.url || window.location;
+			var thiz = this;
 		},
 		//change URL and do something after
 		goTo: function(param) {
-			if (this.type === 'pushState') {
-				window.history.pushState({
-					state: param
-				}, param, param);
-				if (this.paths && this.paths[param]) {
-					//run user defined function for this path
-					this.paths[param]();
-				}
-			} else {
-				//work with hashes
-			}
+			window.location.hash = '!' + param;
 		},
-		//run function for this url
+		//run function for current url
 		run: function() {
-			this.goTo(window.location.substring(this.defaultURL.length));
+			var param = window.location.hash.substring(2);
+			if (this.paths && this.paths[param]) this.paths[param](); //run func for this hash
+			if (this.parseFunc) this.parseFunc(param);
 		}
 	};
+})();
+(function() {
+	var myfunc = function() {
+		Router.run();
+	};
+	window.onhashchange = myfunc;
 })();
