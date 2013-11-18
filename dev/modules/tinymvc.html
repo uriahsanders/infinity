@@ -32,7 +32,9 @@
 			color: 'red',
 			buttonHasBeenClicked: false
 		});
-		View.create(function(name, val){
+		//you can add data to the Model without telling the View
+		Model.add('something', 'value'); //to tell View just use "modify"() func still
+		View.create(function(name, val, states){
 			switch(name){
 				case 'test':
 					console.log('test changed to ' + val);
@@ -42,12 +44,16 @@
 					console.log('changed title to: ' + val);
 					break;
 				case 'buttonHasBeenClicked':
-					if(val === true) alert('You clicked the button!');
+				 	//getting the most recently changed name
+					alert('You clicked the button! Model.lastChanged = "' + Model.lastChanged + '"');
+					//get previous states of a model var
+					console.log("First state of " + name + " is " + states(0) + " and most recent state is: " + states(-1));
 			}
 		});
+		//model in param is the same as directly calling Model.data :)
 		Controller.create(function(model){
-			//get a model var
-			if(model.color === 'red') Model.modify(['test'], false);
+			if(Model.data.color === model.color) Model.modify('test', true);
+			if(model.color === 'red') Model.modify('test', false);
 			//may be more comfortable to get data with tinyMVC syntax (arrays or hyphens) :)
 			var something = Model.get('workspace-documents-attributes-title');
 			var something = model.workspace.documents.attributes.title; //works as well
@@ -60,7 +66,8 @@
 			});
 			//a more practical example
 			$(document).on('click', '#click', function(){
-				Model.modify('buttonHasBeenClicked', true);
+				var bool = (model.buttonHasBeenClicked) ? false : true;
+				Model.modify('buttonHasBeenClicked', bool);
 			});
 			$(document).on('click', '#one', function(){
 				Router.goTo('url1');
@@ -72,20 +79,8 @@
 				Router.goTo('url3');
 			});
 		});
-		//doesnt do anything in this examples, but
-		//heres how to make a router
-		Router.create({
-			//two ways to do something depending on the url:
-			paths: {
-				//an object with a different function for each url
-				"start": function(){
-					//do something
-					Model.modify('test', 'Starting!!!');
-				}
-				//...
-			},
-			//or a function that takes url as parameter and calls with Router.goTo()
-			parseFunc: function(url){
+		Router.create(function(url){
+			//take url as parameter and call with Router.goTo()
 				switch(url){
 					case 'url1':
 						alert("Welcome to page 1.");
@@ -97,10 +92,10 @@
 						alert("Welcome to page 3.");
 						break;
 				}
-			}
 		});
-		//Router.goTo('start'); //will run above function for url1, and pushState
-		Router.run();
+		Router.run(); //run func for current url
+		//finally, to get the current Model
+		var savedModel = Model.retrieve();
 	</script>
 </body>
 </html>

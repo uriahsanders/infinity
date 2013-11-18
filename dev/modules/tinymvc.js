@@ -1,13 +1,18 @@
 "use strict";
 var propFromArray = propFromArray || function(props, to, usr) {
 		var obj = Model.data;
-		for (var i = 0; i < props.length - 1; ++i) { //minus one so we work with property alone
+		var propPos = props.length - 1; //we will deal with final property alone
+		for (var i = 0; i < propPos; ++i) {
 			obj = obj[props[i]];
 		}
-		if (to === false && usr === false) return obj[props[props.length - 1]]; //just return property
-		obj[props[props.length - 1]] = to; //change by reference
+		if (to === false && usr === false) return obj[props[propPos]]; //just return property
+		obj[props[propPos]] = to; //change by reference
 	};
 var Model = Model || (function() {
+	function parseV(what){ //call what as either an array or string broken with -'s
+		if (typeof what === 'string') return what.split('-');
+		return what;
+	}
 	return {
 		lastChanged: null,
 		//initialize Model
@@ -15,17 +20,15 @@ var Model = Model || (function() {
 			this.data = data;
 		},
 		get: function(what) { //get something from Model
-			if (typeof what === 'string') what = what.split('-');
-			return propFromArray(what, false, false);
+			return propFromArray(parseV(what), false, false);
 		},
 		//add an element to the Model wihout calling view
 		add: function(what, value) {
-			propFromArray(what, value);
+			propFromArray(parseV(what), value);
 		},
 		//change an element in the Model (add and call view if non-existant)
 		modify: function(what, value) {
-			//call what as either an array or string broken with -'s
-			if (typeof what === 'string') what = what.split('-');
+			what = parseV(what);
 			propFromArray(what, value);
 			Model.lastChanged = what.join('-');
 			View.notify();
@@ -51,8 +54,7 @@ var View = View || (function() {
 		notify: function() {
 			var c = Model.lastChanged;
 			//parse last changed to get true value from -'s
-			var value = c.split('-');
-			value = propFromArray(value, false, false);
+			var value = propFromArray(c.split('-'), false, false);
 			//save the states key to value
 			if (this.states[c]) this.states[c].push(value);
 			else this.states[c] = [value];
@@ -79,9 +81,8 @@ var Controller = Controller || (function() {
 var Router = Router || (function() {
 	return {
 		//define object with key for path and value for function
-		create: function(obj) {
-			this.paths = obj.paths || {};
-			this.parseFunc = obj.parseFunc || function() {};
+		create: function(func) {
+			this.func = func;
 		},
 		//change URL and do something after
 		goTo: function(param) {
@@ -89,9 +90,7 @@ var Router = Router || (function() {
 		},
 		//run function for current url
 		run: function() {
-			var param = window.location.hash.substring(2);
-			if (this.paths[param]) this.paths[param](); //run func for this hash
-			if (this.parseFunc) this.parseFunc(param);
+			this.func(window.location.hash.substring(2), Model.data);
 		}
 	};
 })();
@@ -99,5 +98,5 @@ var Router = Router || (function() {
 	var myfunc = function() {
 		Router.run();
 	};
-	window.onhashchange = myfunc;
+	window.onhashchange = myfunc; //run current url on back/forward button click
 })();
