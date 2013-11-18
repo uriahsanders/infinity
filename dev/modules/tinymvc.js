@@ -81,6 +81,7 @@ var Controller = Controller || (function() {
 var Router = Router || (function() {
 	return {
 		//define object with key for path and value for function
+		count: 0, //how many times function has been called
 		create: function(func) {
 			this.func = func;
 		},
@@ -90,7 +91,11 @@ var Router = Router || (function() {
 		},
 		//run function for current url
 		run: function() {
-			this.func(window.location.hash.substring(2), Model.data);
+			this.func(window.location.hash.substring(2), this.count, Model.data);
+			++this.count;
+		},
+		getHash: function(){
+			return window.location.hash.substring(2);
 		}
 	};
 })();
