@@ -106,7 +106,6 @@
 				data: data, //data depending on previus code
 
 				success: function(data) { //when done
-					console.log(model.first);
 					$("#main").prepend("<div class=\"forum_2\">" + data + "</div>"); //add the feteched data to a div
 					$(".forum_1").hide("slide", {
 							direction: ((id === "l") ? "left" : "right")
