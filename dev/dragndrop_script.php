@@ -12,7 +12,7 @@ try{
 
 function getGroups($con){
     $groups = array();
-    $query = $con->prepare("SELECT * FROM `groups` WHERE `creator` = :SID");
+    $query = $con->prepare("SELECT * FROM `groups` WHERE `creator` = :SID ORDER BY id DESC");
     $query->execute(array(
     ":SID" => $_SESSION['ID']
     ));
@@ -48,9 +48,9 @@ function delete($item, $name, $con){
     }
     else if($item == "member" && isset($_POST['group'])){
     	$id = getID($_POST['group'], $con);
-    	$query = $con->prepare("DELETE FROM `group_members` WHERE `member` = '".$name."' AND `groupCreator` = '".$_SESSION['ID']."'")or die(mysql_error()); //delete members
+    	$query = $con->prepare("DELETE FROM `group_members` WHERE `member` = :member AND `groupCreator` = :SID")or die(mysql_error()); //delete members
     	$query->execute(array(
-    	":group" => $name,
+    	":member" => $name,
     	":SID" => $_SESSION['ID']
     	));
     	if($query){
@@ -168,16 +168,15 @@ function copyMember($group, $member, $con){
 function search($query, $what, $con){
 	if($what == "groups"){
 		$results = array();
-		$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` LIKE :query OR `group` = :query OR `group` LIKE :percentFront OR `group` LIKE :percentBack AND `creator` = :SID ORDER BY id DESC");
+		$sql = $con->prepare("SELECT * FROM `groups` WHERE `group` = :query OR `group` LIKE :likeQuery AND `creator` = :SID ORDER BY id DESC");
 		$sql->execute(array(
 		":query" => $query,
-		":percentFront" => '%' . $query,
-		":percentBack" => $query . '%',
+		":likeQuery" => '%' . $query . '%',
 		":SID" => $_SESSION['ID']
 		));
 		$row = $sql->fetchAll(PDO::FETCH_OBJ);
-		for($i = 0; $i <= count($row) - 1; $i++){
-			@array_push($results, $row[$i]->group);
+		for($i = 0; $i < count($row) - 1; $i++){
+			array_push($results, $row[$i]->group);
 		}
 		if(isset($results) && !empty($results)){
 			return json_encode($results);
@@ -186,15 +185,14 @@ function search($query, $what, $con){
 		}
 	}else{
 		$contacts = array();
-		$query = $con->prepare("SELECT * FROM `friends` WHERE `friend` LIKE :contact OR `friend` = :contact OR `friend` LIKE :percentFront OR `friend` LIKE :percentBack OR `friend` AND `id` = :SID");
-		$query->execute(array(
+		$sql = $con->prepare("SELECT * FROM `friends` WHERE `friend` = :contact OR `friend` LIKE :likeQuery AND `id` = :SID");
+		$sql->execute(array(
 		":SID" => $_SESSION['ID'],
 		":contact" => $query,
-		":percentFront" => '%' . $query,
-		":percentBack" => $query . '%'
+		":likeQuery" => '%' . $query . '%'
 		));
-		$row = $query->fetchAll(PDO::FETCH_OBJ);
-		for($i = 0; $i < count($row); $i++){
+		$row = $sql->fetchAll(PDO::FETCH_OBJ);
+		for($i = 0; $i < count($row) - 1; $i++){
 			array_push($contacts, id2user($row[$i]->friend));
 		}
 		if(isset($contacts) && !empty($contacts)){
