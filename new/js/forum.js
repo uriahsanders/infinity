@@ -4,9 +4,6 @@
 // protected by Swedish copyright laws
 /////////////////////////////////////////
 
-//From Uriah to Relax:
-//relax, you'll probably hate me for this :P but here's your code in OOP
-//if you dont like it we'll talk and we can always revert back in git so dont have a heart attack :)
 (function() {
 	//uses my tinyMVC framework :D
 	Model.create({
@@ -20,8 +17,8 @@
 	});
 	//you dont need this yet, but you will once you get to posts and stuff
 	//talk to me so i can explain it to you :)
-	View.create(function(name, value){
-		
+	View.create(function(name, value) {
+
 	});
 	var model = Model.data;
 	Controller.create(function() {
@@ -40,15 +37,23 @@
 			});
 		});
 	});
+	Router.create(function(hash) {
+		if (hash.length !== 1) //check for hashtag
+		{
+			model.first = true;
+			Forum.hash_ajax();
+		} else
+			Router.goTo('');
+	});
 	//all actual functions for this page
 	var Forum = (function() {
 		var Public = {}, Private = {};
 		//i made everything public to match what you had but
 		//consider making some stuff private if you can
-		Public.hash_ajax = function(hash) {
+		Public.hash_ajax = function() {
 			if (model.block)
 				return;
-			var hash = window.location.hash.substring(1); //get the hashtag
+			var hash = Router.getHash(); //get the hashtag
 			if (hash.indexOf("f=") != -1)
 				var cat = hash.substr(hash.indexOf("f=") + 2, hash.indexOf("/") - 2); //get the ID of the category
 			if (hash.indexOf("s=") != -1)
@@ -104,7 +109,7 @@
 					$("#main").prepend("<div class=\"forum_2\">" + data + "</div>"); //add the feteched data to a div
 					$(".forum_1").hide("slide", {
 							direction: ((id === "l") ? "left" : "right")
-						}, ((model.first) ? 0 : 1000), //slide the old one away 
+						}, (1000), //slide the old one away 
 						function() {
 							$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
 							$(".arrow_l").show(500);
@@ -121,7 +126,7 @@
 						});
 					$(".forum_2").show("slide", {
 						direction: ((id !== "l") ? "left" : "right")
-					}, ((model.first) ? 0 : 1000)); //slide the new one in
+					}, (1000)); //slide the new one in
 
 					model.first = false;
 
@@ -135,13 +140,13 @@
 			return newID;
 		};
 		Public.save = function() {
-			var hash = window.location.hash.substring(1);
+			var hash = Router.getHash();
 			if (hash.length === 0) {
 				$("div[class^='arrow_']").remove();
 				old = [];
 				current = 0;
-				window.location.hash = "#";
-				hash = "#";
+				Router.goTo('')
+				hash = Router.getHash();
 				//return;
 			}
 			if (typeof(Storage) !== "undefined") //check of html5 support (storrge)
@@ -161,6 +166,11 @@
 				$(".arrow_r").remove();
 			$(".arrow_l, .arrow_r").show(500);
 		};
+		Public.manageStorage = function() {
+			if (typeof(Storage) !== "undefined")
+				sessionStorage.clear();
+			this.save(this.newID());
+		};
 		Public.nav = function() {
 			$("div[id^='forum_nav_']:not('#forum_nav_1')").hide();
 			$("#forum_nav i").hide();
@@ -175,7 +185,7 @@
 				var txt = $("." + entry).val(); // the text
 				var name = window.atob(txt.substring(0, txt.indexOf("|"))); //decoded name
 				var id = txt.substr(txt.indexOf("|") + 1); //the ID
-				nav.children("span:first-child").html(((index + 1 == arr2.length) ? name : "<a href=\"#f=" + id + "/" + name.replace(/ /g, '_') + "\">" + name + "</a>") + ((index == 0) ? " <b>&#171;</b>" : "")); //set the html with the decoded name
+				nav.children("span:first-child").html(((index + 1 == arr2.length) ? name : "<a href=\"#!f=" + id + "/" + name.replace(/ /g, '_') + "\">" + name + "</a>") + ((index == 0) ? " <b>&#171;</b>" : "")); //set the html with the decoded name
 				$("div[id^='forum_nav_']").removeClass("forum_nav_active"); //remove active from all of them
 				if (index + 1 == arr2.length) //if the last
 					nav.addClass("forum_nav_active"); //active
@@ -210,7 +220,8 @@
 					:
 					model.old_data[model.old[model.current][1]] //get data from variables when session is not supported
 				) + "</div>"); //add the feteched data to a div
-			window.location.hash = model.old[model.current][0]; //set the right hash in the url bar
+			//window.location.hash = model.old[model.current][0]; //set the right hash in the url bar
+			Router.goTo(model.old[model.current][0]);
 			$(".forum_1").hide("slide", {
 					direction: ((id !== "l") ? "left" : "right")
 				}, 1000, //slide in the dirrection depending on l/r
@@ -234,21 +245,6 @@
 		};
 		return Public;
 	})();
-	//implementation:
-	var hash = window.location.hash.substring(1); //get the hashtag
-	if (hash.length !== 0) //check for hashtag
-	{
-		model.first = true;
-		Forum.hash_ajax(hash);
-	} else
-		window.location = "#";
-	//whenever we come to this page we need to run the current URL function
-	//Router.run();
-	$(window).on("hashchange", Forum.hash_ajax); //if the hashtag change
-	/////////////////////////
-	// clear session storage
-	/////////////////////////
-	if (typeof(Storage) !== "undefined")
-		sessionStorage.clear();
-	Forum.save(Forum.newID());
+	Forum.manageStorage();
+	Router.run(); //make absolutely sure we run the URL
 })();

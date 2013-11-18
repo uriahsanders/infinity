@@ -97,9 +97,9 @@ var Router = Router || (function() {
 		}
 	};
 })();
-// (function() {
-// 	var myfunc = function() {
-// 		Router.run();
-// 	};
-// 	window.onhashchange = myfunc; //run current url on back/forward button click
-// })();
+(function() {
+	var myfunc = function() {
+		Router.run();
+	};
+	window.onhashchange = myfunc; //run current url on back/forward button click
+})();

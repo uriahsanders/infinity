@@ -40,7 +40,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				while($row2 = mysql_fetch_array($res2))
 				{
 					echo "<tr>";
-					echo "<td><a href=\"#t=$row2[ID]/".$forum->convertName($row2["title"])."\"><b>$row2[title]</b>";
+					echo "<td><a href=\"#!t=$row2[ID]/".$forum->convertName($row2["title"])."\"><b>$row2[title]</b>";
 					$i = $forum->getUsrInfo($row2['by_']);
 					$u = $i["username"];
 					echo "<br/><i><a href=\"/user/$u\">Started by: $u</a></i>";
