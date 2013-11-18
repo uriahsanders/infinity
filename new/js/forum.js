@@ -37,10 +37,10 @@
 			});
 		});
 	});
-	Router.create(function(hash) {
-		if (hash.length !== 1) //check for hashtag
+	Router.create(function(hash, count) {
+		if (window.location.hash.length !== 0) //check for hashtag
 		{
-			model.first = true;
+			if(count === 0) model.first = true; //do once
 			Forum.hash_ajax();
 		} else
 			Router.goTo('');
@@ -106,10 +106,11 @@
 				data: data, //data depending on previus code
 
 				success: function(data) { //when done
+					console.log(model.first);
 					$("#main").prepend("<div class=\"forum_2\">" + data + "</div>"); //add the feteched data to a div
 					$(".forum_1").hide("slide", {
 							direction: ((id === "l") ? "left" : "right")
-						}, (1000), //slide the old one away 
+						}, ((model.first)?0:1000), //slide the old one away 
 						function() {
 							$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
 							$(".arrow_l").show(500);
@@ -126,10 +127,8 @@
 						});
 					$(".forum_2").show("slide", {
 						direction: ((id !== "l") ? "left" : "right")
-					}, (1000)); //slide the new one in
-
+					}, ((model.first)?0:1000)); //slide the new one in
 					model.first = false;
-
 				}
 			});
 		};
@@ -139,22 +138,22 @@
 				newID += model.chars.charAt(Math.floor(Math.random() * model.chars.length)) //loop to add the random char	
 			return newID;
 		};
-		Public.save = function() {
+		Public.save = function(newID) {
 			var hash = Router.getHash();
 			if (hash.length === 0) {
 				$("div[class^='arrow_']").remove();
-				old = [];
-				current = 0;
+				model.old = [];
+				model.current = 0;
 				Router.goTo('')
 				hash = Router.getHash();
 				//return;
 			}
 			if (typeof(Storage) !== "undefined") //check of html5 support (storrge)
-				sessionStorage.setItem(this.newID, $(".forum_1").html()); //supported, add the old data in the storrage
+				sessionStorage.setItem(newID, $(".forum_1").html()); //supported, add the old data in the storrage
 			else
 				model.old_data[newID] = $(".forum_1").html(); //not supported add it to a normal variable 
 			model.old.splice(model.current);
-			model.old.push([hash, this.newID]); //push the id to history array
+			model.old.push([hash, newID]); //push the id to history array
 
 			this.arrows();
 		};
