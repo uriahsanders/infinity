@@ -58,6 +58,7 @@ if(!$member->logged())
             else if(defined("PAGE") && PAGE == "forum") 
             {
                 echo '<link rel="stylesheet" type="text/css" href="/css/forum.css" />';
+                echo '<script src="/js/tinymvc.js" type="text/javascript"></script>';
                 echo '<script src="/js/forum.js" type="text/javascript"></script>';
             }
             if ($member->logged())
