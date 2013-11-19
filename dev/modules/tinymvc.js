@@ -9,9 +9,8 @@ var propFromArray = propFromArray || function(props, to, usr) {
 		obj[props[propPos]] = to; //change by reference
 	};
 var Model = Model || (function() {
-	function parseV(what){ //call what as either an array or string broken with -'s
-		if (typeof what === 'string') return what.split('-');
-		return what;
+	function parseV(what) { //call what as either an array or string broken with -'s
+		return (typeof what === 'string') ? what.split('-') : what;
 	}
 	return {
 		lastChanged: null,
@@ -22,20 +21,18 @@ var Model = Model || (function() {
 		get: function(what) { //get something from Model
 			return propFromArray(parseV(what), false, false);
 		},
-		//add an element to the Model wihout calling view
-		add: function(what, value) {
-			propFromArray(parseV(what), value);
-		},
 		//change an element in the Model (add and call view if non-existant)
-		modify: function(what, value) {
+		modify: function(what, value, notify) {
 			what = parseV(what);
 			propFromArray(what, value);
-			Model.lastChanged = what.join('-');
-			View.notify();
+			if (notify || typeof notify === 'undefined') {
+				Model.lastChanged = what.join('-');
+				View.notify();
+			}
 		},
-		cascade: function(obj) {
+		cascade: function(obj, notify) {
 			//call a bunch of modifies() from a hash, arrays not allowed in this one :(
-			for (var i in obj) this.modify(i.split('-'), obj[i]);
+			for (var i in obj) this.modify(i.split('-'), obj[i], notify);
 		},
 		//get the Model obj
 		retrieve: function() {
@@ -61,13 +58,7 @@ var View = View || (function() {
 			//dont save too many states
 			if (this.states[c].length > this.max) this.states[c].shift();
 			//call user supplied function
-			var thiz = this;
-			this.func(c, value, function(index) {
-				//get recent states with +|- index
-				if (typeof index === 'undefined') return thiz.states[c];
-				if (index < 0) index += thiz.states[c].length;
-				return thiz.states[c][index];
-			}, Model.data);
+			this.func(c, value, this.states[c], Model.data);
 		}
 	};
 })();
@@ -87,21 +78,21 @@ var Router = Router || (function() {
 		},
 		//change URL and do something after
 		goTo: function(param) {
-			window.location.hash = '!' + param;
+			window.location.hash = '!/' + param;
 		},
 		//run function for current url
 		run: function() {
-			this.func(window.location.hash.substring(2), this.count, Model.data);
-			++this.count;
+			this.func(this.hash(), this.count++, Model.data);
 		},
-		getHash: function(){
-			return window.location.hash.substring(2);
+		hash: function(action){
+			var hash = window.location.hash;
+			return (action === 'visible') ? (hash.length > 3) : hash.substring(3);
 		}
 	};
 })();
 (function() {
-	var myfunc = function() {
+	var a = function() {
 		Router.run();
 	};
-	window.onhashchange = myfunc; //run current url on back/forward button click
+	window.onhashchange = a; //run current url on back/forward button click
 })();

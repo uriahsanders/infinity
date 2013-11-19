@@ -69,48 +69,6 @@ html, body {
 	bottom: 0;
 	right: 0;
 }
-
-::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
-::-webkit-scrollbar-button       { 
-background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
-border: 1px solid #0d0d0d;
-height: 10px;
-width: 10px;
-border-top: 1px solid #666666;
-border-left: 1px solid #666666; }
-::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/infinity/dev/images/down.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/infinity/dev/images/down2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/infinity/dev/images/up.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/infinity/dev/images/up2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:increment { background:url(/infinity/dev/images/right.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/infinity/dev/images/right2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:decrement { background:url(/infinity/dev/images/left.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/infinity/dev/images/left2.png) no-repeat; background-size:6px; background-position:center} 
-::-webkit-scrollbar-track        { }
-::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
-::-webkit-resizer                {  }
-::-webkit-scrollbar-thumb { 
-background: rgba(27,27,27,1);
-opacity: 0.5;
-border: 1px solid #0d0d0d;
-border-top: 1px solid #666666;
-border-left: 1px solid #666666;}
-::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
-::-webkit-scrollbar-corner       {  }
-
-a {
-	opacity: .7;
-	-webkit-transition: all linear 0.2s;
-    -moz-transition: all linear 0.2s;
-    -ms-transition: all linear 0.2s;
-    -o-transition: all linear 0.2s;
-    transition: all linear 0.2s;
-    cursor: pointer;
-}
-
-a:hover {
-	opacity: 1;
-}
 </style>
 <div id='toolbar'><input type='text' placeholder="Search Groups" id='groupQuery' /><input type='submit' value='Search' id='searchGroups' /> <a onclick='window.location.reload();'>View All</a></div>
 <div id="control">

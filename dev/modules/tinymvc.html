@@ -32,9 +32,7 @@
 			color: 'red',
 			buttonHasBeenClicked: false
 		});
-		//you can add data to the Model without telling the View
-		Model.add('something', 'value'); //to tell View just use "modify"() func still
-		View.create(function(name, val, states){
+		View.create(function(name, val, states, model){
 			switch(name){
 				case 'test':
 					console.log('test changed to ' + val);
@@ -47,13 +45,16 @@
 				 	//getting the most recently changed name
 					alert('You clicked the button! Model.lastChanged = "' + Model.lastChanged + '"');
 					//get previous states of a model var
-					console.log("First state of " + name + " is " + states(0) + " and most recent state is: " + states(-1));
+					console.log("First state of " + name + " is " + states[0] + " and most recent state is: " + states[states.length - 1]);
+					break;
 			}
 		});
 		//model in param is the same as directly calling Model.data :)
 		Controller.create(function(model){
-			if(Model.data.color === model.color) Model.modify('test', true);
+			if(Model.data.color === model.color) Model.modify('test', true); //tel the view what you changed with modify
 			if(model.color === 'red') Model.modify('test', false);
+			//you can add/change Model data without telling the View
+			model.something = 'value';
 			//may be more comfortable to get data with tinyMVC syntax (arrays or hyphens) :)
 			var something = Model.get('workspace-documents-attributes-title');
 			var something = model.workspace.documents.attributes.title; //works as well
@@ -79,19 +80,20 @@
 				Router.goTo('url3');
 			});
 		});
-		Router.create(function(url){
+		Router.create(function(url, count){
 			//take url as parameter and call with Router.goTo()
 				switch(url){
 					case 'url1':
-						alert("Welcome to page 1.");
+						console.log("Welcome to page 1.");
 						break;
 					case 'url2':
-						alert("Welcome to page 2.");
+						console.log("Welcome to page 2.");
 						break;
 					case 'url3':
-						alert("Welcome to page 3.");
+						console.log("Welcome to page 3.");
 						break;
 				}
+				console.log(count);
 		});
 		Router.run(); //run func for current url
 		//finally, to get the current Model

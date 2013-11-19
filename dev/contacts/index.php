@@ -55,106 +55,9 @@
 	<meta charset="UTF-8">
 	<title>Contact List</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<style>
-		html, body{
-			margin:0;
-		    padding:0;
-		    width:100%;
-		    min-width:1000px;
-		    height: 100%;
-		}
-		/*SCROLLBARS*/
-		::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
-		::-webkit-scrollbar-button       { 
-		  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
-		  border: 1px solid #0d0d0d;
-		  height: 10px;
-		  width: 10px;
-		  border-top: 1px solid #666666;
-		  border-left: 1px solid #666666; }
-		::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/infinity/dev/images/down.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/infinity/dev/images/down2.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/infinity/dev/images/up.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/infinity/dev/images/up2.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:horizontal:increment { background:url(/infinity/dev/images/right.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/infinity/dev/images/right2.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:horizontal:decrement { background:url(/infinity/dev/images/left.png) no-repeat; background-size:6px; background-position:center} 
-		::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/infinity/dev/images/left2.png) no-repeat; background-size:6px; background-position:center} 
-
-		::-webkit-scrollbar-track        { }
-		::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
-		::-webkit-resizer                {  }
-		::-webkit-scrollbar-thumb { 
-		  background: rgba(27,27,27,1);
-		  opacity: 0.5;
-		  border: 1px solid #0d0d0d;
-		  border-top: 1px solid #666666;
-		  border-left: 1px solid #666666;}
-		::-webkit-scrollbar-thumb:hover  { background:rgba(27,27,27,.6)}
-		::-webkit-scrollbar-corner       {  }
-		input{
-			border-radius: 3px;
-			border: 1px solid #000;
-			padding: 5px;
-		}
-		#toolbar{
-			border-bottom: 1px solid black;
-			padding: 5px;
-			text-align: center;
-		}
-		#control{
-			float: left;
-			width: 16%;
-			padding: 5px;
-			text-align: center;
-		}
-		.group-toolbar{
-			
-		}
-		.group{
-			display: inline-block;
-			border: 1px solid black;
-			margin: 5px;
-			padding: 10px;
-			text-align: center;
-			width: 25%;
-			height: 250px;
-			overflow-y: auto;
-		}
-		.name{
-			font-size: 2em;
-			display: block;
-		}
-		.member{
-			display: block;
-			padding: 5px;
-			cursor: pointer;
-		}
-		.link{
-			opacity: .7;
-			-webkit-transition: all linear 0.2s;
-		    -moz-transition: all linear 0.2s;
-		    -ms-transition: all linear 0.2s;
-		    -o-transition: all linear 0.2s;
-		    transition: all linear 0.2s;
-		    cursor: pointer;
-		}
-		.link:hover{
-			opacity: 1;
-		}
-		#contacts{
-			text-align: center;
-		}
-		.i{
-			font-style: italic;
-		}
-		.b{
-			font-weight: bold;
-		}
-		.opts{
-			text-align: left;
-		}
-	</style>
+	<script src="../modules/tinymvc.js"></script>
+	<script src="script.js"></script>
+	<link rel="stylesheet" href="contacts.css">
 	<script>
 		$(document).ready(function(){
 
@@ -163,7 +66,7 @@
 </head>
 <body>
 	<div id="toolbar">
-		<input type="text"placeholder="Search Groups" /> &emsp; <input type="text" placeholder="Search Contacts"> &emsp; <a class="link">View All</a>
+		<input type="text"placeholder="Search Groups" /> &emsp; <input type="text" placeholder="Search Contacts"> &emsp; <a id="all"class="link">View All</a>
 	</div>
 	<div id="control">
 		<span class="i">Create Group:</span> <br>
@@ -174,7 +77,7 @@
 		<span class="i">Contacts:</span> <a class="link i"style="color: red"title="Delete selected">X</a>
 		<div id="contacts">
 			<div class="members">
-					<span class="member"><input type="checkbox">Person 1</span>
+					<span class="member link"><input type="checkbox">Person 1</span>
 					<span class="member"><input type="checkbox">Person 2</span>
 					<span class="member"><input type="checkbox">Person 3</span>
 					<span class="member"><input type="checkbox">Person 4</span>
@@ -199,11 +102,11 @@
 	</div>
 	<div id="main">
 		<div class="group">
-				<span class="name">Group Name</span>
+				<span class="name link"id="group1">Group Name</span>
 				<span class="group-toolbar"><a class="link">Edit</a> | <a class="link">Delete</a></span>
 				<br><br>
 				<div class="members">
-					<span class="member"><input type="checkbox">Person 1</span>
+					<span class="member"id="contact1"><input type="checkbox">Person 1</span>
 					<span class="member"><input type="checkbox">Person 2</span>
 					<span class="member"><input type="checkbox">Person 3</span>
 					<span class="member"><input type="checkbox">Person 4</span>
