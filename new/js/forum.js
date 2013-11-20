@@ -15,12 +15,12 @@
 		pages: ["forum", "cat", "thread"],
 		chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	});
+	var model = Model.data;
 	//you dont need this yet, but you will once you get to posts and stuff
 	//talk to me so i can explain it to you :)
 	View.create(function(name, value) {
 
 	});
-	var model = Model.data;
 	Controller.create(function() {
 		$(document).ready(function(e) {
 			$(document).on("click", ".cat_title", function() {
@@ -38,7 +38,7 @@
 		});
 	});
 	Router.create(function(hash, count) {
-		if (window.location.hash.length !== 0) //check for hashtag
+		if (Router.hash('visible')) //check for hashtag
 		{
 			if(count === 0) model.first = true; //do once
 			Forum.hash_ajax();
@@ -53,7 +53,7 @@
 		Public.hash_ajax = function() {
 			if (model.block)
 				return;
-			var hash = Router.getHash(); //get the hashtag
+			var hash = Router.hash(); //get the hashtag
 			if (hash.indexOf("f=") != -1)
 				var cat = hash.substr(hash.indexOf("f=") + 2, hash.indexOf("/") - 2); //get the ID of the category
 			if (hash.indexOf("s=") != -1)
@@ -138,13 +138,13 @@
 			return newID;
 		};
 		Public.save = function(newID) {
-			var hash = Router.getHash();
+			var hash = Router.hash();
 			if (hash.length === 0) {
 				$("div[class^='arrow_']").remove();
 				model.old = [];
 				model.current = 0;
 				Router.goTo('')
-				hash = Router.getHash();
+				hash = Router.hash();
 				//return;
 			}
 			if (typeof(Storage) !== "undefined") //check of html5 support (storrge)
