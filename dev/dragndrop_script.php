@@ -18,8 +18,8 @@ function getGroups($con){
     ));
     $row = $query->fetchAll(PDO::FETCH_OBJ);
     if(isset($row) && !empty($row)){
-   		for($i = 0; $i <= count($row) - 1; $i++){
-    		@array_push($groups, $row[$i]->group);
+   		for($i = 0; $i < count($row); $i++){
+    		array_push($groups, $row[$i]->group);
     	}
     	return json_encode($groups);
     }else{
@@ -90,8 +90,8 @@ function getMembers($group, $con){
    	":SID" => $_SESSION['ID']
    	));
    	$row = $query->fetchAll(PDO::FETCH_OBJ);
-   	for($i = 0; $i <= count($row) - 1; $i++){
-   		@array_push($members, $row[$i]->member);
+   	for($i = 0; $i < count($row) - 1; $i++){
+   		array_push($members, $row[$i]->member);
    	}
    	if(isset($members) && !empty($members)){
    		return json_encode($members);
@@ -175,7 +175,7 @@ function search($query, $what, $con){
 		":SID" => $_SESSION['ID']
 		));
 		$row = $sql->fetchAll(PDO::FETCH_OBJ);
-		for($i = 0; $i < count($row) - 1; $i++){
+		for($i = 0; $i < count($row); $i++){
 			array_push($results, $row[$i]->group);
 		}
 		if(isset($results) && !empty($results)){
@@ -192,7 +192,7 @@ function search($query, $what, $con){
 		":likeQuery" => '%' . $query . '%'
 		));
 		$row = $sql->fetchAll(PDO::FETCH_OBJ);
-		for($i = 0; $i < count($row) - 1; $i++){
+		for($i = 0; $i < count($row); $i++){
 			array_push($contacts, id2user($row[$i]->friend));
 		}
 		if(isset($contacts) && !empty($contacts)){
@@ -221,7 +221,6 @@ function getContacts($con){
 }
 
 if(isset($_POST['group']) && isset($_POST['do']) && $_POST['do'] == "create"){
-	define("LAST_GROUP", $_POST['group']); //define the last group made
     echo createGroup($_POST['group'], $con);
 }else if(isset($_POST['get']) && $_POST['get'] == "groups"){
     echo getGroups($con);
