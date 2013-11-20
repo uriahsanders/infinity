@@ -2,7 +2,7 @@ html, body{
 			margin:0;
 		    padding:0;
 		    background: #474747;
-		    background: url('/images/dark_stripes.png');
+		    background: url('../images/dark_stripes.png');
 		    color: #fff;
 		    font-family: sans-serif;
 		    width:100%;
@@ -50,7 +50,7 @@ html, body{
 			padding: 5px;
 			text-align: center;
 			border-bottom: 3px solid black;
-			background: url('/infinity/dev/images/broken_noise.png');
+			background: url('../images/broken_noise.png');
 		}
 		#main{
 			margin-left: 17%;
@@ -61,7 +61,7 @@ html, body{
 			position: fixed;
 			padding: 5px;
 			text-align: center;
-			background: url('/infinity/dev/images/broken_noise.png');
+			background: url('../images/broken_noise.png');
 			border-right: 1px solid #666666;
 			overflow-y: auto;
 			z-index: 10;
@@ -90,7 +90,7 @@ html, body{
 			width: 28%;
 			height: 250px;
 			overflow-y: auto;
-			background: url('/infinity/dev/images/gray_sand.png');
+			background: url('../images/gray_sand.png');
 			border-radius: 3px;
 			border: 1px solid #666666;
 		}

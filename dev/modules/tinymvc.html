@@ -22,17 +22,22 @@
 		/*Example :D*/
 		Model.create({
 			test: 'dddd',
-			workspace: {
-				documents: {
+			workspace: { //Models are just JSON so Collections are just objects :D
+				documents: { 
 					attributes: {
 						title: null
+					},
+					getSomething: function(){
+						return 12;
 					}
 				}
 			},
 			color: 'red',
 			buttonHasBeenClicked: false
 		});
-		View.create(function(name, val, states, model){
+		//following function will execute each time Model.modify() is called
+		//name = name of last modified | val = value of last modified | states = previous values | count = number of times function has ran
+		View.create(function(name, val, states, count, model){ //"model" = Model.data :)
 			switch(name){
 				case 'test':
 					console.log('test changed to ' + val);
@@ -47,14 +52,24 @@
 					//get previous states of a model var
 					console.log("First state of " + name + " is " + states[0] + " and most recent state is: " + states[states.length - 1]);
 					break;
+				case 'something':
+					alert('fff');
+			}
+			if(count === 0){ //do first time this function runs only
+				//all do the exact same thing, running a function from a collection
+				console.log(Model.get('workspace-documents').getSomething());
+				console.log(model.workspace.documents.getSomething());
+				console.log(Model.get(['workspace', 'documents']).getSomething());
 			}
 		});
-		//model in param is the same as directly calling Model.data :)
+		//Controller doesnt do much, yet
 		Controller.create(function(model){
 			if(Model.data.color === model.color) Model.modify('test', true); //tel the view what you changed with modify
 			if(model.color === 'red') Model.modify('test', false);
 			//you can add/change Model data without telling the View
 			model.something = 'value';
+			//or
+			Model.modify('something', 'value', false); //false means dont notify, cascade() has this too
 			//may be more comfortable to get data with tinyMVC syntax (arrays or hyphens) :)
 			var something = Model.get('workspace-documents-attributes-title');
 			var something = model.workspace.documents.attributes.title; //works as well
@@ -80,8 +95,11 @@
 				Router.goTo('url3');
 			});
 		});
-		Router.create(function(url, count){
+		//following function will run each time Router.goTo() is called, hash is changed, and/or refresh/back fwd buttons
+		Router.create(function(url, count){ //current url minus hash | number of times func has ran
 			//take url as parameter and call with Router.goTo()
+			console.log(Router.hash('visible')); //is there a hash present?
+			var hash = Router.hash(); //outputs #!/...
 				switch(url){
 					case 'url1':
 						console.log("Welcome to page 1.");
@@ -95,9 +113,10 @@
 				}
 				console.log(count);
 		});
-		Router.run(); //run func for current url
+		Router.run(); //run function for current url (to handle refresh)
 		//finally, to get the current Model
 		var savedModel = Model.retrieve();
+		alert(JSON.stringify(savedModel));
 	</script>
 </body>
 </html>

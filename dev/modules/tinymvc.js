@@ -5,7 +5,7 @@ var propFromArray = propFromArray || function(props, to, usr) {
 		for (var i = 0; i < propPos; ++i) {
 			obj = obj[props[i]];
 		}
-		if (to === false && usr === false) return obj[props[propPos]]; //just return property
+		if (usr === false) return obj[props[propPos]]; //just return property
 		obj[props[propPos]] = to; //change by reference
 	};
 var Model = Model || (function() {
@@ -46,6 +46,7 @@ var View = View || (function() {
 			this.func = func;
 			this.max = max || 20; //amount of states to store
 		},
+		count: 0,
 		states: {},
 		//call user defined func with changed in Model and value of changed
 		notify: function() {
@@ -58,7 +59,7 @@ var View = View || (function() {
 			//dont save too many states
 			if (this.states[c].length > this.max) this.states[c].shift();
 			//call user supplied function
-			this.func(c, value, this.states[c], Model.data);
+			this.func(c, value, this.states[c], this.count++, Model.data);
 		}
 	};
 })();
