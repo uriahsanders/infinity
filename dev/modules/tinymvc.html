@@ -100,6 +100,7 @@
 			//take url as parameter and call with Router.goTo()
 			console.log(Router.hash('visible')); //is there a hash present?
 			var hash = Router.hash(); //outputs #!/...
+			console.log('url: ' + url);
 				switch(url){
 					case 'url1':
 						console.log("Welcome to page 1.");
@@ -113,10 +114,10 @@
 				}
 				console.log(count);
 		});
-		Router.run(); //run function for current url (to handle refresh)
+		//Router.run(); //to run function for current url (to handle refresh)
 		//finally, to get the current Model
 		var savedModel = Model.retrieve();
-		alert(JSON.stringify(savedModel));
+		//alert(JSON.stringify(savedModel));
 	</script>
 </body>
 </html>
