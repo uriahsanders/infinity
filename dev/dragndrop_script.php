@@ -220,6 +220,39 @@ function getContacts($con){
 	}
 }
 
+function getInfo($what, $name, $con){
+	if($what == "group"){
+		$query = $con->prepare("SELECT * FROM `groups` WHERE `group` = :group AND `creator` = :SID");
+		$query->execute(array(
+		":group" => $name,
+		":SID" => $_SESSION['ID']
+		));
+		$row = $query->fetchAll(PDO::FETCH_OBJ);
+		$info = array();
+		for($i = 0; $i < count($row); $i++){
+			array_push($info, $row[$i]);
+		}
+		if(isset($info) && !empty($info)){
+			return json_encode($info);
+		}else{
+			return json_encode(array("error"));
+		}
+	}else{
+		$id = id2user($name, "user2id");
+		$query = $con->prepare("SELECT * FROM `members` WHERE `id` = :ID");
+		$query->execute(array(
+		":ID" => $id
+		));
+		$row = $query->fetchAll(PDO::FETCH_OBJ);
+		$userinfo = array($row[0]->username, $row[0]->email, $row[0]->date);
+		if(!empty($userinfo) && isset($userinfo)){
+			return json_encode($userinfo);
+		}else{
+			return json_encode(array("error"));
+		}
+	}
+}
+
 if(isset($_POST['group']) && isset($_POST['do']) && $_POST['do'] == "create"){
     echo createGroup($_POST['group'], $con);
 }else if(isset($_POST['get']) && $_POST['get'] == "groups"){
@@ -236,6 +269,8 @@ if(isset($_POST['group']) && isset($_POST['do']) && $_POST['do'] == "create"){
 	echo editInfo($_POST['edit'], $_POST['name'], $_POST['group'], $con);
 }else if(isset($_POST['get']) && $_POST['get'] == "contacts"){
 	echo getContacts($con);
+}else if(isset($_POST['what']) && isset($_POST['name'])){
+	echo getInfo($_POST['what'], $_POST['name'], $con);
 }else{
     die("error"); //if no requirements are met return error
 }

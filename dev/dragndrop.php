@@ -13,23 +13,29 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/libs/lib.php');
 </head>
 <body>
 <style>
-html, body {
+html, body{
 	margin:0;
 	padding:0;
+	background: #474747;
+	background: url('images/dark_stripes.png');
+	color: #fff;
+	font-family: sans-serif;
 	width:100%;
 	min-width:1000px;
 	height: 100%;
 }
-.group {
+
+.group{
 	display: inline-block;
 	border: 1px solid black;
-	border-radius: 10px;
 	margin: 5px;
 	padding: 10px;
 	text-align: center;
-	width: 25%;
+	width: 28%;
 	height: 250px;
-	background: rgba(0, 0, 0, .3);
+	background: url('images/gray_sand.png');
+	border-radius: 3px;
+	border: 1px solid #666666;
 	overflow: hidden;
 }
 
@@ -39,16 +45,22 @@ html, body {
 }
 
 #toolbar {
-	border-bottom: 1px solid black;
 	padding: 5px;
 	text-align: center;
+	border-bottom: 3px solid black;
+	background: url('images/broken_noise.png');
 }
 
 #control {
-	float: left;
 	width: 16%;
+	height: 100%;
+	position: fixed;
 	padding: 5px;
 	text-align: center;
+	background: url('images/broken_noise.png');
+	border-right: 1px solid #666666;
+	overflow-y: auto;
+	z-index: 10;
 }
 
 #contacts {
@@ -70,8 +82,20 @@ html, body {
 	bottom: 0;
 	right: 0;
 }
+
+input, textarea {
+	border-radius: 3px;
+	border: 1px solid #000;
+	padding: 5px;
+	background-color: rgba(255, 255, 255, .4);
+	color: #000;
+}
+
+#main {
+	margin-left: 17%;
+}
 </style>
-<div id='toolbar'><input type='text' placeholder="Search Groups" id='groupQuery' /><input type='submit' value='Search' id='searchGroups' /> <a onclick='window.location.reload();'>View All</a></div>
+<div id='toolbar'><input type='text' placeholder="Search Groups" id='groupQuery' /><input type='submit' value='Search' id='searchGroups' /> &emsp; <a onclick='window.location.reload();'>View All</a></div>
 <div id="control">
 <div id='form'>
 Create Group: <br/><input type='text' id='groupInput' placeholder="Group Name" /><input type='submit' value='Submit' id='submit' />
@@ -96,6 +120,7 @@ $('#submit').click(function (){
                  		return;
             		}
             		window.location.replace("/group/" + $(this).attr("id"));
+            		setPage("group", $(this).attr("id"));
 				});
                 $('div#' + group).droppable({
                     drop: function (event, ui){
@@ -167,7 +192,7 @@ $('#searchGroups').click(function (){
 	}
 });
 </script>
-<div id='groups' style='display:none'><div id='trash' style='display:none'><img src='images/trash.png' width='50' height='50'></img></div></div>
+<div id='main'><div id='groups' style='display:none'><div id='trash' style='display:none'><img src='images/trash.png' width='50' height='50'></img></div></div><div id='info'></div></div>
 <script>
 $(document).ready(function (){
 	$.post("dragndrop_script.php", {
@@ -184,7 +209,8 @@ $(document).ready(function (){
 					if($(this).is('.ui-draggable-dragging')){
                  		return;
             		}
-            		window.location.replace("/group/" + $(this).attr("id"));
+            		window.location.replace("#!/group/" + $(this).attr("id"));
+            		setPage("group", $(this).attr("id"));
 				}); //make each div draggable
                 $('div#' + response[i]).droppable({
                 	drop: function (event, ui){
@@ -255,7 +281,13 @@ $(document).ready(function (){
                 		if(members.length > 0 && members[0] != "no members"){ //check to see if any members were returned
                 			for(var i = 0; i < members.length; ++i){
                 				$('#' + group).append("<span id='" + members[i] + "' class='member' name='" + group + "'>" + members[i] + "</span>"); //make a span for each member
-                				$('span#' + members[i]).draggable({move: "true", scroll: false, helper: "clone", revert: "invalid"}); //make each member span draggable
+                				$('span#' + members[i]).draggable({move: "true", scroll: false, helper: "clone", revert: "invalid"}).dblclick(function (){
+									if($(this).is('.ui-draggable-dragging')){
+                 						return;
+            						}
+            						window.location.replace("#!/contact/" + $(this).attr("id"));
+            						setPage("contact", $(this).attr("id"));
+								}); //make each member span draggable
                 			}
                 		}else{
                 			$('#' + group).append("<span class='member'>There are no members for this group.</span>");
@@ -300,7 +332,7 @@ $(document).ready(function (){
 	}, function (data){
 		data = data.substring(0, data.length - 2);
 		//console.log(data);
-		contacts = jQuery.parseJSON(data);
+		var contacts = jQuery.parseJSON(data);
 		//console.log(contacts);
 		if(contacts.length > 0 && contacts[0] != "No contacts"){
 			for(var i = 0; i < contacts.length; ++i){
@@ -309,7 +341,8 @@ $(document).ready(function (){
 					if($(this).is('.ui-draggable-dragging')){
                  		return;
             		}
-            		window.location.replace("user/" + $(this).attr("id"));
+            		window.location.replace("#!/contact/" + $(this).attr("id"));
+            		setPage("contact", $(this).attr("id"));
 				});
 			}
 			$('#contacts').fadeIn();
@@ -319,6 +352,34 @@ $(document).ready(function (){
 		}
 	});
 });
+function setPage(type, name){
+	$.post("dragndrop_script.php", {
+	what: type,
+	name: name
+	}, function (data){
+		data = data.substring(0, data.length - 2);
+		console.log(data);
+		if(data != "error"){
+			var info = jQuery.parseJSON(data);
+			console.log(info);
+			$('#main').children(':not(#info)').fadeOut();
+			if(type == "group"){
+				$('#info').append("<h1>" + info[0]['group'] + "</h1>");
+				$('#info').append("<h2>Created By: " + info[0]['creator'] + "</h2>");
+			}else{
+				$('#info').append("<h1>" + info[0] + "</h1>");
+				$('#info').append("<p>Email: " + info[1] + "</p>");
+				$('#info').append("<p>Date Joined: " + info[2] + "</p>")
+			}
+			$('#info').append("<a id='close'>Close</a>");
+			$('#close').click(function (){
+				window.location.reload();
+			});
+		}else{
+			alert("There was an error while getting the data for " + type + ": " + name);
+		}
+	});
+}
 </script>
 </body>
 </html>
