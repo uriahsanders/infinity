@@ -184,7 +184,7 @@ $('#searchGroups').click(function (){
 			console.log(results);
 			if(results[0] != "No results.") $('#groups').append("<p style='text-align:center'>Found " + results.length + " result(s).</p>");
 			for(var i = 0; i < results.length; i++){
-				$('#groups').append("<div style='text-align:center'>" + results[i] + "</div>")
+				$('#groups').append("<div style='text-align:center'>" + results[i] + "</div>") //append all the results
 			}
 		});
 	}else{
@@ -362,7 +362,7 @@ function setPage(type, name){
 		if(data != "error"){
 			var info = jQuery.parseJSON(data);
 			console.log(info);
-			$('#main').children(':not(#info)').fadeOut();
+			$('#main').children(':not(#info)').fadeOut(); //fade out everything except for the info div
 			if(type == "group"){
 				$('#info').append("<h1>" + info[0]['group'] + "</h1>");
 				$('#info').append("<h2>Created By: " + info[0]['creator'] + "</h2>");
@@ -370,8 +370,32 @@ function setPage(type, name){
 				$('#info').append("<h1>" + info[0] + "</h1>");
 				$('#info').append("<p>Email: " + info[1] + "</p>");
 				$('#info').append("<p>Date Joined: " + info[2] + "</p>")
+				$('#info').append("<div id='notes'></div>");
+				$.post("dragndrop_script.php", {
+				member: name,
+				get: "notes"
+				}, function (data){
+					data = data.substring(0, data.length - 2);
+					//console.log(data);
+					var notes = jQuery.parseJSON(data);
+					//console.log(notes);
+					for(var i = 0; i < notes.length; i++){
+						$('#notes').append("<p>" + notes[i] + "</p>"); //append each note
+					}
+				})
+				$('#info').append("<textarea id='note' placeholder='Notes'></textarea><input type='submit' id='noteSubmit' value='Submit'>");
+				$('#noteSubmit').click(function (){
+					$.post("dragndrop_script.php", {
+					member: name,
+					note: $('#note').val()
+					}, function (data){
+						//console.log(data);
+						$('#notes').append("<p>" + $('#note').val() + "</p>"); //append the newly created note
+						$('#note').val(''); //make the note textarea empty
+					});
+				});
 			}
-			$('#info').append("<a id='close'>Close</a>");
+			$('#info').append("<br><a id='close'>Close</a>");
 			$('#close').click(function (){
 				window.location.reload();
 			});

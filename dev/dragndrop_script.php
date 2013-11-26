@@ -253,6 +253,38 @@ function getInfo($what, $name, $con){
 	}
 }
 
+function getNotes($member, $con){
+	$query = $con->prepare("SELECT * FROM `group_notes` WHERE `member` = :member AND `creator` = :SID");
+	$query->execute(array(
+	":member" => id2user($member, "user2id"),
+	":SID" => $_SESSION['ID']
+	));
+	$row = $query->fetchAll(PDO::FETCH_OBJ);
+	$notes = array();
+	for($i = 0; $i < count($row); $i++){
+		array_push($notes, $row[$i]->note);
+	}
+	if(isset($notes) && !empty($notes)){
+		return json_encode($notes);
+	}else{
+		return json_encode(array("No notes"));
+	}
+}
+
+function createNote($member, $note, $con){
+	$query = $con->prepare("INSERT INTO `group_notes` (`member`, `creator`, `note`) VALUE (:member, :creator, :note)");
+	$query->execute(array(
+	":member" => id2user($member, "user2id"),
+	":creator" => $_SESSION['ID'],
+	":note" => $note
+	));
+	if($query){
+		return "success";
+	}else{
+		return "error";
+	}
+}
+
 if(isset($_POST['group']) && isset($_POST['do']) && $_POST['do'] == "create"){
     echo createGroup($_POST['group'], $con);
 }else if(isset($_POST['get']) && $_POST['get'] == "groups"){
@@ -271,6 +303,10 @@ if(isset($_POST['group']) && isset($_POST['do']) && $_POST['do'] == "create"){
 	echo getContacts($con);
 }else if(isset($_POST['what']) && isset($_POST['name'])){
 	echo getInfo($_POST['what'], $_POST['name'], $con);
+}else if(isset($_POST['member']) && isset($_POST['get']) && $_POST['get'] == "notes"){
+	echo getNotes($_POST['member'], $con);
+}else if(isset($_POST['member']) && isset($_POST['note'])){
+	echo createNote($_POST['member'], $_POST['note'], $con);
 }else{
     die("error"); //if no requirements are met return error
 }
