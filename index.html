@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Infinity-Forum</title>
+	<!-- Bootstrap and Font Awesome -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/home.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<!-- Top Bar -->
+		<div class="row">
+			<!-- Should be able to access most content through drop-down -->
+			<div class="col-md-9 top"id="links">
+				<a href="index.html"class="fa fa-home"></a>
+				<span class="dropdown">
+				  <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+				    General
+				    <span class="caret"></span>
+				  </a>
+				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="about.html">About</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="infinity.html">Infinity</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="help.html">Help</a></li>
+				  </ul>
+				</span>
+				<span class="dropdown">
+				  <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+				    Community
+				    <span class="caret"></span>
+				  </a>
+				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				  	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Lounge</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Forum</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Projects</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Workspace</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Members</a></li>
+				  </ul>
+				</span>
+				<!-- Search -->
+				<select id="search_select"class="form-control"name="" id="">
+					<option value="">Search Projects</option>
+					<option value="">Search Threads</option>
+					<option value="">Search Members</option>
+				</select>
+				<input id="search"class="form-control"type="text"placeholder="Search...">
+				<i class="fa fa-search"></i>
+			</div>
+			<!-- Control -->
+			<div class="col-md-3 top"id="control">
+				<!-- All User options in one link -->
+				<span class="dropdown">
+				  <span class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+				    <a href="">Guest</a>
+				    <span class="caret"></span>
+				  </span>
+				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Login</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Register</a></li>
+				    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Recover</a></li>
+				  </ul>
+				</span>
+				<i class="fa fa-user fa-lg"></i>
+				&emsp;<i class="fa fa-cog fa-lg"></i>&emsp;<i class="fa fa-comment fa-lg"></i>&emsp;<i class="fa fa-dollar fa-lg"></i>
+			</div>
+		</div>
+		<!-- slideshow showing sexy stuff done on IF -->
+		<div class="row">
+			<div id="slideshow"class="col-md-12">
+					<div id="this-carousel-id" class="carousel slide">
+					  <div class="carousel-inner">
+					    <div class="item active">
+					      <img src="http://placehold.it/1200x400/fff/000&text=Infinity-Forum" alt="" />
+					      <div class="carousel-caption">
+					        <p class="fa-lg"style="color:#000;">Transforming dreams into reality</p>
+					      </div>
+					    </div>
+					    <div class="item">
+					      <img src="http://placehold.it/1200x400/fff/000&text=Infinity-Forum" alt="" />
+					      <div class="carousel-caption">
+					        <p class="fa-lg"style="color:#000;">Screenshot of the Lounge</p>
+					      </div>
+					    </div>
+					    <div class="item">
+					      <img src="http://placehold.it/1200x400/fff/000&text=Infinity-Forum" alt="" />
+					      <div class="carousel-caption">
+					        <p class="fa-lg"style="color:#000;">Screenshot of the Forum</p>
+					      </div>
+					    </div>
+					    <div class="item">
+					      <img src="http://placehold.it/1200x400/fff/000&text=Infinity-Forum" alt="" />
+					      <div class="carousel-caption">
+					        <p class="fa-lg"style="color:#000;">Screenshot of the Projects Page</p>
+					      </div>
+					    </div>
+					    <div class="item">
+					      <img src="http://placehold.it/1200x400/fff/000&text=Infinity-Forum" alt="" />
+					      <div class="carousel-caption">
+					        <p class="fa-lg"style="color:#000;">Screenshot of the Workspace</p>
+					      </div>
+					    </div>
+					  </div>
+					    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<i class="fa fa-toggle-left fa-4x"style="color:#000;"></i>
+					    </a>
+					    <a class="carousel-control right"href="#this-carousel-id" data-slide="next">
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<br>
+					    	<i class="fa fa-toggle-right fa-4x"style="color:#000;"></i>
+					    </a>
+					</div>
+			</div>
+		</div>
+		<!-- Links to major points -->
+		<div class="row">
+			<div id="main"class="col-md-12">
+				<span class="lead">Be productive, creative, and social at the same time.</span>
+				<br><br><br><br>
+				<a class="feature">
+					<i class="fa fa-lightbulb-o fa-4x"></i><br>
+					Idea
+				</a>
+				&emsp;&emsp;
+				<i class="feature">
+					<i class="fa fa-plus fa-3x"></i><br>
+				</i>
+				&emsp;&emsp;
+				<a class="feature">
+					<i class="fa fa-globe fa-4x"></i><br>
+					Information
+				</a>
+				&emsp;&emsp;
+				<i class="feature">
+					<i class="fa fa-plus fa-3x"></i><br>
+				</i>
+				&emsp;&emsp;
+				<a class="feature">
+					<i class="fa fa-users fa-4x"></i><br>
+					Collaboration
+				</a>
+				&emsp;&emsp;
+				<i class="feature">
+					<i class="fa fa-plus fa-3x"></i><br>
+				</i>
+				&emsp;&emsp;
+				<a class="feature">
+					<i class="fa fa-flag fa-4x"></i><br>
+					Freedom
+				</a>&emsp;&emsp;
+				<span class="fa-4x">=</span>&emsp;&emsp;
+				<a class="feature">
+					<i class="fa fa-check fa-4x"></i><br>
+					Something Amazing
+				</a>
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="panel panel-info">
+			        <div class="panel-heading">
+			          <h3 class="panel-title lead">Come up with an idea.</h3>
+			        </div>
+			        <div class="panel-body lead">
+			          Infinity makes it easy to come up with ideas. <br> Consult the community for advice or check out
+			          the <a>Projects page</a> for inspiration. <br> And it doesn't just have to be your own idea that
+			          captures your imagination: <br> The <a>Forums</a> are teeming with brilliant discussions
+			          and several projects are awaiting more contributors.
+			        </div>
+			    </div>
+			    <div class="panel panel-info">
+			        <div class="panel-heading">
+			          <h3 class="panel-title lead">Learn more about what you want to do.</h3>
+			        </div>
+			        <div class="panel-body lead">
+			          One of the most difficult things about starting a project is that you never seem to know enough. <br>
+			          Time to forget your troubles: The Infinity-Forum community boasts a wide variety of people in every field. <br>
+			          Use our social tools to get into contact with some potential partners and mentors. <br>
+			          And Infinity isn't all just business, either! <br>
+			          Take advantage of community activities to make real friends who share your interests.
+			        </div>
+			    </div>
+			    <div class="panel panel-info">
+			        <div class="panel-heading">
+			          <h3 class="panel-title lead">Find people to help you do it.</h3>
+			        </div>
+			        <div class="panel-body lead">
+			          Now that you have an idea and the knowledge to pursue it, your going to need some help. <br>
+			          Time to start networking and getting your idea out there. <br>
+			          Start a project and invite people, public or private. <br>
+			          Use the Infinity <a>Workspace</a> to keep track of what needs to get done. <br>
+			          And pay attention to rankings and statistics to keep an eye out for interesting people.
+			        </div>
+			    </div>
+			    <div class="panel panel-info">
+			        <div class="panel-heading">
+			          <h3 class="panel-title lead">Take advantage of the freedom Infinity-Forum offers.</h3>
+			        </div>
+			        <div class="panel-body lead">
+			          Freedom of knowledge and the power to use it is the defining conecpt here. <br>
+			          We actually make it a priority to work with our fellow community members. <br>
+			          We provide free plans for groups that require it. <br>
+			          We support open source. <br>
+			          Infinity-Forum was designed to be a pathway to success, for anyone. <br>
+			          The last thing we will do is get in the way.
+			        </div>
+			    </div>
+			    <i class="fa fa-star fa-4x"></i>
+			    <p class="lead">
+					<h2 style="font-style:italic">In just one place, make your dream come to fruition.</h2>
+					<br>
+					<br>
+					<br>
+				</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Libs -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<!-- Scripts -->
+	<script>
+		$(document).ready(function(){
+			$('.carousel').carousel();
+		});
+	</script>
+</body>
+</html>

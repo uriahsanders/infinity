@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Infinity-Help</title>
+	<!-- Bootstrap and Font Awesome -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+	<!-- <link href="css/home.css" rel="stylesheet"> -->
+	<style>
+		#search_select{
+			width: 20%;
+			display: inline;
+			font-size: 1em;
+			padding: 2px;
+		}
+		#search{
+			width: 40%;
+			display: inline;
+		}
+		.top{
+			height: 50px;
+		}
+		.form-control{
+			height: 30px;
+		}
+	</style>
+</head>
+<body>
+	<!-- Libs -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
+	<!-- Requires tinyMVC.js and book.js -->
+	<script src="js/tinymvc.js"></script>
+	<script src="js/book.js"></script> 
+	<script>
+		$(function(){
+			$('body').isABook({
+				title: 'Help',
+				description: 'Hello! This page will provide detailed help on how to use each part of Infinity-Forum. However, if you still need help, please consult the staff at lol@something.org',
+				// add nav
+				before: ['<div class="container">',
+		'<!-- Top Bar -->',
+		'<div class="row">',
+		'	<!-- Should be able to access most content through drop-down -->',
+		'	<div class="col-md-9 top"id="links">',
+		'		<a href="index.html"class="fa fa-home"></a>',
+		'		<span class="dropdown">',
+		'		  <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">',
+		'		    General',
+		'		    <span class="caret"></span>',
+		'		  </a>',
+		'		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="about.html">About</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="infinity.html">Infinity</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="help.html">Help</a></li>',
+		'		  </ul>',
+		'		</span>',
+		'		<span class="dropdown">',
+		'		  <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">',
+		'		    Community',
+		'		    <span class="caret"></span>',
+		'		  </a>',
+		'		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">',
+		'		  	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Lounge</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Forum</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Projects</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Workspace</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Members</a></li>',
+		'		  </ul>',
+		'		</span>',
+		'		<!-- Search -->',
+		'		<select id="search_select"class="form-control"name="" id="">',
+		'			<option value="">Search Projects</option>',
+		'			<option value="">Search Threads</option>',
+		'<option value="">Search Members</option>',
+		'		</select>',
+		'		<input id="search"class="form-control"type="text"placeholder="Search...">',
+		'		<i class="fa fa-search"></i>',
+		'	</div>',
+		'	<!-- Control -->',
+		'	<div class="col-md-3 top"id="control">',
+		'		<!-- All User options in one link -->',
+		'		<span class="dropdown">',
+		'		  <span class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">',
+		'		    <a href="">Guest</a>',
+		'		    <span class="caret"></span>',
+		'		  </span>',
+	'			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">',
+'<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Login</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Register</a></li>',
+		'		    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Recover</a></li>',
+		'		  </ul>',
+	'			</span>',
+	'			<i class="fa fa-user fa-lg"></i>',
+	'			&emsp;<i class="fa fa-cog fa-lg"></i>&emsp;<i class="fa fa-comment fa-lg"></i>&emsp;<i class="fa fa-dollar fa-lg"></i>',
+	'		</div>',
+	'	</div></div>'].join(''),
+				content: {
+					Lounge: {
+						Subtitle1: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?',
+						Subtitle2: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?'
+					},
+					Forum: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur aperiam delectus debitis repellendus alias! Magnam ut molestias consequuntur sint. Maiores, mollitia voluptatum odio fugit aut. Rerum soluta est fuga aperiam.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?',
+					Projects: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur aperiam delectus debitis repellendus alias! Magnam ut molestias consequuntur sint. Maiores, mollitia voluptatum odio fugit aut. Rerum soluta est fuga aperiam.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?',
+					Workspace: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur aperiam delectus debitis repellendus alias! Magnam ut molestias consequuntur sint. Maiores, mollitia voluptatum odio fugit aut. Rerum soluta est fuga aperiam.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?',
+					Profile: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur aperiam delectus debitis repellendus alias! Magnam ut molestias consequuntur sint. Maiores, mollitia voluptatum odio fugit aut. Rerum soluta est fuga aperiam.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eos, corporis, accusamus officia alias vel et assumenda ipsam quam amet eveniet ex nobis consequuntur sequi at atque reiciendis aliquid nostrum?'
+				}
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+html, body{
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+		div[class^="col-md-"]{
+			/*border: 1px solid black;*/
+			padding: 5px;
+		}
+		#slideshow{
+			height: 400px;
+		}
+		#main{
+			text-align: center;
+		}
+		#search_select{
+			width: 20%;
+			display: inline;
+			font-size: 1em;
+			padding: 2px;
+		}
+		#search{
+			width: 40%;
+			display: inline;
+		}
+		.top{
+			height: 50px;
+		}
+		.form-control{
+			height: 30px;
+		}
+		a{
+			cursor: pointer;
+		}
+		.feature{
+			display: inline-block;
+		}
+		#control{
+			margin-top: 5px;
+		}
+		.carousel-control.right, .carousel-control.left {
+			background: #fff;
+		}
