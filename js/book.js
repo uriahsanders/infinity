@@ -40,14 +40,6 @@
 						nav += '<li><a href="#' + pre + 'chapter-' + prop + '"><button data-container="body"data-toggle="tooltip"title="' + prop.replace(/_/g, ' ') + '"class="btn btn-default ' +
 							pre + 'list-button">' + (++i) + '</button></a></li>';
 						chapter = model.content[prop];
-						//if we have subtitles, stick em in
-						if (typeof chapter === 'object') {
-							nav += '<ul id="' + pre + 'sub-list">';
-							for (var sub in chapter) {
-								nav += '<li>' + sub.replace(/_/g, ' ') + '</li>';
-							}
-							nav += '</ul>';
-						}
 					}
 					return nav + '</ul>';
 				})();
@@ -135,7 +127,7 @@
 						target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
 						if (target.length) {
 							$('html,body').animate({
-								scrollTop: target.offset().top
+								scrollTop: target.offset().top -50
 							}, 1000);
 							return false;
 						}
@@ -172,7 +164,8 @@
 				"position": model.position,
 				"height": model.height,
 				"overflow-y": 'auto',
-				"width": model.width
+				"width": model.width,
+				"z-index": 2
 			});
 			//left side bar ul's
 			$(pre + 'list, ' + pre + 'sub-list').css({
