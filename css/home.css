@@ -19,7 +19,7 @@
 			border-bottom: 5px solid #000;
 			border-top: 5px solid #000;
 			text-align: center;
-			background: url('/var/www/images/broken_noise.png');
+			background: url('../images/broken_noise.png');
 			padding: 2px;
 		}
 		#main{
@@ -36,5 +36,5 @@
 		}
 		.carousel-control.right, .carousel-control.left {
 			background: #181818;
-			background:url('/var/www/images/broken_noise.png');
+			background:url('../images/broken_noise.png');
 		}

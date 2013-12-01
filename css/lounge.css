@@ -1,0 +1,15 @@
+.lounge-icon{
+}
+.lounge-icon:hover{
+	/*padding: 5px;*/
+	font-size: 3em;
+}
+.active{
+	color: #428bca;
+}
+#nav{
+	background: url('../images/gray_sand.png');
+	border: 2px solid #000;
+	height: 100px;
+	padding: 30px;
+}
