@@ -1,0 +1,19 @@
+.project{
+	background:url('../images/gray_sand.png');
+	width:22%;
+	display:inline-block;
+	height:410px;
+	border-radius: 5px;
+	margin: 10px;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #000;
+}
+#body{
+	padding: 10px;
+}
+.project-title{
+	font-weight: bold;
+}
+.project-img{
+}

@@ -18,6 +18,9 @@
 		#scrollup:hover{
 			opacity: 1;
 		}
+		.btn{
+			opacity: 1;
+		}
 		.panel-default>.panel-heading {
 			background: url('../images/broken_noise.png');
 			border-bottom: 1px solid #000;
