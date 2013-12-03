@@ -18,21 +18,24 @@
 		#scrollup:hover{
 			opacity: 1;
 		}
-		.panel-heading{
+		.panel-default>.panel-heading {
 			background: url('../images/broken_noise.png');
 			border-bottom: 1px solid #000;
-		}
-		.panel-default>.panel-heading {
 			border-color: #000;
+			color: #fff;
 		}
-		.panel{
+		.panel-default{
 			background:url('../images/gray_sand.png');
 			color: #fff;
 			width: 85%;
 			margin: auto;
 			border: 1px solid #000;
 		}
-		.panel-title{
+		.panel{
+			width: 85%;
+			margin: auto;
+		}
+		.panel-default>.panel-title{
 			color: #fff;
 		}
 		.fa{
@@ -55,6 +58,9 @@
 		}
 		.blue{
 			color: #3232ff;
+		}
+		.lightblue{
+			color: #0000ff;
 		}
 		.red{
 			color: #d2322d;

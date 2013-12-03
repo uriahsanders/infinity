@@ -153,7 +153,6 @@
 		function addStyling() {
 			//style container
 			el.css({
-				"text-rendering": 'optimizeLegibility',
 				"font-size": model.fontSize
 			});
 			//id's
