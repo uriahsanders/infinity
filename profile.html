@@ -39,7 +39,6 @@
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="forum.html">Forum</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="projects.html">Projects</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="workspace.html">Workspace</a></li>
-				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="members.html">Members</a></li>
 				  </ul>
 				</span>
 				&emsp;&emsp;
@@ -68,6 +67,8 @@
 					    <i class="fa fa-caret-down"></i>
 					  </span>
 					  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					  	<!-- Profile only when logged in -->
+					  	<li role="presentation"><a role="menuitem" tabindex="-1" href="profile.html">Profile</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="login">Login</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="register">Register</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="recover">Recover</a></li>
@@ -242,6 +243,149 @@
 					</div>
 				</div>
 		</div>
+		<!-- Forms -->
+				<div id="login-modal"class="modal fade">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        <h4 class="modal-title">Login</h4>
+				      </div>
+				      <div class="modal-body">
+				        <input type="text"class="form-control"placeholder="Username..."/>
+				        <br>
+				        <input type="password"class="form-control"placeholder="Password..."/>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-primary">Login</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+				<!--  -->
+				<div id="register-modal"class="modal fade">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        <h4 class="modal-title">Register</h4>
+				      </div>
+				      <div class="modal-body">
+				        <input type="text"class="form-control"placeholder="Username..."/>
+				        <br>
+				        <input type="text"class="form-control"placeholder="Password..."/>
+				        <br>
+				        <input type="text"class="form-control"placeholder="Confirm Password..."/>
+				        <br>
+				        <input type="text"class="form-control"placeholder="Email..."/>
+				        <br>
+				        <input type="checkbox"/> I accept the <a href="">Terms and Agreements</a>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-primary">Register</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+				<!--  -->
+				<div id="recover-modal"class="modal fade">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        <h4 class="modal-title">Recover</h4>
+				      </div>
+				      <div class="modal-body">
+				        <input type="text"class="form-control"placeholder="Username or Email..."/>
+				        <br>
+				        <p>An email will be sent to your associated email. Follow the directions within.</p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-primary">Recover</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+				<!--  -->
+				<div id="contact-modal"class="modal fade">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        <h4 class="modal-title">Contact Us</h4>
+				      </div>
+				      <div class="modal-body">
+				      	I am contacting Infinity for:
+				        <span class="dropdown">
+							  <span class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+							    <span>Questions</span>
+							    <i class="fa fa-caret-down"></i>
+							  </span>
+							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							    <li role="presentation"><a role="menuitem" tabindex="-1">Comments</a></li>
+							    <li role="presentation"><a role="menuitem" tabindex="-1">Security</a></li>
+							    <li role="presentation"><a role="menuitem" tabindex="-1">Support</a></li>
+							  </ul>
+						</span>
+						<br>
+						<input type="text"class="form-control"placeholder="Subject..."/>
+						<br>
+						<textarea class="form-control"name="" id="" cols="30" rows="10"></textarea>
+						<br>
+						<p>
+							Please be as specific as possible. We do actually read this stuff, so if you feel like trolling we'll feel like banning.
+						</p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-primary">Send</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
 	</div>
 	<!-- Libs -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

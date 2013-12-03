@@ -12,3 +12,16 @@
 // 		}
 // 	});
 // })();
+//modals
+$(document).on('click', '#login', function(){
+				$('#login-modal').modal('show');
+			});
+			$(document).on('click', '#register', function(){
+				$('#register-modal').modal('show');
+			});
+			$(document).on('click', '#recover', function(){
+				$('#recover-modal').modal('show');
+			});
+			$(document).on('click', '#contact', function(){
+				$('#contact-modal').modal('show');
+			});
