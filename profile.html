@@ -6,8 +6,7 @@
 	<!-- Bootstrap and Font Awesome -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-	<link href="css/base.css" rel="stylesheet">
-	<link href="css/profile.css" rel="stylesheet">
+	<link href="css/dark.css" rel="stylesheet">
 </head>
 <body>
 	<div id="container">
@@ -88,11 +87,11 @@
 					<a class="fa fa-cog fa-lg grey"></a>&emsp;<a class="fa fa-question fa-lg white"></a>&emsp;<a class="fa fa-dollar fa-lg gold"></a>
 					<span class="dropdown">
 					  <span class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-					    <a title="theme"class="fa fa-circle fa-lg black"></a>
+					    <a id="orgcss"title="theme"class="fa fa-circle fa-lg black"></a>
 					  </span>
 					  <ul class="dropdown-menu" style="min-width:0px"role="menu" aria-labelledby="dropdownMenu1">
-					  	<li role="presentation"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg black"></i></a></li>
-					    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg white"></i></a></li>
+					  	<li role="presentation"id="darkcss"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg black"></i></a></li>
+					    <li role="presentation"id="whitecss"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg white"></i></a></li>
 					  </ul>
 					</span>
 				</span>
@@ -102,7 +101,7 @@
 		<!-- /top -->
 		<br>
 		<!-- slideshow showing sexy stuff done on IF -->
-		<div id="body">
+		<div id="body"style="padding:10px">
 			<br><br>
 			<div id="info"class="text-center shadow">
 				<div id="picture">
@@ -192,7 +191,7 @@
 					<a href=""class="fa fa-bar-chart-o fa-lg"> Stats</a>
 				</div>
 				<br>
-				<div id="main"class="shadow">
+				<div id="main"class="shadow"style="text-align:left;background:url('images/broken_noise.png');">
 					<a class="person">
 						<i href=""class="fa fa-user fa-3x red"></i>
 					</a>
