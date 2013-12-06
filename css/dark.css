@@ -89,6 +89,9 @@
 .grey{
 	color: grey;
 }
+.inline{
+	display: inline;
+}
 ::-webkit-scrollbar              { width:10px; height:10px; background:rgba(27,27,27,1);}
 ::-webkit-scrollbar-button       { 
 	background: -webkit-gradient(linear, left top, right top, color-stop(0%, #4d4d4d), color-stop(100%, #333333));
@@ -130,6 +133,15 @@
 			background-color: rgba(255, 255, 255, .7);
 			color: #000;
 			border: 0px;
+		}
+		.input{
+			width: 20%;
+			display: inline;
+			color: #000;
+			border: 0px;
+		}
+		.btn{
+			opacity: 1;
 		}
 		.top{
 			height: 50px;
@@ -274,8 +286,7 @@
 		.lounge-icon{
 		}
 		.lounge-icon:hover{
-			/*padding: 5px;*/
-			font-size: 3em;
+			/*font-size: 3em;*/
 		}
 		.active{
 			color: #428bca;
