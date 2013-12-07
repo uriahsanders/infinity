@@ -227,6 +227,7 @@
 			background: url('../images/broken_noise.png');
 			text-align: center;
 			padding: 5px;
+			min-width: 1000px;
 		}
 		.modal-header, .modal-footer{
 			border: 0px;
@@ -369,12 +370,13 @@
 			background:url('../images/gray_sand.png');
 			width:22%;
 			display:inline-block;
-			height:410px;
+			height:430px;
 			border-radius: 5px;
 			margin: 10px;
 			text-align: center;
 			padding: 5px;
 			border: 3px solid #000;
+			min-width: 225px;
 		}
 		.project-title{
 			font-weight: bold;
