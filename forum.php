@@ -10,7 +10,7 @@
 	</div>
 	<div id="body">
 		<br>
-		<div style="margin-left:8%;position:fixed;width:100%;z-index:10">
+		<div style="margin-left:15%;position:fixed;width:100%;z-index:10">
 			<button class="btn btn-success fa fa-plus"></button>&emsp;
 			<div class="btn-group">
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		<br><br><br>
-		<div class="panel panel-default">
+		<div class="panel panel-default"style="width:70%;">
 			<div class="panel-heading">
 				<h3 class="panel-title">General <i class="fa fa-caret-down"></i></h3>
 			</div>
@@ -108,7 +108,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-default"style="width:70%;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Infinity <i class="fa fa-caret-down"></i></h3>
 			</div>
@@ -152,7 +152,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-default"style="width:70%;">
 			<div class="panel-heading">
 				<h3 class="panel-title">World <i class="fa fa-caret-down"></i></h3>
 			</div>
@@ -196,7 +196,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-default"style="width:70%;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Arts <i class="fa fa-caret-down"></i></h3>
 			</div>
@@ -240,7 +240,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-default"style="width:70%;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Sciences <i class="fa fa-caret-down"></i></h3>
 			</div>
@@ -284,7 +284,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-default"style="width:70%;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Mathematics <i class="fa fa-caret-down"></i></h3>
 			</div>

@@ -8,6 +8,14 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/dark.css" rel="stylesheet">
+	
+		<!-- for forum only, temp: -->
+		<style>
+			tr:not(:last-child){
+				border-bottom: 1px solid #000;
+			}
+		</style>
+	
 	<!-- JS scripts at bottom -->
 </head>
 <body>
