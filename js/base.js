@@ -43,4 +43,17 @@ $(function() {
 		$('#orgcss').removeClass(localStorage.css === 'white' ? 'black' : 'white');
 		$('#orgcss').addClass(localStorage.css === 'dark' ? 'black' : 'white');
 	}
+	/*
+	Okay, now for persistent forms
+	which will show an unobtrusive form for chosen content
+	at the bottom of the page,
+	with data stored on session (JS)
+	so the form stays up when you switch pages.
+	Multiple forms can be active at once
+	*/
+	$(document).on('click', '.psform-btn', function(){
+		var form = new PersistentForm($(this).data('psform-html'));
+		form.connect();
+		PersistentForm.show();
+	});
 });
