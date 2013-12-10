@@ -182,18 +182,21 @@
 	<script>
 		$(document).ready(function(){
 			$('.carousel').carousel();
-			$('a[href*=#]:not([href=#]):not([href=#this-carousel-id])').click(function() {
-			    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-			      var target = $(this.hash);
-			      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-			      if (target.length) {
-			        $('html,body').animate({
-			          scrollTop: target.offset().top - 50
-			        }, 1000);
-			        return false;
-			      }
-			    }
-			  });
+			var specials = ['#idea', '#information', '#collaboration', '#freedom', '#amazing', '#topmost'];
+			$('a[href*=#]').click(function() {
+				if($.inArray($(this).attr('href'), specials) !== -1){
+				    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+				      var target = $(this.hash);
+				      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+				      if (target.length) {
+				        $('html,body').animate({
+				          scrollTop: target.offset().top - 50
+				        }, 1000);
+				        return false;
+				      }
+				    }
+				}
+			});
 		});
 	</script>
 	<?php

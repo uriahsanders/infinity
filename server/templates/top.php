@@ -7,9 +7,7 @@
 	<!-- Bootstrap and Font Awesome and CSS -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-	<link href="css/dark.css" rel="stylesheet">
-	<link href="css/psform.css" rel="stylesheet">
-	
+	<link href="css/dark.css" rel="stylesheet">	
 		<!-- for forum only, temp: -->
 		<style>
 			tr:not(:last-child){
@@ -109,6 +107,7 @@
 					    <li role="presentation"id="whitecss"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg white"></i></a></li>
 					  </ul>
 					</span>
+					<a id="psform-btn"class="fa fa-archive fa-lg grey"></a>
 				</span>
 				</div>
 			</div>

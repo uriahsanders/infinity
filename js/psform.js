@@ -10,21 +10,20 @@ var PersistentForm = PersistentForm || (function() {
 		this.num = sessionStorage.psCount;
 		console.log("Connecting new form to container.");
 		var mark = 'ps-' + this.num;
+		this.id = mark;
 		var thiz = this;
 		var classes = 'tab-pane fade'; //first tab is special
 		if (this.num === 1) classes += ' in active';
-		$(function() {
-			$('#ps-tabs').append('<li><a href="#' + mark + '"data-toggle="tab">' + name + '</a></li>');
-			$('#ps-content').append('<div class="' + classes + '"id="' + mark + '">' + data + '</div>');
-			$('#ps-tabs a:first').tab('show') //Select first tab
-			//now save everything in session
-			sessionStorage.psForm = $('#ps-formholder').html();
-		});
+		$('#ps-tabs').append('<li><a href="#' + mark + '"data-toggle="tab">' + name + '&nbsp;<button id="ps-close-'+mark+'"class="close fa fa-lg">×</button></a></li>');
+		$('#ps-content').append('<div class="' + classes + '"id="' + mark + '">' + data + '</div>');
+		$('#ps-tabs a:first').tab('show') //Select first tab
+		//now save everything in session
+		sessionStorage.psForm = $('#ps-formholder').html();
 	};
 	//create form container
 	PersistentForm.create = function() { //static
 		console.log("Creating PersistentForm container.");
-		var psForm = sessionStorage.psForm || false;
+		var psForm = /*sessionStorage.psForm || */false;
 		if (!psForm) {
 			//lets create the form, but dont display it
 			var formHolder = [
@@ -37,51 +36,64 @@ var PersistentForm = PersistentForm || (function() {
 				'</div>',
 				'</div>'
 			].join('');
+			$(document.body).prepend(formHolder);
 		} else {
 			$(document.body).prepend('<div id="ps-formholder">' + psForm + '</div>');
-			$('#ps-tabs a:first').tab('show') //Select first tab
 		}
 		//click handling
-		$(function() {
-			$(document.body).prepend(formHolder);
-			//top resizable: thanks to Martijn Hols for intial help
-			//http://stackoverflow.com/a/14002818/2822051
-			$('#ps-drag').on('mousedown', function(e) {
-				//make text nonselectable to prevent annoyances
-				$(document.body).attr('unselectable', 'on').css('user-select', 'none').on('selectstart', false);
-				var dragger = $(this).parent(),
-					startHeight = dragger.height(),
-					py = e.pageY;
-				$(document).on('mouseup', function(e) {
-					$(document).off('mouseup').off('mousemove');
-					//do something here to enable selection again :P
-					//...
-				});
-				$(document).on('mousemove', function(me) {
-					var my = (me.pageY - py);
-					dragger.css({
-						height: startHeight - my
-					});
-				});
+		//top resizable
+		$('#ps-drag').on('mousedown', function(e) {
+			//make text nonselectable to prevent annoyances
+			$(document.body).attr('unselectable', 'on').css('user-select', 'none').on('selectstart', false);
+			var dragger = $(this).parent(),
+				startHeight = dragger.height(),
+				py = e.pageY;
+			$(document).on('mouseup', function(e) {
+				$(document).off('mouseup').off('mousemove');
+				//do something here to enable selection again :P
+				//...
 			});
-			//close the formholder
-			$(document).on('click', '#ps-close', function() {
-				$('#ps-formholder').fadeOut();
+			$(document).on('mousemove', function(me) {
+				dragger.css('height', startHeight - (me.pageY - py));
 			});
+		});
+		//close the formholder
+		$(document).on('click', '#ps-close', function() {
+			$('#ps-formholder').fadeOut();
+		});
+		//close the tab and its content
+		$(document).on('click', '[id^="ps-close-ps-"]', function() {
+			var id = $(this).attr('id').substring(9);
+			$('a[href="#'+id+'"]').parent().fadeOut();
+			$('#'+id).fadeOut();
 		});
 	};
-	//common enough for func i guess
+	//handle visibility
 	PersistentForm.toggle = function() { //static
 		console.log("Showing PersistentForm container.");
-		$(function() {
-			$('#ps-formholder').toggle();
+		$('#ps-formholder').toggle(0, function(){
+			if($(this).is(':visible')) sessionStorage.psVisible = true;
+			else sessionStorage.psVisible = false;
 		});
+	};
+	//manually remove form
+	PersistentForm.prototype.remove = function(){
+		$('a[href="#'+this.id+'"]').parent().fadeOut();
+		$('#'+this.id).fadeOut();
+	};
+	//manually select form
+	PersistentForm.prototype.select = function(){
+		$('#ps-tabs a[href="#'+this.id+'"]').tab('show') //Select first tab
 	};
 	return PersistentForm;
 })();
-//example:
-// PersistentForm.create(); //create form holder
-// var form = new PersistentForm('Workspace Document', 'my html content'); //add a new tab, (title, content)
-// var form = new PersistentForm('Something', 'my html content');
-// var form = new PersistentForm('Another', 'my html content');
-// PersistentForm.toggle(); //show the formholder
+$(function() {
+	//example:
+	PersistentForm.create(); //create form holder
+	var form1 = new PersistentForm('Workspace Document', 'workspace form content'); //add a new tab, (title, content)
+	var form2 = new PersistentForm('Something', 'my html content');
+	var form3 = new PersistentForm('Another', 'some other html content');
+	// form2.select(); //works
+	// form3.remove(); //works
+	//PersistentForm.toggle(); //show the formholder
+});
