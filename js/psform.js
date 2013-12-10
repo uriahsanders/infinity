@@ -3,18 +3,16 @@ var PersistentForm = PersistentForm || (function() {
 	sessionStorage.psCount = sessionStorage.psCount || 0;
 	//set instance data
 	var PersistentForm = function(name, data) {
-		console.log("Persistent form created.");
 		this.name = name;
 		this.data = data;
 		++sessionStorage.psCount;
 		this.num = sessionStorage.psCount;
-		console.log("Connecting new form to container.");
 		var mark = 'ps-' + this.num;
 		this.id = mark;
 		var thiz = this;
 		var classes = 'tab-pane fade'; //first tab is special
 		if (this.num === 1) classes += ' in active';
-		$('#ps-tabs').append('<li><a href="#' + mark + '"data-toggle="tab">' + name + '&nbsp;<button id="ps-close-'+mark+'"class="close fa fa-lg">×</button></a></li>');
+		$('#ps-tabs').append('<li><a href="#' + mark + '"data-toggle="tab">' + name + '&nbsp;<button id="ps-close-' + mark + '"class="close fa fa-lg">×</button></a></li>');
 		$('#ps-content').append('<div class="' + classes + '"id="' + mark + '">' + data + '</div>');
 		$('#ps-tabs a:first').tab('show') //Select first tab
 		//now save everything in session
@@ -22,8 +20,8 @@ var PersistentForm = PersistentForm || (function() {
 	};
 	//create form container
 	PersistentForm.create = function() { //static
-		console.log("Creating PersistentForm container.");
-		var psForm = /*sessionStorage.psForm || */false;
+		var thiz = this;
+		var psForm = sessionStorage.psForm || false;
 		if (!psForm) {
 			//lets create the form, but dont display it
 			var formHolder = [
@@ -59,41 +57,43 @@ var PersistentForm = PersistentForm || (function() {
 		});
 		//close the formholder
 		$(document).on('click', '#ps-close', function() {
-			$('#ps-formholder').fadeOut();
+			thiz.toggle();
 		});
 		//close the tab and its content
 		$(document).on('click', '[id^="ps-close-ps-"]', function() {
 			var id = $(this).attr('id').substring(9);
-			$('a[href="#'+id+'"]').parent().fadeOut();
-			$('#'+id).fadeOut();
+			$('a[href="#' + id + '"]').parent().fadeOut();
+			$('#' + id).fadeOut();
 		});
 	};
 	//handle visibility
 	PersistentForm.toggle = function() { //static
-		console.log("Showing PersistentForm container.");
-		$('#ps-formholder').toggle(0, function(){
-			if($(this).is(':visible')) sessionStorage.psVisible = true;
+		$('#ps-formholder').toggle(0, function() {
+			if ($(this).is(':visible')) sessionStorage.psVisible = true;
 			else sessionStorage.psVisible = false;
 		});
 	};
 	//manually remove form
-	PersistentForm.prototype.remove = function(){
-		$('a[href="#'+this.id+'"]').parent().fadeOut();
-		$('#'+this.id).fadeOut();
+	PersistentForm.prototype.remove = function() {
+		$('a[href="#' + this.id + '"]').parent().fadeOut();
+		$('#' + this.id).fadeOut();
 	};
 	//manually select form
-	PersistentForm.prototype.select = function(){
-		$('#ps-tabs a[href="#'+this.id+'"]').tab('show') //Select first tab
+	PersistentForm.prototype.select = function() {
+		$('#ps-tabs a[href="#' + this.id + '"]').tab('show') //Select first tab
 	};
 	return PersistentForm;
 })();
 $(function() {
-	//example:
+	//DO NOT REMOVE create() func
 	PersistentForm.create(); //create form holder
-	var form1 = new PersistentForm('Workspace Document', 'workspace form content'); //add a new tab, (title, content)
-	var form2 = new PersistentForm('Something', 'my html content');
-	var form3 = new PersistentForm('Another', 'some other html content');
-	// form2.select(); //works
-	// form3.remove(); //works
-	//PersistentForm.toggle(); //show the formholder
+	//example:
+	if (!sessionStorage.psForm) {
+		var form1 = new PersistentForm('Workspace Document', 'workspace form content'); //add a new tab, (title, content)
+		var form2 = new PersistentForm('Something', 'my html content');
+		var form3 = new PersistentForm('Another', 'some other html content');
+		// form2.select(); //works
+		// form3.remove(); //works
+		//PersistentForm.toggle(); //show the formholder
+	}
 });
