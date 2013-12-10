@@ -55,6 +55,10 @@ var PersistentForm = PersistentForm || (function() {
 				dragger.css('height', startHeight - (me.pageY - py));
 			});
 		});
+		//button for opening form
+		$(document).on('click', '#psform-btn', function() {
+			PersistentForm.toggle();
+		});
 		//close the formholder
 		$(document).on('click', '#ps-close', function() {
 			thiz.toggle();
@@ -85,8 +89,11 @@ var PersistentForm = PersistentForm || (function() {
 	return PersistentForm;
 })();
 $(function() {
-	//DO NOT REMOVE create() func
+	//DO NOT REMOVE ////////////////////////////////////////////////////
 	PersistentForm.create(); //create form holder
+	//make sure form stays visible or not on load
+	if (sessionStorage.psVisible === 'true') PersistentForm.toggle();
+	////////////////////////////////////////////////////////////////////
 	//example:
 	if (!sessionStorage.psForm) {
 		var form1 = new PersistentForm('Workspace Document', 'workspace form content'); //add a new tab, (title, content)

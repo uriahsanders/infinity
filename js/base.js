@@ -44,12 +44,4 @@ $(function() {
 		$('#orgcss').removeClass(localStorage.css === 'white' ? 'black' : 'white');
 		$('#orgcss').addClass(localStorage.css === 'dark' ? 'black' : 'white');
 	}
-	//persistent forms
-	$(document).on('click', '#psform-btn', function() {
-		PersistentForm.toggle();
-	});
-	$(function() {
-		//make sure form stays visible or not on load
-		if (sessionStorage.psVisible === 'true') PersistentForm.toggle();
-	});
 });
