@@ -159,4 +159,5 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.2/js/bootstrap.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 		<script src="js/psform.js"></script>
+		<script src="js/forms.js"></script>
 		<script src="js/base.js"></script>
