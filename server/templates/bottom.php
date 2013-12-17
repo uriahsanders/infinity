@@ -21,13 +21,13 @@
 				        <h4 class="modal-title">Login</h4>
 				      </div>
 				      <div class="modal-body">
-				        <input type="text"class="form-control"placeholder="Username..."/>
+				        <input id="login_usr"type="text"class="form-control"placeholder="Username..."/>
 				        <br>
-				        <input type="password"class="form-control"placeholder="Password..."/>
+				        <input id="login_pwd"type="password"class="form-control"placeholder="Password..."/>
 				      </div>
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				        <button type="button" class="btn btn-primary">Login</button>
+				        <button type="button" class="btn btn-primary"id="login_btn">Login</button>
 				      </div>
 				    </div><!-- /.modal-content -->
 				  </div><!-- /.modal-dialog -->
@@ -161,3 +161,4 @@
 		<script src="js/psform.js"></script>
 		<script src="js/forms.js"></script>
 		<script src="js/base.js"></script>
+		<script src="js/login.js"></script>

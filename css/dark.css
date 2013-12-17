@@ -6,7 +6,7 @@
 	padding: 10px;
 	cursor: pointer;
 	color: grey;
-	/*display: none;*/
+	display: none;
 }
 #bottom{
 	bottom: 0;

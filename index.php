@@ -182,7 +182,7 @@
 	<script>
 		$(document).ready(function(){
 			$('.carousel').carousel();
-			var specials = ['#idea', '#information', '#collaboration', '#freedom', '#amazing', '#topmost'];
+			var specials = ['#idea', '#information', '#collaboration', '#freedom', '#amazing'];
 			$('a[href*=#]').click(function() {
 				if($.inArray($(this).attr('href'), specials) !== -1){
 				    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {

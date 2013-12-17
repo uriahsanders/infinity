@@ -44,4 +44,15 @@ $(function() {
 		$('#orgcss').removeClass(localStorage.css === 'white' ? 'black' : 'white');
 		$('#orgcss').addClass(localStorage.css === 'dark' ? 'black' : 'white');
 	}
+	//top scroll btn
+	$(window).scroll(function() {
+		if ($(window).scrollTop() === 0) $('#scrollup').fadeOut();
+		else $('#scrollup').fadeIn();
+	});
+	$('#totop').click(function() {
+		$('html,body').animate({
+			scrollTop: $(this.hash).offset().top - 50
+		}, 1000);
+		return false;
+	});
 });

@@ -334,6 +334,7 @@
 		include_once("server/templates/bottom.php");
 	?>
 <!-- Scripts -->
+<script src="js/forum.js"></script>
 <script>
 
 </script>

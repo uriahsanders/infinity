@@ -20,7 +20,7 @@
 <body>
 	<span id="topmost"></span>
 	<div id="scrollup">
-		<a href="#topmost"class="fa fa-arrow-up fa-3x"></a>
+		<a id="totop"href="#topmost"class="fa fa-arrow-up fa-3x"></a>
 	</div>
 	<div id="container">
 		<!-- Top Bar -->
