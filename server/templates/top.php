@@ -61,10 +61,11 @@
 				    <i class="fa fa-caret-down"></i>
 				  </span>
 				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				  	<li role="presentation"><a role="menuitem" tabindex="-1">Projects</a></li>
-				    <li role="presentation"><a role="menuitem" tabindex="-1">Members</a></li>
-				    <li role="presentation"><a role="menuitem" tabindex="-1">Threads</a></li>
-				    <li role="presentation"><a role="menuitem" tabindex="-1">Blog</a></li>
+				  	<li role="presentation"id="search-projects"><a role="menuitem" tabindex="-1">Projects</a></li>
+				    <li role="presentation"id="search-members"><a role="menuitem" tabindex="-1">Members</a></li>
+				    <li role="presentation"id="search-forum"><a role="menuitem" tabindex="-1">Forum</a></li>
+				    <li role="presentation"id="search-workspace"><a role="menuitem" tabindex="-1">Workspace</a></li>
+				    <li role="presentation"id="search-blog"><a role="menuitem" tabindex="-1">Blog</a></li>
 				  </ul>
 				</span>
 				<input id="search"class="form-control"type="text"placeholder="Projects...">

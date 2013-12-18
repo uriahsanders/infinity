@@ -1,6 +1,7 @@
 <?php
 		include_once("server/templates/top.php");
 	?>
+	<input type="hidden"id="base_current_page"value="forum">
 	<br><br>
 	<div style="position:fixed;top:50%;padding:20px">
 		<a class="fa fa-caret-left fa-5x green"></a>

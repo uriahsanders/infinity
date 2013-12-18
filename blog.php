@@ -1,6 +1,7 @@
 <?php
 		include_once("server/templates/top.php");
 	?>
+		<input type="hidden"id="base_current_page"value="blog">
 		<br><br><br>
 		<!-- slideshow showing sexy stuff done on IF -->
 		<div id="body"style="text-align:center;">

@@ -1,6 +1,7 @@
 <?php
 		include_once("server/templates/top.php");
 	?>
+		<input type="hidden"id="base_current_page"value="workspace">
 		<br><br>
 		<div id="body">
 			<br><br>
