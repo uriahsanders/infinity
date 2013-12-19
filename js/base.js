@@ -45,7 +45,7 @@ $(function() {
 	//stuff that depends on current page
 	(function() {
 		//what page are we on?
-		var page = $('#base_current_page').val();
+		var page = $('#base_current_page').val() || 'Projects';
 		//change search bar criteria based on page
 		changeSearch(cFirst('u', page) + '...');
 	})();

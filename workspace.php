@@ -4,8 +4,8 @@
 		<input type="hidden"id="base_current_page"value="workspace">
 		<br><br>
 		<div id="body">
-			<br><br>
-			<div class="nav"style="position:fixed;margin:auto;width:100%;margin-left:8%">
+			<br>
+			<div class="nav"style="margin:auto;width:100%;margin-left:8%">
 				<button class="btn btn-success">New Workspace</button>&nbsp;
 				<div class="btn-group">
 				<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
@@ -84,7 +84,7 @@
 			</div>
 			<input type="text" class="form-control input"placeholder="Search...">
 			</div>
-			<br><br><br>
+			<br>
 			<div style="margin-left:8%">
 				<textarea name="" id="" cols="30" rows="4"class="form-control wrk-input"placeholder="Post to stream"></textarea>
 				<br><br>

@@ -4,7 +4,7 @@
 	<br><br>
 	<div id="body">
 		<br>
-		<div class="nav"style="position:fixed;margin:auto;width:100%;margin-left:1%">
+		<div class="nav"style="margin:auto;width:100%;margin-left:1%">
 			<button class="btn btn-success">New Project</button>&nbsp;
 			<button class="btn btn-info">Help</button>&nbsp;
 			<div class="btn-group">
@@ -37,8 +37,6 @@
 			</div>
 		</div>
 		<div>
-			<br>
-			<br>
 			<br>
 			<!--  -->
 			<a>

@@ -36,6 +36,7 @@
 				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				  	<li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="index.php">Start</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="about.php">About</a></li>
+				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="plans.php">Plans</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="blog.php">Blog</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="help.php">Help</a></li>
 				    <li role="presentation"><a class=""role="menuitem" tabindex="-1" id="contact">Contact</a></li>
@@ -51,6 +52,7 @@
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="forum.php">Forum</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="projects.php">Projects</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="workspace.php">Workspace</a></li>
+				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="feedback.php">Feedback</a></li>
 				  </ul>
 				</span>
 				&emsp;&emsp;
@@ -80,8 +82,9 @@
 					    <i class="fa fa-caret-down"></i>
 					  </span>
 					  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-					  	<!-- Profile only when logged in -->
+					  	<!-- Profile/options only when logged in -->
 					  	<li role="presentation"><a role="menuitem" tabindex="-1" href="profile.php">Profile</a></li>
+					  	<li role="presentation"><a role="menuitem" tabindex="-1" id="options">Options</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="login">Login</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="register">Register</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="recover">Recover</a></li>
@@ -98,8 +101,14 @@
 					    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-user fa-lg grey"></i></a></li>
 					  </ul>
 					</span>
-					<a class="fa fa-cog fa-lg grey"></a>&emsp;<a class="fa fa-question fa-lg white"></a>&emsp;<a class="fa fa-dollar fa-lg gold"></a>
-					<span class="dropdown">
+					<a class="fa fa-envelope-o fa-lg white"></a>&emsp;
+					<a id="psform-btn"class="fa fa-archive fa-lg red"></a>
+					&emsp;<a class="fa fa-comments fa-lg grey"></a>&emsp;
+					<a class="fa-stack fa-lg">
+					  <i class="fa fa-square-o fa-stack-2x orange"></i>
+					  <i class="fa fa-stack-1x gold">!</i>
+					</a>
+					<!-- <span class="dropdown">
 					  <span class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
 					    <a id="orgcss"title="theme"class="fa fa-circle fa-lg black"></a>
 					  </span>
@@ -107,8 +116,7 @@
 					  	<li role="presentation"id="darkcss"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg black"></i></a></li>
 					    <li role="presentation"id="whitecss"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-circle fa-lg white"></i></a></li>
 					  </ul>
-					</span>
-					<a id="psform-btn"class="fa fa-archive fa-lg grey"></a>
+					</span> -->
 				</span>
 				</div>
 			</div>
