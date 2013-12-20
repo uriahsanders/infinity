@@ -145,6 +145,42 @@
 				    </div><!-- /.modal-content -->
 				  </div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
+				<!--  -->
+				<div id="mail-modal"class="modal fade">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        <h4 class="modal-title">Personal Messages</h4>
+				      </div>
+				      <div class="modal-body">
+				      	<ul id="top-mail-ul">
+				      		<li>Compose<i class="fa fa-caret-down black"style="float:right;"></i></li>
+				      		<li><a>Arty</a>: "How are you?"<i class="fa fa-caret-down black"style="float:right;"></i></li>
+				      		<li><a>Relax</a>: "I love you!"<i class="fa fa-caret-down black"style="float:right;"></i></li>
+				      		<li><a>Jeremy</a>: "Whats up?"<i class="fa fa-caret-down black"style="float:right;"></i></li>
+				      		<li><a>Uriah Sanders</a>: "Work harder!"<i class="fa fa-caret-down black"style="float:right;"></i></li>
+				      		<li><a>Infinity-Forum</a>: "Welcome to Infinity!"<i class="fa fa-caret-down black"style="float:right;"></i></li>
+				      	</ul>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <a><button type="button" class="btn btn-primary">View More</button></a>
+				        <button type="button" class="btn btn-success" disabled>Send</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
 				<!-- Tokens -->
 				<input type="hidden"id="csrfToken"value=
 				<?php

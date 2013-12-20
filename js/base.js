@@ -17,6 +17,9 @@ $(function() {
 	$(document).on('click', '#contact', function() {
 		$('#contact-modal').modal('show');
 	});
+	$(document).on('click', '#top-mail', function() {
+		$('#mail-modal').modal('show');
+	});
 	$(document).on('click', '#darkcss', function() {
 		$('link[href="css/white.css"]').attr('href', 'css/dark.css');
 		localStorage.css = 'dark';
