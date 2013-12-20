@@ -7,8 +7,8 @@
 <?php
 	//include_once("server/soon.php"); //modals, footer, and libs
 ?>
-<div style="width:80%;background:url('images/broken_noise.png');margin:auto;padding:10px;border-radius:5px;"class="text-center shadow">
-	<div class="lead i"style="margin:auto">Profile Options</div><br>
+<div style="width:80%;margin:auto;padding:10px;border-radius:5px;"class="text-center">
+	<div class="lead i fa-2x"style="margin:auto">Profile Options</div><br>
 	<div style="border:2px solid #000;width:75%;margin:auto;background:url('images/gray_sand.png');padding:20px;height:100%;border-radius:5px;">
 		<input type="text"class="form-control"style="display:inline;width:80%"placeholder="Current Password...">
 		<br><br>
@@ -50,6 +50,7 @@
 			<br><br>
 	</div><br>
 		<button class="btn btn-success">Change</button>
+		<br><br>
 </div>
 <br>
 <br>

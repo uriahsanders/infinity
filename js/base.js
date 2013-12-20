@@ -38,6 +38,10 @@ $(function() {
 		}, 1000);
 		return false;
 	});
+	//dont close notifications onclick
+	$(document).on('click', '#notifications', function(e){
+		e.stopPropagation();
+	});
 	//change search bar criteria on cat click
 	$(document).on('click', 'li[id^="search-"]', function(){
 		changeSearch(cFirst('u', $(this).attr('id').substring(7)) + '...');
