@@ -52,7 +52,6 @@
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="forum.php">Forum</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="projects.php">Projects</a></li>
 				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="workspace.php">Workspace</a></li>
-				    <li role="presentation"><a class="truelink"role="menuitem" tabindex="-1" href="feedback.php">Feedback</a></li>
 				  </ul>
 				</span>
 				&emsp;&emsp;
@@ -84,7 +83,7 @@
 					  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 					  	<!-- Profile/options only when logged in -->
 					  	<li role="presentation"><a role="menuitem" tabindex="-1" href="profile.php">Profile</a></li>
-					  	<li role="presentation"><a role="menuitem" tabindex="-1" id="options">Options</a></li>
+					  	<li role="presentation"><a role="menuitem" tabindex="-1" href="options.php">Options</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="login">Login</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="register">Register</a></li>
 					    <li role="presentation"><a role="menuitem" tabindex="-1" id="recover">Recover</a></li>

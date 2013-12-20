@@ -100,14 +100,14 @@
 	width: 10px;
 	border-top: 1px solid #666666;
 	border-left: 1px solid #666666; }
-	::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(/images/down.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(/images/down2.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(/images/up.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(/images/up2.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:horizontal:increment { background:url(/images/right.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(/images/right2.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:horizontal:decrement { background:url(/images/left.png) no-repeat; background-size:6px; background-position:center} 
-	::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(/images/left2.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:vertical:increment {background: rgb(27,27,27); background:url(../images/down.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:vertical:increment:active, ::-webkit-scrollbar-button:vertical:increment:hover { background:url(../images/down2.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:vertical:decrement {background: rgb(27,27,27);background:url(../images/up.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:vertical:decrement:active, ::-webkit-scrollbar-button:vertical:decrement:hover { background:url(../images/up2.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:horizontal:increment { background:url(../images/right.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:horizontal:increment:active, ::-webkit-scrollbar-button:horizontal:increment:hover { background:url(../images/right2.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:horizontal:decrement { background:url(../images/left.png) no-repeat; background-size:6px; background-position:center} 
+	::-webkit-scrollbar-button:horizontal:decrement:active, ::-webkit-scrollbar-button:horizontal:decrement:hover { background:url(../images/left2.png) no-repeat; background-size:6px; background-position:center} 
 
 	::-webkit-scrollbar-track        { }
 	::-webkit-scrollbar-track-piece  {background:rgba(79,79,79,1);}
