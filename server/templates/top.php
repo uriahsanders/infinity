@@ -102,7 +102,6 @@
 					</span>
 					<a id="top-mail"class="fa fa-envelope-o fa-lg white"></a>&emsp;
 					<a id="psform-btn"class="fa fa-archive fa-lg red"></a>
-					&emsp;<a class="fa fa-comments fa-lg grey"></a>
 					<span class="dropdown">
 					  <span class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
 					    <a class="fa gold fa-lg">!</a>

@@ -10,7 +10,7 @@
 <div style="width:80%;margin:auto;padding:10px;border-radius:5px;"class="text-center">
 	<div class="lead i fa-2x"style="margin:auto">Profile Options</div><br>
 	<div style="border:2px solid #000;width:75%;margin:auto;background:url('images/gray_sand.png');padding:20px;height:100%;border-radius:5px;">
-		<input type="text"class="form-control"style="display:inline;width:80%"placeholder="Current Password...">
+		<input type="text"class="form-control"style="display:inline;width:80%"placeholder="Current Password (Required)">
 		<br><br>
 		<div class="lead">Account</div>
 		<input type="text"class="form-control"style="display:inline;width:80%"placeholder="Username..."><br><br>
@@ -46,7 +46,7 @@
 					<li><a href="#">Dark Theme</a></li>
 					<li><a href="#">Light Theme</a></li>
 				</ul>
-			</div>&emsp;<button style="display:inline"class="btn btn-primary">Change</button>
+			</div>
 			<br><br>
 	</div><br>
 		<button class="btn btn-success">Change</button>

@@ -12,7 +12,7 @@ var PersistentForm = PersistentForm || (function() {
 		var thiz = this;
 		var classes = 'tab-pane fade'; //first tab is special
 		if (this.num === 1) classes += ' in active';
-		$('#ps-tabs').append('<li><a href="#' + mark + '"data-toggle="tab">' + name + '&nbsp;<button id="ps-close-' + mark + '"class="close fa fa-lg">×</button></a></li>');
+		$('#ps-tabs').append('<li><a href="#' + mark + '"data-toggle="tab">' + name + '&nbsp;'+(name === 'Chat' ? '' : '<button id="ps-close-' + mark + '"class="close fa fa-lg">×</button>')+'</a></li>');
 		$('#ps-content').append('<div class="' + classes + '"id="' + mark + '">' + data + '</div>');
 		$('#ps-tabs a:first').tab('show') //Select first tab
 		//now save everything in session
@@ -84,7 +84,7 @@ var PersistentForm = PersistentForm || (function() {
 	};
 	//manually select form
 	PersistentForm.prototype.select = function() {
-		$('#ps-tabs a[href="#' + this.id + '"]').tab('show') //Select first tab
+		$('#ps-tabs a[href="#' + this.id + '"]').tab('show');
 	};
 	return PersistentForm;
 })();
@@ -96,6 +96,7 @@ $(function() {
 	////////////////////////////////////////////////////////////////////
 	//example:
 	if (!sessionStorage.psForm) {
+		var chat = new PersistentForm('Chat', '<div id="bottom-chat"></div>');
 		var form1 = new PersistentForm('Workspace Document', 'workspace form content'); //add a new tab, (title, content)
 		var form2 = new PersistentForm('Something', 'my html content');
 		var form3 = new PersistentForm('Another', 'some other html content');

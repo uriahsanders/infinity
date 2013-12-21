@@ -175,7 +175,7 @@
 				      </div>
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				        <a><button type="button" class="btn btn-primary">View More</button></a>
+				        <a><button type="button" class="btn btn-primary">Advanced</button></a>
 				        <button type="button" class="btn btn-success" disabled>Send</button>
 				      </div>
 				    </div><!-- /.modal-content -->
@@ -198,3 +198,4 @@
 		<script src="js/forms.js"></script>
 		<script src="js/base.js"></script>
 		<script src="js/login.js"></script>
+		<script src="js/chat.js"></script>
