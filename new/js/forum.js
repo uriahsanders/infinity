@@ -38,11 +38,11 @@
 		});
 	});
 	Router.create(function(hash, count) {
-		if (Router.hash('visible')) //check for hashtag
+		if (location.hash.length >= 3) //check for hash start
 		{
-			if(count === 0) model.first = true; //do once
+			if (count === 0) model.first = true; //do once
 			Forum.hash_ajax();
-		} else
+		} else //start hash
 			Router.goTo('');
 	});
 	//all actual functions for this page
@@ -109,7 +109,7 @@
 					$("#main").prepend("<div class=\"forum_2\">" + data + "</div>"); //add the feteched data to a div
 					$(".forum_1").hide("slide", {
 							direction: ((id === "l") ? "left" : "right")
-						}, ((model.first)?0:1000), //slide the old one away 
+						}, ((model.first) ? 0 : 1000), //slide the old one away 
 						function() {
 							$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
 							$(".arrow_l").show(500);
@@ -126,7 +126,7 @@
 						});
 					$(".forum_2").show("slide", {
 						direction: ((id !== "l") ? "left" : "right")
-					}, ((model.first)?0:1000)); //slide the new one in
+					}, ((model.first) ? 0 : 1000)); //slide the new one in
 					model.first = false;
 				}
 			});
