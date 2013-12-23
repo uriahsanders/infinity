@@ -74,26 +74,32 @@ var Router = Router || (function() {
 	return {
 		//define object with key for path and value for function
 		count: 0, //how many times function has been called
+		type: 'hash',
+		set: function(type) {
+			this.type = type;
+		},
 		create: function(func) {
 			this.func = func;
+			var a = function() {
+				Router.run();
+			};
+			window.onpopstate = a; //run current url on back/forward button click
 		},
 		//change URL and do something after
 		goTo: function(param) {
-			window.location.hash = '!/' + param;
+			if (this.type === 'hash') location.hash = '!/' + param;
+			else {
+				history.pushState('', '', param);
+				this.run();
+			}
 		},
 		//run function for current url
 		run: function() {
-			this.func(this.hash(), this.count++, Model.data);
+			this.func((this.type === 'hash' ? this.hash() : ''), this.count++, Model.data);
 		},
-		hash: function(action){
-			var hash = window.location.hash;
+		hash: function(action) {
+			var hash = location.hash;
 			return (action === 'visible') ? (hash.length >= 3) : hash.substring(3);
 		}
 	};
-})();
-(function() {
-	var a = function() {
-		Router.run();
-	};
-	window.onhashchange = a; //run current url on back/forward button click
 })();
