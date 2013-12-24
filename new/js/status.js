@@ -18,7 +18,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 			type: 'POST',
 			data: {'signal':'change-status', 'status':id},
 			success: function() {
-				Private.setForced(forced || false); //they chose to change their status, or a manual param
+				Private.setForced(forced || false); //was the status changed forced by code, or manual by user?
 				if(after) after();
 			},
 			error: function(){
@@ -63,7 +63,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	
 	//Poll server every minute to see if away or now available
 	Private.pollStatus = function() {
-		//if they chose to go away, dont make them available
+		//changing them to away//
 		if (++Private.idleTime > 15 && Public.getIcon() == 1) { //15 minutes
 			Public.changeStatus(2, true, function(){
 				window.setTimeout(Private.pollStatus, 60000); //tell changeStatus to recall us afterwards
@@ -74,7 +74,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	Public.getIcon = function()
 	{
 		var icon =$(".status_icon").attr("src");
-		return icon.substr(icon.lastIndexOf("/")+1,1);
+		return icon.substr(icon.length - 5, 1);
 	}
 	Public.init = function() {
 		$(document).ready(function() {
@@ -88,14 +88,13 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 				Private.timer = setTimeout(function()
 					{
 						clearInterval(Private.timer);
-						if (Private.getForced() && Public.getIcon() == 2)
-							Public.changeStatus("1", false);
-							//if they dont have another status already (only make them go away if they are "Available")
+						if (Private.getForced() === 'true' && Public.getIcon() == 2){
+							Public.changeStatus("1", true);
+						}
 					},2500); //a delay so the vForced value can be set before this runs
 			});
 			//change status on element click
 			$(document).on('click', '#status_icon label', function() {
-				//you may want to change some of this depending on the DOM
 				var new_status = $(this).children("img").attr('alt');
 				Public.changeStatus(new_status, false);
 			});
@@ -105,8 +104,9 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	return Public;
 })(jQuery); //include jQuery before this
 
-Status.init();
+Status.init(); //start listening
 $(document).ready(function(e) {
+	//UI handling
     $(document).on("click", "#status_icon", function()
 		{
 			var icon = $(this).children("img");
