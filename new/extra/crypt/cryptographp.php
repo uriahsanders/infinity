@@ -11,8 +11,8 @@
 // => Voir fichier Licence_CeCILL_V2-fr.txt)
 // -----------------------------------------------
 
-
-session_start();
+//relax.php session_start_secure()
+//session_start();
 error_reporting(E_ALL ^ E_NOTICE);
 SetCookie("cryptcookietest", "1");
 Header("Location: cryptographp.inc.php?cfg=".$_GET['cfg']."&sn=".session_name()."&".SID);

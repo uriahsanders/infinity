@@ -1,3 +1,5 @@
+2014-01-06
+			session cookie fixed to stay for 2 weeks. (this was done by php.ini before)
 2014-01-05
 			logout modifyed, forum header error fixed when logged out.
 2014-01-05

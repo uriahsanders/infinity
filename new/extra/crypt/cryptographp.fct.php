@@ -11,7 +11,8 @@
 // => Voir fichier Licence_CeCILL_V2-fr.txt)
 // -----------------------------------------------
 
- if(session_id() == "") session_start();
+//relax.php session_start_secure
+ //if(session_id() == "") session_start();
  
  $_SESSION['cryptdir']= dirname($cryptinstall);
  

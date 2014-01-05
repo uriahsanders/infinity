@@ -46,19 +46,33 @@ function session_start_secure() //starting a secure session
 {
 	if (session_status() != PHP_SESSION_ACTIVE) //check if there is one atm
 	{
-		if (isset($_COOKIE['PHPSESSID']) && !preg_match('/^[a-z0-9-,]{22,40}$/i', $_COOKIE['PHPSESSID']))//check session ID so its not manipullated
-				unset($_COOKIE['PHPSESSID']); //removing cookie, incorrect
+		$cookie_name = "infinity";
+		$time = time() + 12096000; //2 weeks
+		
+		if (isset($_COOKIE[$cookie_name]) && !preg_match('/^[a-z0-9-,]{22,40}$/i', $_COOKIE[$cookie_name]))//check session ID so its not manipullated
+				unset($_COOKIE[$cookie_name]); //removing cookie, incorrect
 		
 		$currentCookieParams = session_get_cookie_params(); // getting active session parameters
+		
 		session_set_cookie_params(  //putting a new secure cookie
-			$currentCookieParams["lifetime"],  
+			$time,  //this is somehow not working, therefore setcookie at the bottom
 			$currentCookieParams["path"],  
 			$currentCookieParams["domain"],  
 			$currentCookieParams["secure"],  
 			true //http_only
 		); 
+		session_name('infinity'); 
 		session_start(); //starting session
-		session_regenerate_id(); //regenerate ID to prevent hojacking
+		session_regenerate_id(true); //regenerate ID to prevent hijacking
+		
+		setcookie($cookie_name, //set the current cookie again(to get the time and http_only right) [TODO]
+			session_id(), 
+			$time,
+			$currentCookieParams["path"],
+			$currentCookieParams["domain"],
+			$currentCookieParams["secure"],
+			true
+		);
 	}
 }
 
