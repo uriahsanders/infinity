@@ -16,6 +16,9 @@ RewriteEngine on
 #register done
 RewriteRule ^\/?member\/register\/done\/?$ /index.php?done&marker [L]
 
+
+
+
 RewriteRule ^\/?restricted\/?$ /index.php?marker&restricted [L]
 
 

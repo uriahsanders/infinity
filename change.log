@@ -1,0 +1,13 @@
+2014-01-05
+			logout modifyed, forum header error fixed when logged out.
+2014-01-05
+			added referar when trying to access a restricted page. $_GET["u"]
+2014-01-05
+			when going to /restricted/ login box automaticly opens up
+2014-01-05
+			after loging in when trying to access a restricted url the user is sent to the url.
+			even after fail login.
+2014-01-05
+			added relax2.php with a System class and a new Database singelton PDO class that should be used on simpler queries
+2014-01-05
+			fixed css on lounge and other pages.

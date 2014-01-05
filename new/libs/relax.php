@@ -5,7 +5,10 @@ if (!defined("INFINITY"))
 session_start_secure();
 include_once($_SERVER['DOCUMENT_ROOT']."/config.php");
 
-
+///////////////////////////////////
+//	Includes
+///////////////////////////////////
+include_once("relax2.php"); //new php patterns, better classes and moved functions. Don't fucking edit this file.
 
 ///////////////////////////////////
 //	Global variables
@@ -70,6 +73,12 @@ function _PDO()
 	return new PDO("mysql:host=".SQL_SERVER.";dbname=".SQL_DB, SQL_USR, SQL_PWD);		
 }
 
+
+/**
+*	SQL
+*	@depriciated
+*	@see Database - Database singelton class in relax2.php
+*/
 class SQL{ 
     private $SQL_USR = SQL_USR; //username to sql server
     private $SQL_PWD = SQL_PWD; //password
@@ -460,13 +469,24 @@ class member extends SQL{
 				return true;
 			return false;
 		}
-		function logout($x)
+		
+		/**
+		* logout - log the user out
+		* @param integer $x - 1 = tried to acecess restricted page
+		* @access public
+		*/
+		public function logout($x)
 		{
-			session_unset();
-			session_destroy();
+			
+			$_SESSION = array(); //clear all session values
+			session_regenerate_id(); //regenerate id
+			$new_id = session_id(); //save the new id
+			session_unset(); //unset session
+			session_destroy(); //destroy the session
+			session_id($new_id); //put a the regenerated session id as active one incase php does not end after this
             if ((int)$x === 1)
             {
-                header("Location: /restricted/");
+                header("Location: /restricted/?u=". $_SERVER['REQUEST_URI']);
                 die();                
             }
 			header("Location: /");

@@ -304,7 +304,10 @@ if(!$member->logged())
     <?php
         if (!$member->logged())
         {
-        
+        	if (preg_match("/\/restricted\/.*/", $_SERVER['REQUEST_URI']))
+				echo "<script>$(document).ready(function(e){
+					$(\"#box_top\").click();
+				});</script>";
     ?>
         <div class="member_box">
             <div class="inner_box1">
@@ -319,7 +322,11 @@ if(!$member->logged())
                         Password:<br/>
                         <input type="password" tabindex="2" name="pwd" id="login_pwd" autocomplete="off" maxlength="30" /><br />
                         <input type="hidden" name="token" value="<?php echo $token; ?>" />
-                    
+                    	<?php
+						$url = substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], "u=")+2); //doing this with code instead of htaccess
+							if (strtolower($url) !== "estricted/") //checking that url exist
+								echo "<input type=\"hidden\" name=\"u\" value=\"$url\" />"; //hidden redirect
+						?>
                     <input type="button" tabindex="3" class="login_btn" value="Login"><br /><br /></form>
                 </div>
             </div>

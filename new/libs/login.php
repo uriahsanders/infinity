@@ -7,15 +7,19 @@ include_once("relax.php");
 //if (!preg_match("/^http(s)?\:\/\/([a-zA-Z0-9]*)?\.?infinity-forum\.org\/?/", $_SERVER['HTTP_REFERER']))// only allow this file to be accessed from our servers
   //  header("Location: /"); 
 
+if (isset($_POST["u"]))
+	if (!preg_match("/http(s)?:\/\/(.*)/", $_POST["u"])); //check so its not cross domain
+		$URL = $_POST["u"];
+			
 if(!isset($_SESSION['token']) || empty($_SESSION['token']) || !isset($_POST['token']) || $_SESSION['token'] != $_POST['token']) //check token
 {
     $_SESSION['login_error'] = "The token did not match, refresh the page and try again";
-    header("Location: /login/error");
+    header("Location: /login/error".((isset($URL))?"/?u=$URL":""));
 }
 if (!isset($_POST['usr']) || !isset($_POST['pwd']))
 {
     $_SESSION['login_error'] = "The data was empty, refresh the page and try again";
-    header("Location: /login/error");
+    header("Location: /login/error".((isset($URL))?"/?u=$URL":""));
 }
 
 $sys = new sys;
@@ -28,7 +32,7 @@ $res = $member->Query("INSERT INTO login_attempts (`IP`,`username`, `date`, `dat
 if (!$res)
 {
     $_SESSION['login_error'] = "There was an error, please contact suport with errorcode:[LD-1]";
-    header("Location: /login/error");
+    header("Location: /login/error".((isset($URL))?"/?u=$URL":""));
     die();
 }
 
@@ -40,7 +44,7 @@ if($nr >= 6) {
     
     
     $_SESSION['login_error'] = "Sorry you have made to many incorrect login attempts.<br/>You are locked out until<br/><div id='tt'></div>\",1); \n var x = new Date(); \n var y = new Date(x.getTime() +(20*60*1000));\n $('#tt').html(y.getHours() + \":\" + y.getMinutes());\n //);";
-    header('Location: /login/info');
+    header('Location: /login/info'.((isset($URL))?"/?u=$URL":""));
     die();
 }
 
@@ -50,7 +54,7 @@ $res = $member->Query("SELECT ID, username, password, admin FROM members WHERE u
 if (!$res)
 {
     $_SESSION['login_error'] = "There was an error, please contact suport with errorcode:[LD-2]";
-    header("Location: /login/error");
+    header("Location: /login/error".((isset($URL))?"/?u=$URL":""));
     die();
 }
 
@@ -67,13 +71,19 @@ if ($bcrypt->verify($pwd, $row[2]))
     $_SESSION['ADMIN']     =     (($row[3] == "1")?"1":"0");
 	include_once("status.php"); //set status
 	$Status->changeMyStatus("1");
-    header("Location: /lounge/");
+	if (isset($URL))
+	{
+		header("Location: ". $URL);//send to right url
+		die();
+    	
+	}
+	header("Location: /lounge/");
     die();
 }
 else
 {
     $_SESSION['login_error'] = "The username and password does not match.<br />You have ".(6-(int)$nr)." tries left.";
-    header("Location: /login/error");
+    header("Location: /login/error" . ((isset($URL))?"/?u=$URL":""));
     die();
 }
 
