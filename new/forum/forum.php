@@ -35,7 +35,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				while($row2 = mysql_fetch_array($res2))
 				{
 					echo "<tr>";
-					echo "<td><a href=\"#!/f=$row2[ID]/".$forum->convertName($row2["name"])."\"><b>$row2[name]</b>";
+					echo "<td><a href=\"#f=$row2[ID]/".$forum->convertName($row2["name"])."\"><b>$row2[name]</b>";
 					if (strlen($row2["desc_"]) > 0)
 						echo "<br/><i>$row2[desc_]</i>";
 					$res3 = $forum->Query("SELECT * FROM subforum WHERE parent_ID = %d AND (visible=1 OR %d=%d) ORDER BY index_ desc;", $row2["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
@@ -44,7 +44,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 						$subforum = "<i>";
 						while($row3 = mysql_fetch_array($res3))
 						{
-							$subforum .= "&nbsp;<a href=\"#!/f=$row2[ID]/".$forum->convertName($row2["name"])."&s=$row3[ID]/".$forum->convertName($row3["name"])."\">$row3[name]</a>,";
+							$subforum .= "&nbsp;<a href=\"#f=$row2[ID]/".$forum->convertName($row2["name"])."&s=$row3[ID]/".$forum->convertName($row3["name"])."\">$row3[name]</a>,";
 						}
 						echo substr($subforum,0,-1)."</i>";
 					}
