@@ -2,8 +2,8 @@
 define("INFINITY", true); // this is so the includes can't get directly accessed
 define("PAGE", "forum"); // this is what page it is, for the links at the top
 include_once("libs/relax.php"); // use PATH from now on
+Login::checkAuth();
 include_once(PATH ."core/top.php");
-$member->check_auth();
 
 
 

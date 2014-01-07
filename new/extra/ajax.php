@@ -16,20 +16,20 @@ include_once("../libs/relax.php"); //import setting and classes
             case "getNews":
                 if (!isset($_POST['id']) || !preg_match('/([0-9])*/', $_POST['id']))
                     die("[error]{1}"); // error
-                $sql = new SQL();
-                $result = $sql->Query("SELECT * FROM news WHERE id= %d ",$_POST['id']);
-                if (mysql_num_rows($result)==1)
-                    echo json_encode(mysql_fetch_row($result));
+                $sql = Database::getInstance();
+                $result = $sql->Query("SELECT * FROM news WHERE id=? ",$_POST['id']);
+                if ($result->rowCount() === 1)
+                    echo json_encode($result->fetch());
                 else
                     die("[error]{2}"); //nothing found
                 break;
 			case "getAbout":
                 if (!isset($_POST['id']) || !preg_match('/([0-9])*/', $_POST['id']))
                     die("[error]{1}"); // error
-                $sql = new SQL();
-                $result = $sql->Query("SELECT * FROM about WHERE id= %d ",$_POST['id']);
-                if (mysql_num_rows($result)==1)
-                    echo json_encode(mysql_fetch_row($result));
+                $sql = Database::getInstance();
+                $result = $sql->Query("SELECT * FROM about WHERE id= ? ",$_POST['id']);
+                if ($result->rowCount() === 1)
+                    echo json_encode($result->fetch());
                 else
                     die("[error]{2}"); //nothing found
                 break;

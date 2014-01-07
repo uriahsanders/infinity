@@ -8,7 +8,8 @@ include_once(PATH ."libs/relax.php");
 $token = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
 $_SESSION['token'] = $token;
 
-if(!$member->logged()) 
+$logged = Login::checkAuth(true);
+if(!$logged) 
 {
     $cryptinstall="./extra/crypt/cryptographp.fct.php"; 
     include_once($cryptinstall); //catcha code
@@ -29,7 +30,7 @@ if(!$member->logged())
         ?>
         <link rel="stylesheet" type="text/css" href="/css/default.css" /><!--php?style=default-->
         <?php
-            if ($member->logged())
+            if ($logged)
                 echo '<link rel="stylesheet" type="text/css" href="/css/member.css" />'."\n";        
         ?>
         <link href='http://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
@@ -47,20 +48,20 @@ if(!$member->logged())
             }
             else if(defined("PAGE") && PAGE == "profile") 
             {
-                echo '<link rel="stylesheet" type="text/css" href="/css/profile.css" />';
+               echo '<link rel="stylesheet" type="text/css" href="/css/profile.css" />';
                 echo '<script src="/js/profile.js" type="text/javascript"></script>';
 				echo '<link href="/extra/imgUpload/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />';
 	        	echo '<script src="/extra/imgUpload/js/jquery.Jcrop.min.js"></script>';
         		echo '<script src="/extra/imgUpload/js/script.js"></script>';
 				
-				echo '<script src="/js/wall.js"></script>';
+				//echo '<script src="/js/wall.js"></script>';
             }
             else if(defined("PAGE") && PAGE == "forum") 
             {
                 echo '<link rel="stylesheet" type="text/css" href="/css/forum.css" />';
                 echo '<script src="/js/forum.js" type="text/javascript"></script>';
             }
-            if ($member->logged())
+            if ($logged)
 			{
                 echo '<script src="/js/lmember.js" type="text/javascript"></script>';
                 echo '<script src="/js/status.js" type="text/javascript"></script>';
@@ -98,7 +99,7 @@ if(!$member->logged())
                         </tr>
                         <tr><td>&nbsp;</td></tr>
                         <?php
-                            if ($member->logged())
+                            if ($logged)
                             {
                                 echo '<tr><td>Do you want to be anonymous when leaving feedback?</td></tr>';
                                 echo '<tr><td><input type="checkbox" name="anon" id="fee_anon" /> Check for Yes</td></tr>';    
@@ -225,7 +226,7 @@ if(!$member->logged())
         <span id="logo" onclick="window.location = '/';">&nbsp;</span><span id="extra"></span><span id="extra2"></span><!--
         --><span id="menu">
         <?php
-            listlinks(PAGE);
+            System::listLinks(PAGE);
         ?>
         </span>
         
@@ -236,7 +237,7 @@ if(!$member->logged())
             <div class="extra_icon2"></div>
         </div>
         <?php
-            if ($member->logged())
+            if ($logged)
             {
                 echo "
                 <div class=\"member_bar\">
@@ -301,7 +302,7 @@ if(!$member->logged())
         ?>
     </div>
     <?php
-        if (!$member->logged())
+        if (!$logged)
         {
         	if (preg_match("/\/restricted\/.*/", $_SERVER['REQUEST_URI']))
 				echo "<script>$(document).ready(function(e){

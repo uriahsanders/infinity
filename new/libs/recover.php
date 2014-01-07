@@ -2,6 +2,10 @@
 	define("INFINITY", true);
 	include_once("relax.php");
 	
+	// [TODO] - fix file with new classes and functions
+	$sql = Database::getInstance();
+	$members = Members::getInstance();
+	
 	if (isset($_GET['change']))
 	{
 		if (!isset($_POST['code']) || !isset($_POST['rec_f_pwd']) || !isset($_POST['rec_f_pwd2']) || !isset($_POST['token']) || @$_POST['token'] != $_SESSION['token'])
@@ -16,12 +20,12 @@
 		{
 			error("Password is not secure enough.");
 		}
-		$res = $member->Query("SELECT code, ID_usr FROM recover WHERE `code`=%s", $_POST['code']);
+		$res = $sql->query("SELECT code, ID_usr FROM recover WHERE `code`=?", $_POST['code']);
 		if (!$res)
 		{
 			error("There was a problem, try again or contact suport with errorcode:[RCC-1]");
 		}
-		if (mysql_num_rows($res) != 1)
+		if ($res->rowCount() !== 1)
 		{
 			error("There was a problem with the recovery code, please try again");
 		}
@@ -29,12 +33,12 @@
 		$ID  = $row[1];
 		$bcrype = new Bcrypt;
 		$PWD = $bcrype->hash($_POST['rec_f_pwd']);
-		$res = $member->Query("UPDATE members SET `password`=%s WHERE `ID`=%d", $PWD, $ID);
+		$res = $sql->query("UPDATE members SET `password`=? WHERE `ID`=?", $PWD, $ID);
 		if (!$res)
 		{
 			error("There was a problem, try again or contact suport with errorcode:[RCC-2]");
 		}
-		$res = $member->Query("DELETE FROM recover WHERE `code`=%s", $_POST['code']);
+		$res = $sql->query("DELETE FROM recover WHERE `code`=?", $_POST['code']);
 		header("Location: /recover/done");
 		die();
 	}
@@ -46,22 +50,22 @@
 	if (preg_match('/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/', $_POST['rec_usr'])) 
 	{
 		$type= "E";
-		$ID = $member->getID($_POST['rec_usr'], "email");
+		$data = $members->getUserData($_POST['rec_usr'], "email");
 	}
 	else
 	{
 		$type = "U";
-		$ID = $member->getID($_POST['rec_usr']);
+		$data = $members->getUserData($_POST['rec_usr'], "username");
 	}	
-	$sys	= new sys;
-	$data 	= $member->getUsrData($ID); // i know we might already have the email but this way we are 100% sure we have it right
+	//$data 	= $member->getUsrData($ID); // i know we might already have the email but this way we are 100% sure we have it right
+	$ID = $data["ID"];
 	$email 	= $data['email']; //there we go
 	$usr	= $data['username'];
 	
 	$time	= date("Y-m-d H:m:s");
 	$code   = md5(rand().time().$_POST['rec_usr']);
-	$IP		= $sys->getRealIp();
-	$res 	= $member->Query("INSERT INTO recover (`ID_usr`, `code`, `IP`, `time`) VALUES (%d, %s, %s, %s)", $ID, $code, $IP, $time);
+	$IP		= System::getRealIp();
+	$res 	= $sql->query("INSERT INTO recover (`ID_usr`, `code`, `IP`, `time`) VALUES (?,?,?,?)", $ID, $code, $IP, $time);
 	if (!$res)
 	{
 		error("There was an error, contact suport with errorcode: [RcD-1]");

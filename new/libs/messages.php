@@ -1,6 +1,11 @@
 <?php
 if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
+	
+	
+/**
+	[TODO] - fix the messages to be correct spellt etc.
+*/
 $start = "<script type=\"text/javascript\">\n $(document).ready(function(){\n";
 $end   = " \n});</script>";
 
@@ -69,9 +74,9 @@ else if (isset($_GET['recover']))
         case "code":
             if (!isset($_GET['code']) || strlen($_GET['code']) != 32)
                 echo $start . "MsgBox(\"Error\", \"That code is invalid, please try again\",3);" . $end;
-                
-            $res = $member->Query("SELECT ID_usr FROM recover WHERE `code`=%s", $_GET['code']);
-            if (mysql_num_rows($res)!= 1)
+            $sql = Database::getInstance();
+            $res = $sql->query("SELECT ID_usr FROM recover WHERE `code`=?", $_GET['code']);
+            if ($res->rowCount() !== 1)
             {
                 echo $start . "MsgBox(\"Error\", \"That code is invalid, please try again\",3);" . $end;
             } 

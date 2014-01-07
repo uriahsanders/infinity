@@ -88,7 +88,7 @@ $(window).ready(function () {
                     "id": id
                 },
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.substring(0, 7) == "[error]") {  // darn it :(
                         notification("Something went wrong, please try again later.<br/>Error code: " + data.substring(7, 10), "red"); //show a error notification
                     } else if (parseInt($.parseJSON(data)[0]) == id) { // check if we got the right data

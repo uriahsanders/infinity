@@ -1,4 +1,6 @@
 <?php
+
+// [TODO] - rewrite with classes in relax.php
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     Header("Location: /");
     die();
@@ -9,12 +11,12 @@ include_once('relax.php');
 $cryptinstall="../extra/crypt/cryptographp.fct.php";
 include_once $cryptinstall;
 
-if (!isset($_POST['reg_usr']) || !isset($_POST['reg_pwd']) || !isset($_POST['reg_pwd2']) || !isset($_POST['reg_email']) || !isset($_POST['reg_code'])){
+if (!System::checkPG("POST", array("reg_usr", "reg_pwd", "reg_pwd2", "reg_email", "reg_code"))){
     $_SESSION['reg_error']="MD";
     header("Location: /member/register/error");
     die();    
 }
-$member   = new member;
+$member   = Members::getInstance();
 $ERRORMSG = array();
 $USR      = $_POST['reg_usr'];
 $PWD      = $_POST['reg_pwd'];
@@ -49,22 +51,21 @@ if (count($ERRORMSG) != 0) {
     header('Location: /member/register/error');
     die();
 } else {
-    $sys = new sys;
     $bcrypt = new Bcrypt;
-    
-    $IP = $sys->getRealIp();
+    $sql = Database::getInstance();
+    $IP = System::getRealIp();
     $acode    = md5("infinity-" . $USR . "-" . $EMAIL . date("Y-m-d H:i:s")); //activation code
     $PASSWORD = $bcrypt->hash($PWD); //password with salt and quadro md5
     $DATE     = date("Y-m-d H:i:s"); // date in mysql format
       
-    $res = $member->Query("INSERT INTO members (`username`, `password`, `email`, `date`, `IP`, `activatecode`) VALUES (%s, %s, %s, %s, %s, %s)", $USR, $PASSWORD, $EMAIL, $DATE, $IP, $acode);
+    $res = $sql->Query("INSERT INTO members (`username`, `password`, `email`, `date`, `IP`, `activatecode`) VALUES (?, ?, ?, ?, ?, ?)", $USR, $PASSWORD, $EMAIL, $DATE, $IP, $acode);
     if (!$res) {
         $_SESSION['reg_error']="There was an unexpected error, errorcode:[REG-D1]";
         header('Location: /member/register/error');
         die();
     }
     $prevID = mysql_insert_id();
-    $res2 = $member->Query("INSERT INTO memberinfo (`ID`, `username`) VALUES (%d, %s)", $prevID, $USR);
+    $res2 = $sql->Query("INSERT INTO memberinfo (`ID`, `username`) VALUES (?, ?)", $prevID, $USR);
     if (!$res2) {
         $_SESSION['reg_error']="There was an unexpected error, errorcode:[REG-D2]";
         header('Location: /member/register/error');

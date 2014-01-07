@@ -1,8 +1,11 @@
 <?php 
+// [TODO] - fix this fucking page
     define("INFINITY", true); // this is so the includes can't get directly accessed
     define("PAGE", "profile"); // this is what page it is, for the links at the top
     include_once("libs/relax.php"); // use PATH from now on
-    $member->check_auth();
+    Login::checkAuth();
+	
+	$member = Members::getInstance();
     if (isset($_GET['user']) && !empty($_GET['user']))
     {    
         $ID = $member->getID($_GET['user'],"username");
@@ -14,9 +17,11 @@
     }
     
     include_once(PATH ."core/top.php");
-    include_once(PATH ."core/top.php");
     include_once(PATH ."core/bar_main_start.php");
     
+	
+	echo " [TODO] - does not work";
+	
     if (empty($ID))
         {
             $start = "<script type=\"text/javascript\">\n $(document).ready(function(){\n";
@@ -24,10 +29,10 @@
             echo $start . "MsgBox(\"Error\", \"The user \\\"$_GET[user]\\\" does not exist.\",3);" . $end;
             $ID = $_SESSION['ID'];
         }
-    $image = $member->getUsrPicture($ID);
-    $data = $member->getUsrInfo($ID);
+    $data = $member->getUserData($ID, "ID");
+    $image = $data["image"]; 
 ?>
-<input type="hidden" value="<?php echo $ID; ?>" id="usr_id" />
+<input type="hidden" value="<?php echo $ID; ?>" id="usr_id" /> 
 <div id="pro_side">
     <div id="pro_user_pic">
         <?php
@@ -38,9 +43,9 @@
                 echo '</span>';
             }
         ?>
-        <img src="/images/user/<?php echo $image; ?>" id="pro_profile_p"/>
-        <div id="pro_user_type">
-        <?php
+      <img src="/images/user/<?php echo $image; ?>" id="pro_profile_p"/>
+      <div id="pro_user_type">
+        <?php 
         if (!empty($data['special']))
         {
             echo "$data[special]";
@@ -48,7 +53,7 @@
         ?></div>
     </div>
     <div id="pro_info">
-    <?php
+    <?php 
         if (!empty($data['age']))
         {
             echo "Age <b>$data[age]</b><br />";
@@ -98,7 +103,7 @@
     </div>
     <div id="pro_user_friends">
         <div id="pro_user_friends_title">
-        <?
+        <?php // <--- THAT MOTHERFUCKER DID THE RANDOM LOGOUTS!!!!!! WHAT THA FUCK!!!!!!
             $friends = $member->getFriends($ID);
             echo "<span>".count($friends)." Friends</span>"
         ?>
@@ -123,7 +128,7 @@
 </div>
 <div id="pro_main">
     <div id="pro_title">
-    <?php 
+    <?php  
     echo $data['username']; 
     if (!empty($data['quote']))
         {
@@ -153,7 +158,7 @@
     </div>
         
         <?php
-            if ($ID != $_SESSION['ID'])
+            if ($ID !== $_SESSION['ID'])
             {
                 $ft = md5($_SESSION['ID'] . $_SESSION['USR'] . $ID);
                 echo "<input type=\"hidden\" id=\"f_t\" value=\"$ft\" />";
@@ -194,7 +199,8 @@
     <div id="pro_usr_main">
         <div id="pro_usr_stream">
         <?php
-            include_once("wall.php");        
+           //include_once("wall.php");        
+		   //error in wall.js so need to comment out for now here and top.php 
         ?>
         </div>
     </div>

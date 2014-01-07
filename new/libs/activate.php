@@ -2,9 +2,9 @@
     if (isset($_GET['code']) && strlen($_GET['code']) == 32) {
         define("INFINITY", true);
         include_once('relax.php');
-        $member = new member;
+        $login = Login::getInstance();
         
-        $status = $member->activate($_GET['code']);    
+        $status = $login->ActivateAccount($_GET['code']);    
         ////////// $status /////////
         // 0 = connection error
         // 1 = activated

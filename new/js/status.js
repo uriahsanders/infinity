@@ -1,4 +1,5 @@
 //changeStatus, getStatus, pollStatus
+
 var Status = Status || (function($) { //thanks for this, did not know you could do else statements this easy in js ^_^
 	//Just run: Status.init() to do everything
 	var Public = {}, Private = {};

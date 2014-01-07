@@ -5,15 +5,18 @@
     if (!isset($_GET['username']) && !isset($_GET['email']))
         die();
     else
-        $sql = new SQL();
+        $members = Members::getInstance();
         
         
     if (isset($_GET['username'])) {
-        $results = $sql->Query("SELECT username FROM members WHERE `username` = %s",$_GET['username']);
+        $results = $members->checkDub("username", $_GET["username"]);
     } elseif (isset($_GET['email'])) {
-        $results = $sql->Query("SELECT email FROM members WHERE `email` = %s",$_GET['email']);
+        $results = $members->checkDub("email", $_GET["email"]);
     } else {
         die();
     }
-    echo mysql_num_rows($results);
+	if ($results)
+		echo 1;
+	else
+		echo 0;
 ?>

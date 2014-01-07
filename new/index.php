@@ -11,10 +11,11 @@ include_once(PATH ."core/bar_main_start.php");
             <div id="mnu_left" data="News">
             <ul>
                 <?php
-                $sql = new SQL(); 
-                $res = $sql->Query("SELECT * FROM news ORDER BY date DESC LIMIT 8");
-                while($row = mysql_fetch_array($res)){
-                    echo "<li id=\"$row[ID]\" ".(($row['ID']==0)?"active":"").">$row[subject]</li>\n";
+                $sql = Database::getInstance(); 
+                $res = $sql->query("SELECT * FROM news");
+				$result = $res->fetchAll();
+                foreach($result as $row){
+                    echo "<li id=\"$row[ID]\" ".(($row['ID']==0)?"active":"").">$row[subject].</li>\n";
                     if ($row['ID']==0)
                         $welcome = $row;
                 }

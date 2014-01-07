@@ -2,7 +2,7 @@
     define("INFINITY", true); // this is so the includes can't get directly accessed
     define("PAGE", "profile"); // this is what page it is, for the links at the top
     include_once("libs/relax.php"); // use PATH from now on
-    $member->check_auth();
+    Login::checkAuth();
     if (isset($_GET['user']) && !empty($_GET['user']))
     {    
         $ID = $member->getID($_GET['user'],"username");
