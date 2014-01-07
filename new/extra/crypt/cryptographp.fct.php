@@ -12,10 +12,10 @@
 // -----------------------------------------------
 
 //relax.php session_start_secure
- //if(session_id() == "") session_start();
+//if(session_id() == "") 
+//@session_start();
  
  $_SESSION['cryptdir']= dirname($cryptinstall);
- 
  
  function dsp_crypt($cfg=0,$reload=1) {
  // Affiche le cryptogramme
@@ -27,7 +27,7 @@
 
  function chk_crypt($code) {
  // Vérifie si le code est correct
- include ($_SESSION['configfile']);
+ include ($_SESSION['cryptdir'] . "/cryptographp.cfg.php");
  $code = addslashes ($code);
  $code = str_replace(' ','',$code);  // supprime les espaces saisis par erreur.
  $code = ($difuplow?$code:strtoupper($code));

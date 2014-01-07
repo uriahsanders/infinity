@@ -1,29 +1,27 @@
+2014-01-07
+			- fixed the registration so its in Login class.
+			- fixed Database relations for members and memberinfo
+			- new sql dump
+			- fixed the crypt that was messed up because of session code.
+			- fixed another problem with redirect system on accessed pages. this should now work...
 2014-01-06
-			rewriting structure, functions, classes, and all old files
-			working at this moment
-			*startpage
-			*feedback
-			*register
-			*activate
-			*login
-			*status
-			*and some more....
-
-2014-01-06
-			fixed small bug in login system with redirect
-			also started to move functions and rewrite/reorder from relax.php => relax2.php
-2014-01-06
-			session cookie fixed to stay for 2 weeks. (this was done by php.ini before)
+			- rewriting structure, functions, classes, and all old files
+			- working at this moment
+				*startpage
+				*feedback
+				*register
+				*activate
+				*login
+				*status
+				*and some more....
+			
+			- fixed small bug in login system with redirect
+			- started to move functions and rewrite/reorder from relax.php => relax2.php
+			- session cookie fixed to stay for 2 weeks. (this was done by php.ini before)
 2014-01-05
-			logout modifyed, forum header error fixed when logged out.
-2014-01-05
-			added referar when trying to access a restricted page. $_GET["u"]
-2014-01-05
-			when going to /restricted/ login box automaticly opens up
-2014-01-05
-			after loging in when trying to access a restricted url the user is sent to the url.
-			even after fail login.
-2014-01-05
-			added relax2.php with a System class and a new Database singelton PDO class that should be used on simpler queries
-2014-01-05
-			fixed css on lounge and other pages.
+			- logout modifyed, forum header error fixed when logged out.
+			- added referar when trying to access a restricted page. $_GET["u"]
+			- when going to /restricted/ login box automaticly opens up
+			- after loging in when trying to access a restricted url the user is sent to the url. even after fail login.
+			- added relax2.php with a System class and a new Database singelton PDO class that should be used on simpler queries
+			- fixed css on lounge and other pages.

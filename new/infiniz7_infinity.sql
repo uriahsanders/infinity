@@ -1,11 +1,32 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.3
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jan 07, 2014 at 11:21 PM
+-- Server version: 5.6.12-log
+-- PHP Version: 5.5.0
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
+--
+-- Database: `infinity`
+--
+CREATE DATABASE IF NOT EXISTS `infinity` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `infinity`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `about`
+--
 
 CREATE TABLE IF NOT EXISTS `about` (
   `ID` int(3) NOT NULL AUTO_INCREMENT,
@@ -15,11 +36,21 @@ CREATE TABLE IF NOT EXISTS `about` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
+--
+-- Dumping data for table `about`
+--
+
 INSERT INTO `about` (`ID`, `subject`, `text`, `date`) VALUES
 (1, 'About', 'Welcome to Infinity, a place for collaboration and learning. <br />\r\nThere are many talented people in the world hindered by a lack of money and a dedicated team. <br />\r\nWe believe opportunity shouldn''t be decided by wealth or reasorces. <br />\r\nOur goal is to provide intellectual stimulation, free project management, easy learning, and opportunities for collaboration. <br />\r\nMost importantly, this website is free. <br />\r\nSo join in and have fun. What have you got to lose? <br /><br />\r\n\r\nIf you like what we''re doing and share our vision, please take the time to donate. <br />\r\nYour contributions will be used to improve your experience in drastic ways. <br />\r\nWith your help, we''ll be able to offer more support for our users, provide more activities, and add new features. <br />\r\nWe don''t charge money for the services we provide. <br />\r\nWith your help we can keep it that way and have a more efficient website. <br />\r\nWe thank you for your support! <br /><br />\r\n\r\n-The Infinity Staff', '2013-04-16 00:00:00'),
 (2, 'FAQ', '<div class="Q_1">1. Q: <span class="Qt"> Who is the Infinity Staff?</span></div>\r\n<div class="A_1">A: <span class="At"> We are a group of people who want to expand the knowledge available, \r\nas well as it''s quality. We also want to provide the opportunity of success for anyone who is willing to learn.</span></div>\r\n\r\n<div class="Q_2">2. Q: <span class="Qt"> What is the purpose of this website?</span></div>\r\n<div class="A_2">A: <span class="At"> In short, Infinity is designed to expand knowledge and collaboration. A place where intellectuals can have \r\ndiscussions, create projects, and even make some money.</span></div>\r\n\r\n<div class="Q_3">3. Q: <span class="Qt"> What is the difference between projects and freelancing?</span></div>\r\n<div class="A_3">A: <span class="At"> By definition, you could say there is little difference, but at infinity-forum we divide the two. \r\nIn projects, you reveal the full scope of your plan, can ask for donations, and can provide other incentives for help than money. \r\nYou can not require work by the hour in a project. In freelancing, you only pay with money, you can pay by the hour or \r\nonce the work is completed, you cannot request donations to help with your task, and you are not expected to reveal much \r\nof the purpose behind the work you are asking. In general, freelancing is better for companies, while projects are better for the average user.</span></div>\r\n\r\n<div class="Q_4">4. Q: <span class="Qt"> I hear a lot of talk about "growing" the site. What does that mean, and what does it entail?</span></div>\r\n<div class="A_4">A: <span class="At"> As we expand in funds, we will be providing better software for use on the site, as well as optimizing the website itself. \r\nAlso, funds will be directed towards community projects, challenges, and activities.</span></div>\r\n\r\n<div class="Q_5">5. Q: <span class="Qt"> Can I have an example of one of these activities?</span></div>\r\n<div class="A_5">A: <span class="At"> Sure! One plan is utilizing funds in order to compete on challenge.gov, where we can submit \r\nsolutions to government problems and gain prize money for both the site, and those who helped.</span></div>\r\n\r\n<div class="Q_6">6. Q: <span class="Qt"> There is no "Challenge.gov" in my country... does that mean I am excluded?</span></div>\r\n<div class="A_6">A: <span class="At"> Of course not! That is merely one example of many. Also, there will be community managers in different areas, \r\nwho''s job is to come up with projects for people in that area to work on.</span></div>\r\n\r\n<div class="Q_7">7. Q: <span class="Qt"> I hear that the forums are a great way to get to know one another, and make good choices for your projects. \r\nThat''s fine, but I don''t think I''ll have time to be active on these forums. Is there any way I can still be sure that I am working with trustworthy people?</span></div>\r\n<div class="A_7">A: <span class="At"> Of course! You are able to list your qualifications on your profile, and even create a portfolio of your work. \r\nTry checking through these to find out if they are who you need. Also, there is an Elite position granted by staff, \r\nthat will display to the community that you are a great contributor. It is fairly easy to get into this position, \r\nall that is required is proof that you are serious, hardworking, and trustworthy.</span></div>\r\n\r\n<div class="Q_8">8. Q: <span class="Qt"> Sounds great! If I find that I want to work with Infinity, what positions are there, and how can I get in?</span></div>\r\n<div class="A_8">A: <span class="At"> You can be a site admin, moderator, or community manager. You can apply for these positions HERE.</span></div>\r\n\r\n<div class="Q_9">9. Q: <span class="Qt"> How many different positions are there and what are they?</span></div>\r\n<div class="A_9">A: <span class="At"> There are several different postions you can obtain, and each higher position has the priveleges of \r\nall those below them. In ascending order:Guests- Un-registered visitors to the website, Members-Registered users, \r\nFrequenters- Members with a significant number of posts, Elites- Members who are individually promoted by proving \r\nthemselves as trustworthy,great contributors, VIP''s-Members who are designated a role in helping others along with \r\nprojects/topics they are familiar in. You can not apply for this position, we will contact you for it. \r\nModerators(Mods)- Staff members who keep the peace, regualte content, and provide as much help as possible. \r\nThey have a designated board to manage. Global Moderators(GMods)- Moderators who are able to manage every board. \r\nAdmins- In addition to the previous roles, they manage the overall site, are very influential and skilled members, \r\nand also manage the website at a technical level. They make the big descisions.</span></div>\r\n\r\n<div class="Q_10">10. Q:<span class="Qt">Okay, well, all this sounds great, but what makes you special? Why not a website like Elance, or just another forum?</span></div>\r\n<div class="A_10">&nbsp;&nbsp;&nbsp;A: <span class="At"> Happy that you asked. Infinity is special because it allows you to grow as a family, \r\nwith opportunities for you to learn, as well as create. It is a wonderful experience, being a part of this community. \r\nYou will gain friends, connections, knowledge, and money. Also, the forums give you an opportunity to communicate with other \r\nintellectuals. Most importantly, unlike others, this site is absolutely free!</span></div>\r\n\r\n<div class="Q_11">11. Q: <span class="Qt"> That''s not enough for me...</span></div>\r\n<div class="A_11">&nbsp;&nbsp;&nbsp;A: <span class="At"> Infinity is also the ONLY thing of it''s kind with a purpose to support you and your endeavors. \r\nWe will use funds to advertise your companies, we will form partnerships with you and actively search for ways to advance \r\nyour company or dream. We will even designate personnel to personally help you along your way. We do not see our clients as \r\nmere words on a sheet of paper, but as people.</span></div>\r\n\r\n<div class="Q_12">12. Q: <span class="Qt"> I heard that you can make money on this site... how is that?</span></div>\r\n<div class="A_12">&nbsp;&nbsp;&nbsp;A: <span class="At"> You can earn cash from helping with other people''s projects, with the pay decided by the creator of the project.\r\nYou can also sign up for a position as site staff and get payed for it. Various community activities will also provide a way to earn money. \r\nFor example, challenges are a unique way to advance your skills, do some good in the world, and earn cash prizes.</span></div>\r\n\r\n<div class="Q_13">13. Q: <span class="Qt"> Okay, but how does Infinity make money?</span></div>\r\n<div class="A_13">&nbsp;&nbsp;&nbsp;A: <span class="At"> This site will always be free. We feel that requesting membership fees will hinder the availability of \r\nsuccess and knowledge to the populace. Instead, we maintain and expand the website through the donations of our users, \r\nand minimal use of ads. If you like what we are doing here, and would like to donate below.</span></div>\r\n\r\n<div class="Q_14">14. Q: <span class="Qt"> Are you guys a company? Or just a website?</span></div>\r\n<div class="A_14">&nbsp;&nbsp;&nbsp;A: <span class="At"> When we recieve enough funds to begin branching out and and doing more things outside of just the website, \r\nwe will do so. We hope to make Infinity a company that utilizes the expertise of all different fields to create amazing things, \r\nand hires based on proven skills rather than solely college information. Most importantly, members who give amazing contributions \r\nand stand out in the forums will have a great chance of being hired!</span></div>\r\n\r\n<div class="Q_15">15. Q: <span class="Qt"> I still have more questions!</span></div>\r\n<div class="A_15">&nbsp;&nbsp;&nbsp;A: <span class="At"> Email us at Infinityprojects@yahoo.com.</span></div>', '2013-04-16 00:00:00'),
 (3, 'Contact', '<form action="#" method="post" id="cf_form">\r\n	<table class="cf">\r\n    <tr>\r\n    	<td>Subject:</td>\r\n        <td><input type="text" name="subject" id="cf_subject"/></td>\r\n    </tr>\r\n    <tr>\r\n    	<td></td>\r\n        <td><div class="cf_err">The subject needs to be at least 4 characters.</div></td>\r\n    </tr>\r\n    <tr>\r\n    	<td>Your email:</td>\r\n        <td><input type="text" name="email" id="cf_email"/>\r\n    </tr>\r\n    <tr>\r\n    	<td></td>\r\n        <td><div class="cf_err">The email you entered if not valid.</div></td>\r\n    </tr>\r\n    <tr>\r\n    	<td>Message:</td>\r\n        <td><textarea id="cf_msg" name="msg"></textarea></td>\r\n    </tr>\r\n    <tr>\r\n    	<td></td>\r\n        <td><div class="cf_err">The message is to short, please write a message with at least 30 characters.</div></td>\r\n    </tr>\r\n    <tr>\r\n    	<td><input type="hidden" name="token" value="" id="cf_token" /></td>\r\n        <td><span class="btn" id="cf_submit">Send</span></td>\r\n    </tr>\r\n    \r\n    </table>\r\n</form>', '2013-04-16 00:00:00'),
 (4, 'Terms and agreements', '<div class="terms">\r\n<b>Terms and conditions, Agreement between user and Infinity:</b><br />\r\nWelcome to Infinity. The Infinity website (the "site") is comprised of various pages operated by Infinity. Infinity is offered to you conditioned on your acceptance without modification of the terms, conditions, and notices contained herein (the "Terms"). Your use of Infinity constitutes your agreement to all such Terms. Please read these terms carefully, and keep a copy of them for your reference.\r\n<br /><br /><b>Privacy:</b><br />\r\nYour use of Infinity is subject to Infinity''s Privacy Policy. Please review our Privacy Policy, which also governs the Site and informs users of our data collection practices.\r\n<br /><br /><b>Electronic Communications:</b><br />\r\nVisiting Infinity or sending emails to Infinity constitutes electronic communications. You consent to receive electronic communications and you agree that all agreements, notices, disclosures and other communications that we provided to you electronically, via email and on the Site, satisfy any legal requirement that such communications be in writing.\r\n<br /><br /><b>Your account:</b><br />\r\nIf you use this site, you are responsible for maintaining the confidentiality of your account and password and for restricting access to your computer, and you agree to accept responsibly for all activities that occur under your account of password. You may not assign or otherwise transfer your account to any other parson or entity. You acknowledge that Infinity is not responsible for third party access to your account that results from theft or misappropriation of your account. Infinity and its associates reserve the right to refuse or conceal service, terminate accounts, or remove or edit content in our sole discretion.\r\n<br /><br /><b>Cancellation Policy:</b><br />\r\nYou may cancel your account at any time. Infinity reserves the right to keep all data related to your account indefinitely.\r\n<br /><br /><b>Links to third party sites:</b><br />\r\nInfinity may contain links to other websites ("Linked Sites"). The Linked Sites are not under the control of Infinity and Infinity is not responsible for the content of any Linked Site, including without limitation any link contained in a Linked Site, or any changes or updates to a Linked Site. Infinity is providing these links to you only as a convenience, and the inclusion of any link does not imply endorsement by Infinity of the site or any association with its operators.\r\n<br /><br /><b>No unlawful or prohibited use/Intellectual Property:</b><br />\r\nYou are granted a non-exclusive, non-transferable, revocable license to access and use Infinity strictly in accordance with these terms of use. As a condition of your use of the Site, you warrant Infinity that you will not use the Site for any purpose that is unlawful or prohibited by these Terms. You may not use the Site in any manner which could damage, overburden, or impair the Site or interfere with any other party''s use and enjoyment of the Site. You may not obtain or attempt to obtain any materials or information through any means not intentionally made available or provided through the Site.\r\nAll content included as part of the Service, such as text, graphics, logos, images, as well as the compilation thereof, and any software used on the Site, is the property of Infinity or its suppliers and protected by copyright and other laws that protect intellectual property and proprietary rights. You agree to observe and abide by all the copyright and other proprietary notices, legends or other restrictions contained in any such content and will not make any changes thereto.\r\nYou will not modify, publish, transmit, reverse engineer, participate in the transfer or sale, create derivative works, or in any way exploit any of the content, in whole or in part, found on the Site. Infinity content is not for resale. Your use of the Site does not entitle you to make any unauthorized use of any protected content, and in particular you will not delete or alter any proprietary rights or attribution notices in any content. You will use protected content solely for your personal use, and will make no other use of the content without the express written permission of Infinity and the copyright owner. You agree that you do not acquire any ownership right in any protected content. We do not grant you any licenses, express or implied, to the intellectual property of Infinity or our licensors except as expressly authorized by the Terms.\r\n<br /><br /><b>Use of communication services:</b><br />\r\nThe Site may contain bulletin board services, chat areas, news groups, forums, communities, personal web pages, calendars, and/or other message or communication facilities designed to enable you to communicate with the public at large or with a group (collectively, "Communication Services"), you agree to use the Communication Services only to post, send and receive messages and material that are proper and related to the particular Communication Service.\r\nBy way of example, and not as a limitation, you agree that when using a Communication Service, you will not: defame, abuse, harass, stalk, threaten or otherwise violate the legal rights (such as rights of privacy and publicity) of others; publish, post, upload, distribute or disseminate any inappropriate, profane, defamatory, infringing, obscene, indecent or unlawful topic, name material or information; upload files that contain software or other material protected by intellectual property laws (or by rights of privacy of publicity) unless you own or control the rights thereto or have received all necessary consents; upload files that contain viruses, corrupted files, or any other similar software or programs that may damage the operation of another''s computer; advertise or offer to sell or buy any goods or services for any business purpose, unless such Communication Service specifically allows such messages; conduct or forward surveys, contests, pyramid schemes or chain letters; download any file posted by another user of a Communication Service that you know, or reasonably should know, cannot be legally distributed in such manner; falsify or delete any author attributions, legal or other proper notices of proprietary designations or labels of the origin or source of software or other material contained in a file that is uploaded, restrict or inhibit any other user from using and enjoying the Communication Services; violate any code of conduct or other guidelines which may be applicable for any particular Communication Service; harvest or otherwise collect information about others, including email addresses, without their consent; violate any applicable laws or regulations.\r\nInfinity has no obligation to monitor the Communication Services. However, Infinity reserves the right to review materials posted to a Communication Service and to remove any materials in its sole discretion. Infinity reserves the right to terminate you access to any or all of the Communication Services at any time without notice for any reason whatsoever.\r\nInfinity reserves the right at all times to disclose any information as necessary to satisfy applicable law, regulation, legal process or government request, or to edit, refuse to post or to remove any information or materials, in whole or in part, in Infinity''s sole discretion.\r\nAlways use caution when giving out any personally identifying information about yourself or your children in any Communication Service. Infinity does not control or endorse the content, messages or information found in any Communication Service and, therefore, Infinity specifically disclaims any liability with regard to the Communication Services and any actions resulting from you participation in and Communication Service. Managers and hosts are not authorized Infinity spokespersons, and their views do not necessarily reflect those of Infinity.\r\nMaterials uploaded to a Communication Service may be subject to posted limitations on usage, reproduction and/or dissemination. You are responsible for adhering to such limitations if you upload the materials.\r\n<br /><br /><b>Materials provided to Infinity or posted on any Infinity web page:</b><br />\r\nInfinity does not claim ownership of the materials you provide to Infinity (including feedback and suggestions) or post, upload, input or submit to any Infinity Site or our associated services (collectively "Submissions"). However, by posting, uploading, inputting, providing or submitting you Submission you are granting Infinity, our affiliated companies and necessary sub-licensees permission to use you Submission in connection with the operation of their Internet businesses including, without limitations, the rights to: copy, distribute, transmit, publicly, display, publicly perform, reproduce, edit, translate and reformat your Submission; and to publish your name in connection with your Submission.\r\nNo compensation will be paid with respect to the use of your Submission, as provided herein. Infinity is under no obligation to post of use any Submission you may provide and may remove any Submission at any time in Infinity''s sole discretion.\r\nBy posting, uploading, inputting, providing or submitting you Submission you warrant and represent that you own or otherwise control all of the rights to your Submission as described in this section including, without limitation, all the rights necessary for you to provide, post, upload input or submit the Submissions.\r\n<br /><br /><b>Indemnification:</b><br />\r\nYou agree to indemnify, defend and hold harmless Infinity, its officers, directors, employees, agents and third parties, for any losses, costs, liabilities and expenses (including reasonable attorneys'' fees) relating to or arising out of your use of or inability to use the Site or services, any user postings made by you, your violation of any terms of this Agreement or you violation of any rights of a third party, or your violation of any applicable laws, rules or regulations. Infinity reserves the right, at its own cost, to assume the exclusive defense and control of any matter otherwise subject to indemnification by you, in which event you will fully cooperate with Infinity in asserting any available defenses.\r\n<br /><br /><b>Liability disclaimer:</b><br />\r\nThe information, software, products, and services included in or available through the site may include inaccuracies or typographical errors. Changes are periodically added to the information herein. Infinity and/or its suppliers may make improvements and/or changes in the site at any time.\r\nInfinity and/or its suppliers make no representations about the suitability, reliability, availability, timeliness, and accuracy of the information, software, products, services and related graphics contained on the site for any purpose to the maximum extent permitted by applicable law, all such information, software, products, services and related graphics are provided "as is" without warranty or condition of any kind. Infinity and/or its suppliers hereby disclaim all warranties and condition with regard to this information, software, products, services, and related graphics, including all implied warranties or conditions of merchant ability, fitness for a particular purpose, title and non-infringement.\r\nTo the maximum extent permitted by applicable law, in no event shall Infinity and/or its suppliers be liable for any direct, indirect, punitive, incidental, special, consequential damages or any damages whatsoever including. Without limitation, damages for loss of data or profits, arising out of or in any way connected with the use or performance of the site, with the delay or inability to use the site or related services, the provision of or failure to provide services, or for any information, software, products, services and related graphics graphics obtained through the site, or otherwise arising out of the use of the site, whether based on contract, tort, negligence, strict liability or otherwise, even if Infinity or any of its suppliers has been advised of the possibility of damages. Because some states/jurisdiction do not allow the exclusion or limitation of liability for consequential or incidental damages, the above limitation may not apply to you. If you are dissatisfied with any portion of the site, or with any of these terms of use, your sole and exclusive remedy is to discontinue using the site.\r\n<br /><br /><b>Termination/access restriction</b>:<br />\r\nInfinity reserves the right, in its sole discretion, to terminate your access to the Site and the related services or any portion thereof at any time, without notice. To the maximum extent permitted by law, this agreement is governed by the law of the United States of America and you hereby consent to the exclusive jurisdiction and venue of courts in the United States of America in all disputes arising out of or relating to the use of the Site. Use of the Site is unauthorized in any jurisdiction that does not give effect to all provisions of these Terms, including, without limitation, this section.\r\nYou agree that no joint venture, partnership, employment, or agency relationship exists between you and Infinity as result of this agreement or use of the Site. Infinity''s performance of this agreement is subject to existing laws and legal process, and nothing contained in this agreement is subject to existing laws and legal process, and nothing contained in the agreement is in derogation of Infinity''s right to comply with governmental, court law enforcement requests or requirements relating to your use of the Site or information provided to or gathered by Infinity with respect to such use. If any part of this agreement is determined to be invalid or unenforceable pursuant to applicable law including, but not limited to, the warranty disclaimers and liability limitations set forth above, then the invalid or unenforceable provision will be deemed superseded by a valid, enforceable provision that most closely matches the intent of the original provision and the remainder of the agreement shall continue in effect.\r\nUnless otherwise specified herein, this agreement constitutes the entire agreement between the user and Infinity with respect to the Site and it supersedes all prior contemporaneous communication and proposals, whether electronic, oral or written, between the user and Infinity with respect to the Site. A printed version of this agreement and of any notice given in electronic form shall be admissible in judicial or administrative proceeding base upon or relating to this agreement to the same extent and subject to the same condition as other business documents and records originally generated and maintained in printed form. It is the express with to the parties that this agreement and all related documents be written in English.\r\n<br /><br /><b>Changes to Terms:</b><br />\r\nInfinity reserves the right, in its sole description, to change the Terms under which Infinity is offered. The most current version of the Terms will supersede all previous versions. Infinity encourages you to periodically review the Terms to stay informed of our updates\r\nInfinity welcomes your questions or comments regarding the terms and agreements!\r\n<br /><br />Effective as of 12/8/2012</div>', '2013-04-16 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
 
 CREATE TABLE IF NOT EXISTS `categories` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -30,7 +61,11 @@ CREATE TABLE IF NOT EXISTS `categories` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `name` (`name`),
   KEY `min_rank` (`min_rank`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `categories`
+--
 
 INSERT INTO `categories` (`ID`, `name`, `index_`, `min_rank`, `visible`) VALUES
 (1, 'General', 1000, 1, 1),
@@ -42,6 +77,12 @@ INSERT INTO `categories` (`ID`, `name`, `index_`, `min_rank`, `visible`) VALUES
 (7, 'VIP', 1000, 3, 0),
 (8, 'Admins', 1000, 6, 1);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedback`
+--
+
 CREATE TABLE IF NOT EXISTS `feedback` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `fee_l` int(11) NOT NULL,
@@ -51,11 +92,13 @@ CREATE TABLE IF NOT EXISTS `feedback` (
   `comments` text NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-INSERT INTO `feedback` (`ID`, `fee_l`, `fee_n`, `fee_f`, `fee_a`, `comments`, `date`) VALUES
-(1, 10, 10, 10, 10, '0', '2013-05-23 05:05:18'),
-(2, 10, 9, 10, 9, 'sasa', '2013-05-31 08:05:24');
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `friends`
+--
 
 CREATE TABLE IF NOT EXISTS `friends` (
   `ID` int(20) NOT NULL AUTO_INCREMENT,
@@ -68,6 +111,10 @@ CREATE TABLE IF NOT EXISTS `friends` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
+--
+-- Dumping data for table `friends`
+--
+
 INSERT INTO `friends` (`ID`, `usr_ID`, `friend_ID`, `block`, `block_by`, `accepted`, `date`) VALUES
 (18, 9, 1, 0, 0, 1, '2013-06-20 05:45:40'),
 (14, 1, 2, 0, 0, 1, '2013-06-20 04:41:10'),
@@ -75,6 +122,12 @@ INSERT INTO `friends` (`ID`, `usr_ID`, `friend_ID`, `block`, `block_by`, `accept
 (16, 1, 4, 0, 0, 0, '2013-06-20 04:41:33'),
 (21, 2, 3, 0, 0, 1, '2013-06-20 18:43:16'),
 (20, 3, 4, 0, 0, 0, '2013-06-20 17:49:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `infinity_messages`
+--
 
 CREATE TABLE IF NOT EXISTS `infinity_messages` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -84,11 +137,13 @@ CREATE TABLE IF NOT EXISTS `infinity_messages` (
   `date` datetime NOT NULL,
   `IP` varchar(15) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-INSERT INTO `infinity_messages` (`ID`, `subject`, `email`, `msg`, `date`, `IP`) VALUES
-(1, 'Re: Are Americans REALLY Stupid? ', 'nexonuwh@gmail.com', 'dfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfg', '2013-05-09 04:32:29', '127.0.0.rawr'),
-(2, 'sdfxcv', 'r3lax.uwh@gmail.com', 'sdfsdfsdfdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfg', '2013-05-09 04:33:10', '127.0.0.rawr');
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_attempts`
+--
 
 CREATE TABLE IF NOT EXISTS `login_attempts` (
   `ID` int(6) NOT NULL AUTO_INCREMENT,
@@ -97,14 +152,13 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
   `date` varchar(30) NOT NULL,
   `date2` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-INSERT INTO `login_attempts` (`ID`, `username`, `IP`, `date`, `date2`) VALUES
-(1, 'relax', '127.0.0.1', '1379380986', '2013-09-17 03:23:06'),
-(2, 'relax', '127.0.0.1', '1379381040', '2013-09-17 03:24:00'),
-(3, 'relax', '127.0.0.1', '1379381280', '2013-09-17 03:28:00'),
-(4, 'relax', '127.0.0.1', '1379381299', '2013-09-17 03:28:19'),
-(5, 'relax', '127.0.0.1', '1379381328', '2013-09-17 03:28:48');
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `memberinfo`
+--
 
 CREATE TABLE IF NOT EXISTS `memberinfo` (
   `ID` mediumint(11) NOT NULL AUTO_INCREMENT,
@@ -125,15 +179,25 @@ CREATE TABLE IF NOT EXISTS `memberinfo` (
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `status_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
+
+--
+-- Dumping data for table `memberinfo`
+--
 
 INSERT INTO `memberinfo` (`ID`, `username`, `sex`, `image`, `banner`, `rank`, `country`, `wURL`, `quote`, `age`, `last_login`, `work`, `active_p`, `special`, `points`, `status`, `status_time`) VALUES
-(1, 'relax', 'Male', '9a1111520842d32326809d2e7678defep', '457a42062ca91fb20f0d67020aa89119p', 6, 'Sweden', 'http://moijo.org', 'You don''t get what you want... you get what you work for.', 26, '0000-00-00 00:00:00', 'Student', 'Infinity-forum', 'Co-Founder', 10000, 2, '2013-10-15 22:15:22'),
+(1, 'relax', 'Male', '9a1111520842d32326809d2e7678defep', '457a42062ca91fb20f0d67020aa89119p', 6, 'Sweden', 'http://moijo.org', 'You don''t get what you want... you get what you work for.', 26, '0000-00-00 00:00:00', 'Student', 'Infinity-forum', 'Co-Founder', 10000, 0, '2014-01-07 22:05:27'),
 (2, 'Uriah', 'Male', '5579265ae3dec2569717c0e0f1f7b5e5j', '', 6, 'USA', 'http://infinity-forum.org', 'I like milk', 15, '0000-00-00 00:00:00', 'Infinity', 'infinity-forum', 'Co-Founder', 10000, 0, '0000-00-00 00:00:00'),
 (3, 'jeremy', 'Male', '716e08e05e5a92e36e922bc6be9ebd19j', '', 6, 'USA', '', 'I like cookies', 14, '0000-00-00 00:00:00', '', '', 'Co-Founder', 10000, 0, '0000-00-00 00:00:00'),
 (4, 'wabi', '', '', '', 6, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Co-Founder', 10000, 0, '0000-00-00 00:00:00'),
-(9, 'Test', '', '', '', 1, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, 0, '0000-00-00 00:00:00'),
-(10, 'arty', '', 'b4cb6f5e620a2b31a3065caca393131ap', '566de5d708d32517a1a7c4ca59a6990dp', 5, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, 0, '0000-00-00 00:00:00');
+(10, 'arty', '', 'b4cb6f5e620a2b31a3065caca393131ap', '566de5d708d32517a1a7c4ca59a6990dp', 5, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, 0, '0000-00-00 00:00:00'),
+(11, 'Test123', '', '', '', 1, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, 0, '2014-01-07 22:04:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `members`
+--
 
 CREATE TABLE IF NOT EXISTS `members` (
   `ID` mediumint(11) NOT NULL AUTO_INCREMENT,
@@ -146,15 +210,25 @@ CREATE TABLE IF NOT EXISTS `members` (
   `activatecode` varchar(34) NOT NULL,
   `note` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
+
+--
+-- Dumping data for table `members`
+--
 
 INSERT INTO `members` (`ID`, `admin`, `username`, `password`, `email`, `date`, `IP`, `activatecode`, `note`) VALUES
 (1, 1, 'relax', '$2a$12$pCFVjYScazDMlGUBV1wVoO77jspOCBODetA6yXUuDXJPp3WLOmeOy', 'relax@infinity-forum.org', '2013-05-25 13:54:03', '127.0.0.1', 'Y-71ad8cdc6c38455d9d9d6c176b6a6090', ''),
 (2, 1, 'Uriah', '$2a$12$1HXLUsxcf8ZB6INXDgqb7.FYzkec1vp9SpuQQ43WtTrMEr9oIvCre', 'uriah@infinity-forum.org', '2013-05-25 22:54:37', '108.23.116.84', 'Y-655e1e2bcd17683de73b22b9767475d9', ''),
 (3, 1, 'jeremy', '$2a$12$Xlo9eARyi6eleXabNVVhneuPdnxvxGyk1h2Vnfh.8CIN1JwSWor4G', 'jeremy@infinity-forum.org', '2013-05-25 23:41:27', '99.155.45.129', 'Y-536429b4778c171b9cf8a310380d123d', ''),
 (4, 1, 'wabi', '$2a$12$2oBcqX8VPj.Pi7JU3YOQ9OcqM.VIEIvS8HkOzPCzumEcOgwg2baSO', 'd4us.mach1na@gmail.com', '2013-05-29 21:28:15', '50.40.124.192', 'Y-72a2fe57959f27f115853c86448e556a', ''),
-(9, 0, 'Test', '$2a$12$.4se.fmcCRvKzZvOKd3Qtu3eIgM9NffBsAf/eGsLENR7fDGL7kQTu', 'r3lax.uwh@gmail.com', '2013-06-05 09:56:36', '79.102.223.110', 'Y-b72be38430627f96775b1f44b2f85ad8', ''),
-(10, 0, 'arty', '$2a$12$Cy7sAPwYED7HdtjQaZ/3HuwAJSG8WeiiE/jXuGSh1.o1048e..9DK', 'arty@infinity-forum.org', '2013-07-08 05:41:57', '108.29.127.124', 'Y-59e097bbfb029344030c1afe48057839', '');
+(10, 0, 'arty', '$2a$12$Cy7sAPwYED7HdtjQaZ/3HuwAJSG8WeiiE/jXuGSh1.o1048e..9DK', 'arty@infinity-forum.org', '2013-07-08 05:41:57', '108.29.127.124', 'Y-59e097bbfb029344030c1afe48057839', ''),
+(11, 0, 'Test123', '$2a$12$.9cxEkRi2SQUpsYxPBbhWeFjK8F7vF7yZ/7XfebgGzxdp0bcQGnE2', 'r3lax.uwh@gmail.com', '2014-01-07 22:49:04', '127.0.0.1', 'Y-b4455d0ad203ac2001eefb639f1e2e04', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `news`
+--
 
 CREATE TABLE IF NOT EXISTS `news` (
   `ID` int(4) NOT NULL AUTO_INCREMENT,
@@ -164,6 +238,10 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
 
+--
+-- Dumping data for table `news`
+--
+
 INSERT INTO `news` (`ID`, `subject`, `text`, `date`) VALUES
 (0, 'Welcome', 'Welcome to Infinity, a place for collaboration and learning! <br/>\r\nWe are glad to have you here. Feel welcome to search through any "up and coming" news, browse the forums, and post projects. <br/>\r\nAlso, please take the time to visit the About page, where you can find information about our vision for this website.<br/>\r\nOnce you have familiarized yourself with the site, we encourage you to register and start getting involved.<br /><br />\r\nOur philosophy is that knowledge should be shared and that finding people to work with should be easy.<br/> \r\nWhether you are a seasoned master looking for colleagues, or a curious soul hungry for knowledge, this is the place for you.<br /><br />\r\nIn our forums you will find a wide variety of topics. This is a great place to share what you know as well as learn from others.<br />\r\nHere, you can make a reputation for yourselves and increase your chances of getting into projects. We encourage you to join in.<br />\r\nIn projects you can see what others are creating, offer your skills, or start your own project.<br />\r\nWe make it easy for you to find a way to make cash doing the things you love, and find the right people to help you along your path to success.<br /><br />\r\nYou will also find articles, downloads, and tutorials to add and learn from.<br/>\r\nAs this site expands, so will its content and the opportunities it produces.<br />\r\nSo learn, contribute, debate, create, and make some cash.<br />\r\nWe''re sure you''ll fit right in.<br/><br/>\r\n-The Infinity Staff', '2013-06-05 00:00:00'),
 (17, 'CMS', 'The start of the CMS is up now :)<br />\r\nlucid''s news script is implemented and working.<br />\r\nYou can access this by logging in on your account if your admin, if your not contact relax or uriah and we will decide your faith<br />\r\n<br />\r\nand I also forgot to say...RAWR!!!<br />\r\n<br />\r\n/relax', '2013-02-13 20:09:34'),
@@ -171,6 +249,12 @@ INSERT INTO `news` (`ID`, `subject`, `text`, `date`) VALUES
 (26, 'Profile', 'General settings is mostly finished, and you can see the changes in your profile summary. The rest of the profile stuff is almost done as well, but im probably going to finish it tomorrow, im getting a bit tired of working on it. But feel free to test it out!(Ik its the most interesting part, but no, you still cant change your avatar)', '2013-02-16 02:54:33'),
 (27, 'Changing Styles', 'The change style script is now finished, but don''t expect much from it; the actual stylesheets are not finished yet, and there''s not even such a thing as the white-brown one yet. But yeah, it works, and if you change the style youll see everything look all wierd. Ill write a js script to make the change instant soon, but for now you need to switch pages for the change to take effect.', '2013-02-16 18:10:13'),
 (28, 'Infinity.php', 'If you read the announcements, youll know that infinity.php and its cms is pretty much up and running, thanks to jeremy. I know i wrote this in announcements, but for some reason I just really love using the news cms, its so awesome :D', '2013-02-16 21:51:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
 
 CREATE TABLE IF NOT EXISTS `notifications` (
   `ID` int(15) NOT NULL AUTO_INCREMENT,
@@ -182,11 +266,13 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `friend_answ` int(11) NOT NULL,
   `date_` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-INSERT INTO `notifications` (`ID`, `usr_ID`, `extra_ID`, `type_`, `text_`, `read_`, `friend_answ`, `date_`) VALUES
-(31, 4, 3, 1, 'jeremy wants to be your friend', 0, 0, '2013-06-20 17:49:27'),
-(27, 4, 1, 1, 'relax wants to be your friend', 0, 0, '2013-06-20 04:41:33');
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
 
 CREATE TABLE IF NOT EXISTS `posts` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -200,36 +286,28 @@ CREATE TABLE IF NOT EXISTS `posts` (
   KEY `parent_ID` (`parent_ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=135 ;
 
+--
+-- Dumping data for table `posts`
+--
+
 INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES
-(1, 'oowhi muc beesoto grookroogh loowhootu eeckust noboptoo padrukyz uwh iglooje wovyjoolt oasteckuha dokro ree sutsig urunawigh ake ychoage geewh ', '127.0.0.1', 9, 1, '1993-05-19 22:24:01'),
 (2, 'tidool igra bihoa stach oast owheejeem eetheewa oangoz fiwhokruk gloshihapt ram gry oovemsag eji tohoani phocmeck roj ujoangoo otowoopt oadra oag yte ', '127.0.0.1', 4, 1, '1996-09-16 20:43:22'),
 (3, 'eegnic eestephit theeksece icul zeeptips ich perdompeet ehirtoogr eecu hiftansoax belroalafu ooka editchess dooj huzodsipi tapta oaksomten ', '127.0.0.1', 10, 1, '2002-10-28 05:14:39'),
 (4, 'ootsyngogn hecmas ptehithoa eshej iwaghi eediwoo jooc thooshe grigl voovoo stawhotsyv goowha pho kad oamp dyk ptupsydool tooku epsistac ', '127.0.0.1', 4, 1, '2010-07-25 02:29:49'),
-(5, 'ejeekse uzy loacu ijothaw shu ryceeteek sys oabomsoakr oovurge phyghozoz ypte ethicy eemtu oorygla tunser zyveez osafoash iteks upihoo achuwhik ahodr ekalon dikrema itep igoach ', '127.0.0.1', 9, 1, '1996-02-17 05:32:54'),
 (6, 'itheepteep etor oody goad ewheefoas ynyb sogheeds sheewytsix esoansa eewoo phoolrydi ula ozulsalric hoanyvoo ypyho ', '127.0.0.1', 10, 1, '2011-05-19 09:24:39'),
 (7, 'ocoseroptu nynguft ubee ewh zoopsocho oosh oavelre oof hurgyl oardi zoopt ptiglemto ugr hoa deptaj ifehoa ', '127.0.0.1', 4, 1, '2006-09-05 05:35:25'),
 (8, 'ilakreftej oongoampoa rerg foon oageemads ugl voophoama uxyt wifimta eglecooc uchej ygassi eerg thoo gloalsa ptoo fas oglu liry whyps cer gru psoocoargu agelysseez ', '127.0.0.1', 10, 1, '1992-07-25 03:34:21'),
 (9, 'yphuwes ochythos eec sho etishoas uwaftoo weepoogi phu eevogr icyma ytipirdee uwhiglee ools yjolsilso joa istachu xapesh mox agreepsa kedroojadr phi ooc peevocamu oortan ', '127.0.0.1', 1, 2, '1973-10-08 05:38:44'),
 (10, 'uxyjin pseed psooz glasty ystijo waji galt jeemeepha oshiwh fodegylrit oatu iloapepta apsoast ', '127.0.0.1', 4, 2, '1984-12-04 18:22:59'),
-(11, 'ehoaru ybev esezygn phesh jygnoof oongeeveez duptusy yfys eehoo feech grung ycukseeft oosognufte bucmooksy pyrtirgoo eeltil whycmooth doo epsar cyj gripytsest ', '127.0.0.1', 9, 2, '2009-01-22 19:49:52'),
 (12, 'gloamso oboow imukeltu numogr kupti chuts ujogr oaphoashep yransybe yxosh ereensad geebypte gli ithuptelen oomucoonoo whutivalti ydoargo iphachek ytheefoon umyck roaptybept loa eemo vorsadem stoatahiv iph ', '127.0.0.1', 1, 2, '1990-11-16 00:08:44'),
-(13, 'dygn yvoamsihib uhools taphimtirs gaphecugla sing ryxoowoab reephyr ahoafesyx sots yvaz rook boo shyl feefy ', '127.0.0.1', 9, 2, '1989-02-03 06:01:12'),
-(14, 'glopoaptoa eelrelur oalee steeltu margooj tee xeecheely yglygloaf iwhejeech ucoks bitsalse gluweeg awhoglemok whugimpy doaptebee ukoams haglengoj oahathyngy feeje cerdyls hoovymy glee eej ithoawi ', '127.0.0.1', 9, 2, '1995-11-08 15:03:54'),
-(15, 'uptoo oomsoab epoasta fip pych eesogla ooduwhudoo awirtusha voane oanoolt pha gyc cexoadr ', '127.0.0.1', 9, 2, '1980-04-02 15:32:46'),
 (16, 'psi ogoa asoals eeree whoagroamt psootsipt glimpeelsu doak ugly azunuhozi anolikr xepheest whi ophy cilop ofoapseet nems tho sooptibo yku kuphat stene eeltyrgiw oacefook xoal otoophyth iridsee ', '127.0.0.1', 1, 2, '2013-08-22 02:59:58'),
-(17, 'eegny choophawha eepyden istooboapt oampydsew syftojee stets eeftumsyth lozoo ushajosh ethoatusu merooz owheegl tooche eekr ooftyd koosu eecko lok upt whoanyb ikumsy zeemejust iwhiput ashiv gempift ygr whethoocmi ', '127.0.0.1', 9, 2, '2008-06-20 09:31:31'),
 (18, 'eepsir ocoftelr yroagl eshepsut eephy exeep sheewoolaj aloaw ishusoofoo soopt iroo stirda opeert noagl xeeryvukim ozybeeceds oshych det mew namsipo guhydr goozohi agoadrudu fagloolsu psyjoa joaladoaho bipeetchoa oampoortim evu ', '127.0.0.1', 10, 3, '1993-06-15 06:44:34'),
 (19, 'icha lylsimtog mibygri weenaptyci pher ugo pan omop oosuds yphuboomi zaghycirgi eess mys epu vahijir unyjof tagreej how ipophee grykrec ohigloa mimteed eenon phooh odagnotch cydredux wheest ', '127.0.0.1', 4, 3, '1984-12-27 05:54:21'),
 (20, 'oachoal covee ytaghor pyv giphy noo caft eexytcheep oatsoots ith cheethick oduglompev steeptaj greekr alykroosta ', '127.0.0.1', 1, 3, '1991-05-15 02:06:59'),
 (21, 'omiphoak ugo aceempyf oaxyco voaglozy weegloche griro ipte moofoogro guty adex jeft oazyrdeecm foowhahomi zawhoofun ooxelr chysytyj zensathyms hoanogo oord yfoardoa egli anenangoa ', '127.0.0.1', 4, 3, '1977-11-07 07:36:44'),
-(22, 'donojee oargez eestib oakoox oompert oogloghoaj toaty fyfy cachi jegnestab oophuls uku omiwhuni aturtad whyh oogl pyngooksy ypooriji iwhy oodyng oodaksosoa kawh yru ecafip oweest ', '127.0.0.1', 9, 4, '2008-11-28 02:12:13'),
-(23, 'fapt emiglav tee eeps eert thedsy shoatis raptempo gleetch ach graxu epirsoop shyns styltiphyw theeckoods grartatchy bur whyghi ', '127.0.0.1', 9, 4, '2011-08-18 02:03:01'),
-(24, 'acufoo nyckythox ufumpustoz hoxeglu corguptoa wirtoordu udaselrale vawhedr wheecha chusoodsuh bakee ejopads whignegr keral thajijoa chirgyphe yptaphyfy tessy ', '127.0.0.1', 9, 4, '1994-01-10 01:58:30'),
 (25, 'oomtoaft oast ekups codeesubi ooksoa alycm oaks eegnoa gook ushys grongy ewheecegy eedredrapt ivom oodroge oovybune eezixu oadoockyxe moawhid ypsyxyh anedyroo oacma oato oomsoothy goace aphophuwe ', '127.0.0.1', 3, 4, '1982-02-04 03:55:46'),
 (26, 'hisixodse psi soar oleergeeft nishoheek ijoakrapo steex oog oglolijej fatsydoop zoaptoasha yheedardy kite oolreersee upeetchyng soam ufedewop rokr poox echafeej opsoogl ', '127.0.0.1', 4, 4, '1998-01-20 08:49:05'),
 (27, 'zoazy hampajoo ivehak ifishoroa ryms voohuzushe oaph mewhonsek usy shyzeeg eecu gleel dansoongum sheeholt suk osydsoa ekutsudroa psuste nagnegaj ewhoch ', '127.0.0.1', 3, 5, '2009-01-08 21:03:46'),
-(28, 'aloaruxo moo uleelsung ekykrykr othoopyz eelse grook wolsoaz itheriwa oomeny egizoa eboongap gapho lithoons fooph shoal oomt ptotsyg ', '127.0.0.1', 9, 5, '1979-11-26 05:50:12'),
-(29, 'soamy whymsoa tylryds oagl ojorgeed chih ystomoogl yphi ebe ogebo agroh dikaw whoord mera echik majeptoox ulootchykr dicmizucha ', '127.0.0.1', 9, 5, '2002-08-17 03:08:05'),
 (30, 'fun xompa veefaptejo ech yzingy jyt uwhipsee hoa meestada opt zoarir hoopsigro poostigere oocmaps taghyss whudroarto haw oocheza lar ikeempok exina eejoachirg iloagryns ', '127.0.0.1', 4, 5, '1993-07-13 20:14:07'),
 (31, 'anymsij iptaboo noaf greezooms ipeete sakro phyxood ptu ewhee etumseec moamips kapore esomisse ceenulufib groahoafe jasheph eevukoa psofytsap hoany ewhe ', '127.0.0.1', 1, 5, '1996-01-31 07:33:49'),
 (32, 'tyksoce oat veeliph aphun ciptogla loa yne oagheessix chisisogh uchoat gleexoo teftexe mekseelra areergukri song ecysap ziphyh ydoogh eertodiwi meer ash stengar largoowyd ', '127.0.0.1', 10, 5, '1987-09-21 12:23:06'),
@@ -240,13 +318,11 @@ INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES
 (37, 'shecmo shororoads cho tapsy stalritan gygl whee yjy xop soconsee oamp eest pseegringy onem egoo eesh feks uzolsoo ', '127.0.0.1', 4, 6, '1989-02-22 08:52:49'),
 (38, 'ezugiboa yluchu glicol sheeluxo oocmym zyj thockoofe udilseef dofuc zoopheec shidedsax kecm eetch owikom whoak wee ', '127.0.0.1', 10, 6, '2009-01-17 09:30:28'),
 (39, 'ooxopo uwhagrugly opeekri oajix xeed ptalagek shelte oorsoamt ajoah ech egr ogru mergoaph ekikseds uma zoaky uxigaxense oobesh igujoam mosypooc xeethab ukisodsys mosholr zeveemee thestydsy ikoadulos oolra xoaje voogoteex ', '127.0.0.1', 1, 6, '1993-05-16 08:21:07'),
-(40, 'yzetoalt veexoamih too ipylsoal onexotchot ooships uleehooss egozirs oolsyngo fertytchee ptoaz gliksoodsy doazixi iph whe glymoaja beroodriz eegheemtel ', '127.0.0.1', 9, 6, '1976-06-05 03:52:55'),
 (41, 'vyboacicku ichyzups gow fyshals tha eekackexyl eetsoathu agroam joo oaphi wohutheehi igezakoga oans puteempuk oam oozoaptow ypighudri kuf oahultossa ychoglin ixorym boahocyx oampumt egeghub wipudre durta oog ymyglymem cyhu ', '127.0.0.1', 2, 6, '1976-10-20 21:43:07'),
 (42, 'ashu oockaby ruta doaloos ykoolsoc oarsock coobas neksa oackoo goow psoatsoopt epi jishee psoksof uphy meekov shift eer sytax uth eglu upsoonoota oaboa stumte eezecmun coagyfooti oagne glognerdi ', '127.0.0.1', 10, 7, '1990-10-02 13:13:05'),
 (43, 'ylep ugoamsoa yglujivaj ugrajoaph peeglor oapsec oolteept roogaxob eecergaro roajoopu phignoojy rooroo atheepheeg coosoophee oomseft shoo iku yglufemeec weef ', '127.0.0.1', 3, 7, '2005-07-16 22:37:24'),
 (44, 'stotaghi meesuzeed cassoa sugloompoh whu eelrakr eegn themsi okargy grobicki oogrynirt ifot choadrept xetsolt soafoptee ystoosupty ushu ept ceepepipo eboorti xofta lami alakeepej oarimt ', '127.0.0.1', 4, 7, '1976-05-16 17:15:09'),
 (45, 'uwo oolry istoogryg stoaksad oaphez lutuk iph jeepsu gleeng avulsoang ewyls seezukez uju thypsicm agroveefoa fywadi amulogakac yphees ipho eempaguwaw grymoft shyck uchistyg uto ykylreecku ooksuptoa ', '127.0.0.1', 2, 8, '1977-01-09 05:06:14'),
-(46, 'goopsy zoozewogr thyh gleetood oaxotids ixoa ypsyfoo mih ogleemoo upheeshe whulsyg eertoa shytch abij ishoano ojys yboacm yshoodoa ethisaphi whors ', '127.0.0.1', 9, 8, '2009-07-25 16:36:43'),
 (47, 'psoahuw ugroops idez veehoage guxuv ducheedydo glujagnept owhuloos ehynsunek ptyje phiksev ywopt eensoaxi ptingirse ', '127.0.0.1', 4, 8, '1976-08-28 21:32:06'),
 (48, 'dujoawhep imypteerte glofty ooghoowh coar ewossikaro stedra tazakugily epsiguwam coditse shoz istoozu isoothordu stygros boo ichuche shoard yzoltugho evuwoogucm aptoataph rodsa gaglasho oatir ', '127.0.0.1', 1, 8, '1997-12-19 19:21:52'),
 (49, 'ochuwoglo foawhe roofoo nyj hudycmug whu eptoo ceebopter thade phufeesh avungop oshookujee thee hulydooc asilsoac thonotcha tiruwoag suthe sersonerd umikasha oaftutchee oceegn eeshyhadse tupsy taptumt gumichusy opybe ', '127.0.0.1', 1, 9, '1970-06-19 02:12:37'),
@@ -269,32 +345,16 @@ INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES
 (66, 'theerga ach geem ytargiwh oorduv oapokrird rishi woakist whypheglut oongyptooc glaw ootsyp gewhebib itholegl ath mooxevuz vemti thoamtish ubookigny stiw oriksitso aso oather eecy achin phoatsy vingeeks axoo glymsoagh gleghooks iwhecubiwh rydrugl ', '127.0.0.1', 2, 11, '1997-03-27 11:42:38'),
 (67, 'fongools chuchoa oansar uryh horga gluks gro yshygoof eereensuft phyrsi eph koalu kewh gli poav muneek oglat grumt ', '127.0.0.1', 1, 11, '1983-03-07 14:07:00'),
 (68, 'tadrigoo chuzyp yphe ojugli tanijoomee oabums oomoj ptud oas madsy apoo whooshylsu idedsa bam phed heftoabely eethoah odab anoaraw six ', '127.0.0.1', 1, 11, '2013-02-15 01:03:08'),
-(69, 'uzig epsacoc elemy choalr oal ibi uloophij iwh ptersyzoos styfy ugrufeewee lang xujylu grushoo pooree ihitu oagleep roxolo hahirs taptoawhu eshoru shachocor ehydsugle tugryp ', '127.0.0.1', 1, 12, '2001-06-24 06:39:16'),
-(70, 'oohampicho oassyro uch gyrdy ipteeh yph ishywun fuvej ekocmy otitsypoo ugoockits oni soajeegaly ithac egritu asuxyloo eep nafoamtool ukymte owhogoa beethyz idapeek pooso ', '127.0.0.1', 1, 12, '1982-12-10 04:11:46'),
-(71, 'kusooch oxivitofon eglupta phoakruda upty elyrgy othypsoav oalso thidoaftu stoonsoo nithatoh ajee inukroagl zatcha phiss opsesho iglothuph imeepu eedsoo eevyco wupsyke oaburge pers ooroowu ', '127.0.0.1', 10, 12, '1999-06-24 22:10:38'),
-(72, 'oardyngyp joode ovoolra oapseeboa oortigr shohu oshi foo ysyrdirgir nihypsopt glipt glypsarte sychansod kansuz emeeksugru ilyphuvym echeex egloofyh eetulsedr toohe agriw umultooro oodroo ygerdag ruso ypsoas ohoptoo growh grav soopsut ysi upheewhy ', '127.0.0.1', 4, 12, '2007-02-22 20:59:13'),
-(73, 'wudseeboam oasteerge astalej nimperevu eetsoav oah melsefteeb ifotooth zeedit uzoadang neept ymackeehel kixe astogiwhi phyds unoadrol mugl zekarylru astoozad osoh ', '127.0.0.1', 9, 12, '1972-03-04 21:21:02'),
-(74, 'dophu thi ynolt oocmyc rodryrsee kigli axyksedy ewhoawhaph uglood oojym glyptast upsy dalsirtad toocuzo ibistoagl vosoon upt vawh ', '127.0.0.1', 1, 12, '1983-10-13 17:35:25'),
-(75, 'anomsoa xeeboapy oaderdis zangotyk isheboaj grimsy che stusewaf ileboose gliksorg foazu oovoawox hoopastoa theems ujolrartu jast iwhonusith xoagro ysath ', '127.0.0.1', 10, 12, '1990-07-28 04:04:55'),
-(76, 'ogur oomtygreri stognaksoo ytedynee eecug ehunistylt wyfteeb cakrugagny ptoabeps imox bymt vidri aptostoax zoglihoart yde oatsi ninge eepitchy yglila opsa cidrecmoa xuporsybu che vemsoav noo ', '127.0.0.1', 1, 12, '2010-08-25 02:35:50'),
-(77, 'oongyl chomt chee oaftak wumix phep eeragra ynuthoamso ilo keestee ikats raksoasee thuckoap grurgys ooressix girdee thochu idoaksooft oowheesix inikoo yzoaro ', '127.0.0.1', 9, 12, '1990-05-15 00:31:25'),
 (78, 'ookegnyssy oadsoor ptoal ufuw ooxi moo eempadem footh beepsopa yhoa ypoachoo ypseephush tiphuvist xurdah ', '127.0.0.1', 2, 13, '1981-01-05 08:19:25'),
 (79, 'cyb soghoapoo tiwhacoaz thi xoojekishu gleewhoapi whupoa ubee eeksujup efomteech akysocic whyrdavel opeegna stafu iph eda ucicmostov uth boo ', '127.0.0.1', 1, 13, '1997-03-25 06:44:36'),
-(80, 'cho stee eboam glu ixemtyn gree eergithe asixomtyc shyz abooteef stoat oaltoop eekogleecu zordav ipt akagloor oagoaboojy staftoo isoksinys vako goateenych ugroan epsoagra vutsyckuwu omol xoglylyph gloagoobu ocopse ymu ', '127.0.0.1', 9, 13, '1970-08-30 09:40:43'),
 (81, 'yrigroothu bickegn eewaphigh psymsoo asomun oopoof osu xoodeer ypsoaj eejoag ootuj ptoo egre voaserad ganuckuh tyzast iwhoa enawignee colsicuse ozusoteep yptekegoow weeth ojoam ipt rocketsoo zartoosti zoj obootheeck bosho geeroolef cox ', '127.0.0.1', 3, 13, '1977-10-04 18:31:48'),
 (82, 'chooralt ypowh eertuche eth idugneelt eemsyd ekookr eeg peecheth eeckivoa awha iburtekeev eesha oapsa ooc woow oacoakem gokroz ooxo edyf oot daloakelta psem ookoost ywoaxa uwhoashi larg oars che mybe ', '127.0.0.1', 4, 13, '1989-02-15 18:57:11'),
-(83, 'ebagiheft oostoocma xig ixognymyxo oafa tomy psongewest sexixups obessy ptol oakysa stidamp eengemi exaloalu asoo eersoorsy oongumsy eengisy jee greerte xooxooth uvempygh eedolt ', '127.0.0.1', 9, 13, '1978-12-27 05:11:34'),
 (84, 'hump yhyrtefe ekuksoatch seeth psod ujeeh seeshomo whoaltoaf whe ogloanusta gonilr oosigroo xeglyrg ', '127.0.0.1', 4, 13, '2006-05-10 12:33:11'),
 (85, 'ywoolux ewo uhesikree lirg ebo jomoav oonipteegl sta uzu phegy ikuchysu beeheku opeeg oogriloolr pheeglydr phizyth hyri grexovylru psa compoo ooci psy oawe boojo ', '127.0.0.1', 10, 14, '2011-05-08 03:10:47'),
 (86, 'aphoa oognodra ketchodruw soat ojoangocm omij roa chyh feex eevacma estah eruthygrir toaps sothygl izult nov whepob ishewu xooshetyke wheezaph gloro groaksach thooloansi oowhi yceecmohi ', '127.0.0.1', 1, 14, '1995-01-27 08:18:07'),
 (87, 'stecmo stychudr eechoa ibuk eshoa phoazulito adeti igipydirsy coj evatchocmo esanizudr lap ptoshoa raxeer emeghyv efafuno amoo ihilresh hul ', '127.0.0.1', 3, 14, '1985-02-27 06:38:02'),
 (88, 'enewhe azywhane toogre roo ubeerdoo ineef vood shimaltud reetho stoadsols rurgeetcha yfeloat pybargyts oak ', '127.0.0.1', 2, 14, '2003-03-18 13:16:08'),
-(89, 'egl uree eeloakoagn otym kerg ogrit gru stukrighi gleeruth eroa aglopsymev soos oogawawo oadu custamtyr eethog tud eengurgoos yvi oartoon vakri ', '127.0.0.1', 9, 14, '1980-08-10 07:51:39'),
-(90, 'aps hoka kucap ymun ywachognaz ofepsu gleecoonsa yphy choks ynuwhe eery achapt itignu doach oawheecydi ', '127.0.0.1', 9, 14, '1984-09-21 23:47:40'),
-(91, 'oglaxuni doame uzepeesoa coogr oowadri wit phamterti ezukredro chy iwhuthoak aze oorsekseby oogusseky ystomutu meenopsoop ijeckojyd ijersu ethywavook oaw ', '127.0.0.1', 9, 14, '1998-10-29 04:00:13'),
-(92, 'thi usteehap chamsyj yshig choahawik gloa ugrostee mams eemp lyvilte okee toawyhusti egloah eekrezehem ximpuxersa oocick noost anythysh udyckoaxi exylt fucmu shy osuda oongylo ', '127.0.0.1', 9, 14, '2011-09-20 18:05:05'),
 (93, 'thydr eew ysyjutcho furdy eeb ocooho biwhinoft whonsoo birt ceevi oshuphacha tyksans eewh tyteep afon oal xaz shyx oal oakuj seewoako ooj xooro peloaz ythoophas thinsebel ', '127.0.0.1', 4, 14, '1978-12-04 07:53:56'),
-(94, 'toahest owee ywo unumirdu oagrodsyha gloap uglevyca lalsapsubu oampyksoom toathoptu moonyn kek oagnudsoa yxikrafyp whoachah foacha veevapteph oapsokru ', '127.0.0.1', 9, 15, '1987-09-03 07:47:22'),
 (95, 'yboompy eetee ustytejowa phifetchin aboa xoalest iredseka cookolid zexoo stomtoac zoakoshit ozoocoaf peegloja ', '127.0.0.1', 3, 15, '1993-02-23 22:22:55'),
 (96, 'yglunuvoa tulubogny ysty ixyngoa varso foagrol phijirif ptoo eecmolr oogoghe xafepoatso awh ptuph phod doocos oabyme grensoow ', '127.0.0.1', 2, 15, '1975-12-04 02:47:24'),
 (97, 'gloa oro kyftoalrar odyt boa utooshymp pipipsyds oofuh chuphuleed gekraho ixeeloo leebuf ptalruj eegykoagr jeesileko vopt ocyrgoamy ymooltishi sissylsaju chirsatsaz hoo ptucoa wooptu whedroon ', '127.0.0.1', 1, 16, '1988-10-12 20:37:41'),
@@ -308,39 +368,39 @@ INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES
 (105, 'ush yzyb oampoord gremoa eroopseeh vidim ovurootch zoo ptaks uthoo uth nusolruc steeltad psojawaf eemsyruj zeepta toociza deeptooxyg ', '127.0.0.1', 2, 17, '1979-03-11 15:05:14'),
 (106, 'zoa chej ogrosizy edoopsy acaksagruc stu whi whoo eegnymso pheeshuv avu stil eecmootch awheem oagritchu ijoan oonsu dabo iwh cik ', '127.0.0.1', 3, 17, '1999-10-03 04:38:58'),
 (107, 'reepsowhac fosto choo zidr eecmapsaz thywu ulinseenso ihoocmo psigelse glocma itagn nucmyglods ideeboo xeehysigri oacmuf ostuwh shy awheesy enimed icissan eewhe xapturdyma aneekr okoops cykoakree ', '127.0.0.1', 1, 17, '1993-05-15 10:50:19'),
-(108, 'onadefipty ysu ykegha baftoampoo oakr norgoacmil meltempoow boogroo oogecm tertutch nokooftov eeli sajizopyga cymte oave ozadyck oxewo pewha ycip stengoa ustoabooth hyt comtym ', '127.0.0.1', 9, 17, '1975-04-02 19:35:33'),
-(109, 'owoafeerta eecools eemsoo koly ejydru opot zoosty oakro veewheegee vophee eec anulreeg seegiw ', '127.0.0.1', 9, 17, '1979-07-15 09:30:40'),
-(110, 'ysu unyvigywer psi oshophoom ybeetchee ygonsoa dif atylsez afoam poothy izoah oossiz salry xoaviwaz dytsoogn seecininoa ynody oosoo otees azulree ', '127.0.0.1', 9, 17, '1971-11-30 14:08:41'),
 (111, 'ozyrgeev oagny odub merteet glum oagnareecy xoo shev iwheehevyw ophojoaf ocharapt eekseech shej meesod ziltas chyth oheev ree sho iglept ooje fee ynoarsee nohoabipys eef ', '127.0.0.1', 4, 18, '1996-03-28 14:34:00'),
-(112, 'oorgitsooj chickykoob sho whoh lifad boapyju eensuxemec punaryckee avotsag efusog eptefopen oguf fyph steelreeb chifeel mushipatha ', '127.0.0.1', 9, 18, '1979-10-14 21:25:04'),
 (113, 'doogreesoa ofoogh igloolo aduwhagiwh agruthoow soaxeewhok oogrythe nocket taz avoogerde teefyji codazu aphemee etyltadry poothee choo gowin oateedoo oduwoor optox adad joa zehytchu oorga ykignup tucomsi uwebocmyt inethygl efoodro ', '127.0.0.1', 4, 18, '2007-03-22 12:21:53'),
-(114, 'buptolro omort oodro oow yzoz eevoa ytyts pognyfeb whi stutoak ethee estyf stitsot ugrik oavympimt grymsooj eegrees cylsav irogr zochuvoa axegringo oolruwoaj xigry zoagich eko ximta ygl riss yliweega zevickera sokoapu atho echoomo egrich xoanyst oadsave ', '127.0.0.1', 9, 18, '1994-12-08 02:00:36'),
 (115, 'dehoo shixepy gyw izuwu uphoogryc omuf ata koavogl eelteegr gleecoort gethy oolralru xamybewycm pharsa owood eglugixeh sostokekr athozefy ootocm coshumoart ozoazoo she chonsudru hyji oogurg befte yjicoothyv ysoalta yphavab wohys yptoagi gle igradooni whoos thugoash eekseeh ', '127.0.0.1', 1, 18, '1983-04-04 05:19:02'),
 (116, 'recmoashat tupyc ochyp goasukyb ohu storsucmyc psylro ukoapsux sto ugr hekenecomt uboan makirgee ixaloawoa mulsyxu cixongupt ukugn whoshymu oshoa def ', '127.0.0.1', 3, 19, '1996-07-20 01:27:06'),
 (117, 'ysimomsoo exoc rechi ehir oodeeroaf epsygresoo todoo vicods stoarde groaphoan vafoam grym mooch kynoo phudse roogro ypsoo onoviphu ', '127.0.0.1', 1, 19, '1996-09-17 19:17:16'),
 (118, 'uwh kev gyftoast awessoart oong gloxe phoodra lolrax isycumpyv yshul jywaphoamy stoj whoolsoaph ucoadree fyrtagluh loa ', '127.0.0.1', 2, 19, '1974-02-21 15:17:25'),
-(119, 'oodoolej owips pty gleewh shy ethigrafyn ovu rewhinoo oolitu thoa uhyltur oompi ootchoch cylry cholra cecm oakrix ufo oroadroamt lyphewho xemsy eeshust ojooj heeboazy eglo ', '127.0.0.1', 9, 19, '1972-06-24 15:54:23'),
 (120, 'orelre ihy oarteh yshejubec ducas noateenej cudra ones whorgo wewhocki uthacix emel machag ybympivec ', '127.0.0.1', 4, 19, '2000-03-25 04:15:52'),
 (121, 'groaphoowu glugreglu cufeegr ifeks ejeelsycko eteezat ycuth ifyfi che oacudsa uhuv ethoawysh emoamsa ulissu gree mighyk oomsuloavo eedr ethupsugr ucoacitch oatuce bisoashe psotchakr oamsu eegr obompi jept ugre mexoo yhynsung ichophigr ', '127.0.0.1', 3, 19, '2008-10-26 23:14:19'),
 (122, 'oadsognee igocma zoosih voawel yps opsoalikoo oolrysta joozeeshee iroafezuty ymoothe ugraj loob ceelaroa psoawoad shocmopim cichith grilrety feeco gomo ciptulsong oodreckyp bycheg oax ', '127.0.0.1', 3, 19, '2009-08-30 16:38:17'),
-(123, 'ootessoap eegheebass oan ted mibeze gleethyls sikrerge oova zeekeesyj nucmewhogi reb ijyrdosty ryhoapoo temt oowoaly izoodafy toj thoa pelremu pti thacme awh hypso phycor ', '127.0.0.1', 9, 20, '1999-09-21 06:43:10'),
-(124, 'gacmob eezoltiz eeseengimp agr efuptod ime ooshy gupansecmi oomp oansyghirg phoostu foothejygr whuheveel ooj erughynso oonsirsoa ilawa eelri ', '127.0.0.1', 10, 20, '2004-12-24 16:12:13'),
-(125, 'ahoa usoorsooch eeshooptuz atootho avuh oth shileet aveeghoa phoagl goat apuxej ooracis onavoov noaci agr psack ytoalri ythoathen cyd okuckeez ', '127.0.0.1', 4, 20, '1990-02-13 12:51:23'),
 (126, 'whekroov fetsoveel ovyh thoa oagl ujemsic ohowonewu uwits whav fyksast yglez bolroods oluri xoostag iwositaha ujojif uwhiga fooch footafush whic groo roapeec peebed ', '127.0.0.1', 10, 21, '1993-07-19 17:32:34'),
 (127, 'oartaftu enum eexep reewheci stytchy soolud awhoaj uxo ufonoa epasyglib wibygh nunsoa egi ryglisseew whee seech igoasock zongyrdyh soaxoo ', '127.0.0.1', 3, 21, '1970-02-07 08:29:52'),
 (128, 'eezy eptoloza ishisuwhee xirt shaveemto ooth oochu glynoap custoorsa joagrof cengoocor ceetobephe usocheelr shyrseeks neek apocmecmi ', '127.0.0.1', 3, 21, '1973-03-19 16:40:34'),
 (129, 'sezutymtob groodro owhoo hoaneeptoa ragry ygaw oakoans ekydsort veekooxu itampyr diftuftee booteratu eersookroa phic eestuz steefe edoo oostyhoo rimsahe toachuh ilomso she rab leecha och psuka themongof hyxywh roax chamtobuch glus ', '127.0.0.1', 3, 21, '1992-12-10 16:31:02'),
 (130, 'uxaboab udoar eepoomtuge hix oni griks avicm nolsex goophoowoa gelegr pho pexiphiksa umoang tuptogy eeds teereegrig eglyceec whodorsisy egrep otatch unisoath uphiwi oabeleersy adux leez ', '127.0.0.1', 3, 21, '1988-03-23 11:27:16'),
 (131, 'zygrensoar sho afeet dunsoomso choagyhi mitu newha daduft psyj woalam yhyhoa jidre owobu raxurdoath steengo jee ', '127.0.0.1', 3, 21, '1981-02-13 11:41:09'),
-(132, 'uxee ipsiny kimpem pathoptots eephonguhy ada shift fard agleekopsu weepechyz ymowho mycm oashapit efeech get doomuwhoo doapt inezugav icha ', '127.0.0.1', 9, 21, '2003-01-16 17:40:28'),
 (133, 'eezoameeks cha ytyno pheckog aneetife deth odirtadobo zoagoo gloob ichop glo ybeev ubodiw juf irood foop oanyf gleegnupt toafeecak ', '127.0.0.1', 3, 21, '1986-10-10 02:09:23'),
 (134, 'gooshoofoo ushujokeev igeepsoo idortoomee eest gliwumte chifexest athoapsee leboodroa psyrtu huchugluks vedri xickeek paftoacujy stogl eptoog uforegro rozuhak sug ptee esup pseepesoob whinughix ', '127.0.0.1', 4, 21, '2002-02-05 04:57:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ranks`
+--
 
 CREATE TABLE IF NOT EXISTS `ranks` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `ranks`
+--
 
 INSERT INTO `ranks` (`ID`, `name`) VALUES
 (0, 'Banned'),
@@ -351,6 +411,12 @@ INSERT INTO `ranks` (`ID`, `name`) VALUES
 (5, 'GMOD'),
 (6, 'Admin');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recover`
+--
+
 CREATE TABLE IF NOT EXISTS `recover` (
   `ID` mediumint(9) NOT NULL AUTO_INCREMENT,
   `ID_usr` int(5) NOT NULL,
@@ -358,29 +424,13 @@ CREATE TABLE IF NOT EXISTS `recover` (
   `IP` varchar(15) NOT NULL,
   `time` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
-INSERT INTO `recover` (`ID`, `ID_usr`, `code`, `IP`, `time`) VALUES
-(6, 0, '8d48b9ab00f7b2924376d3b52f0c27d6', '127.0.0.1', '2013-05-26 17:05:05'),
-(7, 0, '3ec8059aa7f38c77192f7d84ea020e01', '127.0.0.1', '2013-05-26 17:05:53'),
-(8, 0, 'bb44da122be0027cccf269d26707b77f', '127.0.0.1', '2013-05-26 17:05:53'),
-(9, 0, '0b2901f7e483a158be081617435a9e44', '127.0.0.1', '2013-05-26 17:05:23'),
-(10, 0, 'd9611bd3275db131343cd169617616a2', '127.0.0.1', '2013-05-26 17:05:49'),
-(11, 0, 'f5252d899d9c240b5c0bec3976d29af0', '127.0.0.1', '2013-05-26 17:05:33'),
-(12, 0, '5a5168bfb8d11332d59d4d7e164e69ee', '127.0.0.1', '2013-05-26 17:05:58'),
-(13, 0, '850d15f87e41e48112a9f3abfccb1d1f', '127.0.0.1', '2013-05-26 17:05:26'),
-(14, 1, 'a00eb8d5af7a4a708e38fe6225772a95', '127.0.0.1', '2013-05-26 17:05:36'),
-(15, 1, 'e6219c7127ab869980587a9e7382d838', '127.0.0.1', '2013-05-26 17:05:56'),
-(16, 1, 'f3b307614675a1af9e4dd628bba06f4d', '127.0.0.1', '2013-05-26 17:05:23'),
-(17, 1, '1c14479da5b05f55cabbd3cf3986ca3f', '127.0.0.1', '2013-05-26 17:05:57'),
-(18, 1, '998158b0f88e6b9d21ca071587a59fad', '127.0.0.1', '2013-05-26 17:05:41'),
-(19, 1, '530656ffb35f9b017c82f2be6655e46b', '127.0.0.1', '2013-05-26 17:05:58'),
-(20, 1, 'b0ba592f6fbaf4936d1800a7310a452a', '127.0.0.1', '2013-05-26 17:05:12'),
-(21, 1, 'a4689740685ff2190355ac7632ea28d4', '127.0.0.1', '2013-05-26 17:05:13'),
-(22, 1, '54b6dddef03abd043c25061359af39f1', '127.0.0.1', '2013-05-26 18:05:44'),
-(23, 1, 'bc153e96f7c587c8a0e95d5192a8b54b', '127.0.0.1', '2013-05-26 18:05:10'),
-(24, 1, '1c62a1eeeeb24f4a22ff47db276e2ac9', '127.0.0.1', '2013-05-26 18:05:43'),
-(25, 1, '3f59a28f7af4019b3c1580ac15b730cb', '127.0.0.1', '2013-05-26 18:05:54');
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subcat`
+--
 
 CREATE TABLE IF NOT EXISTS `subcat` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -394,6 +444,10 @@ CREATE TABLE IF NOT EXISTS `subcat` (
   KEY `parent_ID` (`parent_ID`),
   KEY `min_rank` (`min_rank`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
+
+--
+-- Dumping data for table `subcat`
+--
 
 INSERT INTO `subcat` (`ID`, `parent_ID`, `name`, `index_`, `desc_`, `min_rank`, `visible`) VALUES
 (1, 1, 'General discussion', 1000, 'General educated discussions', 1, 1),
@@ -431,6 +485,12 @@ INSERT INTO `subcat` (`ID`, `parent_ID`, `name`, `index_`, `desc_`, `min_rank`, 
 (51, 7, 'Random', 1000, 'Only VIP see this', 1, 1),
 (52, 7, 'hidden VIP', 999, 'This should not be visible unless your an admin', 3, 0);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subforum`
+--
+
 CREATE TABLE IF NOT EXISTS `subforum` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -443,6 +503,10 @@ CREATE TABLE IF NOT EXISTS `subforum` (
   KEY `parent_ID` (`parent_ID`),
   KEY `min_rank` (`min_rank`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+
+--
+-- Dumping data for table `subforum`
+--
 
 INSERT INTO `subforum` (`ID`, `name`, `parent_ID`, `visible`, `min_rank`, `index_`, `desc_`) VALUES
 (1, 'Fun', 3, 1, 1, 1000, ''),
@@ -460,6 +524,12 @@ INSERT INTO `subforum` (`ID`, `name`, `parent_ID`, `visible`, `min_rank`, `index
 (13, 'Security', 44, 1, 1, 1000, ''),
 (14, 'other', 44, 1, 1, 1000, '');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `topics`
+--
+
 CREATE TABLE IF NOT EXISTS `topics` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `sub` tinyint(1) NOT NULL DEFAULT '0',
@@ -473,6 +543,10 @@ CREATE TABLE IF NOT EXISTS `topics` (
   KEY `by` (`by_`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
+--
+-- Dumping data for table `topics`
+--
+
 INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, `IP`) VALUES
 (1, 0, 'sha chigru gleec gemtuka eegre papsyh yrooheev iboordoaz thooch yxiptu gly pse egroboar googluster oachoatoop uwupti ', 'ootchi zoaloapt astyloo ', 1, '2007-12-03 02:09:04', 10, '127.0.0.1'),
 (2, 1, 'phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee mphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy aksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee makphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy suv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy ', 'zitam ape feeja ', 1, '2000-02-16 02:01:11', 1, '127.0.0.1'),
@@ -485,7 +559,6 @@ INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, 
 (9, 0, 'the axamp chem cempeerg shu tethoof eegnolta thegnooz erybyftu ihoakrucm wher pidsee ageets igroa glehymp opteegl sha eemp lee anooptee oaftecke iru ajal iryngux loopeve icusoa ipoo oow rikooss gybuhox wheegly jar chiv obophoafec ', 'stoamt upsegrojy das ', 2, '2010-12-10 01:01:16', 3, '127.0.0.1'),
 (10, 0, 'ecudri chemacka groabog coanukicha biftythycu eexewhopho oass ypessaf nodroshoal domi noapse huhigh oozissoa hursoanguk oanso stoa sungij arergood midroals vyz ozasoach olegys machewhoss phaneemsoo nylrep ypsu oapooz ugryphygli oageem ipoaxat churgosooc compuchu oxoosheeg ogloobiw ', 'jerufte atartoock gyptij ', 2, '2000-02-02 13:46:21', 1, '127.0.0.1'),
 (11, 0, 'fee pooree boomycy oadrekroos jecikseep ooghahov eedsipsoos noamud pej veeroanoof iheex ugulsotchi vaphoarsu isoomu grojossy ooryzons edoohocm chipsyc ', 'alorg phomsucky eegnodryb echah ', 2, '2010-07-14 15:06:50', 2, '127.0.0.1'),
-(12, 0, 'boa ymard gikessoa oaw edoofoowe thakseena ysarta pamugnidr sumsyc ptinsoawaf hoost groa foono whaghoaki pseeksakr sotchyhim avengidsi oavanso ', 'steb siph phi eedry azu agrofoapo ', 2, '2003-12-11 00:50:52', 9, '127.0.0.1'),
 (13, 0, 'oagh oockic gragrixos ugregu vexamtetoo exav ixoohe psesi ogred pyrtu lypema psyps oophaw oonsoa shojanativ ech pso thu rixy apteele phyftur ', 'sto eensa oanoo ', 2, '2002-11-29 02:10:05', 2, '127.0.0.1'),
 (14, 0, 'ugoa zith olijiw ysh epseb tengeeshy oavuds ooz kotee ychesajoa eec oavygroo racmu ', 'ufalti stiltast sho ymoostep ', 2, '2005-03-02 08:37:54', 10, '127.0.0.1'),
 (15, 0, 'ala vagy eephyp jitsadsowh yceejeez oackoa iwomtywhoo opsefoad mikywi aheev ozy cywuchel koax keds ogruz oorgeex gleece ogle ilooso ipag ', 'oart leltilsig cha ', 2, '2007-05-06 13:06:43', 10, '127.0.0.1'),
@@ -493,8 +566,13 @@ INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, 
 (17, 0, 'mersacm lees veftux ecergeeph ekoo ipadseemen saksylr zoalos owu yba eetchaftoa shee beepapsugl agyptoa baphoa thoxeksuds zoakooxet vimpu akyglolug sahyg eek grersinsod doochoozis wholaloa agr xoost emis okyta estor oag ptoo ', 'xileel goothez vizosooj ewhyz adeegopy ', 3, '2006-05-01 20:16:56', 1, '127.0.0.1'),
 (18, 0, 'othymyni eeceleeth stoovogh fifick chic vee foacuwhu shooroath jugoa ahuphupse oodsilsilr thavo koogroo dyvoad oalrih ', 'reedeexez eegeegub estywob ', 3, '2012-08-02 11:49:47', 4, '127.0.0.1'),
 (19, 0, 'ykoa epoocheef ptoavyz eshunood yboophe oov pterteew azagib ysite oawhazile pheeh iwetch uwooshiz doavoch ptoakeron igilsoob oohoaby edoapsi cyw oolikeecox eer oan oardaghyr achepsogle cheerseh optypt irooweek ephacogle ', 'toaboojeh xajeegh tocooloak hytchubyc oat ', 3, '2004-12-10 05:20:36', 1, '127.0.0.1'),
-(20, 0, 'oastu dehev izidroat jelroa jam edecmulryj ywufyz eze choachase gridoa ooz aryks greck apsona weenanyje yshy ptudryshy whoanooks nee ophaphoale ivakoadry larseeps ugatsaksub ', 'wuthih coagigleg eekats uloajoack glu ', 3, '2007-02-16 03:13:35', 9, '127.0.0.1'),
 (21, 0, 'puwywyrd upt aboordaz kat cidses aheeltor achoasofa ixoarga buftydr egra wylroab ywhee oongoopt roftyxyg fupsoofim wherge itophoogr xockywev dudruw glissu ylishoar oate upicom yreeksec ptod stexu ymookryfty ', 'ebee eegr cyrtuj choax ', 3, '2011-07-08 07:11:15', 2, '127.0.0.1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wall`
+--
 
 CREATE TABLE IF NOT EXISTS `wall` (
   `ID` int(5) NOT NULL AUTO_INCREMENT,
@@ -509,6 +587,10 @@ CREATE TABLE IF NOT EXISTS `wall` (
   `like` longtext NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- Dumping data for table `wall`
+--
 
 INSERT INTO `wall` (`ID`, `by`, `to`, `privacy`, `date`, `txt`, `child`, `IP`, `geo`, `like`) VALUES
 (1, 1, 1, 0, '2013-07-07 15:38:01', 'Testing to write on MY wall', 0, '127.0.0.1', 'NONE', ''),
@@ -528,27 +610,48 @@ INSERT INTO `wall` (`ID`, `by`, `to`, `privacy`, `date`, `txt`, `child`, `IP`, `
 (15, 1, 2, 0, '2013-07-18 05:47:45', 'test', 7, '31.4.245.152', 'NONE', ''),
 (16, 1, 2, 0, '2013-07-18 05:47:56', 'test', 0, '31.4.245.152', 'NONE', '');
 
+--
+-- Constraints for dumped tables
+--
 
+--
+-- Constraints for table `categories`
+--
 ALTER TABLE `categories`
   ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`min_rank`) REFERENCES `ranks` (`ID`);
 
+--
+-- Constraints for table `memberinfo`
+--
 ALTER TABLE `memberinfo`
-  ADD CONSTRAINT `memberinfo_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `members` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `memberinfo_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `members` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Constraints for table `posts`
+--
 ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`by_`) REFERENCES `memberinfo` (`ID`),
-  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`parent_ID`) REFERENCES `topics` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`parent_ID`) REFERENCES `topics` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`by_`) REFERENCES `memberinfo` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Constraints for table `subcat`
+--
 ALTER TABLE `subcat`
-  ADD CONSTRAINT `subcat_ibfk_1` FOREIGN KEY (`parent_ID`) REFERENCES `categories` (`id`),
+  ADD CONSTRAINT `subcat_ibfk_1` FOREIGN KEY (`parent_ID`) REFERENCES `categories` (`ID`),
   ADD CONSTRAINT `subcat_ibfk_2` FOREIGN KEY (`min_rank`) REFERENCES `ranks` (`ID`);
 
+--
+-- Constraints for table `subforum`
+--
 ALTER TABLE `subforum`
   ADD CONSTRAINT `subforum_ibfk_1` FOREIGN KEY (`parent_ID`) REFERENCES `subcat` (`ID`),
   ADD CONSTRAINT `subforum_ibfk_2` FOREIGN KEY (`min_rank`) REFERENCES `ranks` (`ID`);
 
+--
+-- Constraints for table `topics`
+--
 ALTER TABLE `topics`
-  ADD CONSTRAINT `topics_ibfk_1` FOREIGN KEY (`by_`) REFERENCES `memberinfo` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `topics_ibfk_1` FOREIGN KEY (`by_`) REFERENCES `memberinfo` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

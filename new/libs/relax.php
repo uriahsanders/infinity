@@ -28,6 +28,7 @@ if (!defined("INFINITY"))
 interface iDatabase {
 	public static function getInstance(); //get the instance of Database
 	public function query($query); //run the query
+	public function lastInsertId(); //get the last inserted ID
 }
 /**
 * Database - singelton databas class
@@ -118,6 +119,16 @@ class Database implements iDatabase
 			System::Error($e->getMessage());
 		}
 	}
+	
+	/**
+	*	lastInsertId - PDO function to get last id
+	*	
+	*	@access public
+	*/
+	public function lastInsertId()
+	{
+		return $this->_db->lastInsertId();
+	}
 }
 ////////////////////////////////////////////////////////////////////////
 //	Database ENDS
@@ -172,8 +183,13 @@ interface iLogin {
 	public static function logout($planned = true); //loggs the user out
 	public function setSessionForUser($ID); //set the login session for the user
 	public function loginUser(); //tries to login a user
-	//private function BruteForceProtection($usr); //brute force protection for loginUser
+		//private function BruteForceProtection($usr); //brute force protection for loginUser
 	public function ActivateAccount($code); //activate the user account
+	public function RegisterUser($POST); // register a new user.
+		//private function registerError($msg); //small function for errors in RegisterUser
+		//private function addNewUser($usr, $pwd, $email, $code); the function to add the user to the database
+		//private function ValidateRegistration($POST); //function to validate the post data for RegisterUser()
+		//private function SendActivationMail($username, $email, $code); //send the activation email
 }
 /**
 *	Login class - login functions
@@ -409,6 +425,161 @@ class Login implements iLogin
 		}
 		return 3; //did not find the code
 	}
+	
+	
+	/**
+	*	RegisterUser - Register a new user
+	*
+	*	@access public
+	*	@param array $POST - The POST data
+	*/
+	public function RegisterUser($POST)
+	{
+		if (!System::checkPG("POST", array("reg_usr", "reg_pwd", "reg_pwd2", "reg_email", "reg_code")) && System::cleanPG("POST", false)) //also cleans from nullbyte attack
+			$this->registerError("MD");
+			
+		$Validate = $this->ValidateRegistration($POST); //Validate all the data
+		if ($Validate !== true)
+			$this->registerError(json_encode($Validate));
+			
+		$USR 	= $POST["reg_usr"]; //easier to write like this
+		$PWD 	= $POST["reg_pwd"]; //same
+		$EMAIL 	= $POST["reg_email"]; //same
+		$CODE 	= md5("infinity-" . $USR . "-" . $EMAIL . date("Y-m-d H:i:s")); //activation code
+		
+		if(!$this->addNewUser($USR, $PWD, $EMAIL, $CODE)) //add a new user
+			$this->registerError("There was an unexpected error, errorcode:[REG-D1]");
+				
+		if(!$this->SendActivationMail($USR, $EMAIL, $CODE))
+			$a = 0; //$this->registerError("There was an unexpected error, errorcode:[REG-E1]"); //this will throw on localhost if you dont have a smpt server configured
+			
+		$_SESSION['reg_email'] = $EMAIL;
+		$_SESSION['reg_done'] = "YES";
+		header('Location: /member/register/done');
+		die();
+	}
+	/**
+	*	registerError - throws error for user
+	*
+	*	@acecess private {@see RegisterUser()}
+	*/
+	private function registerError($msg)
+	{
+		$_SESSION['reg_error']=$msg;
+		header('Location: /member/register/error');
+		die();
+	}
+	/**
+	*	addNewUser - add a new user to database.
+	*
+	*	@access private {@see RegisterUser()}
+	*	@param string $usr, $pwd, $email, $code - data for the new user, $code = activation code from RegisterUser
+	*	@return boolean
+	*/
+	private function addNewUser($usr, $pwd, $email, $code)
+	{
+		$IP = System::getRealIp();
+		$PASSWORD = $this->Bcrypt->hash($pwd); //password with salt and quadro md5
+		$DATE     = date("Y-m-d H:i:s"); // date in mysql format
+		  
+		  
+		// [TODO] write a error handeler in Database class and check if theres a way to insert to both talbes at the same time wit same ID.
+		$res = $this->_db->query("INSERT INTO members (`username`, `password`, `email`, `date`, `IP`, `activatecode`) VALUES (?, ?, ?, ?, ?, ?)", $usr, $PASSWORD, $email, $DATE, $IP, $code);
+		if (!$res)
+			return false; //error with insert
+		$prevID = $this->_db->lastInsertId();
+		//var_dump($prevID);
+		//die();
+		$res2 = $this->_db->query("INSERT INTO memberinfo (`ID`, `username`) VALUES (?, ?)", $prevID, $usr);
+		if (!$res2)
+			return false; //error with insert
+		return true;		
+	}
+	
+	/**
+	*	ValidateRegistration - validates all the data for registration
+	*
+	*	@access private {@see RegisterUser()}
+	*	@returns mixed - Array if validation fails, boolean if validation is successfull
+	*/
+	private function ValidateRegistration($POST)
+	{
+		$ERRORMSG = array();
+		//Username 
+		$USR     	=	$POST['reg_usr'];
+		$USR_PAT 	= 	"/^[a-zA-Z0-9_-]*$/";
+		$USR_MAX 	= 	16;
+		$USR_MIN 	= 	4;
+		//Email
+		$EMAIL		=	$POST["reg_email"];
+		$EMAIL_PAT	=	"/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/";
+		$EMAIL_MAX	=	50;
+		$EMAIL_MIN	=	6;
+		//Password
+		$PWD		=	$POST["reg_pwd"];
+		$PWD2		=	$POST["reg_pwd2"];
+		$PWD_PAT	=	"/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/";
+		$PWD_MIN	=	6;
+		$PWD_MAX	=	25;
+		// Validate Username
+		if ($this->_Members->userExist($USR, "username")) 
+				array_push($ERRORMSG, "That username is already taken.");
+		if (!preg_match($USR_PAT, $USR)) 
+				array_push($ERRORMSG, "That's an invalid username.");
+		if (strlen($USR) < $USR_MIN || strlen($USR) > $USR_MAX) 
+				array_push($ERRORMSG, "The username is to short or long");
+			
+		// Validate Email
+		if ($this->_Members->userExist($EMAIL, "email")) 
+				array_push($ERRORMSG, "The email is already used.");
+		if (strlen($EMAIL) > $EMAIL_MAX || strlen($EMAIL) < $EMAIL_MIN || !preg_match($EMAIL_PAT, $EMAIL)) 
+				array_push($ERRORMSG, "That is not an valid email.");
+		
+		// Validate Password
+		if (!preg_match($PWD_PAT, $PWD)) 
+				array_push($ERRORMSG, "That is not an secure password.");
+		if (strlen($PWD) < $PWD_MIN || strlen($PWD) > $PWD_MAX) 
+				array_push($ERRORMSG, "The password is to short or long.");
+		if ($PWD != $PWD2) 
+				array_push($ERRORMSG, "The passwords do not match.");
+		
+		//Validate Terms of agrement
+		if (!isset($POST['reg_terms']))
+				array_push($ERRORMSG, "You need to accept the terms.");
+		//Validate Captcha code
+		if (!chk_crypt($_POST['reg_code']))
+				array_push($ERRORMSG, "The captcha code is wrong.");
+		
+		if (count($ERRORMSG) != 0)
+			return $ERRORMSG;
+		return true;
+	}
+	
+	/**
+	*	SebdActivationMail - send the activation mail to the user
+	*
+	*	@access private
+	*	@param string $username, $email, $code - info to send the mail
+	*	@return boolean
+	*/
+	private function SendActivationMail($username, $email, $code)
+	{
+		$subject = "Activate your account";
+		$message =  "<p>Welcome to Infinity,<br />".
+					"To validate your account click <a href =\"http://".$_SERVER['HTTP_HOST']."/member/activate/".$code."\"> here.</a><br />".
+					"If you have any questions or problems please contact us at support@infinity-forum.org<br />".
+					"Thank You,<br />".
+					"Infinity Staff<br /></p>";
+		$from = "donotreply@infinity-forum.org";
+		$headers = "From:" . $from . "\r\n";
+		$headers .= "MIME-Version: 1.0" . "\r\n";
+		$headers .="Content-type: text/html; charset=iso-8859-1" . "\r\n";
+		
+		$suck = mail($email,$subject,$message,$headers);
+		if (!$suck)
+			return false;
+		return true;
+	}
 }
 ////////////////////////////////////////////////////////////////////////
 //	Login ENDS
@@ -429,8 +600,8 @@ class Login implements iLogin
 */
 interface iMembers {
 	public static function getInstance(); //get the instance of self
-	public function getUserData($find); //returns the data for the user with ID or username match
-	public function userExist($find); //return boolean true if user ID or username exist
+	public function getUserData($find, $what = "."); //returns the data for the user with ID or username match
+	public function userExist($find, $what = "."); //return boolean true if user ID or username exist
 	public function getUsrPicture($ID);
 }
 /**
@@ -504,10 +675,12 @@ class Members implements iMembers
 	*
 	*	@acess public
 	*	@returns boolean
+	*	@param string $find - username, email or ID
+	*	@param string $what	- specify what $find is username|email|ID
 	*/
-	public function userExist($find)
+	public function userExist($find, $what = ".")
 	{
-		if ($this->getUserData($find) == false)
+		if ($this->getUserData($find, $what) == false)
 			return false; //does not exist
 		return true; //does exist
 	}
@@ -570,6 +743,7 @@ interface iSystem {
 	public static function checkPG ($type = "GET", $array); //check if global variables GET or POST is set from array
 	public static function ValidateToken(); //validate CSRF token
 	public static function StartSecureSession(); //start a secure session
+	public static function cleanPG($type = "GET", $xss = true); //clean post/get variables from null-byte and xss for data not storing in database (thats auto in Database::query)
 }
 /**
 *	System class
@@ -708,6 +882,29 @@ class System
 				true
 			);
 		}
+	}
+	
+	
+	/**
+	* 	cleanPG() - clear POST/GET data from null-byte attack and xss (optional before output)
+	*
+	*	@access public
+	*	@static
+	*	@param string $type - GET or POST
+	*	@param string $xss	- clean from xss tries aswell? Default=true
+	* 	@return boolean|array - false=found null-byte else array with clean
+	*/
+	public static function cleanPG($type = "GET", $xss = true)
+	{
+		$data = array(); // our clean data
+		foreach( ((strtoupper($type) == "GET") ? $_GET : $_POST) as $key => $value) //check if get or post
+		{	
+			if (strpos($value, chr(0))) //check for null-byte
+				return false; //null byte found
+			if ($xss)
+				$data[$key] = htmlspecialchars($value); //clean from xss
+		}
+		return $data; //return clean array.
 	}
 }
 ////////////////////////////////////////////////////////////////////////

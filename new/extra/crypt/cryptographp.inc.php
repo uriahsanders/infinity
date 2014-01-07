@@ -25,6 +25,9 @@ if  ((!isset($_COOKIE['cryptcookietest'])) and ($_GET[$_GET['sn']]==""))
 if ($_GET[$_GET['sn']]=="") unset ($_GET['sn']); 
 //relax.php session_start_secure()
 //session_start();
+define("INFINITY", true);
+include_once("../../libs/relax.php");
+System::StartSecureSession();
 
 
 // N'accepte que les fichiers de config du meme répertoire

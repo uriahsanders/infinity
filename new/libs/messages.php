@@ -23,11 +23,15 @@ else if (isset($_GET['feedback']) && $_GET['feedback'] == "error")
 }
 else if (isset($_SESSION['reg_error']) && strlen($_SESSION["reg_error"]) > 0)
 {
-    $arr = json_decode($_SESSION['reg_error']);
+	$txt = $_SESSION["reg_error"];
+    $arr = json_decode($txt);
+	if (json_last_error() === 0)
+	{
+		$txt = "";
+		foreach($arr as $val)
+			$txt .= $val . "<br />";
+	}
     unset($_SESSION['reg_error']);
-    $txt = "";
-    foreach($arr as $val)
-        $txt .= $val . "<br />";
     echo $start . "MsgBox(\"Error\",\"".$txt."\" ,3);" . $end;
 } 
 else if (isset($_SESSION['reg_done'])) 
