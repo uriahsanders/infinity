@@ -1,4 +1,58 @@
 $(document).ready(function(e) {
+    //validate.init();
+});
+
+
+var validate = validate || new function()
+{
+	var Public = {}, Private = {};
+	
+	Public.init = function()
+	{
+	}
+	
+	Public.checkDub = function(element) 
+	{
+		var name 	= $(element).attr("id");
+		var value 	= $(element).val();
+		element.setCustomValidity("");
+		if (element.validity.valid)
+		{
+			return $.ajax({
+				type: "GET",
+				url: "/libs/check_dub.php",
+				data: name + "=" + value,
+				async: true,
+				cache: true,
+				success: function(data) { 
+					if(data == 0)
+						return false; //does not exist
+					else if (data == 1) {
+						element.setCustomValidity(((name == "reg_usr")? "Username taken" : "That email is already in use"));
+						$("#reg_sub").click();
+						return true; //does exist
+					}
+					else
+						MsgBox("Error", "There was some kind of error, <br>please refresh and try again ",3);
+					return false; //error but keep going
+					
+				}
+			});
+		}
+	}
+	Public.register = function()
+	{
+		document.getElementById('reg_pwd2').setCustomValidity("");			
+		if(document.getElementById("reg_pwd").value != document.getElementById("reg_pwd2").value)
+		{
+			document.getElementById('reg_pwd2').setCustomValidity('Passwords must match');
+			$("#reg_sub").click();
+		}
+	}
+	return Public;
+}
+/*
+$(document).ready(function(e) {
 	//some simple restriction settings
 	var usr_minlen = 3;
 	var usr_maxlen = 20;
@@ -225,3 +279,4 @@ $(document).ready(function(e) {
 	
 	
 });
+*/

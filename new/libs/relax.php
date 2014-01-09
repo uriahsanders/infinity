@@ -693,7 +693,7 @@ class Members implements iMembers
 	*	@access public
 	*	@return integer - number of hits, should max be 1
 	*/
-	public function checkDub($what = "username", $value)
+	/*public function checkDub($what = "username", $value)
 	{
 		if (strlen($value) <= 0 || strlen($value) >= 60)
 			System::Error("Incorrect size on value");
@@ -708,7 +708,7 @@ class Members implements iMembers
 				return true;
 		}
 		return false;
-	}
+	}*/
 	
 	/**
 	*	getUsrPicture - get the picture of the user

@@ -2,16 +2,14 @@
     define("INFINITY", true);
     include_once('relax.php');
     
-    if (!isset($_GET['username']) && !isset($_GET['email']))
+    if (!isset($_GET['reg_usr']) && !isset($_GET['reg_email']))
         die();
     else
         $members = Members::getInstance();
-        
-        
-    if (isset($_GET['username'])) {
-        $results = $members->checkDub("username", $_GET["username"]);
-    } elseif (isset($_GET['email'])) {
-        $results = $members->checkDub("email", $_GET["email"]);
+    if (isset($_GET['reg_usr'])) {
+        $results = $members->userExist($_GET["reg_usr"], "username");
+    } elseif (isset($_GET['reg_email'])) {
+        $results = $members->userExist($_GET["reg_email"], "email");
     } else {
         die();
     }
