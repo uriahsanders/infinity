@@ -451,7 +451,7 @@ class Login implements iLogin
 			$this->registerError("There was an unexpected error, errorcode:[REG-D1]");
 				
 		if(!$this->SendActivationMail($USR, $EMAIL, $CODE))
-			$a = 0; //$this->registerError("There was an unexpected error, errorcode:[REG-E1]"); //this will throw on localhost if you dont have a smpt server configured
+			$this->registerError("There was an unexpected error, errorcode:[REG-E1]"); //this will throw on localhost if you dont have a smpt server configured
 			
 		$_SESSION['reg_email'] = $EMAIL;
 		$_SESSION['reg_done'] = "YES";

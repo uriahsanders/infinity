@@ -1,5 +1,7 @@
 2014-01-09
 			- Validation with HTML5, one thing missing...
+			- One thing fixed.... another thing broken...
+			- Another thing fixed ^_^
 2014-01-07
 			- fixed the registration so its in Login class.
 			- fixed Database relations for members and memberinfo

@@ -45,7 +45,7 @@
 	
 	if (!isset($_POST['rec_usr']) || strlen($_POST['rec_usr']) < 3)
 	{
-		error("Data missing, refresh the page and try again.");
+		error("Data missing or to short,<br>try again please.");
 	}
 	if (preg_match('/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/', $_POST['rec_usr'])) 
 	{
@@ -57,6 +57,10 @@
 		$type = "U";
 		$data = $members->getUserData($_POST['rec_usr'], "username");
 	}	
+	if ($data == false) 
+	{
+		error("That " . (($type == "E")? "email" : "username") . " was not found in our database.");
+	}
 	//$data 	= $member->getUsrData($ID); // i know we might already have the email but this way we are 100% sure we have it right
 	$ID = $data["ID"];
 	$email 	= $data['email']; //there we go
@@ -85,7 +89,7 @@
     $suck = mail($to,$subject,$message,$headers); 
 	if (!$suck)
 	{
-		error("There was an problem sending the mail, contact suport with errorcode: [RcE-1]");
+		//error("There was an problem sending the mail, contact suport with errorcode: [RcE-1]");
 	}
 	$hideemail  = strpos($email,"@"); //because of information disclosure we will not show them the full email registered
 	$hidelen 	= $hideemail - 3;

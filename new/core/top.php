@@ -318,9 +318,9 @@ if(!$logged)
                 <div class="box_cont">
                     <form action="/login/" method="post" id="login_frm">
                         Username:<br/>
-                        <input type="text" tabindex="1" name="usr" required id="login_usr" maxlength="20" /><br/>
+                        <input type="text" tabindex="1" name="usr" required pattern=".{3,16}" placeholder="Enter your username" id="login_usr" maxlength="20" /><br/>
                         Password:<br/>
-                        <input type="password" tabindex="2" name="pwd" required id="login_pwd" autocomplete="off" maxlength="30" /><br />
+                        <input type="password" tabindex="2" name="pwd" required pattern=".{3,16}" placeholder="Enter your password" id="login_pwd" autocomplete="off" maxlength="30" /><br />
                         <input type="hidden" name="token" value="<?php echo $token; ?>" />
                     	<?php
 						if (strpos($_SERVER['REQUEST_URI'], "?u=") !== false)
@@ -337,26 +337,7 @@ if(!$logged)
                     <div id="box_title">Register</div>
                     <div class="box_icon2"></div>
                 </div>
-                <div class="box_cont"><!--<div id="reg_errors">
-                           <div class="reg_error_usr">
-                               [+] Must be between 3 and 16 cahars, characters allowed are A-Z, a-z, 0-9, _- and .<br />
-                               [+] Might already be a user with that name.
-                           </div><div style="height:0px"></div>
-                           <div class="reg_error_pwd">
-                               [+] Must be between 6 and 25 cahars.<br />
-                               [+] The password must contain a capitalized and lower-case letter, and a number.
-                           </div>
-                           <div class="reg_error_pwd2">
-                               [+] Password does not match.
-                           </div>
-                           <div class="reg_error_email">
-                               [+] Email is not valid.<br />
-                               [+] There might already be a user with that email registered.
-                           </div><div style="height:65px"></div>
-                           <div class="reg_error_code">
-                               [+] You need to enter the code from above here.
-                           </div>
-                       </div>-->
+                <div class="box_cont">
                    <form action="/member/register" method="post" id="reg_form">
                        Username:<br/>
                        <input type="text" name="reg_usr" id="reg_usr" maxlength="16" onblur="validate.checkDub(this)" required pattern="[a-zA-Z0-9_-]{3,16}" placeholder="Enter a username" title="Must be between 3 and 16 cahars, characters allowed are A-Z, a-z, 0-9, _- and ."/><br/>
@@ -373,7 +354,6 @@ if(!$logged)
                        <input type="hidden" name="reg_token" value="<?php echo $token; ?>" />
                        <input type="submit" class="reg_btn" id="reg_sub" value="Register" onclick="validate.register();"/><br /><br />
                    </form>
-                   <!--<div class="reg_btn">Register</div><br /><br />-->
                 </div>
             </div>
             <div class="inner_box3">
@@ -383,13 +363,8 @@ if(!$logged)
                 </div>
                 <div class="box_cont">
                    <form action="/recover/" method="post" id="rec_form">
-                   <div id="rec_errors">
-                           <div class="rec_error_usr">
-                               [+] Theres no one with that email or username registered.
-                           </div>
-                       </div>
-                          Username or Email:<br/>
-                       <input type="text" name="rec_usr" required id="rec_usr" maxlength="30" /><br/>
+                        Username or Email:<br/>
+                       <input type="text" name="rec_usr" required pattern=".{3,50}" id="rec_usr" maxlength="30" placeholder="Input username or email"/><br/>
                        <input type="hidden" name="token" value="<?php echo $token; ?>" />
                        <input type="submit" value="Recover" class="rec_btn" />
                    </form>

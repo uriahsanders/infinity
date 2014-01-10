@@ -1,16 +1,27 @@
 $(document).ready(function(e) {
-    //validate.init();
+    validate.init();
 });
 
 
 var validate = validate || new function()
 {
 	var Public = {}, Private = {};
-	
+	Public.handlers = [];
 	Public.init = function()
 	{
+		Private.icon();
 	}
-	
+	Private.icon = function() 
+	{
+		$("input:required").each(function(index, element) {
+            document.getElementById(element.id).onkeyup = function(e) {
+                if ( $(this).val().length !== 0) {
+					$(this).css("background-position", "right top");
+					document.getElementById(this.id).onkeyup =  null;
+				}
+            };
+        });
+	}
 	Public.checkDub = function(element) 
 	{
 		var name 	= $(element).attr("id");
@@ -46,7 +57,6 @@ var validate = validate || new function()
 		if(document.getElementById("reg_pwd").value != document.getElementById("reg_pwd2").value)
 		{
 			document.getElementById('reg_pwd2').setCustomValidity('Passwords must match');
-			$("#reg_sub").click();
 		}
 	}
 	return Public;
