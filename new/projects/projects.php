@@ -7,7 +7,7 @@ class Projects{
 	Projects Comments SQL database Structure:
 	ID | projectID | date | posterID | body
 	Workspace Data SQL database structure:
-	ID | projectID | type | title | body | date | level | user | data | lastUser | branch
+	ID | projectID | type | title | body | date | level | user | data | lastUser | branch | session
 	*/
 	//Ill just make all public stuff static because we only need one instance of Projects
 	const LIMIT = 10; //how many results to retrieve

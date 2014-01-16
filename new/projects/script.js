@@ -47,8 +47,8 @@
 				Projects.handle_projectClick($(this).attr('id').split('-'));
 			});
 			//prevent default on clicking project links so whole page
-			//doesnt need to be refreshed but they still have the option to
-			//open in a new tab
+			//doesnt need to be refreshed since we handle with js & ajax
+			//but they still have the option to open in a new tab if they want
 			$(document).on('click', 'a.projectLink', function(e) {
 				e.preventDefault();
 			});
@@ -140,9 +140,11 @@
 		//PRIVATE DATA
 		//shorthand ajax so we can bulk handle errors and successes
 		function ajax(type, request, callback) {
-			//check token with every request
-			if (typeof request === 'string') request += '&token=' + $('#token').val();
-			else request.token = $('#token').val();
+			//check token with every POST request
+			if(type === 'POST'){
+				if (typeof request === 'string') request += '&token=' + $('#token').val();
+				else request.token = $('#token').val();
+			}
 			$.ajax({
 				type: type,
 				data: request,
@@ -165,7 +167,7 @@
 					signal: 'search',
 					query: query
 				}, function(res) {
-					//#main is container for conent
+					//#main is container for content
 					$('#main').html(res);
 				});
 			},

@@ -8,3 +8,8 @@
 <?php
     include_once(PATH ."core/main_end_foot.php");
 ?>
+
+
+
+<script type="text/javascript" src="../js/tinymvc.js"></script>
+<script type="text/javascript" src="script.js"></script>
