@@ -1,37 +1,38 @@
 <?php
+$projects = new Projects();
 switch($_SERVER['REQUEST_METHOD']){
 	case 'POST':
 		if(!$_POST['token'] || $_POST['token'] != $_SESSION['token']) die(); //CSRF defense
 		switch($_POST['signal']){
 			case 'create':
-				die(Projects::create($_POST['projectName'], $_POST['short'], $_POST['description'], $_POST['image'], $_POST['video']));
+				die($projects->create($_POST['projectName'], $_POST['short'], $_POST['description'], $_POST['image'], $_POST['video']));
 			case 'delete':
-				die(Projects::delete($_POST['id']));
+				die($projects->delete($_POST['id']));
 			case 'update':
-				die(Projects::update($_POST['id'], $_POST['projectName'], $_POST['short'], $_POST['description'], $_POST['image'], $_POST['video']));
+				die($projects->update($_POST['id'], $_POST['projectName'], $_POST['short'], $_POST['description'], $_POST['image'], $_POST['video']));
 			case 'comment':
-				die(Projects::comment($_POST['id'], $_POST['comment']));
+				die($projects->comment($_POST['id'], $_POST['comment']));
 			case 'join':
-				die(Projects::join($_POST['id'], $_POST['bool']));
+				die($projects->join($_POST['id'], $_POST['bool']));
 		}
 		die();
 	case 'GET':
 		switch($_GET['signal']){
 			case 'search':
-				$res = Projects::search($_GET['query']);
+				$res = $projects->search($_GET['query']);
 				die(show('projects', $res));
 			case 'getOne':
-				$res = Projects::getOne($_GET['id']);
+				$res = $projects->getOne($_GET['id']);
 				die(projectTemplate($res['ID'], $res['projectname'], $res['creator'], $res['date'], $res['popularity'], $res['members'], $res['short'], $res['description'], $res['image'], $res['video']));
 			case 'retrieve':
-				$res = Projects::retrieve($_GET['category']);
+				$res = $projects->retrieve($_GET['category']);
 				die(show('projects', $res));
 			case 'comments':
-				$res = Projects::comments($_GET['projectID']);
+				$res = $projects->comments($_GET['projectID']);
 				die(show('comments', $res));
 			case 'loadMore':
 				$action = $_GET['action'];
-				$res = Projects::load_more($_GET['results'], $action, $_GET['category'], $_GET['query'], $_GET['projectID']);
+				$res = $projects->load_more($_GET['results'], $action, $_GET['category'], $_GET['query'], $_GET['projectID']);
 				if($action == 'project'){
 					die(show('comments', $res));
 				}else if($action == 'searching' || $action == 'category'){
