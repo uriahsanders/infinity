@@ -18,6 +18,7 @@
 		//elements are what we need to open on edit in a new window with togetherJS
 		elements: ['document', 'task', 'event', 'table', 'graph', 'sketch', 'file', 'note'],
 		project: $('#hidden_project').val(), //current project (creator/projectname)
+		projectID: $('#hidden_projectID').val(), //current project ID
 		branch: 'Master', //current branch
 		elementID: null, //current element ID
 		elementType: null,
@@ -26,12 +27,12 @@
 			Observers can make suggestions, view content
 			Members can create and edit everything except for tasks and events, and can post to Stream
 			Supervisors can create and edit tasks and events, and delete anything but tasks and events
-			Managers can add members, create branches, change project information (but not the name)
-			Admins can remove members and assign privileges (not other admins or the creator), delete/edit branches and project info
-			The Creator can pass lead, remove any member change any privilege
+			Managers can add members, create branches, change project information (but not the name), delete tasks and events
+			Admins can remove members and assign privileges (not other admins or the creator), delete/edit branches and project info, launch project
+			The Creator can pass lead, remove any member change any privilege, change project name
 			And, of course, all privileges can also do all of the things that their inferiors can
 		*/
-		privileges: ['Observer', 'Member', 'Supervisor', 'Manager', 'Admin', 'Creator'],
+		privileges: ['Observer', 'Member', 'Supervisor', 'Manager', 'Admin', 'Creator'], //0 - 5
 		numResults: 0 //how many results do I currently have?
 	});
 	var model = Model.data;
@@ -117,10 +118,10 @@
 			//also stick projectname and branch in with every request
 			if (type === 'POST') {
 				if (typeof request === 'string')
-					request += '&token=' + $('#token').val() + '&project=' + model.project + '&branch=' + model.branch;
+					request += '&token=' + $('#token').val() + '&projectID=' + model.projectID + '&branch=' + model.branch;
 				else {
 					request.token = $('#token').val();
-					request.project = model.project;
+					request.projectID = model.projectID;
 					request.branch = model.branch;
 				}
 			}
@@ -172,6 +173,22 @@
 					elementID: id
 				}, function(res) {
 
+				});
+			},
+			createElement: function(form){
+				ajax('POST', {
+					signal: 'createElement',
+					form: form
+				}, function(res) {
+					Model.modify('elementID', res);
+				});
+			},
+			createElementVersion: function(){
+				ajax('POST', {
+					signal: 'createElementVersion',
+					form: form
+				}, function(res) {
+					Model.modify('elementID', res);
 				});
 			},
 			//go to edit url for current element
@@ -342,14 +359,6 @@
 
 				});
 			},
-			messageMember: function(form) {
-				ajax('POST', {
-					signal: 'messageMember',
-					form: form
-				}, function(res) {
-
-				});
-			},
 			getAdvancedMemberInfo: function() {
 				ajax('POST', {
 					signal: 'getAdvancedMemberInfo',
@@ -358,30 +367,7 @@
 
 				});
 			},
-			//Documents
-			createDocumentVersion: function(form) {
-				ajax('POST', {
-					signal: 'createDocumentVersion',
-					form: form
-				}, function(res) {
-
-				});
-			},
-			// updateDocumentVersion: function() {
-
-			// },
 			//Tasks
-			createTask: function(form) {
-				ajax('POST', {
-					signal: 'createTask',
-					form: form
-				}, function(res) {
-
-				});
-			},
-			// updateTask: function() {
-
-			// },
 			changeTaskStatus: function() {
 				ajax('POST', {
 					signal: 'changeTaskStatus',
@@ -391,14 +377,6 @@
 				});
 			},
 			//Events
-			addEvent: function(form) {
-				ajax('POST', {
-					signal: 'addEvent',
-					form: form
-				}, function(res) {
-
-				});
-			},
 			goToEvent: function() {
 				ajax('POST', {
 					signal: 'goToEvent',
@@ -407,46 +385,6 @@
 
 				});
 			},
-			// updateEvent: function() {
-
-			// },
-			//Tables
-			createTableVersion: function(form) {
-				ajax('POST', {
-					signal: 'createTableVersion',
-					form: form
-				}, function(res) {
-
-				});
-			},
-			// updateTable: function() {
-
-			// },
-			//Graphs
-			createGraph: function(form) {
-				ajax('POST', {
-					signal: 'createGraph',
-					form: form
-				}, function(res) {
-
-				});
-			},
-			// updateGraph: function() {
-
-			// },
-			//Sketches
-			createSketch: function(form) {
-				ajax('POST', {
-					signal: 'createSketch',
-					form: form
-				}, function(res) {
-
-				});
-			},
-			//can only add to existing sketches because canvas can only save as image
-			// addToSketch: function(){
-
-			// },
 			//Files
 			addFile: function() {
 
@@ -455,14 +393,6 @@
 
 			}
 			//Notes
-			createNote: function(form) {
-				ajax('POST', {
-					signal: 'createNote',
-					form: form
-				}, function(res) {
-
-				});
-			},
 			//notes are not a collaborative effort, so update func is here
 			updateNote: function(form) {
 				ajax('POST', {
@@ -473,22 +403,6 @@
 				});
 			},
 			//Suggestions
-			createSuggestion: function(form) {
-				ajax('POST', {
-					signal: 'createSuggestion',
-					form: form
-				}, function(res) {
-
-				});
-			},
-			dismissSuggestion: function(form) {
-				ajax('POST', {
-					signal: 'dismissSuggestion',
-					form: form
-				}, function(res) {
-
-				});
-			},
 			approveSuggestion: function() {
 				ajax('POST', {
 					signal: 'approveSuggestion',
