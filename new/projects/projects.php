@@ -12,7 +12,7 @@ class Projects{
 	*/
 	const LIMIT = 10; //how many results to retrieve
 	private $sql;
-	public function __constructor(){
+	public function __construct(){
 		$this->sql = Database::getInstance();
 	}
 	public function date(){
