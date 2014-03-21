@@ -246,12 +246,8 @@ if(!$logged)
                             <a class='member_link'href=\"/lounge/\">Lounge</a>&nbsp;
                             <!--<a class='member_link'href=\"/projects/\">Projects</a>&nbsp;-->
                             <a class='member_link'href=\"/workspace/\">Workspace</a>&nbsp;
-                            <a class='member_link'href=\"/workspace/\">Members</a>&nbsp;
-                            <a class='member_link'href=\"/workspace/\">Unread</a>&nbsp;
-                            <!--
-                            <a href=\"http://retube.com\">Porn</a>&nbsp;
-                            <a href=\"http://pornhub.com\">MORE!!!</a>
-                            -->
+                            <a class='member_link'href=\"/users/\">Members</a>&nbsp;
+                            <a class='member_link'href=\"/pm/\">Unread</a>&nbsp;
                         </div>
                     </div>
                     <div id=\"member_bar_icons\">";

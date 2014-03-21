@@ -9,7 +9,7 @@ if (!defined("INFINITY"))
     <div class="boxx"><div class="boxx-main"></div></div>
     <div class="totop"></div> 
     <div id="foot" class="bar" style="position:absolute;">
-        © Copyright 2013 <a href="/" title="Infinity-forum.org">Infinity-forum.org</a> - All Rights Reserved.
+        © Copyright 2014 <a href="/" title="Infinity-forum.org">Infinity-forum.org</a> - All Rights Reserved.
     </div>
     </div>
     </body>

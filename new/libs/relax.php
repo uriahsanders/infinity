@@ -686,31 +686,6 @@ class Members implements iMembers
 	}
 	
 	/**
-	*	checkDub - checks if email or username alread exist
-	*
-	*	@param string $what - email or username(Default)
-	*	@param string value - the value
-	*	@access public
-	*	@return integer - number of hits, should max be 1
-	*/
-	/*public function checkDub($what = "username", $value)
-	{
-		if (strlen($value) <= 0 || strlen($value) >= 60)
-			System::Error("Incorrect size on value");
-			
-		if ($what == "username")
-			if ($this->userExist($value))
-				return true;
-		else 
-		{
-			$result = $this->_db->query("SELECT * FROM members WHERE `email`=?", $value);
-			if ($result->rowCount() !== 0)
-				return true;
-		}
-		return false;
-	}*/
-	
-	/**
 	*	getUsrPicture - get the picture of the user
 	*
 	*	@access public
@@ -756,7 +731,7 @@ class System
 	{
 		$links = array( //all links that we will have at the top
 			"/" => "Start",
-			"/member/"=>"",
+			"/lounge/"=>"",
 			"/projects/" => "Projects",
 			"/forum/" => "Forum",
 			"/about/" => "About",
@@ -764,7 +739,7 @@ class System
 			"/help/" => "Help"
 		);
 		if (Login::checkAuth(true)) // if loggedin show the lounge link as well
-			$links["/member/"] = "Lounge";               
+			$links["/lounge/"] = "Lounge";               
 	  
 		foreach ($links as $k => &$n) {
 			if ($n != "") { // only if name is not empty like member is as default
