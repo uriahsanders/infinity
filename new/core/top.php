@@ -33,16 +33,18 @@ if(!$logged)
             if ($logged)
                 echo '<link rel="stylesheet" type="text/css" href="/css/member.css" />'."\n";        
         ?>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
         <script type="text/javascript" src="/js/jquery-1.9.0.min.js"></script>
-        
         <script src="/js/jquery-ui.min.js" type="text/javascript"></script> 
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script src="/js/mix.js" type="text/javascript"></script>
         
         <?php 
             if(defined("PAGE") && PAGE == "start") 
             { 
+                echo '<link rel="stylesheet" type="text/css" href="/css/start.css" />'; 
                 echo '<link rel="stylesheet" type="text/css" href="/extra/slider/slide.css" />'; 
                 echo '<script type="text/javascript" src="/extra/slider/jquery.nivo.slider.js"></script>';
             }
@@ -55,6 +57,11 @@ if(!$logged)
         		echo '<script src="/extra/imgUpload/js/script.js"></script>';
 				
 				//echo '<script src="/js/wall.js"></script>';
+            }
+            else if(defined("PAGE") && PAGE == "lounge") 
+            {
+                echo '<link rel="stylesheet" type="text/css" href="/css/lounge.css" />';
+                echo '<script src="/js/lounge.js" type="text/javascript"></script>';
             }
             else if(defined("PAGE") && PAGE == "forum") 
             {
