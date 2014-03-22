@@ -11,6 +11,7 @@ include_once($_SERVER['DOCUMENT_ROOT']."/config.php");
 ///////////////////////////////////
 //	Autostart
 ///////////////////////////////////
+
 System::StartSecureSession();
 
 
@@ -264,11 +265,11 @@ class Login implements iLogin
 	public static function logout($planned = true)
 	{
 		$_SESSION = array(); //clear the values
-		session_regenerate_id(true); //generate new session id.
-		$new_id = session_id(); //save the id for later
+		//session_regenerate_id(true); //generate new session id.
+		//$new_id = session_id(); //save the id for later
 		session_unset(); //unset session
 		session_destroy(); //destroy the session
-		session_id($new_id); //set the session id to new generated
+		//session_id($new_id); //set the session id to new generated
 		
 		if (!$planned)
 		{
@@ -827,36 +828,34 @@ class System
 	*/
 	final public static function StartSecureSession() //starting a secure session
 	{
+		// this is actually the recomended way sense php 5.4 to check for an active session.
+		// or session_status == PHP_SESSION_NONE
 		if (session_status() != PHP_SESSION_ACTIVE) //check if there is one atm
 		{
-			$cookie_name = "infinity";
+			$cookie_name = "Infinity"; //cookie_name
 			$time = time() + 12096000; //2 weeks
 			
-			if (isset($_COOKIE[$cookie_name]) && !preg_match('/^[a-z0-9-,]{22,40}$/i', $_COOKIE[$cookie_name]))//check session ID so its not manipullated
-					unset($_COOKIE[$cookie_name]); //removing cookie, incorrect
+			if (isset($_COOKIE[$cookie_name]) && !preg_match('/^[a-z0-9-,]{22,40}$/i', $_COOKIE[$cookie_name]))//check session ID so value looks OK
+				unset($_COOKIE[$cookie_name]); //removing cookie, incorrect value
 			
 			$currentCookieParams = session_get_cookie_params(); // getting active session parameters
-			
+
 			session_set_cookie_params(  //putting a new secure cookie
-				$time,  //this is somehow not working, therefore setcookie at the bottom
+				$time, 
 				$currentCookieParams["path"],  
 				$currentCookieParams["domain"],  
 				$currentCookieParams["secure"],  
 				true //http_only
 			); 
-			session_name('infinity'); 
-			session_start(); //starting session
-			session_regenerate_id(true); //regenerate ID to prevent hijacking
+			session_name($cookie_name); //set the name
 			
-			setcookie($cookie_name, //set the current cookie again(to get the time and http_only right) [TODO]
-				session_id(), 
-				$time,
-				$currentCookieParams["path"],
-				$currentCookieParams["domain"],
-				$currentCookieParams["secure"],
-				true
-			);
+			$timeout = ini_get("max_execution_time"); //get curent setting
+			ini_set("max_execution_time", 5); //should never be more then 5 sec to start a session
+			session_start(); 
+			ini_set("max_execution_time", $timeout); //restore do default
+			session_regenerate_id(); //regenerate ID to prevent hijacking
 		}
+		
 	}
 	
 	
