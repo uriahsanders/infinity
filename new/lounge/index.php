@@ -19,10 +19,11 @@
         <a class="fa fa-envelope-o fa-2x lounge-icon white"></a>&emsp;
         <a class="fa fa-user fa-2x lounge-icon yellow"></a>&emsp;
         <a class="fa fa-comments fa-2x lounge-icon lightgreen"></a>&emsp;
-        <a class="fa fa-cogs fa-2x lounge-icon grey"></a>
+        <a class="fa fa-cogs fa-2x lounge-icon grey"></a>&emsp;
+        <a class="fa fa-folder fa-2x lounge-icon grey"></a>
     </div>
     <br><br>
-    <div style="text-align:left;">
+    <div>
         <div class="panel">
                     <div class="panel-heading">
                       <span class="panel-title">News</span>

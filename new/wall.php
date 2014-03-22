@@ -1,7 +1,7 @@
 <?php
-	$me = $member->getUsrInfo($_SESSION['ID']);
-	$wall = new wall;
-	$sys = new sys;
+	$me = $member->getUserData($_SESSION['ID']);
+	$wall = Wall::getInstance();
+	$sys = new System;
 	
 ?>
 
@@ -17,13 +17,13 @@
             <?php
 			
 				$TheWall = $wall->getWall($ID);
-				while($row = mysql_fetch_array($TheWall))
+				while($row = $TheWall->fetch())
 				{
-					$by = $member->getUsrInfo($row['by']);
+					$by = $member->getUserData($row['by']);
 					echo '<div class="pro_usr_stream_log">';
 					echo '<a href="/user/'.$by['username'].'"><img src="/images/user/'.$by['image'].'" class="pro_pic_tumb" /></a>';
 					echo '<div class="pro_stream_box" sID="'.$row['ID'].'">';
-					echo '<b><a href="/user/'.$by['username'].'">'.$by['username'].'</a> '.(($row['to'] != $row['by'])? " &raquo; <a href=\"/user/".$member->getUsrInfo($row['to'])['username']."\">". $member->getUsrInfo($row['to'])['username']."</a>" : "") . '</b> <i>'.$sys->timeDiff($row['date']).'</i>';
+					echo '<b><a href="/user/'.$by['username'].'">'.$by['username'].'</a> '.(($row['to'] != $row['by'])? " &raquo; <a href=\"/user/".$member->getUserData($row['to'])['username']."\">". $member->getUserData($row['to'])['username']."</a>" : "") . '</b> <i>'.$sys->timeDiff($row['date']).'</i>';
 					echo '<span class="pro_stream_s"><img src="/images/s.png" /></span>';
 					echo '<p>'. $row['txt'];
 					echo '<span class="pro_stream_l">'.$wall->getLikesCount($row['like']).' people(s) liked this</span><img src="/images/like.png" title="Like" class="stream_like_ico"></p>';
@@ -31,9 +31,9 @@
 					
 					$TheWallA = $wall->getWallA($row['ID']);
 					
-					while($row2 = mysql_fetch_array($TheWallA))
+					while($row2 = $TheWallA->fetch())
 					{
-						$by2 = $member->getUsrInfo($row2['by']);
+						$by2 = $member->getUserData($row2['by']);
 						echo '<hr>
 						<div class="pro_stream_log_a">
 							<a href="/user/'.$by2['username'].'"><img src="/images/user/'.$by2['image'].'" class="pro_pic_tumb_a" /></a>
@@ -64,7 +64,7 @@
             </div>
             
             
-            
+          
             
             
             

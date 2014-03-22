@@ -55,8 +55,8 @@ if(!$logged)
 				echo '<link href="/extra/imgUpload/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />';
 	        	echo '<script src="/extra/imgUpload/js/jquery.Jcrop.min.js"></script>';
         		echo '<script src="/extra/imgUpload/js/script.js"></script>';
-				
-				//echo '<script src="/js/wall.js"></script>';
+				//note
+				echo '<script src="/js/wall.js"></script>';
             }
             else if(defined("PAGE") && PAGE == "lounge") 
             {
@@ -300,7 +300,7 @@ if(!$logged)
                         </span>*/
 						
 						
-                        echo "<a href=\"/member/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
+                        echo "<a href=\"/lounge/settings.php\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
                         <!--Need messages icon here-->
                         <a href=\"/lounge/logout\"><img src=\"/images/logout.png\" alt=\"logout\" title=\"logout\" border=\"0\"/></a>
                     </div>

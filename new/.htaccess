@@ -125,6 +125,12 @@ RewriteCond %{QUERY_STRING} !marker
 RewriteRule ^/?projects\.php$ /projects [R=301,L]
 RewriteRule ^\/?projects\/?$ /projects.php?marker [L]
 
+#settings
+RewriteCond %{REQUEST_URI} ^/lounge/settings.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?lounge\/settings\.php$ /lounge/settings [R=301,L]
+RewriteRule ^\/?lounge\/settings\/?$ /lounge/settings.php?marker [L]
+
 RewriteCond %{REQUEST_URI} ^/libs/notification.php$
 RewriteCond %{QUERY_STRING} !marker
 RewriteCond %{QUERY_STRING} ID=([0-9]+)

@@ -74,8 +74,28 @@ $(document).ready(function(e) {
 			$(".boxx-main").attr("active", "1");
 			XY();
 		});
-	
-	
+	$(document).on('click', '.pro_usr_menu', function(){
+		$('.pro_usr_menu').attr('active', false);
+		$(this).attr('active', true);
+	});
+	//showing and hiding parts onclick
+	$(document).on('click', "#stream, #about, #resume, #skills, #photos", function(){
+		var id = $(this).attr('id');
+		if(!$('#pro_usr_'+id).is(':visible')){
+			$('.pro_usr_ele').hide();
+			if($('#pro_usr_'+id).html() == false){
+				$.ajax({
+					type: 'GET',
+					url: '../profile_handle.php',
+					data: {signal: 'getInfo', username: window.location.pathname.split('/')[2], what: id},
+					success: function(res){
+						$('#pro_usr_'+id).html(res);
+					}
+				});
+			}
+			$('#pro_usr_'+id).fadeIn();
+		}
+	});
 });
 var ftemp = "";
 setTimeout(function(){

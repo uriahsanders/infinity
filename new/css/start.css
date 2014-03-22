@@ -1,0 +1,30 @@
+.btn{
+	background: #000;
+	opacity: 0.4;
+	border: 1px solid #000;
+	border-radius: 3px;
+	color: #fff;
+}
+.panel-heading{
+	background:url('../images/broken_noise.png');
+	border: 1px solid #000;
+	border-radius: 3px;
+	padding: 8px;
+}
+.panel-title{
+	font-size: 1.1em;
+}
+.panel-body{
+	background:url('../images/gray_sand.png');
+	padding: 10px;
+	border: 1px solid #000;
+}
+.feature{
+	display: inline-block;
+}
+.lead{
+	font-size: 1.2em;
+}
+.i{
+	font-style: italic;
+}

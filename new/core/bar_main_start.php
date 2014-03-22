@@ -5,8 +5,8 @@
     if(defined("PAGE") && PAGE == "start") 
     {
         echo '
-        <div id="mid_bar" class="bar">
-            <a href="#" id="tour-link">Take a Tour</a>
+        <div id="mid_bar" class="bar"style="padding:0px;">
+            <a id="tour-link"style="color:#000"class="fa fa-play-circle fa-4x"></a>
         </div>';
     }
     ?>

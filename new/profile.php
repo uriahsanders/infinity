@@ -8,7 +8,7 @@
 	$member = Members::getInstance();
     if (isset($_GET['user']) && !empty($_GET['user']))
     {    
-        $ID = $member->getID($_GET['user'],"username");
+        $ID = $member->get($_GET['user'],"ID");
         
     }
     else 
@@ -20,7 +20,6 @@
     include_once(PATH ."core/bar_main_start.php");
     
 	
-	echo " [TODO] - does not work";
 	
     if (empty($ID))
         {
@@ -97,7 +96,7 @@
                     echo "<b>$data[points]</b><br />";
                 }
                 ?>
-                Ash-points</td>
+                Points</td>
             </tr>
         </table>
     </div>
@@ -105,7 +104,7 @@
         <div id="pro_user_friends_title">
         <?php // <--- THAT MOTHERFUCKER DID THE RANDOM LOGOUTS!!!!!! WHAT THA FUCK!!!!!!
             $friends = $member->getFriends($ID);
-            echo "<span>".count($friends)." Friends</span>"
+            echo "<span>".count($friends)." Friends</span>";
         ?>
         </div>
         <div id="pro_user_friends_pics">
@@ -156,7 +155,6 @@
         }
     ?>
     </div>
-        
         <?php
             if ($ID !== $_SESSION['ID'])
             {
@@ -188,20 +186,31 @@
         ?>
         
         
-    
     <span id="pro_usr_menu">
-        <span active>Stream</span>
-        <span>About</span>
-        <span>Resumé</span>
-        <span>Portfolio</span>
-        <span>Photos</span>
+        <span  id="stream"class="pro_usr_menu"active="true">Stream</span>
+        <span id="about"class="pro_usr_menu">About</span>
+        <span id="resume"class="pro_usr_menu">Resume</span>
+        <span id="skills"class="pro_usr_menu">Skills</span>
+        <span id="photos"class="pro_usr_menu">Photos</span>
     </span>
     <div id="pro_usr_main">
-        <div id="pro_usr_stream">
+        <div id="pro_usr_stream"class="pro_usr_ele">
         <?php
-           //include_once("wall.php");        
+           include_once("wall.php");        
 		   //error in wall.js so need to comment out for now here and top.php 
         ?>
+        </div>
+        <div id="pro_usr_about"class="pro_usr_ele"style="display:none">
+            
+        </div>
+        <div id="pro_usr_resume"class="pro_usr_ele"style="display:none">
+            
+        </div>
+        <div id="pro_usr_skills"class="pro_usr_ele"style="display:none">
+           
+        </div>
+        <div id="pro_usr_photos"class="pro_usr_ele"style="display:none">
+           
         </div>
     </div>
 </div>

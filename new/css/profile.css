@@ -208,7 +208,7 @@ body {
 #pro_usr_menu span:first-child {
 	margin-left:0;
 }
-#pro_usr_menu span:hover, #pro_usr_menu span[active] {
+#pro_usr_menu span:hover, #pro_usr_menu span[active=true] {
 	background:rgba(255,255,255,.2);
 	cursor:pointer;
 }

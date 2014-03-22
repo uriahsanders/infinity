@@ -68,6 +68,5 @@ $(document).ready(function(e) {
 			
 		
 	}
-	
 var Meee = $.parseJSON($("#Mee").val());
 });

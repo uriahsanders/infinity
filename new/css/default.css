@@ -415,7 +415,7 @@ display: inline-block;
     -ms-transform: scale(1);
     transform: scale(1);
 }
-#tour-link {
+/*#tour-link {
     font-size:150%;
     font-variant:small-caps;
     position:relative;
@@ -433,10 +433,10 @@ display: inline-block;
         inset 1px 0 1px rgba(255,255,255,0.2);
     box-shadow:
         inset 1px 0 1px rgba(255,255,255,0.2);
-}
+}*//*
 #tour-link:hover {
     background:rgba(255,255,255,.2);
-}
+}*/
 
 /* Member Login/Register/Recover boxes START */
 #box_top {
@@ -487,7 +487,7 @@ display: inline-block;
     height:100%
 }
 
-input:not([type='checkbox']):not([type='button']):not([type='radio']), textarea, #rec_f_pwd{        
+input:not([type='checkbox']):not([type='button']):not([type='radio']):not(.form-control), textarea:not(.form-control), #rec_f_pwd{        
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
     border-radius: 3px;
@@ -1271,3 +1271,11 @@ span.tooltip {
     left: 540px;
     top: 125px;
 }*/
+.form-control{
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid grey;
+}
+.lead{
+    font-size: 1.2em;
+}

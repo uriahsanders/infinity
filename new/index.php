@@ -152,7 +152,7 @@ include_once(PATH ."core/bar_main_start.php");
                       target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
                       if (target.length) {
                         $('html,body').animate({
-                          scrollTop: target.offset().top - 50
+                          scrollTop: target.offset().top
                         }, 1000);
                         return false;
                       }
