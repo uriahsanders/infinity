@@ -103,7 +103,6 @@ class Database implements iDatabase
 			$res = $this->_db->prepare($query); //starting prepared statement
 			if (!$res)
 				throw new Exception("wrong with query...");
-				
 			$args = func_get_args();  //Get all arguments
 			array_shift($args);//hides the $query argument
 			if (count($args) >= 1) // one or more?

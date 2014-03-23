@@ -53,8 +53,12 @@
 				e.preventDefault();
 			});
 			//actually creating a new project
-			$(document).on('submit', '#project-form', function() {
+			$(document).on('submit', '#project-form', function(e) {
+				e.preventDefault();
 				Projects.handle_createProject($(this).serialize());
+			});
+			$(document).on('click', '#new-project', function(){
+				$('#project-form').fadeToggle();
 			});
 			//entering a search request
 			$(document).on('submit', '#search-form', function() {
@@ -159,7 +163,7 @@
 		}
 		//PUBLIC DATA
 		return {
-			//MAIN FUNCS
+			//meat FUNCS
 			//lets make Router calls before ajax calls because Router purifies Model
 			search: function(query) {
 				Router.goTo('search/' + query);
@@ -167,8 +171,8 @@
 					signal: 'search',
 					query: query
 				}, function(res) {
-					//#main is container for content
-					$('#main').html(res);
+					//#meat is container for content
+					$('#meat').html(res);
 				});
 			},
 			//get one project
@@ -178,7 +182,7 @@
 					signal: 'getOne',
 					id: id
 				}, function(res) {
-					$('#main').html(res);
+					$('#meat').html(res);
 					//so, whether or not the project has been joined in stored in a hidden input
 					//so hide form if it has been joined and show it otherwise
 					//required boolean is the value of the hidden input
@@ -192,7 +196,7 @@
 					signal: 'retrieve',
 					category: where
 				}, function(res) {
-					$('#main').html(res);
+					$('#meat').html(res);
 				});
 			},
 			create: function(formData) {
@@ -200,8 +204,8 @@
 					Contents of formData:
 					projectName, short, description, image, video
 				*/
-				ajax('POST', 'signal=new-project&' + formData, function(res) {
-					console.log("Project was created.");
+				ajax('POST', 'signal=create&' + formData, function(res) {
+					console.log(res);
 				});
 			},
 			deleteOne: function(id) {
@@ -259,9 +263,9 @@
 					action: model.action, //what are we doing?
 					category: model.category,
 					query: model.query,
-					projectID: model.getOne === true ? $('#projectID').val() : -1;
+					projectID: model.getOne === true ? $('#projectID').val() : -1
 				}, function(res){
-					$('#main').append(res); //append results
+					$('#meat').append(res); //append results
 					model.results += model.limit;
 				});
 			},

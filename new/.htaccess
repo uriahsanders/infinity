@@ -119,12 +119,6 @@ RewriteCond %{QUERY_STRING} !marker
 RewriteRule ^/?about\.php$ /about [R=301,L]
 RewriteRule ^\/?about\/?$ /about.php?marker [L]
 
-#projects
-RewriteCond %{REQUEST_URI} ^/projects.php$
-RewriteCond %{QUERY_STRING} !marker
-RewriteRule ^/?projects\.php$ /projects [R=301,L]
-RewriteRule ^\/?projects\/?$ /projects.php?marker [L]
-
 #settings
 RewriteCond %{REQUEST_URI} ^/lounge/settings.php$
 RewriteCond %{QUERY_STRING} !marker

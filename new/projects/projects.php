@@ -1,9 +1,11 @@
 <?php
+define("INFINITY", true); // this is so the includes can't get directly accessed
+include('../libs/relax.php');
 //Projects page
 class Projects{
 	/*
 	Projects Page SQL database structure: ("short" is short description)
-	ID | projectname | creator | Date | Popularity | Members | short | description | category | image | video | launched
+	ID | projectname | creator | date | Popularity | members | short | description | category | image | video | launched
 	Projects Comments SQL database Structure:
 	ID | projectID | date | posterID | body
 	Workspace Data SQL database structure:
@@ -16,7 +18,7 @@ class Projects{
 		$this->sql = Database::getInstance();
 	}
 	public function date(){
-		return date("Y:m:d"); //temp (we want our date to be consistent)
+		return date("Y-m-d H:i:s"); //temp (we want our date to be consistent)
 	}
 	private function limit($start){
 		return "ORDER BY `date` LIMIT ".$start.", ".self::LIMIT;
@@ -47,29 +49,30 @@ class Projects{
 	//get all projects in category
 	public function retrieve($category, $start = 0){ //GET
 		//retrieve only information neccesary for a thumbnail
-		$result = $this->sql->query("SELECT (`ID`, `projectname`, `creator`, `date`, `popularity`, `short`, `image`, `launched`) 
+		$result = $this->sql->query("SELECT `ID`, `projectname`, `creator`, `date`, `popularity`, `short`, `image`, `launched` 
 			FROM `projects` WHERE `launched` = ? AND `category` = ? ".$this->limit($start), 1, $category);
 		return $this->db2arr($result);
 	}
 	//create a new project and a workspace for it
-	public function create($projectname, $short, $description, $image, $video){ //POST
+	public function create($projectname, $category, $short, $description, $image, $video){ //POST
 		//create project
 		$this->sql->query("INSERT INTO `projects` 
-			(`projectname`, `creator`, `date`, `popularity`, `short`, `description`, `image`, `video`, `members`, `launched`)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-			", $projectname, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video, json_encode($_SESSION['ID']), 0);
+			(`projectname`, `category`, `creator`, `date`, `popularity`, `short`, `description`, `image`, `video`, `members`, `launched`)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			", $projectname, $category, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video, json_encode($_SESSION['ID']), 0);
 		$projectID = $this->sql->lastInsertId();
+		echo "done";
 		//create master branch for workspace
-		$this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `title`, `date`, `by`, `branch`)
-			VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', 'Master', $this->date(), $_SESSION['ID'], 'Master');
-		//add privilege to workspace
-		$this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `branch`, `to`, `level`)
-			VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'privilege', 'Master', $_SESSION['ID'], 5);
+		// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `title`, `date`, `by`, `branch`)
+		// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', 'Master', $this->date(), $_SESSION['ID'], 'Master');
+		// //add privilege to workspace
+		// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `branch`, `to`, `level`)
+		// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'privilege', 'Master', $_SESSION['ID'], 5);
 	}
-	public function update($id, $projectname, $short, $description, $image, $video){ //POST
+	public function update($id, $projectname, $category, $short, $description, $image, $video){ //POST
 		$result = $this->sql->query("UPDATE `projects` SET 
-			`projectname` = ?, `short` = ?, `description` = ?, `image` = ?, `video` = ?
-			WHERE `ID` = ? AND `creator` = ?", $projectname, $short, $description, $image, $video, $id, $_SESSION['ID']);
+			`projectname` = ?, `category` = ?, `short` = ?, `description` = ?, `image` = ?, `video` = ?
+			WHERE `ID` = ? AND `creator` = ?", $projectname, $category, $short, $description, $image, $video, $id, $_SESSION['ID']);
 	}
 	public function comment($id, $body){ //POST
 		$result = $this->sql->query("INSERT INTO `projects_comments` (`projectID`, `date`, `posterID`, `body`)
@@ -82,7 +85,7 @@ class Projects{
 		return $this->db2arr($result);
 	}
 	//perhaps a bit misleading name. join() either removes or adds a member
-	public function join($projectID, $bool, $who = $_SESSION['ID']){ //POST
+	public function join($projectID, $bool, $who){ //POST
 		//get members from project
 		$result = $this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $projectID);
 		//get projects from session info
