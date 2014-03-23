@@ -1,4 +1,10 @@
 <?php
+/*
+	I get a headache just looking at this file.
+	restruct, rewrite or remove!
+	
+	/relax
+*/
 if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
 	

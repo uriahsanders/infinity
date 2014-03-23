@@ -1,4 +1,7 @@
 <?php
+/*
+	this file is called from ajax.
+*/
     define("INFINITY", true);
     include_once('relax.php');
     

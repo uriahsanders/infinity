@@ -1,4 +1,9 @@
 <?php
+/*
+	FriendSystem is already rewritten and will replace this file.
+	
+	/Relax
+*/
 	define("INFINITY", true);
 	include("relax.php");
 	if(!$member->logged()) 

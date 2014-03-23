@@ -1,15 +1,14 @@
 <?php
     define("INFINITY", true); // this is so the includes can't get directly accessed
-    define("PAGE", "start"); // this is what page it is, for the links at the top
+    define("PAGE", "projects"); // this is what page it is, for the links at the top and scripts
     include_once("libs/relax.php"); // use PATH from now on
+	//Login::checkAuth();
+	
     include_once(PATH ."core/top.php");
 ?>
-    
+<div class="main">
+
+</div>
 <?php
     include_once(PATH ."core/main_end_foot.php");
 ?>
-
-
-
-<script type="text/javascript" src="../js/tinymvc.js"></script>
-<script type="text/javascript" src="script.js"></script>

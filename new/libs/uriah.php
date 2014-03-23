@@ -1,4 +1,22 @@
 <?php
+	/*
+		Allways do a defined("INFINITY") check for all files, this is for security, ever though its just a class in the file and does not output anything
+		Else then that this file looks clean, I would not call SESSION[ID] as default but do that in the function, one extra line yes but a chanse to catch later on.
+		Try using a tad more blank lines so its easier to read between function and dockblock.
+		Also maybe use [TAB] between the text and the star in dockblock so its easier to read.
+		
+		I don't know whare and what data you use in getMemberData but that looks risky as fuck for injections.
+		How about fetching all data with select * and then only returning the specified?
+		
+		yes right now we need to use ?'s I'll recode so you can use array keys as well. like
+		Query("SELCT * FROM ? WHERE username=:user AND password=:password", "members", [":user"=>"relax", ":password"=>"Test123"]); 
+		
+		You can move this file to clean and include it in relax.php when you feel for it.
+		
+		/Relax
+	*/
+	
+	
 	/**
 	*Profile interface
 	*/
@@ -6,6 +24,7 @@
 		public function getMemberData($columns, $user);
 		public function setMemberData($columns, $user);
 	}
+	
 	/**
 	*Class for profile page related methods
 	*Getting and Setting member data
@@ -14,9 +33,11 @@
 	class Profile implements iProfile{
 		private $sql; //SQL call handler
 		private $table = '`memberinfo`';
+		
 		public function __construct(){
 			$this->sql = Database::getInstance();
 		}
+		
 		/**
 		*Give an array of columns to get back their values for given user
 		*@access public
@@ -30,6 +51,7 @@
 			$result = $this->sql->query("SELECT `".$cols."` FROM ".$table." WHERE `ID` = ?", $user);
 			return $result->fetch(); //return associative array of 'column' => 'value'
 		}
+		
 		/**
 		*Give a key => value array (assoc array) of 'columnName' => 'newValue' and make change in db
 		*@access public
@@ -53,6 +75,7 @@
 			$this->sql->query($query." WHERE `ID` = ?", $newValues);
 		}
 	}
+	
 	/**
 	*Storing and removing actions of members
 	*Table: `actions`, (search & replace this to change all (no instance data 'cause static methods))
@@ -74,6 +97,7 @@
 			Database::getInstance()->query("INSERT INTO `actions` (`user`, `title`, `content`, `category`, `date`) VALUES (?, ?, ?, ?, ?)",
 			 $_SESSION['ID'], $title, $content, $category, $date);
 		}
+		
 		/**
 		*Remove an action from the db
 		*@access public
@@ -85,6 +109,7 @@
 		public static function removeAction($id){
 			Database::getInstance()->query("DELETE FROM `actions` WHERE `ID` = ?", $id);
 		}
+		
 		/**
 		*Get an multidimensional assoc array of action
 		*@access public
@@ -108,6 +133,7 @@
 			$result = Database::getInstance()->query($query, $execs);
 			return $result->fetchAll();
 		}
+		
 		/**
 		*Get the number of actions stored from a user
 		*@access public

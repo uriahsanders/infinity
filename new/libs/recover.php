@@ -1,4 +1,14 @@
 <?php
+
+/*
+	Holy mother och cows!!!
+	
+		Rewrite this peace of crap to functions and classes and use the clean libs for it
+		This should be in the class register!
+		
+		/Relax
+	
+*/
 	define("INFINITY", true);
 	include_once("relax.php");
 	

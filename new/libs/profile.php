@@ -1,4 +1,15 @@
 <?php 
+/*
+	why is this file here?
+		Move it to the right location or remove it if its a doubble.
+		Also this should be recoded.
+		
+		Uriah, is this your file? 
+		if not delete it because its not mine either afaik.
+		
+		/relax
+
+*/
     define("INFINITY", true); // this is so the includes can't get directly accessed
     define("PAGE", "profile"); // this is what page it is, for the links at the top
     include_once("libs/relax.php"); // use PATH from now on

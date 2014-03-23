@@ -186,11 +186,11 @@ a:hover {
     margin-top:26px;
 }
 
-#main, #main2 {
+#main, #main2, .main {
     width:100%;
     background:url(/images/dark_stripes.png);
     padding-top: 60px;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
 }
 #main-body {
     width: 80%;
@@ -200,7 +200,7 @@ a:hover {
     text-align:center;
 }
 #foot {
-    position: relative;
+    position: absolute;
     bottom:0px;
     margin:0px;
 }

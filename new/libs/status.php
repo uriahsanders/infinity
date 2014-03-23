@@ -1,4 +1,11 @@
 <?php
+		/*
+				Uriah I beleve this file is yours as well, look at the comments I had on prifile iclude file and rewrite this a it cleaner, when done move to clean folder.
+				
+				/Relax	
+		*/
+
+
 	@define("INFINITY", true);
 	include_once("relax.php");
     //when i wrote all this i really had no time so
@@ -16,6 +23,7 @@
 			// [TODO] - fix this class
 			$this->_db = Database::getInstance();	
 		}
+		
         function getStatus($ID = 0){
 			if ($ID == 0) // if not specified
 				$ID = @$_SESSION['ID']; //current user
