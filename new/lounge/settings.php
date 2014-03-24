@@ -14,7 +14,7 @@
     $member = Members::getInstance();
     $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
 ?>
-
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> 
   <div onsubmit="return false;"style="width:80%;margin:auto;padding:10px;border-radius:5px;"class="text-center">
     <div class="lead i fa-2x"style="margin:auto">Profile Options</div><br>
     <form id="options"style="border:2px solid #000;width:75%;margin:auto;background:url('/images/gray_sand.png');padding:20px;height:100%;border-radius:5px;">
@@ -43,17 +43,17 @@
         <br><br>
         About Me:<br>
         <textarea style="display:inline;width:80%"id="" cols="30" name="about"rows="10"class="form-control">
-            <?php echo '"'.$member->get($_SESSION['ID'], 'about').'"'; ?>
+            <?php echo ''.$member->get($_SESSION['ID'], 'about').''; ?>
         </textarea><br><br>
         Resume:<br>
         <textarea style="display:inline;width:80%"name="resume" id="" cols="30"rows="10"class="form-control">
-            <?php echo '"'.$member->get($_SESSION['ID'], 'resume').'"'; ?>
+            <?php echo ''.$member->get($_SESSION['ID'], 'resume').''; ?>
         </textarea>
         <br><br>
         <input type="text"class="form-control"style="display:inline;width:67%"placeholder="New Skill">&emsp;<button type="button"class="btn btn-info">Add Skill</button><br><br>
         <textarea style="display:inline;width:80%"name="" id="" cols="30" rows="5"class="form-control"placeholder="Skills..."disabled></textarea>
         <br><br>
-        Gender:&emsp;<input type="radio"name="gender"> Male&emsp;<input type="radio"name="gender"> Female&emsp;<input type="radio"name="gender"> Other&emsp;<input type="radio"name="gender"> Undisclosed
+        Gender:&emsp;<input id="Male" type="radio" name="gender" value="Male"/> Male&emsp;<input id="Female" type="radio" name="gender" value="Female"/> Female&emsp;<input id="Other" type="radio" name="gender" value="Other"/> Other&emsp;<input id="Undisclosed" type="radio" name="gender" value="Undisclosed"/> Undisclosed
         <br><br>
         <input type="checkbox"> Allow Infinity to send me emails.
         <input type="hidden"name="token"value=<?php echo '"'.$_SESSION['token'].'"'; ?>/> 
@@ -65,6 +65,14 @@
         <br><br>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        $.post("../settings_handle.php", {
+            signal: "gender"
+        }, function(data){
+            //console.log(data);
+            $('#' + data).attr("checked", true); //make the checkbox checked
+        });
+    });
     $('#options').on('submit', function(e){
         e.preventDefault();
         $.ajax({
