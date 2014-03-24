@@ -6,7 +6,7 @@ $(document).ready(function(e) {
 			url: "/user/wall/post",
 			type:"POST",
 			//  array("txt","to","pri","child")))
-			data: {"txt": $(this).parent("div").children("textarea").val(), "to": $("#usr_id").val(), "pri":0, "child":sid},
+			data: {"txt": $(this).parent("div").children("textarea").val(), "to": $("#usr_id").val(), "pri":0, "child":sid, "type": 0},
 			success: function(data) {
 				//console.log(data);	
 				if (data.substring(0,2) =="OK") {

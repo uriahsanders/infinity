@@ -57,7 +57,25 @@ class System
 			die($msg);		
 		echo $msg;
 	}
-	
+
+	/**
+	*	Log suspicious activity in database so we can be aware of potential attacks from IP's
+	*	Logs all information from user and activity with custom message as well
+	*
+	*	@param string $msg - Anything specific you want to say about this?
+	*	@param boolean $die -  default true: die() after logging?
+	*	@param boolean $alert - default false: tell user they've been logged?
+	*	@static
+	*	@access public
+	*/
+	public static function logSuspect($msg, $die = true, $alert = false){
+		Database::getInstance()->query("INSERT INTO `suspicious` (`userID`, `IP`, `date`, `message`)
+			VALUES (?, ?, ?, ?)
+			", $_SESSION['ID'] || 0, self::getRealIp(), date("Y-m-d H:i:s"), $msg);
+		$res = $alert ? 'Your activity has been logged due to suspicious activity. If this allegation is incorrect, please contact us.' : '';
+		if($die) die($res);
+		echo $res;
+	}
 	
 	/**
 	*	getRealIp() - returns the users real IP-adress

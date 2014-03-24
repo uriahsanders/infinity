@@ -197,7 +197,6 @@
         <div id="pro_usr_stream"class="pro_usr_ele">
         <?php
            include_once("wall.php");        
-		   //error in wall.js so need to comment out for now here and top.php 
         ?>
         </div>
         <div id="pro_usr_about"class="pro_usr_ele"style="display:none">
