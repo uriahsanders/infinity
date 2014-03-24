@@ -1,6 +1,6 @@
 <?php
-define("INFINITY", true); // this is so the includes can't get directly accessed
-include('../libs/relax.php');
+if (!defined("INFINITY"))
+    die(); // do not allow direct access to this fie
 //Projects page
 class Projects{
 	/*

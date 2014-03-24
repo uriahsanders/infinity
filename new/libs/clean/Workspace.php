@@ -1,5 +1,5 @@
 <?php
-if (!defined("INFINITY"))
+/**if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
 //Workspace Data SQL database structure:
 //ID | projectID | version | original | type | title | body | date | level | by | to | data | lastUser | branch | suggested | active
@@ -20,7 +20,7 @@ class Workspace implements Security{
 	}
 	public function has_access_to($projectID){
 		$members = $this->getMembers($projectID);;
-		return (array_search($_SESSION['ID'], $members) ? true : false;
+		return (array_search($_SESSION['ID'], $members)) ? true : false;
 	}
 	public function has_privilege($projectID, $branch, $privilegeNum){
 		//privileges are stored in data of type = branch, branch = branch, to = userID, level = privilege
@@ -246,3 +246,4 @@ class Workspace implements Security{
 		}
 	}
 }
+**/

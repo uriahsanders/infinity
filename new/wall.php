@@ -1,4 +1,5 @@
 <?php
+	include_once('libs/relax.php');
 	$me = $member->getUserData($_SESSION['ID']);
 	$wall = Wall::getInstance();
 	$sys = new System;

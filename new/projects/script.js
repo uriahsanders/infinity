@@ -11,6 +11,7 @@
 		joined: null, //have we joined the current project?
 		query: null, //what are we searching?
 		action: null, //what are we doing right now? (category, searching, project)
+		id: null, //current project id
 		//all different categories
 		categories: ['all', 'technology', 'music', 'art', 'literature', 'language', 'science', 'mathematics', 'education', 'history'],
 		DL: 'all', //Default Location should show everything
@@ -30,10 +31,10 @@
 				Projects.joinProject(value);
 				break;
 		}
-		//getOne if both projectname and user have changed
-		if (name === 'projectName' && changed[changed.length - 2] === 'creator') {
+		//getOne if projectname has changed
+		if (name === 'projectName') {
 			//get id from DOM
-			Projects.getOne($('[id^=' + model.projectName + '-' + model.creator + '-]').attr('id').split('-')[2]);
+			Projects.getOne();
 		}
 	});
 	Controller.create(function() { //click handlers
@@ -88,6 +89,10 @@
 			$(document).on('click', '#join', function() {
 				Projects.handle_join((model.join === null || model.join === false) ? true : false);
 			});
+			//going back
+			$(document).on('click', '#pr-discover', function(){
+				Router.goTo(model.DL);
+			});
 		});
 	});
 	Router.create(function(hash, count) { //func will run each popstate and hashchange
@@ -117,7 +122,8 @@
 			if (model.creator !== creator && model.projectName !== hash[2]) { //if data is not already correct
 				Model.cascade({
 					creator: creator,
-					projectname: hash[2]
+					projectName: hash[2],
+					id: hash[3]
 				});
 			}
 			//check that there is a filter and a category, and both are valid
@@ -125,11 +131,11 @@
 			console.log("A category");
 			model.action = 'category';
 			//we are looking at a category
-			if (model.category !== hash[0]) Model.modify('category', hash[0]);
+			Model.modify('category', hash[0]);
 		} else if (hash[0] && hash[0] === 'search') { //there is a search query
 			console.log("A search");
 			model.action = 'searching';
-			if (model.query !== hash[1]) Model.modify('query', hash[1]);
+			Model.modify('query', hash[1]);
 		} else if (Router.hash('visible')) { //there's hash content but it wasnt caught above (it's invalid)...
 			console.log("Not found");
 			//show not found message
@@ -137,7 +143,7 @@
 			console.log("Empty hash");
 			model.action = 'category';
 			//so do default location
-			if (model.category !== DL) Model.modify('category', DL);
+			Model.modify('category', DL);
 		}
 	});
 	var Projects = (function() {
@@ -176,13 +182,15 @@
 				});
 			},
 			//get one project
-			getOne: function(id) {
-				Router.goTo(model.creator + '/' + model.projectName);
+			getOne: function() {
+				Router.goTo('project/' + model.creator + '/' + model.projectName);
 				ajax('GET', {
 					signal: 'getOne',
-					id: id
+					projectname: model.projectName,
+					creator: model.creator,
 				}, function(res) {
 					$('#meat').html(res);
+					$('#pr-navigation').hide();
 					//so, whether or not the project has been joined in stored in a hidden input
 					//so hide form if it has been joined and show it otherwise
 					//required boolean is the value of the hidden input
@@ -197,6 +205,7 @@
 					category: where
 				}, function(res) {
 					$('#meat').html(res);
+					$('#pr-navigation').show();
 				});
 			},
 			create: function(formData) {
@@ -280,7 +289,8 @@
 			handle_projectClick: function(id) {
 				Model.cascade({
 					'creator': id[0],
-					'projectName': id[1]
+					'projectName': id[1],
+					'id': id[2]
 				});
 			},
 			handle_searchEnter: function(query) {

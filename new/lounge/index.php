@@ -29,10 +29,13 @@
                       <span class="panel-title">News</span>
                     </div>
                     <div class="panel-body">
-                      <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex, ad, labore, sequi possimus commodi laudantium molestias magnam vel voluptate quo suscipit pariatur deleniti quia esse modi ullam quisquam nobis assumenda.</div>
-                      <div>Perferendis, velit, unde! Eum facilis architecto a quod rem ipsam quia consequatur aperiam voluptas dicta. Blanditiis, perferendis, quidem, cum nihil nemo nam nobis ducimus debitis enim repellendus alias doloribus libero.</div>
-                      <div>Maxime alias consequuntur dolores asperiores minima. Dolorum, aperiam praesentium ab accusantium facilis recusandae et quisquam placeat similique ducimus sit at cumque harum voluptatibus iste id quas culpa corporis ratione saepe.</div>
-                      <br>
+                      <div class="panel-text">
+                      This is some new from Infinity-Forum. This is also just a bunch of random boring text. And if you're still reading this random boring text you should
+                      probably get a life. I wrote this just so I can have some content to look at while testing the Lounge. Theres also quite a it of text here
+                      because i need quite a bit of text to work with. Are you seriously still reading this! Shouldnt you be working on Infinity or something?
+                      OMG you have no life! GET ONE! Wow, seriously stop reading this.
+                      </div>
+                      <br><br>
                       <button class="btn btn-primary">Dismiss</button>
                     </div>
                 </div>

@@ -214,8 +214,3 @@
         </div>
     </div>
 </div>
-
-
-<?php
-include_once(PATH ."core/main_end_foot.php");
-?>

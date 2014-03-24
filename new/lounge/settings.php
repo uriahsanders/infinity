@@ -43,11 +43,11 @@
         <br><br>
         About Me:<br>
         <textarea style="display:inline;width:80%"id="" cols="30" name="about"rows="10"class="form-control">
-            <?php echo '"'.$member->get($_SESSION['ID'], 'about').'"'; ?>
+            <?php echo $member->get($_SESSION['ID'], 'about'); ?>
         </textarea><br><br>
         Resume:<br>
         <textarea style="display:inline;width:80%"name="resume" id="" cols="30"rows="10"class="form-control">
-            <?php echo '"'.$member->get($_SESSION['ID'], 'resume').'"'; ?>
+            <?php echo $member->get($_SESSION['ID'], 'resume'); ?>
         </textarea>
         <br><br>
         <input type="text"class="form-control"style="display:inline;width:67%"placeholder="New Skill">&emsp;<button type="button"class="btn btn-info">Add Skill</button><br><br>

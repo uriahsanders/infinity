@@ -1,7 +1,7 @@
 <?php
-include_once('projects.php');
+define("INFINITY", true); // this is so the includes can't get directly accessed
+include_once('../libs/relax.php');
 $projects = new Projects();
-$member = Members::getInstance();
 switch($_SERVER['REQUEST_METHOD']){
 	case 'POST':
 		if(!$_POST['token'] || $_POST['token'] != $_SESSION['token']) die(); //CSRF defense
@@ -24,7 +24,7 @@ switch($_SERVER['REQUEST_METHOD']){
 				$res = $projects->search($_GET['query']);
 				die(show('projects', $res));
 			case 'getOne':
-				$res = $projects->getOne($_GET['id']);
+				$res = $projects->getOne($_GET['creator'], $_GET['projectname']);
 				die(projectTemplate($res['ID'], $res['projectname'], $res['creator'], $res['date'], $res['popularity'], $res['members'], $res['short'], $res['description'], $res['image'], $res['video']));
 			case 'retrieve':
 				$res = $projects->retrieve($_GET['category']);
@@ -47,15 +47,17 @@ switch($_SERVER['REQUEST_METHOD']){
 	//HTML insertion functions
 	function thumbnailTemplate($id, $projectname, $creator, $date, $popularity, $short, $image){
 		$member = Members::getInstance();
+		$username = $member->get($creator, 'username');
 		return "<a>
-        <div class=\"project\">
+        <div id=\"$username-$projectname-$id\"class=\"project\">
           <div class=\"lead project-title\">$projectname</div>
           <div class=\"project-img\">
             <br>
             <i class=\"fa fa-star gold\"style=\"font-size:9em\"></i>
           </div>
           <div class=\"project-info\">
-            By ".$member->get($creator, 'username')." <br><br>
+            By ".$username." <br><br>
+            Created: ".System::timeDiff($date)." <br><br>
             $short
           <!--<div class=\"progress\">
             <div class=\"progress-bar progress-bar-success black\" role=\"progressbar\" aria-valuenow=\"85\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 85%;\">
@@ -67,7 +69,27 @@ switch($_SERVER['REQUEST_METHOD']){
       </a>";
 	}
 	function projectTemplate($id, $projectname, $creator, $date, $popularity, $members, $short, $description, $image, $video){
-		return 'project';
+		$member = Members::getInstance();
+		$username = $member->get($creator, 'username');
+		$members = json_decode($members);
+		$memberList = "<br>Members:<br><br>";
+		$thisMember = null;
+		foreach((array)$members as $value){
+			$thisMember = $member->get($value, 'username');
+			$memberList .= "<a target=\"_blank\"href=\"/user/$thisMember\">".$thisMember.'</a><br>';
+		}
+		$work = ($creator == $_SESSION['ID']) ? "<button class=\"pr-btn\">Workspace</button> &emsp; <button class='pr-btn'>Edit</button>" : '';
+		return "
+			<div style='width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'>
+				<button class='pr-btn'id='pr-discover'>Discover</button>&emsp;<button class='pr-btn'id='pr-posts'>Posts</button>&emsp;
+				<button class='pr-btn'id='pr-posts'>Stats</button>&emsp;<button class='pr-btn'id='pr-posts'>Join</button>&emsp;
+				$work<br><br>
+				<span class='lead'style='font-size: 3em;'>$projectname</span><br><br> by <a target=\"_blank\"href=\"/user/$username\">$username</a><br><br>
+				<div style='background:#000;width:80%;height:400px;margin:auto'></div>
+				<br><br>
+				<div style='padding:10px;border-radius:5px;margin:auto;width:85%;background:url(\"/images/gray_sand.png\");'>$description</div>
+			</div>
+		";
 	}
 	function commentTemplate($id, $projectID, $date, $posterID, $body){
 		return 'comment';
