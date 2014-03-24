@@ -134,7 +134,7 @@ if(!$logged)
                 echo "<label><img src=\"/images/status/$id.png\" alt=\"$id\" title=\"$name\"/>$name</label>";
                 echo "</span>";
                 echo "</div>";
-                echo "<a href=\"/member/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
+                echo "<a href=\"/lounge/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
                     <!--Need messages icon here-->
                     <a href=\"/lounge/logout\"><img src=\"/images/logout.png\" alt=\"logout\" title=\"logout\" border=\"0\"/></a>
                     </div>
