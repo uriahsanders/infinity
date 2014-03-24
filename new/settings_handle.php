@@ -17,8 +17,8 @@ if(isset($_POST['signal']) && $_POST['signal'] == 'options' && isset($_POST['tok
 		}
 		$_db->query("UPDATE `members` SET `username` = ?, `email` = ? WHERE `ID` = ?",
 			$p['username'], $p['email'], $_SESSION['ID']);
-		$_db->query("UPDATE `memberinfo` SET `username` = ?, `country` = ?, `age` = ?, `about` = ?, `resume` = ?, `work` = ?, `quote` = ?, `wURL` = ? WHERE `ID` = ?",
-			$p['username'], $p['country'], $p['age'], $p['about'], $p['resume'], $p['work'], $p['quote'], $p['wURL'], $_SESSION['ID']);
+		$_db->query("UPDATE `memberinfo` SET `username` = ?, `country` = ?, `age` = ?, `about` = ?, `resume` = ?, `work` = ?, `quote` = ?, `wURL` = ?, `sex` = ? WHERE `ID` = ?",
+			$p['username'], $p['country'], $p['age'], $p['about'], $p['resume'], $p['work'], $p['quote'], $p['wURL'], $p['gender'], $_SESSION['ID']);
 		$_SESSION['USR'] = $p['username'];
 		die("Your stuff was updated.");
 	}else{
