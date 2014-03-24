@@ -13,8 +13,8 @@
     include_once(PATH ."core/bar_main_start.php");
     $member = Members::getInstance();
     $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
-?>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> 
+    $sex = $member->getUserData($_SESSION['ID'], "ID")['sex']; //get the users sex
+?> 
   <div onsubmit="return false;"style="width:80%;margin:auto;padding:10px;border-radius:5px;"class="text-center">
     <div class="lead i fa-2x"style="margin:auto">Profile Options</div><br>
     <form id="options"style="border:2px solid #000;width:75%;margin:auto;background:url('/images/gray_sand.png');padding:20px;height:100%;border-radius:5px;">
@@ -66,12 +66,8 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
-        $.post("../settings_handle.php", {
-            signal: "gender"
-        }, function(data){
-            //console.log(data);
-            $('#' + data).attr("checked", true); //make the checkbox checked
-        });
+        var sex = "<?php echo $sex ?>";
+        $('#' + sex).attr("checked", true); //make the radio ticked
     });
     $('#options').on('submit', function(e){
         e.preventDefault();

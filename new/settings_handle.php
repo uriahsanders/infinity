@@ -24,10 +24,4 @@ if(isset($_POST['signal']) && $_POST['signal'] == 'options' && isset($_POST['tok
 	}else{
 		echo "Sorry, your password is not correct.";
 	}
-}else if(isset($_POST['signal']) && $_POST['signal'] == "gender"){
-	echo getGender($_SESSION['ID'], $member);
-}
-
-function getGender($user, $member){
-	return $member->getUserData($user, "ID")['sex']; //get the members info and return the sex value
 }
