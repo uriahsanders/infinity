@@ -311,6 +311,107 @@ CREATE TABLE IF NOT EXISTS `posts` (
   KEY `parent_ID` (`parent_ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=135 ;
 
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES
+(2, 'tidool igra bihoa stach oast owheejeem eetheewa oangoz fiwhokruk gloshihapt ram gry oovemsag eji tohoani phocmeck roj ujoangoo otowoopt oadra oag yte ', '127.0.0.1', 4, 1, '1996-09-16 20:43:22'),
+(3, 'eegnic eestephit theeksece icul zeeptips ich perdompeet ehirtoogr eecu hiftansoax belroalafu ooka editchess dooj huzodsipi tapta oaksomten ', '127.0.0.1', 10, 1, '2002-10-28 05:14:39'),
+(4, 'ootsyngogn hecmas ptehithoa eshej iwaghi eediwoo jooc thooshe grigl voovoo stawhotsyv goowha pho kad oamp dyk ptupsydool tooku epsistac ', '127.0.0.1', 4, 1, '2010-07-25 02:29:49'),
+(6, 'itheepteep etor oody goad ewheefoas ynyb sogheeds sheewytsix esoansa eewoo phoolrydi ula ozulsalric hoanyvoo ypyho ', '127.0.0.1', 10, 1, '2011-05-19 09:24:39'),
+(7, 'ocoseroptu nynguft ubee ewh zoopsocho oosh oavelre oof hurgyl oardi zoopt ptiglemto ugr hoa deptaj ifehoa ', '127.0.0.1', 4, 1, '2006-09-05 05:35:25'),
+(8, 'ilakreftej oongoampoa rerg foon oageemads ugl voophoama uxyt wifimta eglecooc uchej ygassi eerg thoo gloalsa ptoo fas oglu liry whyps cer gru psoocoargu agelysseez ', '127.0.0.1', 10, 1, '1992-07-25 03:34:21'),
+(9, 'yphuwes ochythos eec sho etishoas uwaftoo weepoogi phu eevogr icyma ytipirdee uwhiglee ools yjolsilso joa istachu xapesh mox agreepsa kedroojadr phi ooc peevocamu oortan ', '127.0.0.1', 1, 2, '1973-10-08 05:38:44'),
+(10, 'uxyjin pseed psooz glasty ystijo waji galt jeemeepha oshiwh fodegylrit oatu iloapepta apsoast ', '127.0.0.1', 4, 2, '1984-12-04 18:22:59'),
+(12, 'gloamso oboow imukeltu numogr kupti chuts ujogr oaphoashep yransybe yxosh ereensad geebypte gli ithuptelen oomucoonoo whutivalti ydoargo iphachek ytheefoon umyck roaptybept loa eemo vorsadem stoatahiv iph ', '127.0.0.1', 1, 2, '1990-11-16 00:08:44'),
+(16, 'psi ogoa asoals eeree whoagroamt psootsipt glimpeelsu doak ugly azunuhozi anolikr xepheest whi ophy cilop ofoapseet nems tho sooptibo yku kuphat stene eeltyrgiw oacefook xoal otoophyth iridsee ', '127.0.0.1', 1, 2, '2013-08-22 02:59:58'),
+(18, 'eepsir ocoftelr yroagl eshepsut eephy exeep sheewoolaj aloaw ishusoofoo soopt iroo stirda opeert noagl xeeryvukim ozybeeceds oshych det mew namsipo guhydr goozohi agoadrudu fagloolsu psyjoa joaladoaho bipeetchoa oampoortim evu ', '127.0.0.1', 10, 3, '1993-06-15 06:44:34'),
+(19, 'icha lylsimtog mibygri weenaptyci pher ugo pan omop oosuds yphuboomi zaghycirgi eess mys epu vahijir unyjof tagreej how ipophee grykrec ohigloa mimteed eenon phooh odagnotch cydredux wheest ', '127.0.0.1', 4, 3, '1984-12-27 05:54:21'),
+(20, 'oachoal covee ytaghor pyv giphy noo caft eexytcheep oatsoots ith cheethick oduglompev steeptaj greekr alykroosta ', '127.0.0.1', 1, 3, '1991-05-15 02:06:59'),
+(21, 'omiphoak ugo aceempyf oaxyco voaglozy weegloche griro ipte moofoogro guty adex jeft oazyrdeecm foowhahomi zawhoofun ooxelr chysytyj zensathyms hoanogo oord yfoardoa egli anenangoa ', '127.0.0.1', 4, 3, '1977-11-07 07:36:44'),
+(25, 'oomtoaft oast ekups codeesubi ooksoa alycm oaks eegnoa gook ushys grongy ewheecegy eedredrapt ivom oodroge oovybune eezixu oadoockyxe moawhid ypsyxyh anedyroo oacma oato oomsoothy goace aphophuwe ', '127.0.0.1', 3, 4, '1982-02-04 03:55:46'),
+(26, 'hisixodse psi soar oleergeeft nishoheek ijoakrapo steex oog oglolijej fatsydoop zoaptoasha yheedardy kite oolreersee upeetchyng soam ufedewop rokr poox echafeej opsoogl ', '127.0.0.1', 4, 4, '1998-01-20 08:49:05'),
+(27, 'zoazy hampajoo ivehak ifishoroa ryms voohuzushe oaph mewhonsek usy shyzeeg eecu gleel dansoongum sheeholt suk osydsoa ekutsudroa psuste nagnegaj ewhoch ', '127.0.0.1', 3, 5, '2009-01-08 21:03:46'),
+(30, 'fun xompa veefaptejo ech yzingy jyt uwhipsee hoa meestada opt zoarir hoopsigro poostigere oocmaps taghyss whudroarto haw oocheza lar ikeempok exina eejoachirg iloagryns ', '127.0.0.1', 4, 5, '1993-07-13 20:14:07'),
+(31, 'anymsij iptaboo noaf greezooms ipeete sakro phyxood ptu ewhee etumseec moamips kapore esomisse ceenulufib groahoafe jasheph eevukoa psofytsap hoany ewhe ', '127.0.0.1', 1, 5, '1996-01-31 07:33:49'),
+(32, 'tyksoce oat veeliph aphun ciptogla loa yne oagheessix chisisogh uchoat gleexoo teftexe mekseelra areergukri song ecysap ziphyh ydoogh eertodiwi meer ash stengar largoowyd ', '127.0.0.1', 10, 5, '1987-09-21 12:23:06'),
+(33, 'sty oog jalti bangyssono eersoolr azastee whydoomoaj ikoapeemte ywh zipt epoojoadi wumool iri eempocuzo ashidoagri ixeemym ', '127.0.0.1', 1, 5, '2001-10-29 22:46:52'),
+(34, 'poaz mosasti xaxa koobyry lymiho psoardoci apsafeze nerycmistu eelsucmex ovoachu onoon fee ptunsohums verditcha akoatchoap ykebehag deecooni kipteesa vamsurdumy bafuftooz osho ', '127.0.0.1', 2, 5, '1977-05-13 12:57:31'),
+(35, 'eertyfynsi heesoowy phyr ochee joadeez kergoofest thoo eemp yximsu rampekry ptyglopsol alegh ugleexiv aglufoa uzart ste oamsyv fapab ohits mybordo ipsoabobi ', '127.0.0.1', 3, 6, '1998-04-02 10:19:27'),
+(36, 'ooksumsoo ptoox poaw yth ptemsoath oocku iptoadoalo shyxap biz pty otiwhoals igregy ygavi oojapoocmy yphoad pseenee psyghi pekydsur shoagnudr mis tumtee zyng oazeecke xogr uchoa ygosheeg ohons ophi ysoassyl evoaphy sool stoa whu ibeef forgoomoo toj punoawu ', '127.0.0.1', 1, 6, '1997-12-06 19:04:17'),
+(37, 'shecmo shororoads cho tapsy stalritan gygl whee yjy xop soconsee oamp eest pseegringy onem egoo eesh feks uzolsoo ', '127.0.0.1', 4, 6, '1989-02-22 08:52:49'),
+(38, 'ezugiboa yluchu glicol sheeluxo oocmym zyj thockoofe udilseef dofuc zoopheec shidedsax kecm eetch owikom whoak wee ', '127.0.0.1', 10, 6, '2009-01-17 09:30:28'),
+(39, 'ooxopo uwhagrugly opeekri oajix xeed ptalagek shelte oorsoamt ajoah ech egr ogru mergoaph ekikseds uma zoaky uxigaxense oobesh igujoam mosypooc xeethab ukisodsys mosholr zeveemee thestydsy ikoadulos oolra xoaje voogoteex ', '127.0.0.1', 1, 6, '1993-05-16 08:21:07'),
+(41, 'vyboacicku ichyzups gow fyshals tha eekackexyl eetsoathu agroam joo oaphi wohutheehi igezakoga oans puteempuk oam oozoaptow ypighudri kuf oahultossa ychoglin ixorym boahocyx oampumt egeghub wipudre durta oog ymyglymem cyhu ', '127.0.0.1', 2, 6, '1976-10-20 21:43:07'),
+(42, 'ashu oockaby ruta doaloos ykoolsoc oarsock coobas neksa oackoo goow psoatsoopt epi jishee psoksof uphy meekov shift eer sytax uth eglu upsoonoota oaboa stumte eezecmun coagyfooti oagne glognerdi ', '127.0.0.1', 10, 7, '1990-10-02 13:13:05'),
+(43, 'ylep ugoamsoa yglujivaj ugrajoaph peeglor oapsec oolteept roogaxob eecergaro roajoopu phignoojy rooroo atheepheeg coosoophee oomseft shoo iku yglufemeec weef ', '127.0.0.1', 3, 7, '2005-07-16 22:37:24'),
+(44, 'stotaghi meesuzeed cassoa sugloompoh whu eelrakr eegn themsi okargy grobicki oogrynirt ifot choadrept xetsolt soafoptee ystoosupty ushu ept ceepepipo eboorti xofta lami alakeepej oarimt ', '127.0.0.1', 4, 7, '1976-05-16 17:15:09'),
+(45, 'uwo oolry istoogryg stoaksad oaphez lutuk iph jeepsu gleeng avulsoang ewyls seezukez uju thypsicm agroveefoa fywadi amulogakac yphees ipho eempaguwaw grymoft shyck uchistyg uto ykylreecku ooksuptoa ', '127.0.0.1', 2, 8, '1977-01-09 05:06:14'),
+(47, 'psoahuw ugroops idez veehoage guxuv ducheedydo glujagnept owhuloos ehynsunek ptyje phiksev ywopt eensoaxi ptingirse ', '127.0.0.1', 4, 8, '1976-08-28 21:32:06'),
+(48, 'dujoawhep imypteerte glofty ooghoowh coar ewossikaro stedra tazakugily epsiguwam coditse shoz istoozu isoothordu stygros boo ichuche shoard yzoltugho evuwoogucm aptoataph rodsa gaglasho oatir ', '127.0.0.1', 1, 8, '1997-12-19 19:21:52'),
+(49, 'ochuwoglo foawhe roofoo nyj hudycmug whu eptoo ceebopter thade phufeesh avungop oshookujee thee hulydooc asilsoac thonotcha tiruwoag suthe sersonerd umikasha oaftutchee oceegn eeshyhadse tupsy taptumt gumichusy opybe ', '127.0.0.1', 1, 9, '1970-06-19 02:12:37'),
+(50, 'xyltyrdub cynoogn vosse ikorsers teckunsowa zafuds meept aloa ywepoal ynolsiha ygle huchognoom grytsoolr lowhy amo alulsucmi ', '127.0.0.1', 10, 9, '2000-10-11 10:33:20'),
+(51, 'atuk ugoadsivu iptoaweet muz zoo phumt walsabee uchasiz thalteerd ikoada ticic oaz bylsor iptoof xope deepuphosy tyglynga zee oapi ukode sheeksoaw edoan yglos leemal lejansys kordashuha lydrumt ', '127.0.0.1', 2, 9, '1986-05-02 15:53:43'),
+(52, 'eewh esoak rikrits rooreeshed agloochih upango lypsoan fav ptooxu xoahiwi joace phiksojo ptekso whargu uzadsen ewo chutyvoox yduho ookug ', '127.0.0.1', 10, 9, '1998-07-19 02:57:36'),
+(53, 'ced oak pooglee upheekicho nedsooph yptoahe wheecas yciw othazythy oodsishee iwoofetcho garise yzoom pysy ixajogrit lut oopsoamad oheep ycuwulsopy ', '127.0.0.1', 1, 9, '2011-09-06 19:07:54'),
+(54, 'eevyj koo ethash eedr oogipsotha evoagnalse phoag usuts ylod chabelansu awee dursapti eenastat zeng voogl poabujyzuz elult obisytoodo eexoaphee zam poaru cijokrulre akossoazod oah ostoaroaf ygr ', '127.0.0.1', 4, 9, '1979-03-07 06:43:48'),
+(55, 'ahyfefta pteckoax utheecy ptoocm ochoa roghof mygryr ygutoa ygoglelr aptag phengoaksa yvu griphoapt eelsoopuch psevixee psi ', '127.0.0.1', 3, 9, '1983-07-21 09:13:05'),
+(56, 'deegletoo psufed uvees eetsee obeer wha stooghoa uje uglasamy ceej isolry yfee foa aveengih ', '127.0.0.1', 10, 9, '1983-08-22 04:56:13'),
+(57, 'pti weephoa chawunooc ydygh uphoageza unubutchyd deefe nura choodut lazateec oozochooph oac oaxitsoa ', '127.0.0.1', 2, 9, '2002-03-30 23:09:39'),
+(58, 'zorseharti teeglive feerolyree bygre abamywh ydee ushatoobiw thukegre toovibo wussy philtartes ycoah hoalipsa ohook ptarteet nuryckoky oveer oardachoo egly edyltoa eepeze ihyvo astoashi yshy oofa ichopha keepte beer oodratchi oaguthej noa ', '127.0.0.1', 4, 10, '1971-09-06 09:25:15'),
+(59, 'apipheewi pymso esteeg eshy vypogn epsi xoazakeest woavyfa psoo eeck voagreep cim jumoa avoopsu ', '127.0.0.1', 2, 10, '1993-05-19 13:01:22'),
+(60, 'udeksoaju eeceboache heebipsee soopsewh ptomy itoas eegoophun eemacobu ejely othexeetho muhe ojineemsu godseftage zoojeewh luvigy ate oruj oamsuva loomiglu exarta heegoama wechatef oacmee nupeedso ubessoc theriz ', '127.0.0.1', 2, 10, '1972-11-18 18:24:11'),
+(61, 'ovoachyh eeghozaft xeest eeh joafy ptoxeevi upoawoa eejidsa oockasurgu geesh ejag dart oangyrsex ewh lopsucho otho ulaltam ezaxo uphamipta oxi ', '127.0.0.1', 4, 10, '1997-07-07 11:03:53'),
+(62, 'ugyvept oobecadsan epsyb ekogroagoa oasoamtoa lultaxi neenizo estoaw itu akaxeepus peev ostoososh hargedri loneftompy greecm ugeegheds yshephowys aha oomsufoawi eriks chi mimsee opoostooms oamsimtee imoo roodake pezensol whory eesap zoo ', '127.0.0.1', 2, 10, '1982-08-24 20:22:48'),
+(63, 'oan show nidrejes epsyhoo teem byrt choozydyh uxeelt xumpoa sty imudsa ibooltylso ynyphas cafoajuz psi xeephy ptoojydsy evumygu oawhyciwoo oasevoa sonsokru imunsix uroajiwy koolap ogikry apsoasetho oobelr acech sordor geetoz wupomeg gra ', '127.0.0.1', 2, 11, '1986-12-13 15:05:14'),
+(64, 'igred glok oansojood oagna oachump tims epybooc ooh onishoa phijoaroah sipe eedul jeeglara umoargi noagroovy nuf oocmo stootasti eemsag opheecaz exe ', '127.0.0.1', 1, 11, '1987-07-24 04:24:17'),
+(65, 'chafy ychoothoas eekr pekroagnef pelo oams uxusseeki eej xuck emyrirtoj pumtooshec goxoamsoxo owhasyr ', '127.0.0.1', 3, 11, '1971-05-06 21:33:40'),
+(66, 'theerga ach geem ytargiwh oorduv oapokrird rishi woakist whypheglut oongyptooc glaw ootsyp gewhebib itholegl ath mooxevuz vemti thoamtish ubookigny stiw oriksitso aso oather eecy achin phoatsy vingeeks axoo glymsoagh gleghooks iwhecubiwh rydrugl ', '127.0.0.1', 2, 11, '1997-03-27 11:42:38'),
+(67, 'fongools chuchoa oansar uryh horga gluks gro yshygoof eereensuft phyrsi eph koalu kewh gli poav muneek oglat grumt ', '127.0.0.1', 1, 11, '1983-03-07 14:07:00'),
+(68, 'tadrigoo chuzyp yphe ojugli tanijoomee oabums oomoj ptud oas madsy apoo whooshylsu idedsa bam phed heftoabely eethoah odab anoaraw six ', '127.0.0.1', 1, 11, '2013-02-15 01:03:08'),
+(78, 'ookegnyssy oadsoor ptoal ufuw ooxi moo eempadem footh beepsopa yhoa ypoachoo ypseephush tiphuvist xurdah ', '127.0.0.1', 2, 13, '1981-01-05 08:19:25'),
+(79, 'cyb soghoapoo tiwhacoaz thi xoojekishu gleewhoapi whupoa ubee eeksujup efomteech akysocic whyrdavel opeegna stafu iph eda ucicmostov uth boo ', '127.0.0.1', 1, 13, '1997-03-25 06:44:36'),
+(81, 'yrigroothu bickegn eewaphigh psymsoo asomun oopoof osu xoodeer ypsoaj eejoag ootuj ptoo egre voaserad ganuckuh tyzast iwhoa enawignee colsicuse ozusoteep yptekegoow weeth ojoam ipt rocketsoo zartoosti zoj obootheeck bosho geeroolef cox ', '127.0.0.1', 3, 13, '1977-10-04 18:31:48'),
+(82, 'chooralt ypowh eertuche eth idugneelt eemsyd ekookr eeg peecheth eeckivoa awha iburtekeev eesha oapsa ooc woow oacoakem gokroz ooxo edyf oot daloakelta psem ookoost ywoaxa uwhoashi larg oars che mybe ', '127.0.0.1', 4, 13, '1989-02-15 18:57:11'),
+(84, 'hump yhyrtefe ekuksoatch seeth psod ujeeh seeshomo whoaltoaf whe ogloanusta gonilr oosigroo xeglyrg ', '127.0.0.1', 4, 13, '2006-05-10 12:33:11'),
+(85, 'ywoolux ewo uhesikree lirg ebo jomoav oonipteegl sta uzu phegy ikuchysu beeheku opeeg oogriloolr pheeglydr phizyth hyri grexovylru psa compoo ooci psy oawe boojo ', '127.0.0.1', 10, 14, '2011-05-08 03:10:47'),
+(86, 'aphoa oognodra ketchodruw soat ojoangocm omij roa chyh feex eevacma estah eruthygrir toaps sothygl izult nov whepob ishewu xooshetyke wheezaph gloro groaksach thooloansi oowhi yceecmohi ', '127.0.0.1', 1, 14, '1995-01-27 08:18:07'),
+(87, 'stecmo stychudr eechoa ibuk eshoa phoazulito adeti igipydirsy coj evatchocmo esanizudr lap ptoshoa raxeer emeghyv efafuno amoo ihilresh hul ', '127.0.0.1', 3, 14, '1985-02-27 06:38:02'),
+(88, 'enewhe azywhane toogre roo ubeerdoo ineef vood shimaltud reetho stoadsols rurgeetcha yfeloat pybargyts oak ', '127.0.0.1', 2, 14, '2003-03-18 13:16:08'),
+(93, 'thydr eew ysyjutcho furdy eeb ocooho biwhinoft whonsoo birt ceevi oshuphacha tyksans eewh tyteep afon oal xaz shyx oal oakuj seewoako ooj xooro peloaz ythoophas thinsebel ', '127.0.0.1', 4, 14, '1978-12-04 07:53:56'),
+(95, 'yboompy eetee ustytejowa phifetchin aboa xoalest iredseka cookolid zexoo stomtoac zoakoshit ozoocoaf peegloja ', '127.0.0.1', 3, 15, '1993-02-23 22:22:55'),
+(96, 'yglunuvoa tulubogny ysty ixyngoa varso foagrol phijirif ptoo eecmolr oogoghe xafepoatso awh ptuph phod doocos oabyme grensoow ', '127.0.0.1', 2, 15, '1975-12-04 02:47:24'),
+(97, 'gloa oro kyftoalrar odyt boa utooshymp pipipsyds oofuh chuphuleed gekraho ixeeloo leebuf ptalruj eegykoagr jeesileko vopt ocyrgoamy ymooltishi sissylsaju chirsatsaz hoo ptucoa wooptu whedroon ', '127.0.0.1', 1, 16, '1988-10-12 20:37:41'),
+(98, 'keksy duphycheer joopoopu ptoareew ipsa eepong uhidsy oomsoarta oogloaso yshithethy owhov nah shypse anooks eek eepifabeep ooch eekroalsyn ', '127.0.0.1', 10, 16, '1983-01-18 07:50:41'),
+(99, 'icord roshetsa icegimy ostoaz oagnyt iptokij kergard ixeeck estyj buheenowhi iboampeef whinyb gympogr eeceewho osyfyp otukru ptadogr gacmigh enocyk ekoocmee ', '127.0.0.1', 4, 16, '2012-07-13 09:36:11'),
+(100, 'footyshym ywhaxo ywawupsu mopooth sycygni ithooj ptaksee grukrecm phirga ypteegron psameegle tomsuphep echori pee ybiryba ipoamsoasi ubansordy damoocmoo oxyruft jac thartafus koxekos hungi najochef ', '127.0.0.1', 4, 16, '2010-09-14 11:05:41'),
+(101, 'eengul nugleeghuc ohe ekur yfameet epacuck pyshoshyw boodoow shampee philsoltoo kow modurty pyckeegow chyth regra upoamtord cifapirgoo ', '127.0.0.1', 2, 16, '1996-05-15 12:44:27'),
+(102, 'psutsupew mycmoahefe ygryxud dedrochub foagriwh oolrosheec wonergy cooph ekonoazy shotilso sugigy foar whu yvuj istatustod ', '127.0.0.1', 1, 16, '2010-04-12 22:20:46'),
+(103, 'asypip psysiwy oosy oaxoac ylih wilr tatchyd oassofif thuruceegh eets shazeedoo pymoaksoa ishux yven eegoazar thurg eempuckov thooghils owhamy doaptudon oox ', '127.0.0.1', 10, 16, '1976-05-20 13:31:39'),
+(104, 'ycoabacoss thoa ogrisoamoo whal opsucostuv oosteefu pseen agrucheedi ooshoathoo tidsy koom eeptapse epo amin ikoopee ivuthacufa onymseko ', '127.0.0.1', 3, 16, '2004-10-28 04:15:42'),
+(105, 'ush yzyb oampoord gremoa eroopseeh vidim ovurootch zoo ptaks uthoo uth nusolruc steeltad psojawaf eemsyruj zeepta toociza deeptooxyg ', '127.0.0.1', 2, 17, '1979-03-11 15:05:14'),
+(106, 'zoa chej ogrosizy edoopsy acaksagruc stu whi whoo eegnymso pheeshuv avu stil eecmootch awheem oagritchu ijoan oonsu dabo iwh cik ', '127.0.0.1', 3, 17, '1999-10-03 04:38:58'),
+(107, 'reepsowhac fosto choo zidr eecmapsaz thywu ulinseenso ihoocmo psigelse glocma itagn nucmyglods ideeboo xeehysigri oacmuf ostuwh shy awheesy enimed icissan eewhe xapturdyma aneekr okoops cykoakree ', '127.0.0.1', 1, 17, '1993-05-15 10:50:19'),
+(111, 'ozyrgeev oagny odub merteet glum oagnareecy xoo shev iwheehevyw ophojoaf ocharapt eekseech shej meesod ziltas chyth oheev ree sho iglept ooje fee ynoarsee nohoabipys eef ', '127.0.0.1', 4, 18, '1996-03-28 14:34:00'),
+(113, 'doogreesoa ofoogh igloolo aduwhagiwh agruthoow soaxeewhok oogrythe nocket taz avoogerde teefyji codazu aphemee etyltadry poothee choo gowin oateedoo oduwoor optox adad joa zehytchu oorga ykignup tucomsi uwebocmyt inethygl efoodro ', '127.0.0.1', 4, 18, '2007-03-22 12:21:53'),
+(115, 'dehoo shixepy gyw izuwu uphoogryc omuf ata koavogl eelteegr gleecoort gethy oolralru xamybewycm pharsa owood eglugixeh sostokekr athozefy ootocm coshumoart ozoazoo she chonsudru hyji oogurg befte yjicoothyv ysoalta yphavab wohys yptoagi gle igradooni whoos thugoash eekseeh ', '127.0.0.1', 1, 18, '1983-04-04 05:19:02'),
+(116, 'recmoashat tupyc ochyp goasukyb ohu storsucmyc psylro ukoapsux sto ugr hekenecomt uboan makirgee ixaloawoa mulsyxu cixongupt ukugn whoshymu oshoa def ', '127.0.0.1', 3, 19, '1996-07-20 01:27:06'),
+(117, 'ysimomsoo exoc rechi ehir oodeeroaf epsygresoo todoo vicods stoarde groaphoan vafoam grym mooch kynoo phudse roogro ypsoo onoviphu ', '127.0.0.1', 1, 19, '1996-09-17 19:17:16'),
+(118, 'uwh kev gyftoast awessoart oong gloxe phoodra lolrax isycumpyv yshul jywaphoamy stoj whoolsoaph ucoadree fyrtagluh loa ', '127.0.0.1', 2, 19, '1974-02-21 15:17:25'),
+(120, 'orelre ihy oarteh yshejubec ducas noateenej cudra ones whorgo wewhocki uthacix emel machag ybympivec ', '127.0.0.1', 4, 19, '2000-03-25 04:15:52'),
+(121, 'groaphoowu glugreglu cufeegr ifeks ejeelsycko eteezat ycuth ifyfi che oacudsa uhuv ethoawysh emoamsa ulissu gree mighyk oomsuloavo eedr ethupsugr ucoacitch oatuce bisoashe psotchakr oamsu eegr obompi jept ugre mexoo yhynsung ichophigr ', '127.0.0.1', 3, 19, '2008-10-26 23:14:19'),
+(122, 'oadsognee igocma zoosih voawel yps opsoalikoo oolrysta joozeeshee iroafezuty ymoothe ugraj loob ceelaroa psoawoad shocmopim cichith grilrety feeco gomo ciptulsong oodreckyp bycheg oax ', '127.0.0.1', 3, 19, '2009-08-30 16:38:17'),
+(126, 'whekroov fetsoveel ovyh thoa oagl ujemsic ohowonewu uwits whav fyksast yglez bolroods oluri xoostag iwositaha ujojif uwhiga fooch footafush whic groo roapeec peebed ', '127.0.0.1', 10, 21, '1993-07-19 17:32:34'),
+(127, 'oartaftu enum eexep reewheci stytchy soolud awhoaj uxo ufonoa epasyglib wibygh nunsoa egi ryglisseew whee seech igoasock zongyrdyh soaxoo ', '127.0.0.1', 3, 21, '1970-02-07 08:29:52'),
+(128, 'eezy eptoloza ishisuwhee xirt shaveemto ooth oochu glynoap custoorsa joagrof cengoocor ceetobephe usocheelr shyrseeks neek apocmecmi ', '127.0.0.1', 3, 21, '1973-03-19 16:40:34'),
+(129, 'sezutymtob groodro owhoo hoaneeptoa ragry ygaw oakoans ekydsort veekooxu itampyr diftuftee booteratu eersookroa phic eestuz steefe edoo oostyhoo rimsahe toachuh ilomso she rab leecha och psuka themongof hyxywh roax chamtobuch glus ', '127.0.0.1', 3, 21, '1992-12-10 16:31:02'),
+(130, 'uxaboab udoar eepoomtuge hix oni griks avicm nolsex goophoowoa gelegr pho pexiphiksa umoang tuptogy eeds teereegrig eglyceec whodorsisy egrep otatch unisoath uphiwi oabeleersy adux leez ', '127.0.0.1', 3, 21, '1988-03-23 11:27:16'),
+(131, 'zygrensoar sho afeet dunsoomso choagyhi mitu newha daduft psyj woalam yhyhoa jidre owobu raxurdoath steengo jee ', '127.0.0.1', 3, 21, '1981-02-13 11:41:09'),
+(133, 'eezoameeks cha ytyno pheckog aneetife deth odirtadobo zoagoo gloob ichop glo ybeev ubodiw juf irood foop oanyf gleegnupt toafeecak ', '127.0.0.1', 3, 21, '1986-10-10 02:09:23'),
+(134, 'gooshoofoo ushujokeev igeepsoo idortoomee eest gliwumte chifexest athoapsee leboodroa psyrtu huchugluks vedri xickeek paftoacujy stogl eptoog uforegro rozuhak sug ptee esup pseepesoob whinughix ', '127.0.0.1', 4, 21, '2002-02-05 04:57:39');
+
+
 -- --------------------------------------------------------
 
 --
@@ -514,6 +615,32 @@ CREATE TABLE IF NOT EXISTS `topics` (
   UNIQUE KEY `ID` (`ID`),
   KEY `by` (`by_`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+
+--
+-- Dumping data for table `topics`
+--
+
+INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, `IP`) VALUES
+(1, 0, 'sha chigru gleec gemtuka eegre papsyh yrooheev iboordoaz thooch yxiptu gly pse egroboar googluster oachoatoop uwupti ', 'ootchi zoaloapt astyloo ', 1, '2007-12-03 02:09:04', 10, '127.0.0.1'),
+(2, 1, 'phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee mphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy aksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee makphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy suv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy ', 'zitam ape feeja ', 1, '2000-02-16 02:01:11', 1, '127.0.0.1'),
+(3, 0, 'leelocafe vylre mirt eecordee nems psyz yjomp gleetsoatu awosheegov roptoack gak ekelroshon whe fefturs oots iglysto gughaph kythuksy toowhyt iween psigroo thoa eeckeeco staruds iwughergoo zaw wodsept oxiroachur ejaltir foati oagnissolr steempub upeekycoo goasiwo ', 'choassys meepte ootu sto ithoamops ', 1, '2009-10-23 05:07:28', 10, '127.0.0.1'),
+(4, 0, 'chicmal geekehyv awhooz ooc oard psoo gadseeca vomsu roo uthiwa kodricmy agr cugnen ujoosh eec yfe glilsi ifechee zyz ahateekro wyfer evucketee coak oal choaba ', 'ufu eeftech vodee ceestu icoomsuf grodsy ', 1, '2013-03-29 20:23:10', 4, '127.0.0.1'),
+(5, 0, 'iptochoka atoam psewho tyfaps wibeth baxampoady koxoost oglyptoagl peeda umagyps soapsocag ochi oawoalso ', 'unessa seghudref zoobeej uchoshu oatchi ', 1, '2012-12-29 17:14:41', 3, '127.0.0.1'),
+(6, 0, 'odiwads azeesh ooreewh ochit aheewh aboglolr jeeh enoastexee ihezaseeb oatsefi oogluthi ekoali xept leg pseerga ooptyky psymtuz wirde gixol eelseksy egee agloonaw jish agl molsoomsih jyd megnos ', 'phegher ekydeelt stiry ', 1, '2000-08-02 20:45:36', 3, '127.0.0.1'),
+(7, 0, 'mirgoofe astystety psirsa ookrilt poag stoolyph ykyh epaft ebywh stoop efiworda obersempe dalrytsoa iptu ujoleewh phofa phoo ', 'imuxo sampe styk ykatse ', 1, '2002-02-03 13:57:49', 10, '127.0.0.1'),
+(8, 0, 'voghoampo psoabym etoam woaglar ysheepsupt ewhoafoa ehee agloglapto zoatyceer ihoohoadoa enukoozelt shudrephoa xawhootcho ubuthivess vits ytypseluli enydadra ', 'abigida uzikse ysage ithy eptute oagassoow ', 1, '2005-09-14 15:27:09', 10, '127.0.0.1'),
+(9, 0, 'the axamp chem cempeerg shu tethoof eegnolta thegnooz erybyftu ihoakrucm wher pidsee ageets igroa glehymp opteegl sha eemp lee anooptee oaftecke iru ajal iryngux loopeve icusoa ipoo oow rikooss gybuhox wheegly jar chiv obophoafec ', 'stoamt upsegrojy das ', 2, '2010-12-10 01:01:16', 3, '127.0.0.1'),
+(10, 0, 'ecudri chemacka groabog coanukicha biftythycu eexewhopho oass ypessaf nodroshoal domi noapse huhigh oozissoa hursoanguk oanso stoa sungij arergood midroals vyz ozasoach olegys machewhoss phaneemsoo nylrep ypsu oapooz ugryphygli oageem ipoaxat churgosooc compuchu oxoosheeg ogloobiw ', 'jerufte atartoock gyptij ', 2, '2000-02-02 13:46:21', 1, '127.0.0.1'),
+(11, 0, 'fee pooree boomycy oadrekroos jecikseep ooghahov eedsipsoos noamud pej veeroanoof iheex ugulsotchi vaphoarsu isoomu grojossy ooryzons edoohocm chipsyc ', 'alorg phomsucky eegnodryb echah ', 2, '2010-07-14 15:06:50', 2, '127.0.0.1'),
+(13, 0, 'oagh oockic gragrixos ugregu vexamtetoo exav ixoohe psesi ogred pyrtu lypema psyps oophaw oonsoa shojanativ ech pso thu rixy apteele phyftur ', 'sto eensa oanoo ', 2, '2002-11-29 02:10:05', 2, '127.0.0.1'),
+(14, 0, 'ugoa zith olijiw ysh epseb tengeeshy oavuds ooz kotee ychesajoa eec oavygroo racmu ', 'ufalti stiltast sho ymoostep ', 2, '2005-03-02 08:37:54', 10, '127.0.0.1'),
+(15, 0, 'ala vagy eephyp jitsadsowh yceejeez oackoa iwomtywhoo opsefoad mikywi aheev ozy cywuchel koax keds ogruz oorgeex gleece ogle ilooso ipag ', 'oart leltilsig cha ', 2, '2007-05-06 13:06:43', 10, '127.0.0.1'),
+(16, 0, 'oagloo belr liwheess xytchuneen choong rop imogokubu uhongimoa egycoteecm awybefoasu pteeshoo jampov luroh phoakrixo ijecmo ', 'oamtahy chetsu ust ', 3, '2007-02-19 21:42:04', 1, '127.0.0.1'),
+(17, 0, 'mersacm lees veftux ecergeeph ekoo ipadseemen saksylr zoalos owu yba eetchaftoa shee beepapsugl agyptoa baphoa thoxeksuds zoakooxet vimpu akyglolug sahyg eek grersinsod doochoozis wholaloa agr xoost emis okyta estor oag ptoo ', 'xileel goothez vizosooj ewhyz adeegopy ', 3, '2006-05-01 20:16:56', 1, '127.0.0.1'),
+(18, 0, 'othymyni eeceleeth stoovogh fifick chic vee foacuwhu shooroath jugoa ahuphupse oodsilsilr thavo koogroo dyvoad oalrih ', 'reedeexez eegeegub estywob ', 3, '2012-08-02 11:49:47', 4, '127.0.0.1'),
+(19, 0, 'ykoa epoocheef ptoavyz eshunood yboophe oov pterteew azagib ysite oawhazile pheeh iwetch uwooshiz doavoch ptoakeron igilsoob oohoaby edoapsi cyw oolikeecox eer oan oardaghyr achepsogle cheerseh optypt irooweek ephacogle ', 'toaboojeh xajeegh tocooloak hytchubyc oat ', 3, '2004-12-10 05:20:36', 1, '127.0.0.1'),
+(21, 0, 'puwywyrd upt aboordaz kat cidses aheeltor achoasofa ixoarga buftydr egra wylroab ywhee oongoopt roftyxyg fupsoofim wherge itophoogr xockywev dudruw glissu ylishoar oate upicom yreeksec ptod stexu ymookryfty ', 'ebee eegr cyrtuj choax ', 3, '2011-07-08 07:11:15', 2, '127.0.0.1');
+
 
 -- --------------------------------------------------------
 
