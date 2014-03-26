@@ -61,6 +61,7 @@ if(!$logged)
             {
                 echo '<link rel="stylesheet" type="text/css" href="/css/profile.css" />';
                 echo '<script src="/js/profile.js" type="text/javascript"></script>';
+                echo '<script src="/js/wall.js" type="text/javascript"></script>';
                 echo '<link href="/extra/imgUpload/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />';
                 echo '<script src="/extra/imgUpload/js/jquery.Jcrop.min.js"></script>';
                 echo '<script src="/extra/imgUpload/js/script.js"></script>';

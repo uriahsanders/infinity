@@ -92,9 +92,7 @@ switch($_SERVER['REQUEST_METHOD']){
 	//repetition safe function
 	function show($what, $res){
 		$done = '';
-		$i = 0;
 		foreach($res as $attr){
-			++$i;
 			$done .= ($what == 'projects') ?
 			thumbnailTemplate($attr['ID'], $attr['projectname'], $attr['creator'], $attr['date'], $attr['popularity'], $attr['short'], $attr['image'])
 			:

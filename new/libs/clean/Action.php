@@ -1,10 +1,11 @@
 <?php
 if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
-/**
+	/**
+	*I suppose this file is a type of notification class, but more versatile
 	*Storing and removing actions of members
 	*Table: `actions`, (search & replace this to change all (no instance data 'cause static methods))
-	*Columns: `ID`, `user`, `title`, `content`, `category`, `date`
+	*Columns: `ID`, `user`, `title`, `content`, `category`, `date` `read`
 	*/
 	class Action{
 		/**
@@ -69,5 +70,17 @@ if (!defined("INFINITY"))
 		public static function getNumActions($user = $_SESSION['ID']){
 			$result = Database::getInstance()->query("SELECT `ID` FROM `actions` WHERE `user` = ?", $user);
 			return $result->fetchColumn(); //return number of affected rows
+		}
+
+		/**
+		*Let db know user read this action
+		*@access public
+		*@static
+		*@return 1 for success else error
+		*@param int $id - id that was read
+		*/
+		public static function readAction($id){
+			Database::getInstance()->query("UPDATE `actions` SET `read` = ? WHERE `ID` = ?", 1, $id);
+			return 1;
 		}
 	}

@@ -159,6 +159,7 @@
 				type: type,
 				data: request,
 				url: model.scriptFile,
+				cache: false,
 				success: function(res) {
 					callback(res);
 				},

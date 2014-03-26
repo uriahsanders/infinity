@@ -32,9 +32,13 @@ class Projects{
 		}
 		return $res;
 	}
-	public function numProjects($userID){ //GET
+	public function numProjectsCreated($userID){ //GET
 		$result = $this->sql->query("SELECT COUNT(*) FROM `projects` WHERE `creator` = ?", $userID);
 		return $result->fetchColumn();
+	}
+	public function numProjects($userID){ //GET
+		$result = $this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $userID);
+		return count(json_decode($result->fetch()['projects']));
 	}
 	public function search($key, $start = 0){ //GET
 		//retrieve information neccesary for a thumbnail
@@ -60,9 +64,14 @@ class Projects{
 		$this->sql->query("INSERT INTO `projects` 
 			(`projectname`, `category`, `creator`, `date`, `popularity`, `short`, `description`, `image`, `video`, `members`, `launched`)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-			", $projectname, $category, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video, json_encode($_SESSION['ID']), 0);
+			", $projectname, $category, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video, json_encode([$_SESSION['ID']]), 0);
 		$projectID = $this->sql->lastInsertId();
-		echo "done";
+		$result = $this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $_SESSION['ID']);
+		$projects = json_decode($result->fetch()['projects'], true);
+		if(!is_array($projects)) $projects = [];
+		array_push($projects, $projectID);
+		$this->sql->xss_prev = false;
+		$this->sql->query("UPDATE `memberinfo` SET `projects` = ? WHERE `ID` = ?", json_encode($projects), $_SESSION['ID']);
 		//create master branch for workspace
 		// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `title`, `date`, `by`, `branch`)
 		// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', 'Master', $this->date(), $_SESSION['ID'], 'Master');
@@ -89,7 +98,6 @@ class Projects{
 	public function join($projectID, $bool, $who){ //POST
 		//get members from project
 		$result = $this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $projectID);
-		//get projects from session info
 		$result2 = $this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $who);
 		//either add user to members or delete from it
 		$members = json_decode($result->fetch()['members']);

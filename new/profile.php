@@ -6,6 +6,7 @@
     Login::checkAuth();
 	
 	$member = Members::getInstance();
+    $projects = new Projects();
     if (isset($_GET['user']) && !empty($_GET['user']))
     {    
         $ID = $member->get($_GET['user'],"ID");
@@ -86,8 +87,10 @@
     <div id="pro_inf_info">
         <table id="pro_inf_info_tbl">
             <tr>
-                <td><b>12*</b><br/>Projects<br /><br /></td>
-                <td><b>1244*</b><br/>Forum Posts<br /><br /></td>
+                <?php
+                    echo "<td><b>".$projects->numProjects($_SESSION['ID'])."*</b><br/>Projects<br /><br /></td>
+                    <td><b>1244*</b><br/>Forum Posts<br /><br /></td>";
+                ?>
             </tr>
             <tr>
                 <td colspan="2">

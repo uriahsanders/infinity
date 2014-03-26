@@ -128,7 +128,7 @@ class Database implements iDatabase
 				if(!$sth) throw new Exception("Something wrong with query...");
 				//loop through each array of arguments in $args
 				if(count($args) >= 1){ //one or more arguments
-					for($i = 0, $len = count($args); $i < $len, ++$i){
+					for($i = count($args) - 1; $i >= 0; --$i){
 						$args[$i] = ($xss_prev)? htmlspecialchars($args[$i]) : $args[$i]; //xss preventation 
 					}
 				}
