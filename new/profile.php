@@ -88,7 +88,7 @@
         <table id="pro_inf_info_tbl">
             <tr>
                 <?php
-                    echo "<td><b>".$projects->numProjects($_SESSION['ID'])."*</b><br/>Projects<br /><br /></td>
+                    echo "<td><b>".$projects->numProjects($ID)."*</b><br/>Projects<br /><br /></td>
                     <td><b>1244*</b><br/>Forum Posts<br /><br /></td>";
                 ?>
             </tr>

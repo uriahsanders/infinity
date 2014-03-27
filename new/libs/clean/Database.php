@@ -89,6 +89,8 @@ class Database implements iDatabase
 				throw new Exception("wrong with query...");
 			$args = func_get_args();  //Get all arguments
 			array_shift($args);//hides the $query argument
+			//so we can also have array as second param instead of using arguments
+			if(is_array($args[0])) $args = $args[0];
 			if (count($args) >= 1) // one or more?
 			{  
 				for ($i = 0; $i<count($args); $i++) //loop all others
@@ -104,45 +106,6 @@ class Database implements iDatabase
 	}
 
 	/**
-	*	Perform multiple queries in a group from an assoc array with transactions
-	*	This prevents any one query from commiting unless all in group are
-	*	successful. Use for dependant queries.
-	*
-	*	@access public
-	*	@param assoc array $queries - $key = query, $value = args
-	*	@param bool $xss_prev - xss prevention for all queries?
-	*	@return int - 1 = success
-	*
-	*	@example transact([
-	*				"SELECT * FROM users WHERE username=? AND ID=?" => ["admin", 1],
-	*				//and so on...
-	*			]);
-	*/
-	public function transact($queries, $xss_prev){
-		$this->_db->beginTransaction();
-		try {
-			$sth; //statement handle
-			//prepare and execute each query
-			foreach($queries as $query => $args){
-				$sth = $this->_db->prepare($query);
-				if(!$sth) throw new Exception("Something wrong with query...");
-				//loop through each array of arguments in $args
-				if(count($args) >= 1){ //one or more arguments
-					for($i = count($args) - 1; $i >= 0; --$i){
-						$args[$i] = ($xss_prev)? htmlspecialchars($args[$i]) : $args[$i]; //xss preventation 
-					}
-				}
-				$sth->execute($args);
-			}
-			$this->_db->commit();
-			return 1; //returns results
-		} catch (Exception $e) {
-			$this->_db->rollback();
-			System::Error($e->getMessage());
-		}
-	}
-	
-	/**
 	*	lastInsertId - PDO function to get last id
 	*	
 	*	@access public
@@ -150,5 +113,29 @@ class Database implements iDatabase
 	public function lastInsertId()
 	{
 		return $this->_db->lastInsertId();
+	}
+
+	/**
+	*	beginTransaction()	-	begin a transaction
+	*/
+	public function beginTransaction()
+	{
+		return $this->_db->beginTransaction(); //use pdo function
+	}
+
+	/**
+	*	commit()	-	commit to database
+	*/
+	public function commit()
+	{
+		return $this->_db->commit(); //use pdo function
+	}
+
+	/**
+	*	rollback()	-	rollback changes
+	*/
+	public function rollBack()
+	{
+		return $this->_db->rollBack(); //use pdo function
 	}
 }

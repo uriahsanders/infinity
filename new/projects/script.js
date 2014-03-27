@@ -18,6 +18,7 @@
 		results: 0 //how many results are being shown atm?
 	});
 	var model = Model.data; //shorthand alias for Model
+	model.category = model.DL; //set category to default location
 	View.create(function(name, value, states) { //function will run each time Model.modify() is called
 		var changed = Model.changed; //array of changed names
 		switch (name) {
@@ -223,7 +224,8 @@
 					signal: 'delete',
 					id: id
 				}, function(res) {
-					console.log("Project was deleted.");
+					console.log(res);
+					//console.log("Project was deleted.");
 				});
 			},
 			updateOne: function(formData) {

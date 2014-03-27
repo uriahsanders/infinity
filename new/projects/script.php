@@ -73,16 +73,18 @@ switch($_SERVER['REQUEST_METHOD']){
 			$thisMember = $member->get($value, 'username');
 			$memberList .= "<a target=\"_blank\"href=\"/user/$thisMember\">".$thisMember.'</a><br>';
 		}
-		$work = ($creator == $_SESSION['ID']) ? "<button class=\"pr-btn\">Workspace</button> &emsp; <button class='pr-btn'>Edit</button>" : '';
+		$work = ($creator == $_SESSION['ID']) ? "<button class=\"pr-btn\">Workspace</button> &emsp;
+		 <button class='pr-btn'>Edit</button> &emsp; <button id='delete'class='pr-btn'>Delete</button>" : '';
 		return "
 			<div style='width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'>
-				<button class='pr-btn'id='pr-discover'>Discover</button>&emsp;<button class='pr-btn'id='pr-posts'>Posts</button>&emsp;
+				<button class='pr-btn'id='pr-discover'>Browse</button>&emsp;<button class='pr-btn'id='pr-posts'>Wall</button>&emsp;
 				<button class='pr-btn'id='pr-posts'>Stats</button>&emsp;<button class='pr-btn'id='pr-posts'>Join</button>&emsp;
 				$work<br><br>
 				<span class='lead'style='font-size: 3em;'>$projectname</span><br><br> by <a target=\"_blank\"href=\"/user/$username\">$username</a><br><br>
 				<div style='background:#000;width:80%;height:400px;margin:auto'></div>
 				<br><br>
 				<div style='padding:10px;border-radius:5px;margin:auto;width:85%;background:url(\"/images/gray_sand.png\");'>$description</div>
+				<input id='projectID'type='hidden'value='".$id."'/>
 			</div>
 		";
 	}
