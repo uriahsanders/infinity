@@ -116,6 +116,9 @@ class Members implements iMembers
 	public function get($ID, $what){
 		return $this->getUserData($ID)[$what];
 	}
+	public function setUsrData($what, $value){
+		$this->_db->query("UPDATE `memberinfo` SET $what = ? WHERE `ID`= ?", $value, $_SESSION['ID']);
+	}
 	public function getFriends($ID, $a=1)
 		{
 			$res = $this->_db->query("SELECT * FROM `friends` WHERE `usr_ID` = ? OR `friend_ID` = ?", $ID, $ID);
@@ -166,5 +169,16 @@ class Members implements iMembers
 			if ($res->rowCount() != 0)
 				return true;
 			return false;
+		}
+		public $ranks = array("Banned","Member","Trusted","VIP","MOD","GMOD","Admin");
+		public function getUserRank($ID = 0, $type = "name"){ // default is active user and to return the name of the rank.
+			if ($ID === 0)
+				$ID = $_SESSION['ID'];
+			$res = $this->_db->query("SELECT `rank` FROM `memberinfo` WHERE `ID`=?", $ID);
+			$row = $res->fetchColumn();
+			if ($type === "name")
+				return $this->ranks[$row[0]];
+			return $row[0];
+			
 		}
 }

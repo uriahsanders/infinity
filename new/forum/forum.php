@@ -5,24 +5,24 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 		include_once($_SERVER["DOCUMENT_ROOT"] . "/libs/relax.php");
 		
 		echo "<div class=\"forum_box\">";
-	
+		$member = Members::getInstance();
 		$MyRank = $member->getUserRank(0,2); //get the current users rank
-    	$forum = new forum; //new forum
+    	$forum = new Forum; //new forum
 		
-		$res = $forum->Query("SELECT * FROM categories WHERE min_rank <= %d AND (visible=1 OR %d=%d) ORDER BY index_ desc;", $MyRank, array_search("Admin", $member->ranks), $MyRank);
+		$res = $forum->sql->query("SELECT * FROM `categories` WHERE `min_rank` <= ? AND (`visible`=1 OR ?=?) ORDER BY `index_` DESC;", $MyRank, array_search("Admin", $member->ranks), $MyRank);
 		// get all the categories that the current users rank has access to and are visible, but show everything to admins and sort dy index...
 		
-		while($row = mysql_fetch_array($res)) //loop all the categories
+		while($row = $res->fetch()) //loop all the categories
 		{
 			echo "<div class=\"forum\">";
 			echo "<div class=\"cat_title\">";
 			echo "<span>&nbsp;</span>"; 
 			echo $row["name"] ; // category name
 			echo "</div>";
-			$res2 = $forum->Query("SELECT * FROM subcat WHERE parent_ID = %d AND min_rank <= %d AND (visible=1 OR %d=%d) ORDER BY index_ desc;", $row["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
+			$res2 = $forum->sql->query("SELECT * FROM `subcat` WHERE `parent_ID` = ? AND `min_rank` <= ? AND (`visible`=1 OR ?=?) ORDER BY `index_` DESC;", $row["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
 			// get all the subcategories that the current users rank has access to and are visible, but show everything to admins and sort dy index...
-			
-			if (mysql_num_rows($res2) > 0) // if any
+			$res2Fetch = $res2->fetchAll();
+			if (count($res2Fetch) > 0) // if any
 			{
 				echo "<div class=\"subcat\">";
 				echo "<table class=\"tbl_subcat\">";
@@ -32,17 +32,18 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<td>[Posts]</td>";
 				echo "<td>[Last Post]</td>";
 				
-				while($row2 = mysql_fetch_array($res2))
+				foreach($res2Fetch as $row2)
 				{
 					echo "<tr>";
 					echo "<td><a href=\"#f=$row2[ID]/".$forum->convertName($row2["name"])."\"><b>$row2[name]</b>";
 					if (strlen($row2["desc_"]) > 0)
 						echo "<br/><i>$row2[desc_]</i>";
-					$res3 = $forum->Query("SELECT * FROM subforum WHERE parent_ID = %d AND (visible=1 OR %d=%d) ORDER BY index_ desc;", $row2["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
-					if (mysql_num_rows($res3) > 0)
+					$res3 = $forum->sql->query("SELECT * FROM `subforum` WHERE `parent_ID` = ? AND (`visible`=1 OR ?=?) ORDER BY `index_` DESC;", $row2["ID"], $MyRank, array_search("Admin", $member->ranks), $MyRank);
+					$res3Fetch = $res3->fetchAll();
+					if (count($res3Fetch) > 0)
 					{
 						$subforum = "<i>";
-						while($row3 = mysql_fetch_array($res3))
+						foreach($res3Fetch as $row3)
 						{
 							$subforum .= "&nbsp;<a href=\"#f=$row2[ID]/".$forum->convertName($row2["name"])."&s=$row3[ID]/".$forum->convertName($row3["name"])."\">$row3[name]</a>,";
 						}

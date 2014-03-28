@@ -3,10 +3,10 @@ if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
 ?>
 
-    
-    <div id="foot" class="bar">
+    <!-- Footer has some issues so will comment out for now -->
+    <!-- <div id="foot" class="bar">
         © Copyright 2014 <a href="/" title="Infinity-forum.org">Infinity-forum.org</a> - All Rights Reserved.
-    </div>
+    </div> -->
     
     <div class="notification">&nbsp;</div>
     

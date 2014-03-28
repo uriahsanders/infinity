@@ -3,12 +3,13 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 {
 		define("INFINITY", true);
 		include_once("../libs/relax.php");
+		$member = Members::getInstance();
 		$MyRank = $member->getUserRank(0,2); //get the current users rank
 		$ranks = $member->ranks;
-    	$forum = new forum; //new forum
+    	$forum = new Forum; //new forum
 		
 		echo "<div class=\"forum_box\">";
-		$res = $forum->Query("	SELECT topics.*, 
+		$res = $forum->sql->query("	SELECT topics.*, 
 												CASE WHEN 
 													sub=0 
 												THEN 
@@ -29,30 +30,29 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 												AS
 													cat_name2 
 								FROM topics, subcat
-								WHERE topics.ID =%d
+								WHERE topics.ID =?
 								AND topics.parent_ID = subcat.ID
 								AND (
 									subcat.visible =1
-									OR %d=%d
+									OR ?=?
 								)
 								AND (
-									subcat.min_rank <= %d
+									subcat.min_rank <= ?
 								)", $_POST["t"], array_search("Admin", $member->ranks), $MyRank, $MyRank);
-								
-		if (mysql_num_rows($res) === 0)
+		$row = $res->fetchAll();						
+		if (count($row) === 0)
 			die("could not find the thread"); //or don't have access
 			
-		$row = mysql_fetch_array($res);
 		
 			echo "<div class=\"thread\">";
 			echo "<div class=\"thread_title\">";
 			echo "<span>&nbsp;</span>"; 
-			echo $row["title"] ; // topic title
+			echo $row[0]["title"] ; // topic title
 			echo "</div>";
 			echo "<div class=\"post\">";
 			echo "<table class=\"tbl_post\"><tr><td>";
 			echo "<div class=\"post_usr\">";
-			$poster = $forum->getUsrInfo($row["by_"]);
+			$poster = $member->getUserData($row[0]["by_"]);
 			echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
 			echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
 			echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
@@ -65,15 +65,15 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo "</div>";
 			echo "</td><td>";
 			echo "<div class=\"post_msg\">";
-			echo $row["msg"];
+			echo $row[0]["msg"];
 			echo "</div>";
 			echo "</td></tr></table>";
 			echo "</div>";
 			echo "</div>";
 			
-			$res = $forum->Query("SELECT * FROM posts WHERE parent_ID=%d", $row["ID"]);
+			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=?", $row[0]["ID"]);
 			
-			while ($row2 = mysql_fetch_array($res))
+			while ($row2 = $res->fetch())
 			{
 				echo "<br/>";
 				echo "<div class=\"thread\">";
@@ -84,7 +84,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<div class=\"post\">";
 				echo "<table class=\"tbl_post\"><tr><td>";
 				echo "<div class=\"post_usr\">";
-				$poster = $forum->getUsrInfo($row2["by_"]);
+				$poster = $member->getUserData($row2["by_"]);
 				echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
 				echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
 				echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
@@ -112,11 +112,11 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			
 			echo "</div>";
 			
-			if (isset($row['cat_ID'])) //if subforum post, so we get right back on track
-				$script  = "<input type=\"hidden\" value=\"".base64_encode($row["cat_name"])."|".$row['cat_ID']."/".$forum->convertName($row["cat_name2"])."&s=".$row["parent_ID"]."\" class=\"hdn_cat\"/>";
+			if (isset($row[0]['cat_ID'])) //if subforum post, so we get right back on track
+				$script  = "<input type=\"hidden\" value=\"".base64_encode($row[0]["cat_name"])."|".$row[0]['cat_ID']."/".$forum->convertName($row[0]["cat_name2"])."&s=".$row[0]["parent_ID"]."\" class=\"hdn_cat\"/>";
 			else
-				$script  = "<input type=\"hidden\" value=\"".base64_encode($row["cat_name"])."|".$row["parent_ID"]."\" class=\"hdn_cat\"/>";
-			$script .= "<input type=\"hidden\" value=\"".base64_encode($row["title"])."|".$row["ID"]."\" class=\"hdn_thr\"/>";
+				$script  = "<input type=\"hidden\" value=\"".base64_encode($row[0]["cat_name"])."|".$row[0]["parent_ID"]."\" class=\"hdn_cat\"/>";
+			$script .= "<input type=\"hidden\" value=\"".base64_encode($row[0]["title"])."|".$row[0]["ID"]."\" class=\"hdn_thr\"/>";
 			echo $script;
 			
 			//var_dump($row);

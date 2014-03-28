@@ -1,16 +1,16 @@
 <?php
 define("INFINITY", true);
 include_once("../libs/relax.php");
-$forum = new forum;
-$m = $forum->Query("SELECT * FROM memberinfo");
+$forum = new Forum;
+$m = $forum->sql->query("SELECT * FROM `memberinfo`");
 $mem = array();
-while($r = mysql_fetch_array($m))
+while($r = $m->fetch())
 	array_push($mem,$r['ID']);
 var_dump($mem);
-$res = $forum->Query("SELECT * FROM subcat WHERE parent_ID <= 1");
+$res = $forum->sql->query("SELECT * FROM `subcat` WHERE `parent_ID` <= 1");
 $now = strtotime(date("Y-m-d H:i:s"));
 $old = strtotime(date("Y-m-d H:i:s", strtotime("2000-01-01 00:00:00")));
-while ($row = mysql_fetch_array($res))
+while ($row = $res->fetch())
 {
 	$num = mt_rand(5, 10);
 	for ($i = 0; $i <= $num;$i++)
@@ -21,16 +21,16 @@ while ($row = mysql_fetch_array($res))
 		for ($k = 0;$k <= mt_rand(2,5);$k++) $title .= random_pronounceable_word(mt_rand(3,9))." ";
 		$by = $mem[mt_rand(0,sizeof($mem)-1)];
 		$time = date('Y-m-d H:i:s',mt_rand($old,$now));
-		$ins = $forum->Query("INSERT INTO topics (msg, title, parent_ID, by_, IP, time_) VALUES (%s,%s,%d,%d,%s,%s)"
+		$ins = $forum->sql->query("INSERT INTO `topics` (`msg`, `title`, `parent_ID`, `by_`, `IP`, `time_`) VALUES (?,?,?,?,?,?)"
 					  ,$msg, $title, $row['ID'], $by, "127.0.0.1", $time);
-		$id = mysql_insert_id($forum->CON);
+		$id = $forum->sql->lastInsertId();
 		$num2 = mt_rand(2, 8);
 		for ($ii = 0; $ii <= $num2;$ii++)
 		{
 			$msg2 = "";
 			$by2 = $mem[mt_rand(0,sizeof($mem)-1)];
 			for ($j = 0;$j <= mt_rand(10,100);$j++) $msg2 .= random_pronounceable_word(mt_rand(3,10))." ";
-			$forum->Query("INSERT INTO posts (msg, IP, by_, parent_ID, time_) VALUES(%s, %s, %d, %d, %s)"
+			$forum->sql->query("INSERT INTO `posts` (`msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES(?, ?, ?, ?, ?)"
 							,$msg2, "127.0.0.1", $by2, $id, date('Y-m-d H:i:s',mt_rand($time,$now)));
 		}
 		
