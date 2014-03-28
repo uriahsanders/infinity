@@ -116,8 +116,8 @@ if(!$logged)
                     <a class='member_link'href=\"/lounge/\">Lounge</a>&nbsp;
                     <!--<a class='member_link'href=\"/projects/\">Projects</a>&nbsp;-->
                     <a class='member_link'href=\"/workspace/\">Workspace</a>&nbsp;
-                    <a class='member_link'href=\"/users/\">Members</a>&nbsp;
-                    <a class='member_link'href=\"/pm/\">Unread</a>&nbsp;
+                    <a class='member_link'href=\"/users/\">Groups</a>&nbsp;
+                    <a class='member_link'href=\"/pm/\">Suggestions</a>&nbsp;
                     </div>
                     </div>
                     <div id=\"member_bar_icons\">";
@@ -136,7 +136,6 @@ if(!$logged)
                 echo "</span>";
                 echo "</div>";
                 echo "<a href=\"/lounge/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
-                    <!--Need messages icon here-->
                     <a href=\"/lounge/logout\"><img src=\"/images/logout.png\" alt=\"logout\" title=\"logout\" border=\"0\"/></a>
                     </div>
                     </div>";

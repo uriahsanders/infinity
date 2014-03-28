@@ -83,7 +83,7 @@ class Forum implements iForum
 		$member = Members::getInstance();
 		$data = $member->getUserData($row["by_"]); //get the info from the user
 		return "by <a href=\"/user/$data[username]\">".$data["username"]."</a> 
-		&nbsp;&nbsp;<span title=\"".$this->getTopicName($row["parent_ID"]).":\n".substr($row["msg"],0,100)."\">&iexcl;
+		&nbsp;&nbsp;<span title=\"".$this->getTopicName($row["parent_ID"]).":\n".substr($row["msg"],0,100)."\">
 		</span><br/>".System::timeDiff($row["time_"]) . "&nbsp;&nbsp;<a href=\"#t=".$row["parent_ID"]."&p=".$row["ID"]."\">&raquo;</a>";	
 		//return our costumized "last post"-text
 	}
@@ -106,7 +106,7 @@ class Forum implements iForum
 		}
 		return $this->getLastPost($array); //run the ormal function but with an array
 	}
-	function getPostCountByUser($userID)
+	public function getPostCountByUser($userID)
 	{
 		$res = $this->sql->query("SELECT COUNT(`by_`) FROM `posts` WHERE `by_`= ?", $userID);
 		$a = $res->fetchColumn();

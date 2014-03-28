@@ -32,10 +32,10 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<div class=\"subcat\">";
 				echo "<table class=\"tbl_subcat\">";
 				echo "<tr>";
-				echo "<td>[Subject]</td>";// some titles
-				echo "<td>[Replies]</td>";
-				echo "<td>[Views]</td>";
-				echo "<td>[Last Post]</td>";
+				echo "<td>Subject</td>";// some titles
+				echo "<td>Replies</td>";
+				echo "<td>Views</td>";
+				echo "<td>Last Post</td>";
 				
 				foreach($res2Fetch as $row2)
 				{

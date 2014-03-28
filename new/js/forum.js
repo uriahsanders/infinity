@@ -26,8 +26,9 @@ $(document).ready(function(e) {
 		first = true;
 		hash_ajax(); //get that page 
 		
-	} else
+	} else{
 		window.location = "#";
+	}
 	$(window).on("hashchange", hash_ajax);//if the hashtag change
 	function hash_ajax()
 	{
@@ -70,6 +71,7 @@ $(document).ready(function(e) {
 			data = {"f":"infinity"};
 			id ="r";
 		}
+		var time = first === true ? 0 : 1000;
 		$.ajax({ // send it with ajax
 				url: page+".php", //to the right file depending on the previus code
 				type:"POST",
@@ -78,7 +80,7 @@ $(document).ready(function(e) {
 				
 				success: function(data) { //when done
 						 $("#main").prepend("<div class=\"forum_2\">"+data+"</div>");//add the feteched data to a div
-						 $(".forum_1").hide("slide", {direction:((id ==="l")?"left":"right")},((first)?0:1000),//slide the old one away 
+						 $(".forum_1").hide("slide", {direction:((id ==="l")?"left":"right")},time,//slide the old one away 
 						 	function(){
 								$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
 								$(".arrow_l").show(500);
@@ -94,7 +96,7 @@ $(document).ready(function(e) {
 								 block = false;
 								 nav();
 							 }); 
-						 $(".forum_2").show("slide", {direction:((id !=="l")?"left":"right")},((first)?0:1000)); //slide the new one in
+						 $(".forum_2").show("slide", {direction:((id !=="l")?"left":"right")},time); //slide the new one in
 						 
 						 first = false;
 						 

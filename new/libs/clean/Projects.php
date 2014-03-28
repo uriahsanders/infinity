@@ -86,7 +86,7 @@ class Projects{
 		//handling category sepearately so we can possibly view all projects
 		if($category != 'all'){
 			$query .= " AND `category` = ? ";
-			array_push($category); //add new arg
+			array_push($exec, $category); //add new arg
 		}
 		$query .= $this->limit($start); //add query end
 		$result = $this->sql->query($query, $exec);
@@ -95,11 +95,18 @@ class Projects{
 	
 	/**
 	*	Create a new project, a workspace for it, and insert into memberinfo `projects`
+	*	Users cannot create projects with the same names they already created
 	*	@access public
 	*	@return void
 	*/
 	public function create($projectname, $category, $short, $description, $image, $video){ //POST
-		//create project
+		//make sure they have no current projects with same name
+		$current = $this->sql->query("SELECT `projectname` FROM `projects` WHERE `creator` = ?", $_SESSION['ID']);
+		while($row = $current->fetch()){
+			if($row['projectname'] == $projectname){
+				die("You have already created a project with that name!");
+			}
+		}
 		//args to execute with so we can better deal with them
 		$exec = [$projectname, $category, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video];
 		doForAllInArray($exec, ['filter']);

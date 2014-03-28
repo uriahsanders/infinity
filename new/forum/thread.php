@@ -47,7 +47,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo "<div class=\"thread\">";
 			echo "<div class=\"thread_title\">";
 			echo "<span>&nbsp;</span>"; 
-			echo $row[0]["title"] ; // topic title
+			echo $row[0]["title"]." - ".System::timeDiff($row[0]["time_"]); // topic title
 			echo "</div>";
 			echo "<div class=\"post\">";
 			echo "<table class=\"tbl_post\"><tr><td>";
@@ -56,10 +56,10 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
 			echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
 			echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
-			echo "<span class=\"usr_rank\">".$ranks[$poster["rank"]]."</span>"; //rank
+			echo "<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>"; //rank
 			echo "<table class=\"usr_info\">";
 			echo "<tr><td width=10>Posts:</td><td>". $forum->getPostCountByUser($poster["ID"])."</td></tr>"; //post count
-			echo "<tr><td>Ash:</td><td>". $poster["points"]."</td></tr>"; //ask points
+			echo "<tr><td>Prestige:</td><td>". $poster["points"]."</td></tr>"; //ask points
 			
 			echo "</table>";
 			echo "</div>";
@@ -67,6 +67,10 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo "<div class=\"post_msg\">";
 			echo $row[0]["msg"];
 			echo "</div>";
+			echo "<div class=\"post_msg_btm\">";
+				echo "
+					<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a>Modify</a> &emsp; <a>Remove</a>" : "&emsp; <a>Report</a>");
+				echo "</div>";
 			echo "</td></tr></table>";
 			echo "</div>";
 			echo "</div>";
@@ -77,9 +81,9 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			{
 				echo "<br/>";
 				echo "<div class=\"thread\">";
-				echo "<div class=\"thread_title2\">";
+				echo "<div class=\"thread_title\">";
 				echo "<span>&nbsp;</span>"; 
-				//echo ">> ".$row["title"] ; // topic title
+				echo "Re: ".$row[0]["title"]." - ".System::timeDiff($row2["time_"]); // topic title
 				echo "</div>";
 				echo "<div class=\"post\">";
 				echo "<table class=\"tbl_post\"><tr><td>";
@@ -88,10 +92,10 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
 				echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
 				echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
-				echo "<span class=\"usr_rank\">".$ranks[$poster["rank"]]."</span>"; //rank
+				echo "<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>"; //rank
 				echo "<table class=\"usr_info\">";
 				echo "<tr><td width=10>Posts:</td><td>". $forum->getPostCountByUser($poster["ID"])."</td></tr>"; //post count
-				echo "<tr><td>Ash:</td><td>". $poster["points"]."</td></tr>"; //ask points
+				echo "<tr><td>Prestige:</td><td>". $poster["points"]."</td></tr>"; //ask points
 				
 				echo "</table>";
 				echo "</div>";
@@ -101,7 +105,8 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "</div>";
 				
 				echo "<div class=\"post_msg_btm\">";
-				echo "will add a menu here with post actions (only placeholder atm)";
+				echo "
+					<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a>Modify</a> &emsp; <a>Remove</a>" : "&emsp; <a>Report</a>");
 				echo "</div>";
 				
 				echo "</td></tr></table>";

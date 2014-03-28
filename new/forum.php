@@ -14,7 +14,7 @@ include_once(PATH ."core/top.php");
 
 
 <div id="forum_nav">
-	<div id="forum_nav_1"><a href="#">Infinity-forum</a></div><i>---------</i><!--
+	<div id="forum_nav_1"><a href="#">Infinity-forum</a></div>&nbsp;<i class="fa fa-long-arrow-right fa-lg"></i>&nbsp;<!--
     --><div id="forum_nav_2"><span></span><span><?php 
 	echo "<ul>";
 	$member = Members::getInstance();
@@ -40,8 +40,8 @@ include_once(PATH ."core/top.php");
 
 	echo "</ul>";
 	unset($forum);
-	?></span></div><i>---------</i><!--
-    --><div id="forum_nav_3" class="forum_nav_active"><span></span></div><i>---------</i><!--
+	?></span></div>&nbsp;<i class="fa fa-long-arrow-right fa-lg"></i>&nbsp;<!--
+    --><div id="forum_nav_3" class="forum_nav_active"><span></span></div>&nbsp;<i class="fa fa-long-arrow-right fa-lg"></i>&nbsp;<!--
     --><div id="forum_nav_4"></div>
 </div><br/>
 <div id="main">

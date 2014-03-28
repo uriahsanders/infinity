@@ -21,7 +21,7 @@ class System
 			"/" => "Start",
 			"/lounge/"=>"",
 			"/projects/" => "Projects",
-			"/forum/" => "Forum",
+			"/forum/#" => "Forum",
 			"/about/" => "About",
 			"/infinity/" => "Infinity",
 			"/help/" => "Help"
