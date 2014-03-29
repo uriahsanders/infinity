@@ -32,11 +32,11 @@ class Wall{
 	}
 	public $lastID = 0;
 	
-	public function POST($txt = "",$to = 0, $pri = 0, $child = 0, $type = 0) {
+	public function POST($txt = "",$to = 0, $pri = 0, $child = 0, $type = 0, $by) {
 		$sys = new System;
 		$data = array(
 				"type" => $type,
-				"by" => $_SESSION['ID'],
+				"by" => $by || $_SESSION['ID'],
 				"to" => $to,
 				"privacy" => $pri,
 				"date" => date("Y-m-d H:i:s"),
@@ -82,5 +82,11 @@ class Wall{
 		for ($o = 0; $o <= count($out); ++$o)
 			array_push($ids, @$out[1][$o]);
 		return count($ids); //count just for now, changing later for full
+	}
+
+	//have Infinity-Forum post to a wall
+	public function sitePost($msg, $to, $pri, $child, $type){
+		//by 0 is flag for site
+		$this->POST($msg, $to, $pri, $child, $type, 0);
 	}
 }

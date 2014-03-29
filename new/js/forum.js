@@ -16,6 +16,16 @@ $(document).ready(function(e) {
 		setTimeout(function()
 		{hash_ajax();},200)
 	}); //small hash hack
+	//changing pages
+	$(document).on('click', 'a[id^="change-pg-"]', function(){
+		var hash = window.location.hash;
+		//add a slash if we need to for a proper split
+		if(hash.slice(-1) != '/' && isNaN(hash.slice(-1))) hash += '/';
+		hash = hash.split('/');
+		//change page part of URL
+		hash[hash.length - 1] = $(this).attr('id').substring(10);
+		window.location.hash = hash.join('/');
+	});
 	//////////////////////////////////////////////////////
 	// clicking on a category will be handled with ajax..
 	//////////////////////////////////////////////////////
@@ -34,14 +44,18 @@ $(document).ready(function(e) {
 	{
 		if (block)
 			return;
-		var pages = ["forum", "cat", "thread"]
+		var pages = ["forum", "cat", "thread"];
+		var pg = 1;
 		var hash = window.location.hash.substring(1); //get the hashtag
 		if (hash.indexOf("f=")!= -1)
 			var cat = hash.substr(hash.indexOf("f=")+2,hash.indexOf("/")-2);//get the ID of the category
 		if (hash.indexOf("s=")!= -1)
 			var subcat = hash.substr(hash.indexOf("s=")+2,hash.indexOf("/")-2);	//get the ID of the subcat
-		if (hash.indexOf("t=")!= -1)
+		if (hash.indexOf("t=")!= -1){
 			var thread = hash.substr(hash.indexOf("t=")+2,hash.indexOf("/")-2);	//get the ID of the thread
+			pg = hash.split('/')[hash.split('/').length - 1]; //get last part of url for page number
+			if(pg == false || isNaN(pg)) pg = 1; //fail safe
+		}
 		if (hash.indexOf("p=")!= -1)
 			var post = hash.substr(hash.indexOf("p=")+2);	//get the ID of the post
 		if (hash.length <= 0)
@@ -60,9 +74,9 @@ $(document).ready(function(e) {
 		{
 			page = pages[2];//thread view
 			if (post !== undefined) //specific post
-				data = {"t":thread, "p":post} //^^
+				data = {"t":thread, "p":post, "pg": pg} //^^
 			else //seriusly...
-				data = {"t":thread} //yeah okay...
+				data = {"t":thread, "pg": pg} //yeah okay...
 		} 
 		else
 		{	

@@ -203,4 +203,9 @@ class System
 		}
 		return $time;
 	}
+	//stick a users name together
+	public static function concatName($name){
+		//replace spaces with dots
+		return preg_replace('/\s/i', '.', $name);
+	}
 }

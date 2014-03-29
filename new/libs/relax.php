@@ -21,6 +21,8 @@ require_once("clean/Extra.php");
 require_once("clean/Projects.php");
 require_once("clean/Workspace.php");
 require_once("clean/Wall.php");
-
+require_once("clean/Groups.php");
+require_once("clean/Suggestions.php");
+require_once("clean/Lounge.php");
 //start a secure session
 System::StartSecureSession();

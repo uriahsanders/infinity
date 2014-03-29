@@ -7,11 +7,12 @@ interface iForum {
 *	
 *	@author relax
 */
-class Forum implements iForum 
+class Forum extends Members implements iForum 
 {
 	public function __construct(){
 		$this->sql = Database::getInstance();
 	}
+	const LIMIT = 3; //limit of pages per thread
 	public function getTopicCount($ForumID) //how many topics in the forum
 	{
 		$res = $this->sql->query("SELECT COUNT(*) FROM `topics` WHERE `parent_ID`=?", $ForumID);
@@ -112,5 +113,23 @@ class Forum implements iForum
 		$a = $res->fetchColumn();
 		$res = $this->sql->query("SELECT COUNT(`by_`) FROM `topics` WHERE `by_`= ?", $userID);
 		return $res->fetchColumn() + $a;
+	}
+	//get the number of pages in a thread
+	private function numPagesInThread($threadID){
+		$res = $this->sql->query("SELECT COUNT(*) FROM `posts` WHERE `parent_ID` = ?", $threadID)->fetchColumn();
+		return ceil($res / self::LIMIT);
+	}
+	public function listPageNums($threadID, $pg = 1){
+		$res = 'Pages: ';
+		for($i = 1; $i <= $this->numPagesInThread($threadID); ++$i){
+			$res .= ($pg != $i) ? "<a id='change-pg-".$i."'>".$i."</a> " : '['.$i.'] ';
+		}
+		return $res;
+	}
+	public function beginAtRow($pn){
+		if($pn == 1) return 0;
+		else{
+			return self::LIMIT * ($pn - 1);
+		}
 	}
 }

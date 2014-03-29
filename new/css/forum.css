@@ -283,6 +283,15 @@ div[id^='forum_nav_'] {
 	padding: 8px 12px;
 	font-size: 60%;
 }
+#forum-post{
+	display: inline-block;
+	background: rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.23);
+	padding: 8px 12px;
+	font-size: 60%;
+	color: #fff;
+	cursor: pointer;
+}
 div[id^='forum_nav_'] span:first-child b{
 	display:inline-block;
 	transform:rotate(-90deg);

@@ -43,41 +43,45 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 		if (count($row) === 0)
 			die("could not find the thread"); //or don't have access
 			
-		
-			echo "<div class=\"thread\">";
-			echo "<div class=\"thread_title\">";
-			echo "<span>&nbsp;</span>"; 
-			echo $row[0]["title"]." - ".System::timeDiff($row[0]["time_"]); // topic title
-			echo "</div>";
-			echo "<div class=\"post\">";
-			echo "<table class=\"tbl_post\"><tr><td>";
-			echo "<div class=\"post_usr\">";
-			$poster = $member->getUserData($row[0]["by_"]);
-			echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
-			echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
-			echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
-			echo "<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>"; //rank
-			echo "<table class=\"usr_info\">";
-			echo "<tr><td width=10>Posts:</td><td>". $forum->getPostCountByUser($poster["ID"])."</td></tr>"; //post count
-			echo "<tr><td>Prestige:</td><td>". $poster["points"]."</td></tr>"; //ask points
-			
-			echo "</table>";
-			echo "</div>";
-			echo "</td><td>";
-			echo "<div class=\"post_msg\">";
-			echo $row[0]["msg"];
-			echo "</div>";
-			echo "<div class=\"post_msg_btm\">";
-				echo "
-					<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a>Modify</a> &emsp; <a>Remove</a>" : "&emsp; <a>Report</a>");
-				echo "</div>";
-			echo "</td></tr></table>";
-			echo "</div>";
-			echo "</div>";
-			
-			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=?", $row[0]["ID"]);
-			
-			while ($row2 = $res->fetch())
+			//if we are on the first page show init post
+				echo "<div class=\"thread\">";
+				echo $forum->listPageNums($_POST['t'], $_POST['pg'])."<br>";
+				if($_POST['pg'] == 1){
+					echo "<br><div class=\"thread_title\">";
+					echo "<span>&nbsp;</span>"; 
+					echo $row[0]["title"]." - ".System::timeDiff($row[0]["time_"]); // topic title
+					echo "</div>";
+					echo "<div class=\"post\">";
+					echo "<table class=\"tbl_post\"><tr><td>";
+					echo "<div class=\"post_usr\">";
+					$poster = $member->getUserData($row[0]["by_"]);
+					echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
+					echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
+					echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
+					echo "<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>"; //rank
+					echo "<table class=\"usr_info\">";
+					echo "<tr><td width=10>Posts:</td><td>". $forum->getPostCountByUser($poster["ID"])."</td></tr>"; //post count
+					echo "<tr><td>Prestige:</td><td>". $poster["points"]."</td></tr>"; //ask points
+					
+					echo "</table>";
+					echo "</div>";
+					echo "</td><td>";
+					echo "<div class=\"post_msg\">";
+					echo $row[0]["msg"];
+					echo "</div>";
+					echo "<div class=\"post_msg_btm\">";
+						echo "
+							<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a>Modify</a> &emsp; <a>Remove</a>" : "&emsp; <a>Report</a>");
+						echo "</div>";
+					echo "</td></tr></table>";
+					echo "</div>";
+					echo "</div>";
+				}			
+			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=? LIMIT ".($forum->beginAtRow($_POST['pg'])).", ".Forum::LIMIT, $row[0]["ID"]);
+			$resFetch = $res->fetchAll();
+			$count = count($resFetch);
+			$counter = 0;
+			foreach($resFetch as $row2)
 			{
 				echo "<br/>";
 				echo "<div class=\"thread\">";
@@ -111,6 +115,8 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				
 				echo "</td></tr></table>";
 				echo "</div>";
+				//last row
+				if(++$counter == $count) echo $forum->listPageNums($_POST['t'], $_POST['pg'])."<br>";
 				echo "</div>";
 			}
 			
