@@ -44,7 +44,10 @@ if(!$logged)
         <script type="text/javascript" src="/js/jquery-1.9.0.min.js"></script>
         <script src="/js/jquery-ui.min.js" type="text/javascript"></script> 
         <script src="/js/mix.js" type="text/javascript"></script>
-        
+        <script src="https://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+        <script type="text/javascript">
+        tinymce.init({selector:'.tinymce'});
+        </script>
         <?php 
             /*
                 having different css for each page is stupid, I take the blame for that one.
