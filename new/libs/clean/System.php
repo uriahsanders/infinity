@@ -186,20 +186,25 @@ class System
 		return $data; //return clean array.
 	}
 	public static function timeDiff($t2) {
-		$t1 = time();
-		$t2 = strtotime($t2);
-		$diff = $t1 - $t2;
-		$m = 60; $h = $m * 60; $d = $h * 24; $w = $d * 7;
-		if ($diff < $h) {
+		$t1 = time(); //current time
+		$t2 = strtotime($t2); //given time
+		$diff = $t1 - $t2; //difference between times
+		//get values based on seconds:
+		//minutes, hours, days, weeks, months
+		$m = 60; $h = $m * 60; $d = $h * 24; $w = $d * 7; $mt = $w * 3.6; //cut this down to be safe
+		//show different results depending on what time frame we're in
+		if ($diff < $h) { //less than an hour ago
 			$diff = intval($diff / $m);
 			$time = $diff . (($diff == 1) ? " minute" : " minutes") . " ago";
-		} else if ($diff < $d && $diff >= $h) {
+		} else if ($diff < $d && $diff >= $h) { //more than an hour less than a day
 			$diff = intval($diff / $h);
 			$time = $diff . (($diff == 1) ? " hour" : " hours") . " ago";
-		} else if ($diff >= $d && $diff < $w) {
+		} else if ($diff >= $d && $diff < $w) { //more than a day less than a week
 			$time = date("D g:i a", $t2);
-		} else if ($diff >= $w) {
+		} else if ($diff >= $w && $diff < $mt) { //more than a week less than a month
 			$time = date("jS M g:i a",$t2);
+		} else if($diff >= $mt){ //more than a month
+			$time = date("jS M g:i a, Y");
 		}
 		return $time;
 	}

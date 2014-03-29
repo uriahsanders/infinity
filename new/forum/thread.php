@@ -45,7 +45,6 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			
 			//if we are on the first page show init post
 				echo "<div class=\"thread\">";
-				echo $forum->listPageNums($_POST['t'], $_POST['pg'])."<br>";
 				if($_POST['pg'] == 1){
 					echo "<br><div class=\"thread_title\">";
 					echo "<span>&nbsp;</span>"; 
@@ -77,7 +76,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 					echo "</div>";
 					echo "</div>";
 				}			
-			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=? LIMIT ".($forum->beginAtRow($_POST['pg'])).", ".Forum::LIMIT, $row[0]["ID"]);
+			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=? ORDER BY `time_` DESC LIMIT ".($forum->beginAtRow($_POST['pg'])).", ".Forum::LIMIT, $row[0]["ID"]);
 			$resFetch = $res->fetchAll();
 			$count = count($resFetch);
 			$counter = 0;
@@ -116,7 +115,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "</td></tr></table>";
 				echo "</div>";
 				//last row
-				if(++$counter == $count) echo $forum->listPageNums($_POST['t'], $_POST['pg'])."<br>";
+				if(++$counter == $count) echo "<br><button id='forum-post'>New Post</button>&emsp;".$forum->listPageNums($_POST['t'], $_POST['pg'])."<br>";
 				echo "</div>";
 			}
 			

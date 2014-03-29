@@ -122,14 +122,11 @@ class Forum extends Members implements iForum
 	public function listPageNums($threadID, $pg = 1){
 		$res = 'Pages: ';
 		for($i = 1; $i <= $this->numPagesInThread($threadID); ++$i){
-			$res .= ($pg != $i) ? "<a id='change-pg-".$i."'>".$i."</a> " : '['.$i.'] ';
+			$res .= ($pg != $i) ? "<a class='pg-link'id='change-pg-".$i."'>".$i."</a> " : '['.$i.'] ';
 		}
 		return $res;
 	}
 	public function beginAtRow($pn){
-		if($pn == 1) return 0;
-		else{
-			return self::LIMIT * ($pn - 1);
-		}
+		return self::LIMIT * ($pn - 1);
 	}
 }

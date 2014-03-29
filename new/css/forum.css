@@ -273,7 +273,7 @@
 	margin: auto;
 	z-index: 4;
 }
-#forum_nav a {
+#forum_nav a:not(.pg-link){
 	color: white;
 }
 div[id^='forum_nav_'] {

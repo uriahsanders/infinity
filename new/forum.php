@@ -55,6 +55,10 @@ include_once(PATH ."core/top.php");
 	    }
     </script>
     -->
+    <br><br>
+    <div id="forum-pages">
+    	
+    </div>
 </div><br/>
 <div id="main">
 	<div class="forum_1">

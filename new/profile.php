@@ -100,7 +100,7 @@
                     echo "<b>$data[points]</b><br />";
                 }
                 ?>
-                Points</td>
+                Prestige</td>
             </tr>
         </table>
     </div>
