@@ -126,7 +126,7 @@ if(!$logged)
                     <div id=\"member_bar_icons\">";
                 
                 //status icon
-                echo "<div id=\"status_icon\"><img src=\"/images/status/0.png\" class=\"status_icon\" alt=\"status\" title=\"status\">";
+                echo "<div id=\"status_icon\"><i class=\"fa fa-user fa-lg status_icon user-1\" alt=\"status\" title=\"status\"></i>";
                 echo "<span>";
                 $status = array(
                     1 => "Online",
@@ -135,11 +135,11 @@ if(!$logged)
                     0 => "Invisible"                    
                 );
                 foreach($status as $id=>$name)
-                echo "<label><img src=\"/images/status/$id.png\" alt=\"$id\" title=\"$name\"/>$name</label>";
+                echo "<label><i class='fa fa-user user-$id' alt=\"$id\" title=\"$name\"></i>&nbsp;$name</label>";
                 echo "</span>";
                 echo "</div>";
-                echo "<a href=\"/lounge/settings\"><img src=\"/images/s.png\" alt=\"settings\" title=\"settings\" border=\"0\"/></a>
-                    <a href=\"/lounge/logout\"><img src=\"/images/logout.png\" alt=\"logout\" title=\"logout\" border=\"0\"/></a>
+                echo "&nbsp;&nbsp;<a class='fa fa-envelope fa-lg'style='color:grey'><a>&nbsp;&nbsp;<a alt=\"settings\" title=\"settings\"href=\"/lounge/settings\"class='fa fa-cog fa-lg'style='color:grey'></a>&nbsp;&nbsp;
+                <a class='fa fa-sign-out fa-lg'href=\"/lounge/logout\"alt=\"logout\" title=\"logout\"style='color:grey'></a>&nbsp;&nbsp;
                     </div>
                     </div>";
             }

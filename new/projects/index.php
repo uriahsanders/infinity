@@ -24,23 +24,8 @@
         <input class="form-control"placeholder="Search..."/>
       </div>
       <br>
-      <form style="display:none;"id="project-form">
-        <select name="category">
-          <option>Technology<option>
-        </select>
-        <br><br>
-        <input name="projectName"placeholder="projectname"/>
-        <br><br>
-        <textarea name="short"></textarea>
-        <br><br>
-        <textarea name="description"></textarea>
-        <br><br>
-        <input type="hidden"name="video"value="temporary"/>
-        <input type="hidden"name="image"value="temporary"/>
-        <input id="token"type="hidden"value=<?php echo '"'.$_SESSION['token'].'"'; ?>/>
-        <button>Create</button>
-      </form>
     </div>
+    <input id="token"type="hidden"value=<?php echo '"'.$_SESSION['token'].'"'; ?>/>
     <div id="meat"></div>
     <script type="text/javascript"src="/js/tinymvc.js"></script>
     <script type="text/javascript"src="script.js"></script>

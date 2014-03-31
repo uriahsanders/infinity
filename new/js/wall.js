@@ -8,7 +8,7 @@ $(document).ready(function(e) {
 			//  array("txt","to","pri","child")))
 			data: {"action": "post", "txt": $(this).parent("div").children("textarea").val(), "to": $("#usr_id").val(), "pri":0, "child":sid, "type": 0},
 			success: function(data) {
-				//console.log(data);	
+				console.log(data);	
 				if (data.substring(0,2) =="OK") {
 					if (sid == 0)
 						WallAdd($(".pro_stream_box textarea").val(),null, data.substring(2));

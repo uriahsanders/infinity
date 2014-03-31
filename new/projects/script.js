@@ -59,8 +59,25 @@
 				e.preventDefault();
 				Projects.handle_createProject($(this).serialize());
 			});
-			$(document).on('click', '#new-project', function(){
-				$('#project-form').fadeToggle();
+			$(document).on('click', '#new-project', function() {
+				var form = [
+					'<br><br><form id="project-form">',
+					'<select class="form-control"name="category">',
+					'<option>Technology<option>',
+					'</select>',
+					'<br><br>',
+					'<input class="form-control"name="projectName"placeholder="projectname"/>',
+					'<br><br>',
+					'<textarea placeholder="Short Description"class="form-control"name="short"></textarea>',
+					'<br><br>',
+					'<textarea placeholder="Description"class="form-control"name="description"></textarea>',
+					'<br><br>',
+					'<input class="form-control"type="hidden"name="video"value="temporary"/>',
+					'<input class="form-control"type="hidden"name="image"value="temporary"/>',
+					'<button class="pr-btn">Create</button>',
+					'</form>'
+				].join('');
+				popup('New Project', form, 'create-project');
 			});
 			//entering a search request
 			$(document).on('submit', '#search-form', function() {
@@ -91,7 +108,7 @@
 				Projects.handle_join((model.join === null || model.join === false) ? true : false);
 			});
 			//going back
-			$(document).on('click', '#pr-discover', function(){
+			$(document).on('click', '#pr-discover', function() {
 				Router.goTo(model.DL);
 			});
 		});
@@ -152,7 +169,7 @@
 		//shorthand ajax so we can bulk handle errors and successes
 		function ajax(type, request, callback) {
 			//check token with every POST request
-			if(type === 'POST'){
+			if (type === 'POST') {
 				if (typeof request === 'string') request += '&token=' + $('#token').val();
 				else request.token = $('#token').val();
 			}
@@ -216,7 +233,7 @@
 					projectName, short, description, image, video
 				*/
 				ajax('POST', 'signal=create&' + formData, function(res) {
-					console.log(res);
+					$('#create-project').append("<br>Your project's workspace has been created at: " + res + ". Launch it from there!");
 				});
 			},
 			deleteOne: function(id) {
@@ -242,7 +259,7 @@
 					this.getComments(); //reload comments
 				});
 			},
-			getComments: function(){
+			getComments: function() {
 				ajax('GET', {
 					signal: 'comments',
 					projectID: $('#projectID').val() //hidden input with project ID
@@ -250,7 +267,7 @@
 					$('#comments').html(res);
 				});
 			},
-			joinProject: function(bool){ //true for joining false for leaving
+			joinProject: function(bool) { //true for joining false for leaving
 				//send an ajax call on whether project was joined or unjoined
 				//based on the value of model.joined
 				//hide join form if project is being joined or
@@ -259,16 +276,16 @@
 					signal: 'join',
 					bool: bool,
 					projectID: $('#projectID').val() //hidden input with project ID
-				}, function(res){
+				}, function(res) {
 					console.log("Joining/leaving project has been handled.");
 					this.joinForm(bool); //hide or show form depending on bool
 				});
 			},
-			joinForm: function(bool){
-				if(bool === true) $('#joinForm').hide();
+			joinForm: function(bool) {
+				if (bool === true) $('#joinForm').hide();
 				else $('#joinForm').show();
 			},
-			loadMore: function(){
+			loadMore: function() {
 				ajax('GET', {
 					signal: 'loadMore',
 					results: model.results, //how many results do we have already?
@@ -276,7 +293,7 @@
 					category: model.category,
 					query: model.query,
 					projectID: model.getOne === true ? $('#projectID').val() : -1
-				}, function(res){
+				}, function(res) {
 					$('#meat').append(res); //append results
 					model.results += model.limit;
 				});
@@ -318,7 +335,7 @@
 			handle_loadMore: function() {
 				this.loadMore();
 			},
-			handle_join: function(bool){
+			handle_join: function(bool) {
 				Model.modify('joined', bool);
 			}
 		};

@@ -1301,3 +1301,34 @@ span.tooltip {
     border-radius: 3px;
     cursor: pointer;
 }
+.user-1{
+    color: lightgreen;
+}
+.user-2{
+    color: yellow;
+}
+.user-3{
+    color: red;
+}
+.user-0{
+}
+.popup{
+    position:absolute;
+top:50%;
+left:50%;
+width:800px;  /* adjust as per your needs */
+height:680px;   /* adjust as per your needs */
+margin-left:-400px;   /* negative half of width above */
+margin-top:-340px;   /* negative half of height above */
+background: url(/images/broken_noise.png);
+    border: 6px solid #000000;
+    color: #ffffff;
+      text-align: center;
+      font-size: 14px;
+     box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
+    -webkit-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
+    -moz-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
+    -ms-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
+    -o-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
+    z-index:500;
+}

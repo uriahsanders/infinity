@@ -100,39 +100,47 @@ class Projects{
 	*	@return void
 	*/
 	public function create($projectname, $category, $short, $description, $image, $video){ //POST
-		//make sure they have no current projects with same name
-		$current = $this->sql->query("SELECT `projectname` FROM `projects` WHERE `creator` = ?", $_SESSION['ID']);
-		while($row = $current->fetch()){
-			if($row['projectname'] == $projectname){
-				die("You have already created a project with that name!");
+		$this->sql->beginTransaction();
+		try{
+			//make sure they have no current projects with same name
+			$current = $this->sql->query("SELECT `projectname` FROM `projects` WHERE `creator` = ?", $_SESSION['ID']);
+			while($row = $current->fetch()){
+				if($row['projectname'] == $projectname){
+					die("You have already created a project with that name!");
+				}
 			}
+			//args to execute with so we can better deal with them
+			$exec = [$projectname, $category, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video];
+			doForAllInArray($exec, ['filter']);
+			//dont need to filter these
+			array_push($exec, json_encode([$_SESSION['ID']]), 1);
+			$this->sql->xss_prev = false; //no html entities (&quot;) so we can encode (manual clear XSS)
+			$this->sql->query("INSERT INTO `projects` 
+				(`projectname`, `category`, `creator`, `date`, `popularity`, `short`, `description`, `image`, `video`, `members`, `launched`)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+				", $exec);
+			//get ID of project
+			$projectID = $this->sql->lastInsertId();
+			//getting projects from members and putting new project in
+			$result = $this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $_SESSION['ID']);
+			$projects = json_decode($result->fetch()['projects'], true);
+			//new array if not already an array
+			if(!is_array($projects)) $projects = [];
+			array_push($projects, $projectID);
+			$this->sql->xss_prev = false;
+			$this->sql->query("UPDATE `memberinfo` SET `projects` = ? WHERE `ID` = ?", json_encode($projects), $_SESSION['ID']);
+			//create master branch for workspace
+			// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `title`, `date`, `by`, `branch`)
+			// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', 'Master', $this->date(), $_SESSION['ID'], 'Master');
+			// //add privilege to workspace
+			// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `branch`, `to`, `level`)
+			// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'privilege', 'Master', $_SESSION['ID'], 5);
+			$this->sql->commit();
+			return "<a>Workspace</a>";
+		}catch(Exception $e){
+			$this->sql->rollback();
+			System::Error($e->getMessage());
 		}
-		//args to execute with so we can better deal with them
-		$exec = [$projectname, $category, $_SESSION['ID'], $this->date(), 0, $short, $description, $image, $video];
-		doForAllInArray($exec, ['filter']);
-		//dont need to filter these
-		array_push($exec, json_encode([$_SESSION['ID']]), 1);
-		$this->sql->xss_prev = false; //no html entities (&quot;) so we can encode (manual clear XSS)
-		$this->sql->query("INSERT INTO `projects` 
-			(`projectname`, `category`, `creator`, `date`, `popularity`, `short`, `description`, `image`, `video`, `members`, `launched`)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-			", $exec);
-		//get ID of project
-		$projectID = $this->sql->lastInsertId();
-		//getting projects from members and putting new project in
-		$result = $this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $_SESSION['ID']);
-		$projects = json_decode($result->fetch()['projects'], true);
-		//new array if not already an array
-		if(!is_array($projects)) $projects = [];
-		array_push($projects, $projectID);
-		$this->sql->xss_prev = false;
-		$this->sql->query("UPDATE `memberinfo` SET `projects` = ? WHERE `ID` = ?", json_encode($projects), $_SESSION['ID']);
-		//create master branch for workspace
-		// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `title`, `date`, `by`, `branch`)
-		// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', 'Master', $this->date(), $_SESSION['ID'], 'Master');
-		// //add privilege to workspace
-		// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `branch`, `to`, `level`)
-		// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'privilege', 'Master', $_SESSION['ID'], 5);
 	}
 
 	/**
@@ -262,3 +270,14 @@ class Projects{
 		}
 	}
 }
+//transaction skeleton:
+/*
+		$this->sql->beginTransaction();
+		try{
+			//do queries...
+			$this->sql->commit();
+		}catch(Exception $e){
+			$this->sql->rollback();
+			System::Error($e->getMessage());
+		}
+*/

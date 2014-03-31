@@ -36,7 +36,7 @@ class Wall{
 		$sys = new System;
 		$data = array(
 				"type" => $type,
-				"by" => $by || $_SESSION['ID'],
+				"by" => $by,
 				"to" => $to,
 				"privacy" => $pri,
 				"date" => date("Y-m-d H:i:s"),
