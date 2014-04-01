@@ -87,7 +87,6 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 			Public.getStatus();
 			//reset idle time with any movements
 			$(this).on('mousemove keypress', function() {
-				if(Private.idleTime >= 9){ //dont listen all the damn time (not neccesary)
 					Private.idleTime = 0;
 					Private.timer = setTimeout(function() {
 					clearInterval(Private.timer);
@@ -95,7 +94,6 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 							Public.changeStatus("1", true);
 						}
 					}, 2500); //a delay so the vForced value can be set before this runs
-				}
 			});
 			//change status on element click
 			$(document).on('click', '#status_icon label', function() {

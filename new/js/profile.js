@@ -66,12 +66,9 @@ $(document).ready(function(e) {
 					
 					success: function(data){
 							$("#loading").hide();
-							$(".boxx-main").html("Upload "+(((($(this).parents("div").attr("id") == "pro_user_pic")?"profile" : "banner")))+" picture<br />"+data)
+							popup('Upload', "Upload "+(((($(this).parents("div").attr("id") == "pro_user_pic")?"profile" : "banner")))+" picture<br />"+data);
 						}
 				});
-			$(".boxx-main").show();
-			$(".boxx").fadeIn(500);
-			$(".boxx-main").attr("active", "1");
 			XY();
 		});
 	$(document).on('click', '.pro_usr_menu', function(){
