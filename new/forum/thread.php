@@ -44,7 +44,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			die("could not find the thread"); //or don't have access
 			
 			//if we are on the first page show init post
-				echo "<div class=\"thread\">";
+				echo "<input type='hidden'id='last-page'value='".$forum->numPagesInThread($_POST['t'])."'/><div class=\"thread\">";
 				if($_POST['pg'] == 1){
 					echo "<br><div class=\"thread_title\">";
 					echo "<span>&nbsp;</span>"; 
@@ -76,14 +76,14 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 					echo "</div>";
 					echo "</div>";
 				}			
-			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=? ORDER BY `time_` DESC LIMIT ".($forum->beginAtRow($_POST['pg'])).", ".Forum::LIMIT, $row[0]["ID"]);
+			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=? ORDER BY `time_` ASC LIMIT ".($forum->beginAtRow($_POST['pg'])).", ".Forum::LIMIT, $row[0]["ID"]);
 			$resFetch = $res->fetchAll();
 			$count = count($resFetch);
 			$counter = 0;
 			foreach($resFetch as $row2)
 			{
 				echo "<br/>";
-				echo "<div class=\"thread\">";
+				echo "<div id='thread-".$row['ID']."'class=\"thread\">";
 				echo "<div class=\"thread_title\">";
 				echo "<span>&nbsp;</span>"; 
 				echo "Re: ".$row[0]["title"]." - ".System::timeDiff($row2["time_"]); // topic title

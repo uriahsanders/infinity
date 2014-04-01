@@ -130,7 +130,7 @@ $(document).ready(function(e) {
 							if (thread !== undefined) {
 								$('#forum-pages').append();
 								$.ajax({
-									url: '/forum/buttons.php',
+									url: '/forum/handle.php',
 									type: 'GET',
 									data: data,
 									success: function(res2) {
@@ -264,5 +264,47 @@ $(document).ready(function(e) {
 	///////////////////////////////////////
 	$(document).on("click", "#forum_nav_2 span:nth-child(2) a, #forum_nav_2 span:first-child b", function() {
 		$("#forum_nav_2 span:nth-child(2)").slideToggle(300);
+	});
+	$(document).on('click', '#forum-post', function(){
+		var hash = window.location.hash;
+		if (hash.indexOf("f=") != -1)
+			var cat = hash.substr(hash.indexOf("f=") + 2, hash.indexOf("/") - 2); //get the ID of the category
+		if(hash.indexOf("t=") != -1)
+			var thread = hash.substr(hash.indexOf("t=") + 2, hash.indexOf("/") - 2); //get the ID of the thread
+		popup("New Post", '<form id="new-forum-post"><input type="hidden"name="signal"value="post"/><input type="hidden"name="'+
+			(thread ? 't' : 'f')+'"value="'+(thread || cat)+'"/><br>'+
+			(cat ? '<input name="subject"placeholder="Subject"/>' : '')+
+			'<br><br><textarea name="body"class="form-control"></textarea><br><button class="pr-btn">Post</button></form>');
+	});
+	$(document).on('submit', '#new-forum-post', function(e){
+		 e.preventDefault();
+		 var formData = $(this).serialize();
+		 $.ajax({
+		 	url: '/forum/handle.php',
+		 	data: formData,
+		 	type: 'POST',
+		 	success: function(data){
+		 		//dealing with category
+		 		var hash = window.location.hash;
+		 		var cat = hash.indexOf("f=") != -1 ? true : false;
+		 		if(cat){
+		 			alert(data);
+		 			window.location.reload(true);
+		 		}else{
+		 			//change to last page to see post
+					//add a slash if we need to for a proper split
+					if (hash.slice(-1) != '/' && isNaN(hash.slice(-1))) hash += '/';
+					hash = hash.split('/');
+					//change page part of URL
+					hash[hash.length - 1] = $('#last-page').val();
+					if(window.location.hash === hash.join('/')) $(window).trigger('hashchange');
+					else window.location.hash = hash.join('/');
+					$('.popup').fadeOut();
+					$('html, body').animate({
+			            scrollTop: $(document).height()
+			        }, 3000);
+		 		}
+			}
+		 });
 	});
 });

@@ -43,18 +43,6 @@ include_once(PATH ."core/top.php");
 	?></span></div>&nbsp;<i class="fa fa-long-arrow-right fa-lg"></i>&nbsp;<!--
     --><div id="forum_nav_3" class="forum_nav_active"><span></span></div>&nbsp;<i class="fa fa-long-arrow-right fa-lg"></i>&nbsp;<!--
     --><div id="forum_nav_4"></div>
-    <!--
-    <script type="text/javascript">
-	    var hash = window.location.hash;
-	    if (hash.indexOf("t=")!= -1){
-	    	var threadID = parseInt(hash.substr(hash.indexOf('t=')+2,hash.indexOf('/')-2), 10);
-		    var pg = 1;
-		    pg = hash.split('/')[hash.split('/').length - 1]; //get last part of url for page number
-			if(pg == false || isNaN(pg)) pg = 1; //fail safe
-		    $('#forum_nav').append("<button id='forum-post'>+</button>&emsp;<?php $forum = new Forum(); echo $forum->listPageNums(1); ?>");
-	    }
-    </script>
-    -->
     <br><br>
     <div id="forum-pages">
     	

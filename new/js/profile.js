@@ -59,14 +59,15 @@ $(document).ready(function(e) {
 	
 	
 		$(document).on("click", "#pro_user_pic #upload, #pro_bg_strip #upload", function(){
+			var bool = $(this).attr('class') === 'user-pic-upload';
 			$.ajax({
-					url: "/imgUpload/" + (($(this).parents("div").attr("id") == "pro_user_pic")?"1" : "2"),
+					url: "/imgUpload/" + (bool?"1" : "2"),
 					async:false,
 					beforeSend: function(){$("#loading").show();},
 					
 					success: function(data){
 							$("#loading").hide();
-							popup('Upload', "Upload "+(((($(this).parents("div").attr("id") == "pro_user_pic")?"profile" : "banner")))+" picture<br />"+data);
+							popup('Upload', "Upload "+(bool?"profile" : "banner")+" picture<br />"+data);
 						}
 				});
 			XY();

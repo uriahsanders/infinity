@@ -23,9 +23,9 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			echo $name[0]["name"]; // category name
 			echo "</div>";
 			if ($s)
-				$res2 = $forum->sql->query("SELECT * FROM `topics` WHERE `parent_ID`=? AND `sub`=1",$_POST['s']);
+				$res2 = $forum->sql->query("SELECT * FROM `topics` WHERE `parent_ID`=? AND `sub`=1 ORDER BY `time_` DESC",$_POST['s']);
 			else
-				$res2 = $forum->sql->query("SELECT * FROM `topics` WHERE `parent_ID`=? AND `sub`=0",$_POST['f']);
+				$res2 = $forum->sql->query("SELECT * FROM `topics` WHERE `parent_ID`=? AND `sub`=0 ORDER BY `time_` DESC",$_POST['f']);
 			$res2Fetch = $res2->fetchAll();
 			if (count($res2Fetch) > 0) // if any
 			{

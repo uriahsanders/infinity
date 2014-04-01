@@ -12,7 +12,7 @@ class Forum extends Members implements iForum
 	public function __construct(){
 		$this->sql = Database::getInstance();
 	}
-	const LIMIT = 3; //limit of pages per thread
+	const LIMIT = 14; //limit of posts per thread (does not include topic)
 	public function getTopicCount($ForumID) //how many topics in the forum
 	{
 		$res = $this->sql->query("SELECT COUNT(*) FROM `topics` WHERE `parent_ID`=?", $ForumID);
@@ -115,7 +115,7 @@ class Forum extends Members implements iForum
 		return $res->fetchColumn() + $a;
 	}
 	//get the number of pages in a thread
-	private function numPagesInThread($threadID){
+	public function numPagesInThread($threadID){
 		$res = $this->sql->query("SELECT COUNT(*) FROM `posts` WHERE `parent_ID` = ?", $threadID)->fetchColumn();
 		return ceil($res / self::LIMIT);
 	}

@@ -39,7 +39,7 @@
             if($ID == $_SESSION['ID'])
             {
                 echo '<span><img src="/images/s.png" title="settings"/>';
-                echo '<span><b id="upload">Upload</b><b id="remove">Delete</b></span>';                
+                echo '<span><b class="user-pic-upload"id="upload">Upload</b><b id="remove">Delete</b></span>';                
                 echo '</span>';
             }
         ?>
