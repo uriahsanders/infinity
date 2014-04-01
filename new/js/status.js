@@ -67,7 +67,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	//Poll server every minute to see if away or now available
 	Private.pollStatus = function() {
 		//changing them to away//
-		if (++Private.idleTime > 15 && Public.getIcon() == 1) { //15 minutes
+		if (++Private.idleTime > 10 && Public.getIcon() == 1) { //10 minutes
 			Public.changeStatus(2, true, function() {
 				window.setTimeout(Private.pollStatus, 60000); //tell changeStatus to recall us afterwards
 			});
@@ -77,7 +77,7 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 	Public.getIcon = function() {
 		var claz = $(".status_icon").attr("class").split(' ');
 		var icon = claz[claz.length - 1];
-		return icon;
+		return icon.substring(5);
 	}
 	Public.init = function() {
 		$(document).ready(function() {
@@ -87,13 +87,15 @@ var Status = Status || (function($) { //thanks for this, did not know you could 
 			Public.getStatus();
 			//reset idle time with any movements
 			$(this).on('mousemove keypress', function() {
-				Private.idleTime = 0;
-				Private.timer = setTimeout(function() {
+				if(Private.idleTime >= 9){ //dont listen all the damn time (not neccesary)
+					Private.idleTime = 0;
+					Private.timer = setTimeout(function() {
 					clearInterval(Private.timer);
-					if (Private.getForced() === 'true' && Public.getIcon() == 2) {
-						Public.changeStatus("1", true);
-					}
-				}, 2500); //a delay so the vForced value can be set before this runs
+						if (Private.getForced() === 'true' && Public.getIcon() == 2) {
+							Public.changeStatus("1", true);
+						}
+					}, 2500); //a delay so the vForced value can be set before this runs
+				}
 			});
 			//change status on element click
 			$(document).on('click', '#status_icon label', function() {
