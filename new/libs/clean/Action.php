@@ -8,6 +8,13 @@ if (!defined("INFINITY"))
 	*Columns: `ID`, `user`, `title`, `content`, `category`, `date` `read`
 	*/
 	class Action{
+		//categories of actions so we can sort through
+		//public $categories = ['forum', 'profile', 'projects', 'PM'];
+		//one query function to be performed in multiples by public equivalent
+		private function newAction($user, $title, $content, $category){
+			Database::getInstance()->query("INSERT INTO `actions` (`user`, `title`, `content`, `category`, `date`) VALUES (?, ?, ?, ?, ?)",
+			 $user, $title, $content, $category, date("Y-m-d H:i:s"));
+		}
 		/**
 		*	Add an identified action of a user to db
 		*	@access public
@@ -16,12 +23,40 @@ if (!defined("INFINITY"))
 		*	@param string $title - name of the action
 		*	@param string $content - content or description of the action
 		*	@param string $category - category of the action (for better management) (Default: null)
-		*	@example Action::addAction('Forum post', 'Creative arts', 'Forum');
+		*	@param int $id - if we are in a category that requires an ID provide it here
+		*	@example Action::addAction('Forum post', 'Creative arts', 'forum', 12);
 		*/
-		public static function addAction($title, $content, $category = null){
-			$date = date("Y-m-d"); //temp
-			Database::getInstance()->query("INSERT INTO `actions` (`user`, `title`, `content`, `category`, `date`) VALUES (?, ?, ?, ?, ?)",
-			 $_SESSION['ID'], $title, $content, $category, $date);
+		public static function addAction($title, $content, $category = null, $id = 0){
+			switch($category){
+				case 'forum':
+					$forum = new Forum();
+					//tell each poster in the thread about this action as well
+					foreach($forum->getPostersInThread($id) as $poster){
+						if($poster != $_SESSION['ID']) $this->newAction($poster, $title, $content, $category);
+					}
+					break;
+				case 'profile':
+					$member = Members::getInstance();
+					//tell all friends about this action as well
+					foreach($member->getFriends($_SESSION['ID']) as $friend){
+						$this->newAction($friend['ID'], $title, $content, $category);
+					}
+					break;
+				case 'projects':
+					$projects = new Projects();
+					//tell all members in the project about this action as well
+					foreach($projects->getMembers($id) as $member){
+						if($member != $_SESSION['ID']) $this->newAction($member, $title, $content, $category);
+					}
+					break;
+				case 'PM':
+					//basically creating an action for one other person
+					$this->newAction($id, $title, $content, $category);
+					break;
+				default:
+					//only add action for current user
+					$this->newAction($_SESSION['ID'], $title, $content, $category);
+			}
 		}
 		
 		/**
@@ -70,7 +105,7 @@ if (!defined("INFINITY"))
 		*	@example Action::getNumActions($_SESSION['ID']);
 		*/
 		public static function getNumActions($user){
-			$result = Database::getInstance()->query("SELECT `ID` FROM `actions` WHERE `user` = ?", $user);
+			$result = Database::getInstance()->query("SELECT COUNT(*) FROM `actions` WHERE `user` = ?", $user);
 			return $result->fetchColumn(); //return number of affected rows
 		}
 

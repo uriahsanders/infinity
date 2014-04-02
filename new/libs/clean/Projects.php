@@ -269,6 +269,9 @@ class Projects{
 			System::Error($e->getMessage());
 		}
 	}
+	public function getMembers($projectID){
+		return json_decode($this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $projectID)->fetch()['members'], true);
+	}
 }
 //transaction skeleton:
 /*

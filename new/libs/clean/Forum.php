@@ -49,6 +49,15 @@ class Forum extends Members implements iForum
 		}
 		return $this->getPostCount($array); //send to the post count with all the ID's and then return the results
 	}
+	//get an array of all posters in thread
+	public function getPostersInThread($id){
+		$posters = $this->sql->query("SELECT `by_` FROM `posts` WHERE `parent_ID` = ?", $id);
+		$arr = [];
+		while($row = $posters->fetch()){
+			array_push($arr, $row['by_']);
+		}
+		return $arr;
+	}
 	public function getLastPost($TopicID) //last post of a topic
 	{
 		if (is_array($TopicID)) //check if array 
