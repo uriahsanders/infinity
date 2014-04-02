@@ -121,12 +121,82 @@ class Forum extends Members implements iForum
 	}
 	public function listPageNums($threadID, $pg = 1){
 		$res = 'Pages: ';
-		for($i = 1; $i <= $this->numPagesInThread($threadID); ++$i){
+		//make sure we always have at least one page (cause OP isnt counted)
+		$num = $this->numPagesInThread($threadID) >= 1 ? $this->numPagesInThread($threadID) : 1;
+		for($i = 1; $i <= $num; ++$i){
 			$res .= ($pg != $i) ? "<a class='pg-link'id='change-pg-".$i."'>".$i."</a> " : '['.$i.'] ';
 		}
 		return $res;
 	}
 	public function beginAtRow($pn){
 		return self::LIMIT * ($pn - 1);
+	}
+	public function newThread($subject, $body, $parent){
+		$this->sql->query("INSERT INTO `topics` (`title`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES (?, ?, ?, ?, ?, ?)",
+		$subject, $body, System::getRealIp(), $_SESSION['ID'], $parent, date('Y-m-d H:i:s'));
+	}
+	public function post($body, $parent){
+		$this->sql->query("INSERT INTO `posts` (`msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES (?, ?, ?, ?, ?)",
+		$body, System::getRealIp(), $_SESSION['ID'], $parent, date('Y-m-d H:i:s'));
+	}
+	//return ture if this was created by the current session user
+	private function sessionCreated($id, $what){ //$what is either topics or posts
+		$bool = $this->sql->query("SELECT `by_` FROM `".$what."` WHERE `ID` = ?", $id)->fetchColumn() == $_SESSION['ID'];
+		if($bool == false)
+			System::logSuspect('Potential HTML tampering; user is attempting 
+				to delete a post or topic (from table '.$what.') that they did not create.', false);
+		return $bool;
+	}
+	public function delete($id, $what){ //$what is either topics or posts
+		if($what == 'topics'){
+			if($this->getPostCount($id) != 0){
+				System::logSuspect('User attempted to remove a topic with more than 0 replies. 
+					Potential HTML tampering to allow this action.');
+			}
+		}
+		if($this->sessionCreated($id, $what)) $this->sql->query("DELETE FROM `".$what."` WHERE `ID` = ?", $id);
+	}
+	public function updateThread($id, $subject, $body){
+		if($this->sessionCreated($id, 'topics')) $this->sql->query("UPDATE `topics` SET `title` = ?, `msg` = ? WHERE `ID` = ?", $subject, $body, $id);
+	}
+	public function updatePost($id, $body){
+		if($this->sessionCreated($id, 'posts')) $this->sql->query("UPDATE `posts` SET `msg` = ? WHERE `ID` = ?", $body, $id);
+	}
+	//for topics only atm
+	public function postTemplate($row){
+		$member = Members::getInstance();
+		$ranks = $member->ranks;
+		$poster = $member->getUserData($row[0]["by_"]);
+		$id = $row[0]['ID'];
+		//only show remove is no replies to topic yet
+		$remove = ($this->getPostCount($row[0]["ID"]) == 0) ? ' &emsp; <i id="forum-remove-topics-'.$id.'">Remove</i>' : '';
+		return "<br><div class=\"thread_title\">
+		<span>&nbsp;</span>".
+		$row[0]["title"]." - ".System::timeDiff($row[0]["time_"]). // topic title
+		"</div>
+		<div class=\"post\">
+		<table class=\"tbl_post\"><tr><td>
+		<div class=\"post_usr\"><a href=\"/user/$poster[username]\">$poster[username]</a><br/>
+		<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>
+		<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />
+		<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>
+		<table class=\"usr_info\">
+		<tr><td width=10>Posts:</td><td>". $this->getPostCountByUser($poster["ID"])."</td></tr>
+		<tr><td>Prestige:</td><td>". $poster["prestige"]."</td></tr>
+		</table>
+		</div>
+		</td><td>
+		<div class=\"post_msg\">".
+		$row[0]["msg"].
+		"</div>
+		<div class=\"post_msg_btm\">
+			<a>Quote</a> ".($_SESSION['ID'] == $row[0]['by_'] ? "&emsp; <a id='forum-modify-topics-".$id."'>Modify</a>".$remove : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>").
+		"</div>
+		</td></tr></table>
+		</div>
+		</div>";
+	}
+	public function getPostData($id, $what){
+		return $this->sql->query("SELECT * FROM `".$what."` WHERE `ID` = ?", $id)->fetch();
 	}
 }

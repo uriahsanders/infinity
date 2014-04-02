@@ -95,9 +95,9 @@
             </tr>
             <tr>
                 <td colspan="2">
-                <?php if (isset($data['points']))
+                <?php if (isset($data['prestige']))
                 {
-                    echo "<b>$data[points]</b><br />";
+                    echo "<b>$data[prestige]</b><br />";
                 }
                 ?>
                 Prestige</td>

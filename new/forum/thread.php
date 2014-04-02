@@ -46,35 +46,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			//if we are on the first page show init post
 				echo "<input type='hidden'id='last-page'value='".$forum->numPagesInThread($_POST['t'])."'/><div class=\"thread\">";
 				if($_POST['pg'] == 1){
-					echo "<br><div class=\"thread_title\">";
-					echo "<span>&nbsp;</span>"; 
-					echo $row[0]["title"]." - ".System::timeDiff($row[0]["time_"]); // topic title
-					echo "</div>";
-					echo "<div class=\"post\">";
-					echo "<table class=\"tbl_post\"><tr><td>";
-					echo "<div class=\"post_usr\">";
-					$poster = $member->getUserData($row[0]["by_"]);
-					echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
-					echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
-					echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
-					echo "<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>"; //rank
-					echo "<table class=\"usr_info\">";
-					echo "<tr><td width=10>Posts:</td><td>". $forum->getPostCountByUser($poster["ID"])."</td></tr>"; //post count
-					echo "<tr><td>Prestige:</td><td>". $poster["points"]."</td></tr>"; //ask points
-					
-					echo "</table>";
-					echo "</div>";
-					echo "</td><td>";
-					echo "<div class=\"post_msg\">";
-					echo $row[0]["msg"];
-					echo "</div>";
-					echo "<div class=\"post_msg_btm\">";
-						echo "
-							<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a>Modify</a> &emsp; <a>Remove</a>" : "&emsp; <a>Report</a>");
-						echo "</div>";
-					echo "</td></tr></table>";
-					echo "</div>";
-					echo "</div>";
+					echo $forum->postTemplate($row, $row2);
 				}			
 			$res = $forum->sql->query("SELECT * FROM `posts` WHERE `parent_ID`=? ORDER BY `time_` ASC LIMIT ".($forum->beginAtRow($_POST['pg'])).", ".Forum::LIMIT, $row[0]["ID"]);
 			$resFetch = $res->fetchAll();
@@ -82,6 +54,8 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			$counter = 0;
 			foreach($resFetch as $row2)
 			{
+				//echo $forum->postTemplate($row, $row2);
+				$id = $row2['ID'];
 				echo "<br/>";
 				echo "<div id='thread-".$row['ID']."'class=\"thread\">";
 				echo "<div class=\"thread_title\">";
@@ -109,7 +83,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				
 				echo "<div class=\"post_msg_btm\">";
 				echo "
-					<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a>Modify</a> &emsp; <a>Remove</a>" : "&emsp; <a>Report</a>");
+					<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a id='forum-modify-posts-".$id."'>Modify</a> &emsp; <a id='forum-remove-posts-".$id."'>Remove</a>" : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>");
 				echo "</div>";
 				
 				echo "</td></tr></table>";
