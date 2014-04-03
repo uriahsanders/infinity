@@ -17,7 +17,7 @@ require_once("clean/Action.php");
 require_once("clean/Votes.php");
 require_once("clean/Login.php");
 require_once("clean/Members.php");
-require_once("clean/Upload.php");
+//require_once("clean/Upload.php");
 require_once("clean/Forum.php");
 require_once("clean/Extra.php");
 require_once("clean/Projects.php");
