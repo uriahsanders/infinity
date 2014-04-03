@@ -1313,7 +1313,7 @@ span.tooltip {
 .user-0{
 }
 .popup{
-    position:absolute;
+    position:fixed;
 top:50%;
 left:50%;
 width:800px;  /* adjust as per your needs */
@@ -1331,4 +1331,5 @@ background: url(/images/broken_noise.png);
     -ms-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
     -o-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
     z-index:500;
+    overflow-y: auto;
 }

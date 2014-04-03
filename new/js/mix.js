@@ -400,11 +400,13 @@ function MsgBox(title, txt, icon, style) {
     }, 500);
 }
 $(document).on('click', '.MsgBox_bg', function() {
+    document.body.style.overflow = "";
     $('.popup, .MsgBox').fadeOut();
     $(this).fadeOut();
 });
 
 function popup(title, what, id, style) {
+    document.body.style.overflow = "hidden";
     $(".MsgBox_bg").fadeIn();
     $('<div id="' + id + '"class="popup"style="' + (style || '') + '"><div id="msgbox_title"style="cursor:default">' + title + '<span id=\"msgbox_close\">&times;</span></div>' + what + '</div>')
         .appendTo(document.body).hide().fadeIn();

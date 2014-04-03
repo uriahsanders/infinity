@@ -75,6 +75,11 @@ if(!$logged)
                 echo '<script src="/extra/imgUpload/js/jquery.Jcrop.min.js"></script>';
                 echo '<script src="/extra/imgUpload/js/script.js"></script>';
             }
+            else if(defined("PAGE") && PAGE == "projects") 
+            {
+                echo '<link rel="stylesheet" type="text/css" href="/css/profile.css" />';
+                echo '<script src="/js/wall.js" type="text/javascript"></script>';
+            }
             else if(defined("PAGE") && PAGE == "lounge") 
             {
                 echo '<link rel="stylesheet" type="text/css" href="/css/lounge.css" />';

@@ -25,6 +25,8 @@ switch($_SERVER['REQUEST_METHOD']){
 				die(show('projects', $res));
 			case 'getOne':
 				$res = $projects->getOne($_GET['creator'], $_GET['projectname']);
+				//view this project
+				Views::view($res['ID'], 'project');
 				die(projectTemplate($res['ID'], $res['projectname'], $res['creator'], $res['date'], $res['popularity'], $res['members'], $res['short'], $res['description'], $res['image'], $res['video']));
 			case 'retrieve':
 				$res = $projects->retrieve($_GET['category']);
@@ -41,6 +43,8 @@ switch($_SERVER['REQUEST_METHOD']){
 					die(show('projects', $res));
 				}
 				die();
+			case 'stats':
+				die('Stats');
 		}
 		die();
 }
@@ -73,19 +77,24 @@ switch($_SERVER['REQUEST_METHOD']){
 			$thisMember = $member->get($value, 'username');
 			$memberList .= "<a target=\"_blank\"href=\"/user/$thisMember\">".$thisMember.'</a><br>';
 		}
-		$work = ($creator == $_SESSION['ID']) ? "<button class=\"pr-btn\">Workspace</button> &emsp;
-		 <button class='pr-btn'>Edit</button> &emsp; <button id='delete'class='pr-btn'>Delete</button>" : '';
+		$work = ($creator == $_SESSION['ID']) ? "<button class=\"pr-btn\">Workspace</button> &emsp; <button id='delete'class='pr-btn'>Delete</button>" : '';
 		return "
-			<div style='width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'>
-				<button class='pr-btn'id='pr-discover'>Browse</button>&emsp;<button class='pr-btn'id='pr-posts'>Wall</button>&emsp;
-				<button class='pr-btn'id='pr-posts'>Stats</button>&emsp;<button class='pr-btn'id='pr-posts'>Join</button>&emsp;
-				$work<br><br>
+			<div id='project-main'style='width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'>
+				<div id='pr-nav'>
+				<button class='pr-btn'id='pr-discover'>Browse</button>&emsp;<button class='pr-btn'id='pr-about'>About</button>&emsp;<button class='pr-btn'id='pr-posts'>Wall</button>&emsp;
+				<button class='pr-btn'id='pr-stats'>Stats</button>&emsp;<button class='pr-btn'id='pr-join'>Join</button>&emsp;
+				$work
+				</div>
+				<br><br>
 				<span class='lead'style='font-size: 3em;'>$projectname</span><br><br> by <a target=\"_blank\"href=\"/user/$username\">$username</a><br><br>
 				<div style='background:#000;width:80%;height:400px;margin:auto'></div>
 				<br><br>
 				<div style='padding:10px;border-radius:5px;margin:auto;width:85%;background:url(\"/images/gray_sand.png\");'>$description</div>
 				<input id='projectID'type='hidden'value='".$id."'/>
 			</div>
+			<div id='project-wall'style='display:none;width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'></div>
+			<div id='project-stats'style='display:none;width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'></div>
+			<div id='project-join'style='display:none;width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'></div>
 		";
 	}
 	function commentTemplate($id, $projectID, $date, $posterID, $body){

@@ -1,7 +1,9 @@
 <?php
+	define("INFINITY", true); // this is so the includes can't get directly accessed
 	include_once('libs/relax.php');
+	$member = Members::getInstance();
 	$me = $member->getUserData($_SESSION['ID']);
-	$wall = Wall::getInstance();
+	$wall = Wall::getInstance($_GET['type'] || 0);
 	$sys = new System;
 	
 ?>

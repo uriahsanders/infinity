@@ -66,18 +66,26 @@
 					'<option>Technology<option>',
 					'</select>',
 					'<br><br>',
-					'<input class="form-control"name="projectName"placeholder="projectname"/>',
+					'<input style="width:75%;padding:10px"class="form-control"name="projectName"placeholder="projectname"/>',
 					'<br><br>',
-					'<textarea placeholder="Short Description"class="form-control"name="short"></textarea>',
+					'<textarea placeholder="Short Description"class="form-control"cols="75"rows="10"name="short"></textarea>',
 					'<br><br>',
-					'<textarea placeholder="Description"class="form-control"name="description"></textarea>',
+					'<textarea placeholder="Description"class="tinymce form-control"name="description"></textarea>',
 					'<br><br>',
 					'<input class="form-control"type="hidden"name="video"value="temporary"/>',
 					'<input class="form-control"type="hidden"name="image"value="temporary"/>',
-					'<button class="pr-btn">Create</button>',
+					'<button class="pr-btn">Create</button><br><br><br>',
 					'</form>'
 				].join('');
 				popup('New Project', form, 'create-project');
+				tinymce.init({
+					selector: '.tinymce',
+					width: 675,
+					height: 250
+				});
+				$(function() {
+					$('.mce-tinymce').css('margin', 'auto');
+				});
 			});
 			//entering a search request
 			$(document).on('submit', '#search-form', function() {
@@ -110,6 +118,46 @@
 			//going back
 			$(document).on('click', '#pr-discover', function() {
 				Router.goTo(model.DL);
+			});
+			//viewing project wall
+			$(document).on('click', '#pr-posts', function() {
+				$('[id^="project"]').hide();
+				if ($('#project-wall').html() == '')
+					$.ajax({
+						url: '../wall.php',
+						type: 'GET',
+						data: {
+							type: 1
+						},
+						success: function(res) {
+							$('#project-wall').html($('#pr-nav').html() + "<br><br>" + res);
+						}
+					});
+				$('#project-wall').show();
+			});
+			$(document).on('click', '#pr-about', function() {
+				$('[id^="project"]').hide();
+				$('#project-main').show();
+			});
+			$(document).on('click', '#pr-stats', function() {
+				$('[id^="project"]').hide();
+				if ($('#project-stats').html() == '')
+					$.ajax({
+						url: 'script.php',
+						type: 'GET',
+						data: {
+							signal: 'stats',
+							id: $('#projectID').val()
+						},
+						success: function(res) {
+							$('#project-stats').html($('#pr-nav').html() + "<br><br>" + res);
+						}
+					});
+				$('#project-stats').show();
+			});
+			$(document).on('click', '#pr-join', function() {
+				$('[id^="project"]').hide();
+				$('#project-join').show();
 			});
 		});
 	});

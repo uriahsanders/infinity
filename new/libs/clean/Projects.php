@@ -165,7 +165,9 @@ class Projects{
 		$result = $this->sql->query("SELECT * FROM `projects_comments` WHERE `projectID` = ? ".$this->limit($start), $id);
 		return $this->db2arr($result);
 	}
-
+	public function idFromNameCreator($creator, $projectname){
+		return $this->sql->query("SELECT `ID` FROM `projects` WHERE `creator` = ? AND `projectname` = ?", $creator, $projectname)->fetchColumn();
+	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -245,29 +247,39 @@ class Projects{
 	*	@param int $projectID - id of project to delete
 	*/
 	public function delete($projectID){
-		//dont do anything at all if we get an error
-		$this->sql->beginTransaction();
-		try{
-			//get all members from project
-			$members = json_decode($this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $projectID)->fetch()['members'], true);
-			foreach($members as $member){
-				//get all projects from each member
-				$projects = json_decode($this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $member)->fetch()['projects'], true);
-				//remove deleted project from array
-				remValueFromArr($projects, $projectID);
-				//update members projects
-				$this->sql->xss_prev = false;
-				$this->sql->query("UPDATE `memberinfo` SET `projects` = ? WHERE `ID` = ?", json_encode($projects), $member);
+		if($this->sessionCreated($projectID)){
+			//dont do anything at all if we get an error
+			$this->sql->beginTransaction();
+			try{
+				//get all members from project
+				$members = json_decode($this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $projectID)->fetch()['members'], true);
+				foreach($members as $member){
+					//get all projects from each member
+					$projects = json_decode($this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $member)->fetch()['projects'], true);
+					//remove deleted project from array
+					remValueFromArr($projects, $projectID);
+					//update members projects
+					$this->sql->xss_prev = false;
+					$this->sql->query("UPDATE `memberinfo` SET `projects` = ? WHERE `ID` = ?", json_encode($projects), $member);
+				}
+				//actually delete project
+				$this->sql->query("DELETE FROM `projects` WHERE `ID` = ?", $projectID);
+				//delete all workspace information for project
+				$this->sql->query("DELETE FROM `workspace_data` WHERE `projectID` = ?", $projectID);
+				$this->sql->commit();
+			}catch(Exception $e){
+				$this->sql->rollback();
+				System::Error($e->getMessage());
 			}
-			//actually delete project
-			$this->sql->query("DELETE FROM `projects` WHERE `ID` = ?", $projectID);
-			//delete all workspace information for project
-			$this->sql->query("DELETE FROM `workspace_data` WHERE `projectID` = ?", $projectID);
-			$this->sql->commit();
-		}catch(Exception $e){
-			$this->sql->rollback();
-			System::Error($e->getMessage());
 		}
+	}
+	//make sure this project was created by this session
+	private function sessionCreated($projectID){
+		$bool = $this->sql->query("SELECT `creator` FROM `projects` WHERE `ID` = ?", $projectID)->fetchColumn() == $_SESSION['ID'];
+		if($bool == false)
+			System::logSuspect('Potential HTML tampering; user is attempting 
+				to manipulate a project that they did not create.', false);
+		return $bool;
 	}
 	public function getMembers($projectID){
 		return json_decode($this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $projectID)->fetch()['members'], true);

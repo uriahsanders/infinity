@@ -270,8 +270,16 @@
 				var thread = hash.substr(hash.indexOf("t=") + 2, hash.indexOf("/") - 2); //get the ID of the thread
 			popup("New Post", '<form id="new-forum-post"><input type="hidden"name="signal"value="post"/><input type="hidden"name="' +
 				(thread ? 't' : 'f') + '"value="' + (thread || cat) + '"/><br>' +
-				(cat ? '<input name="subject"placeholder="Subject"/>' : '') +
-				'<br><br><textarea name="body"class="form-control"></textarea><br><button class="pr-btn">Post</button></form>');
+				(cat ? '<input style="padding:10px;width:75%"name="subject"placeholder="Subject"/>' : '') +
+				'<br><br><textarea name="body"class="tinymce form-control"></textarea><br><button class="pr-btn">Post</button></form>');
+			tinymce.init({
+					selector: '.tinymce',
+					width: 675,
+					height: 250
+				});
+				$(function() {
+					$('.mce-tinymce').css('margin', 'auto');
+				});
 		});
 		//deleting
 		$(document).on('click', '[id^="forum-remove-"]', function() {

@@ -24,6 +24,7 @@ $(document).ready(function(e) {
 	
 	function WallAdd(txt, where, ID, usr, UD, time, to, likes)
 	{
+		var Meee = $.parseJSON($("#Mee").val());
 		var where = ((typeof where == "undefined" || where == null)? 0 : where)
 		var ID = ((typeof ID == "undefined")? 0 : ID);
 		var likes = ((typeof likes == "undefined")? 0 : likes);
@@ -68,5 +69,4 @@ $(document).ready(function(e) {
 			
 		
 	}
-var Meee = $.parseJSON($("#Mee").val());
 });

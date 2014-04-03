@@ -153,7 +153,7 @@ class Forum extends Members implements iForum
 		$bool = $this->sql->query("SELECT `by_` FROM `".$what."` WHERE `ID` = ?", $id)->fetchColumn() == $_SESSION['ID'];
 		if($bool == false)
 			System::logSuspect('Potential HTML tampering; user is attempting 
-				to delete a post or topic (from table '.$what.') that they did not create.', false);
+				to manipulate a post or topic (from table '.$what.') that they did not create.', false);
 		return $bool;
 	}
 	public function delete($id, $what){ //$what is either topics or posts
