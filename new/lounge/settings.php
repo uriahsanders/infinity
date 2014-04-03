@@ -41,12 +41,12 @@
             <option value="">Noone except for Infinity Staff</option>
         </select>
         <br><br>
-        About Me:<br>
-        <textarea style="display:inline;width:80%"id="" cols="30" name="about"rows="10"class="form-control">
+        About Me:<br><br>
+        <textarea class="tinymce"name="about">
             <?php echo $member->get($_SESSION['ID'], 'about'); ?>
         </textarea><br><br>
-        Resume:<br>
-        <textarea style="display:inline;width:80%"name="resume" id="" cols="30"rows="10"class="form-control">
+        Resume:<br><br>
+        <textarea class="tinymce"name="resume">
             <?php echo $member->get($_SESSION['ID'], 'resume'); ?>
         </textarea>
         <br><br>
@@ -71,12 +71,13 @@
     });
     $('#options').on('submit', function(e){
         e.preventDefault();
+        tinyMCE.triggerSave();
         $.ajax({
             url: '../settings_handle.php',
             type: 'POST',
             data: $(this).serialize(),
             success: function(data){
-                alert(data);
+                window.location.reload(true);
             }
         });
     });

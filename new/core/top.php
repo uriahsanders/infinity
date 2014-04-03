@@ -46,7 +46,13 @@ if(!$logged)
         <script src="/js/mix.js" type="text/javascript"></script>
         <script src="https://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
         <script type="text/javascript">
-        tinymce.init({selector:'.tinymce'});
+        tinymce.init({
+            selector:'.tinymce',
+            width: 675
+        });
+        $(function(){
+            $('.mce-tinymce').css('margin', 'auto');
+        });
         </script>
         <?php 
             /*

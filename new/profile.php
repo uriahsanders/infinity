@@ -4,7 +4,6 @@
     define("PAGE", "profile"); // this is what page it is, for the links at the top
     include_once("libs/relax.php"); // use PATH from now on
     Login::checkAuth();
-	
 	$member = Members::getInstance();
     $projects = new Projects();
     if (isset($_GET['user']) && !empty($_GET['user']))
@@ -29,6 +28,7 @@
             echo $start . "MsgBox(\"Error\", \"The user \\\"$_GET[user]\\\" does not exist.\",3);" . $end;
             $ID = $_SESSION['ID'];
         }
+    Views::view($ID, 'profile');
     $data = $member->getUserData($ID, "ID");
     $image = $data["image"]; 
 ?>
@@ -81,6 +81,7 @@
         {
             echo "Website: <b><a href='$data[wURL]' target='_blank'>$data[wURL]</a></b><br />";
         }
+        echo "Profile Views: <b>".Views::numViews($ID, 'profile')."</b><br />";
     ?>
     </div>
     
@@ -95,12 +96,11 @@
             </tr>
             <tr>
                 <td colspan="2">
-                <?php if (isset($data['prestige']))
-                {
-                    echo "<b>$data[prestige]</b><br />";
-                }
+                <?php 
+                    echo "<b>".$data['prestige']."</b><br />";
                 ?>
-                Prestige</td>
+                Prestige
+                </td>
             </tr>
         </table>
     </div>

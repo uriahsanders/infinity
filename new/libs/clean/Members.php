@@ -181,4 +181,8 @@ class Members implements iMembers
 			return $row[0];
 			
 		}
+		//grab the highest prestige gained
+		public function highestPrestige($limit){
+		    return $this->_db->query("SELECT `prestige` FROM `memberinfo` ORDER BY `prestige` DESC LIMIT ".$limit)->fetchColumn();
+		}
 }

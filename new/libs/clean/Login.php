@@ -377,6 +377,50 @@ class Login implements iLogin
 			return $ERRORMSG;
 		return true;
 	}
+	//validate username, email, and password only
+	public static function validate($POST){
+		$ERRORMSG = array();
+		//Username 
+		$USR     	=	$POST['username'];
+		$USR_PAT 	= 	"/^[a-zA-Z0-9_-]*$/";
+		$USR_MAX 	= 	16;
+		$USR_MIN 	= 	4;
+		//Email
+		$EMAIL		=	$POST["email"];
+		$EMAIL_PAT	=	"/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/";
+		$EMAIL_MAX	=	50;
+		$EMAIL_MIN	=	6;
+		//Password
+		$PWD		=	$POST["password"];
+		$PWD2		=	$POST["verify"];
+		$PWD_PAT	=	"/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/";
+		$PWD_MIN	=	6;
+		$PWD_MAX	=	25;
+		// Validate Username
+		if (Members::getInstance()->userExist($USR, "username")) 
+				array_push($ERRORMSG, "That username is already taken.");
+		if (!preg_match($USR_PAT, $USR)) 
+				array_push($ERRORMSG, "That's an invalid username.");
+		if (strlen($USR) < $USR_MIN || strlen($USR) > $USR_MAX) 
+				array_push($ERRORMSG, "The username is to short or long");
+			
+		// Validate Email
+		if (Members::getInstance()->userExist($EMAIL, "email")) 
+				array_push($ERRORMSG, "The email is already used.");
+		if (strlen($EMAIL) > $EMAIL_MAX || strlen($EMAIL) < $EMAIL_MIN || !preg_match($EMAIL_PAT, $EMAIL)) 
+				array_push($ERRORMSG, "That is not an valid email.");
+		
+		// Validate Password
+		if (!preg_match($PWD_PAT, $PWD)) 
+				array_push($ERRORMSG, "That is not an secure password.");
+		if (strlen($PWD) < $PWD_MIN || strlen($PWD) > $PWD_MAX) 
+				array_push($ERRORMSG, "The password is to short or long.");
+		if ($PWD != $PWD2) 
+				array_push($ERRORMSG, "The passwords do not match.");		
+		if (count($ERRORMSG) != 0)
+			return $ERRORMSG;
+		return true;
+	}
 	
 	/**
 	*	SebdActivationMail - send the activation mail to the user

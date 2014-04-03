@@ -11,13 +11,7 @@
  */
 define("INFINITY", true);
 include_once("../../libs/relax.php");
-
-if ( !$member->logged())
-{
-	header("Location: /restricted/");
-	die();                
-}
-
+$member = Members::getInstance();
 function uploadImageFile() { // Note: GD library is required for this function
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
