@@ -185,4 +185,14 @@ class Members implements iMembers
 		public function highestPrestige($limit){
 		    return $this->_db->query("SELECT `prestige` FROM `memberinfo` ORDER BY `prestige` DESC LIMIT ".$limit)->fetchColumn();
 		}
+		public $statuses = [
+			0 => 'offline',
+			1 => 'online',
+			2 => 'away',
+			3 => 'busy'
+		];
+		//change a status number to a name
+		public function status2name($status){
+			return $this->statuses[$status];
+		}
 }

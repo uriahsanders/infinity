@@ -8,6 +8,7 @@ class Projects{
 	public function __construct(){
 		$this->sql = Database::getInstance();
 		$this->member = Members::getInstance();
+		$this->groups = new Groups();
 	}
 	public function date(){
 		return date("Y-m-d H:i:s"); //temp (we want our date to be consistent)
@@ -129,6 +130,8 @@ class Projects{
 			array_push($projects, $projectID);
 			$this->sql->xss_prev = false;
 			$this->sql->query("UPDATE `memberinfo` SET `projects` = ? WHERE `ID` = ?", json_encode($projects), $_SESSION['ID']);
+			//automatically create a new group for this project
+			$this->groups->autoGroup($projectname, $short, $projectID);
 			//create master branch for workspace
 			// $this->sql->query("INSERT INTO `workspace_data` (`projectID`, `type`, `title`, `date`, `by`, `branch`)
 			// 	VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', 'Master', $this->date(), $_SESSION['ID'], 'Master');
@@ -167,6 +170,9 @@ class Projects{
 	}
 	public function idFromNameCreator($creator, $projectname){
 		return $this->sql->query("SELECT `ID` FROM `projects` WHERE `creator` = ? AND `projectname` = ?", $creator, $projectname)->fetchColumn();
+	}
+	public function id2name($projectID){
+		return $this->sql->query("SELECT `projectname` FROM `projects` WHERE `ID` = ?", $projectID)->fetchColumn();
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -272,6 +278,9 @@ class Projects{
 				System::Error($e->getMessage());
 			}
 		}
+		//outside to prevent nested transaction error
+		//delete group for this project
+		$this->groups->deleteGroup($this->groups->project2groupID($projectID));
 	}
 	//make sure this project was created by this session
 	private function sessionCreated($projectID){

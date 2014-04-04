@@ -44,16 +44,7 @@ if(!$logged)
         <script type="text/javascript" src="/js/jquery-1.9.0.min.js"></script>
         <script src="/js/jquery-ui.min.js" type="text/javascript"></script> 
         <script src="/js/mix.js" type="text/javascript"></script>
-        <script src="https://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
-        <script type="text/javascript">
-        tinymce.init({
-            selector:'.tinymce',
-            width: 675
-        });
-        $(function(){
-            $('.mce-tinymce').css('margin', 'auto');
-        });
-        </script>
+        <script type="text/javascript"src="https://cdnjs.cloudflare.com/ajax/libs/epiceditor/0.2.2/js/epiceditor.min.js"></script>
         <?php 
             /*
                 having different css for each page is stupid, I take the blame for that one.
@@ -130,8 +121,8 @@ if(!$logged)
                     <a class='member_link'href=\"/lounge/\">Lounge</a>&nbsp;
                     <!--<a class='member_link'href=\"/projects/\">Projects</a>&nbsp;-->
                     <a class='member_link'href=\"/workspace/\">Workspace</a>&nbsp;
-                    <a class='member_link'href=\"/users/\">Groups</a>&nbsp;
-                    <a class='member_link'href=\"/pm/\">Suggestions</a>&nbsp;
+                    <a class='member_link'href=\"/lounge/\">Groups</a>&nbsp;
+                    <a class='member_link'href=\"/lounge/\">Suggestions</a>&nbsp;
                     </div>
                     </div>
                     <div id=\"member_bar_icons\">";

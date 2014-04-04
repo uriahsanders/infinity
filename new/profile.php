@@ -91,7 +91,7 @@
                 <?php
                     $num = $projects->numProjects($ID);
                     echo "<td><b>".$num."*</b><br/>Project".($num == 1 ? '' : 's')."<br /><br /></td>
-                    <td><b>1244*</b><br/>Forum Posts<br /><br /></td>";
+                    <td><b>1244*</b><br/><a>Forum Posts</a><br /><br /></td>";
                 ?>
             </tr>
             <tr>

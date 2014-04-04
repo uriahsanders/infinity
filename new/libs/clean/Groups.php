@@ -47,15 +47,26 @@ class Groups extends Action{
 	public function searchPMs($start = 0, $for){
 		return $this->sql->query("SELECT `subject` FROM `messages` WHERE `subject` LIKE %?% ".$this->limit($start), $for);
 	}
-	public function createGroup($name, $desc){
-		$this->sql->query("INSERT INTO `groups` (`name`, `description`, `by`, `date`) VALUES (?, ?, ?, ?)", $name, $desc, $_SESSION['ID'], date('Y-m-d H:i:s'));
+	//$assoc is any id we want to associate this with
+	public function createGroup($name, $desc, $assoc = 0){
+		$this->sql->query("INSERT INTO `groups` (`name`, `description`, `by`, `date`, `assoc`) VALUES (?, ?, ?, ?, ?)", $name, $desc, $_SESSION['ID'], date('Y-m-d H:i:s'), $assoc);
 		return $this->sql->lastInsertId();
 	}
 	public function editGroup($ID, $name, $desc){
 		$this->sql->query("UPDATE `groups` SET `name` = ?, `description` = ? WHERE `ID` = ?", $name, $desc, $ID);
 	}
 	public function deleteGroup($ID){
-		$this->sql->query("DELETE FROM `groups` WHERE `ID` = ?", $ID);
+		$this->sql->beginTransaction();
+		try{
+			//delete group
+			$this->sql->query("DELETE FROM `groups` WHERE `ID` = ?", $ID);
+			//delete all info for group
+			$this->sql->query("DELETE FROM `group_data` WHERE `groupID` = ?", $ID);
+			$this->sql->commit();
+		}catch(Exception $e){
+			$this->sql->rollback();
+			System::Error($e->getMessage());
+		}
 	}
 	//elemID is user id; add them to a group
 	public function addToGroup($elemID, $groupID){
@@ -64,7 +75,7 @@ class Groups extends Action{
 	//auto create a group from a project
 	//elemID is the ID of the project
 	public function autoGroup($name, $desc, $elemID){
-		$id = $this->createGroup($name, $desc);
+		$id = $this->createGroup($name, $desc, $elemID);
 		//go through every member in project and auto add to group
 		$members = json_decode($this->sql->query("SELECT `members` FROM `projects` WHERE `ID` = ?", $elemID)->fetch()['members'], true);
 		foreach($members as $member){
@@ -73,5 +84,25 @@ class Groups extends Action{
 	}
 	public function searchGroups($start = 0, $for){
 		return $this->sql->query("SELECT `name` FROM `groups` WHERE `name` LIKE %?% ".$this->limit($start), $for);
+	}
+	//get a group id from its associated project id
+	public function project2groupID($projectID){
+		return $this->sql->query("SELECT `ID` FROM `groups` WHERE `assoc` = ?", $projectID)->fetchColumn();
+	}
+	//remove a member from a group (remember each client has own set of groups)
+	public function removeFromGroup($who, $groupID){
+	    $this->sql->query("DELETE FROM `group_data` WHERE `elemID` = ? AND `groupID` = ?", $who, $groupID);
+	}
+	//view sent PM's
+	public function viewSent($start = 0){
+	    return $this->sql->query("SELECT `subject`, `from`, `date`, `ID`, `read` FROM `messages` WHERE `from` = ? ".$this->limit($start), $_SESSION['ID']);
+	}
+	//get data for a bunch of groups
+	public function viewGroups(){
+	    return $this->sql->query("SELECT * FROM `groups` WHERE `by` = ?", $_SESSION['ID']);
+	}
+	//get data for one group
+	public function viewGroup($groupID){
+	    return $this->sql->query("SELECT * FROM `group_data` WHERE `ID` = ?", $groupID)->fetch();
 	}
 }

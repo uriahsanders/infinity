@@ -54,6 +54,12 @@ RewriteCond %{QUERY_STRING} !marker
 RewriteRule ^/?profile\.php$ /user/ [R=301,L]
 RewriteRule ^\/?user\/?$ /profile.php?marker [L]
 
+#about page
+RewriteCond %{REQUEST_URI} ^/about.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?about\.php$ /about [R=301,L]
+RewriteRule ^\/?about\/?$ /about.php?marker [L]
+
 #forum ##I see you added this >.> will need forum in a own folder later so this will have to change
 # also forum will have a million of sub cats on url rewrite, have not decided if going with ID's (the easiest)
 # or with costum names ( looks best )
@@ -113,11 +119,6 @@ RewriteCond %{QUERY_STRING} code=([a-z0-1]+)
 RewriteRule ^\/?libs\/activate\.php$ /member/activate/%1? [R=301,L]
 RewriteRule ^\/?member\/activate\/([a-z0-9]+)\/?$ /libs/activate.php?marker&code=$1 [L]
 
-#about page
-RewriteCond %{REQUEST_URI} ^/about.php$
-RewriteCond %{QUERY_STRING} !marker
-RewriteRule ^/?about\.php$ /about [R=301,L]
-RewriteRule ^\/?about\/?$ /about.php?marker [L]
 
 #settings
 RewriteCond %{REQUEST_URI} ^/lounge/settings.php$

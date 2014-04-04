@@ -12,7 +12,7 @@ class Forum extends Members implements iForum
 	public function __construct(){
 		$this->sql = Database::getInstance();
 	}
-	const LIMIT = 14; //limit of posts per thread (does not include topic)
+	const LIMIT = 5; //limit of posts per thread (does not include topic)
 	public function getTopicCount($ForumID) //how many topics in the forum
 	{
 		$res = $this->sql->query("SELECT COUNT(*) FROM `topics` WHERE `parent_ID`=?", $ForumID);
@@ -195,9 +195,7 @@ class Forum extends Members implements iForum
 		</table>
 		</div>
 		</td><td>
-		<div class=\"post_msg\">".
-		$row[0]["msg"].
-		"</div>
+		<div class=\"post_msg\"><div style='width:100%;height:100%'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>".$row[0]['msg']."</textarea></div></div>
 		<div class=\"post_msg_btm\">
 			<a>Quote</a> ".($_SESSION['ID'] == $row[0]['by_'] ? "&emsp; <a id='forum-modify-topics-".$id."'>Modify</a>".$remove : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>").
 		"</div>

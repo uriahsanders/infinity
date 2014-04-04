@@ -201,17 +201,6 @@ $(window).ready(function() {
     });
 
 
-    ///////////////////////////////
-    // MsgBox
-    ///////////////////////////////
-    $(document).on("click", "#msgbox_close", function() {
-        $(".MsgBox_bg").fadeOut(500);
-        $('.popup').fadeOut();
-    });
-    $(".MsgBox").draggable({
-        handle: "#msgbox_title",
-        cancel: "#msgbox_close"
-    });
 
     //////////////////////////////////
     //    Scroll to top
@@ -399,17 +388,79 @@ function MsgBox(title, txt, icon, style) {
         }, 500);
     }, 500);
 }
-$(document).on('click', '.MsgBox_bg', function() {
+$(document).on('click', '#dim', function() {
     document.body.style.overflow = "";
-    $('.popup, .MsgBox').fadeOut();
+    $('.popup, #dim').fadeOut(function(){
+        $('.popup, #dim').remove();
+    });
     $(this).fadeOut();
+});
+///////////////////////////////
+// MsgBox
+///////////////////////////////
+$(document).on("click", "#msgbox_close", function() {
+    $(".MsgBox_bg").fadeOut(500);
+   // document.body.style.overflow = "";
+    $('.popup, #dim').fadeOut(function() {
+        $('.popup, #dim').remove();
+    });
+    $('.popup').fadeOut();
+});
+$(".MsgBox").draggable({
+    handle: "#msgbox_title",
+    cancel: "#msgbox_close"
 });
 
 function popup(title, what, id, style) {
-    document.body.style.overflow = "hidden";
-    $(".MsgBox_bg").fadeIn();
+    //document.body.style.overflow = "hidden";
+    $("<div id='dim'></div>").appendTo('body').fadeIn();
     $('<div id="' + id + '"class="popup"style="' + (style || '') + '"><div id="msgbox_title"style="cursor:default">' + title + '<span id=\"msgbox_close\">&times;</span></div>' + what + '</div>')
         .appendTo(document.body).hide().fadeIn();
+}
+//id is id of textarea to sync with
+function epicEdit(container, id, change) {
+    if (typeof change === 'undefined') val = true;
+    else val = false;
+    var auto = val ? 'auto' : false;
+    var opts = {
+        container: container,
+        textarea: id || null,
+        basePath: '/css/',
+        useNativeFullscreen: true,
+        clientSideStorage: false,
+        file: {
+            name: 'epiceditor'
+        },
+        theme: {
+            base: 'themes/base-epiceditor.css',
+            preview: 'themes/dark-preview-epiceditor.css',
+            editor: 'themes/dark-epiceditor.css'
+        },
+        button: {
+            preview: val,
+            fullscreen: val,
+            bar: auto
+        },
+        focusOnLoad: false,
+        shortcut: {
+            modifier: 18,
+            fullscreen: 70,
+            preview: 80
+        },
+        string: {
+            togglePreview: 'Toggle Preview Mode',
+            toggleEdit: 'Toggle Edit Mode',
+            toggleFullscreen: 'Enter Fullscreen'
+        }
+    }
+    var editor = new EpicEditor(opts);
+    editor.load();
+    return editor;
+}
+
+function epicDisplay(container, id) {
+    var editor = epicEdit(container, id || null, false);
+    editor.preview();
 }
 /////////////////////////////////
 //    preload images

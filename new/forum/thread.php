@@ -67,19 +67,17 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<div class=\"post_usr\">";
 				$poster = $member->getUserData($row2["by_"]);
 				echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
-				echo "<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>"; //online status
+				echo "<span class=\"status\" id=\"".$member->status2name($poster['status'])."\" title=\"".$member->status2name($poster['status'])."\">&nbsp;</span>"; //online status
 				echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
 				echo "<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>"; //rank
 				echo "<table class=\"usr_info\">";
 				echo "<tr><td width=10>Posts:</td><td>". $forum->getPostCountByUser($poster["ID"])."</td></tr>"; //post count
-				echo "<tr><td>Prestige:</td><td>". $poster["points"]."</td></tr>"; //ask points
+				echo "<tr><td>Prestige:</td><td>". $poster["prestige"]."</td></tr>"; //ask points
 				
 				echo "</table>";
 				echo "</div>";
 				echo "</td><td>";
-				echo "<div class=\"post_msg\">";
-				echo $row2["msg"];
-				echo "</div>";
+				echo "<div class=\"post_msg\"><div style='width:100%;height:100%'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>$row2[msg]</textarea></div></div>";
 				
 				echo "<div class=\"post_msg_btm\">";
 				echo "

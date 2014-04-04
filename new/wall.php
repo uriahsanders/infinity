@@ -5,7 +5,7 @@
 	$me = $member->getUserData($_SESSION['ID']);
 	$wall = Wall::getInstance($_GET['type'] || 0);
 	$sys = new System;
-	
+	$projects = new Projects();
 ?>
 
 			<div id="pro_usr_stream_write">
@@ -18,7 +18,7 @@
             <div id="pro_usr_wall">
             <input type="hidden" ID="Mee" value='<?php echo json_encode(array("ID"=> $me['ID'], "usr" => $me['username'], "img"=>$me['image'])); ?>'>
             <?php
-			
+            	if(isset($_GET['id'])) $ID = $_GET['id'];
 				$TheWall = $wall->getWall($ID);
 				while($row = $TheWall->fetch())
 				{
@@ -26,7 +26,10 @@
 					echo '<div class="pro_usr_stream_log">';
 					echo '<a href="/user/'.$by['username'].'"><img src="/images/user/'.$by['image'].'" class="pro_pic_tumb" /></a>';
 					echo '<div class="pro_stream_box" sID="'.$row['ID'].'">';
-					echo '<b><a href="/user/'.$by['username'].'">'.$by['username'].'</a> '.(($row['to'] != $row['by'])? " &raquo; <a href=\"/user/".$member->getUserData($row['to'])['username']."\">". $member->getUserData($row['to'])['username']."</a>" : "") . '</b> <i>'.$sys->timeDiff($row['date']).'</i>';
+					echo '<b><a href="/user/'.$by['username'].'">'.$by['username'].'</a> '.
+					(($row['to'] != $row['by'])? " &raquo; ".
+						($wall->type == 0 ? "<a href=\"/user/".$member->getUserData($row['to'])['username']."\">".$member->getUserData($row['to'])['username']."</a>" : $projects->id2name($row['to'])) : "") . 
+					'</b> <i>'.$sys->timeDiff($row['date']).'</i>';
 					echo '<span class="pro_stream_s"><img src="/images/s.png" /></span>';
 					echo '<p>'. $row['txt'];
 					echo '<span class="pro_stream_l">'.$wall->getLikesCount($row['like']).' people(s) liked this</span><img src="/images/like.png" title="Like" class="stream_like_ico"></p>';

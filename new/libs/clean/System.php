@@ -20,7 +20,7 @@ class System
 		$links = array( //all links that we will have at the top
 			"/" => "Start",
 			"/lounge/"=>"",
-			"/projects/" => "Projects",
+			"/projects/#!/all" => "Projects",
 			"/forum/#" => "Forum",
 			"/about/" => "About",
 			"/infinity/" => "Infinity",

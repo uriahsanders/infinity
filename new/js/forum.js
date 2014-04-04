@@ -1,7 +1,8 @@
 (function() {
 	var old = [],
-		old_data = [];
+		old_data = [], DIR = 'l', REFER = 0;
 	$(document).ready(function(e) {
+		window.onhashchange = hash_ajax;
 		$(document).on("click", ".cat_title", function() { //if you click on a forum 
 			var ele = $(this).parents(".forum").children(".subcat"); //find the subcat for that forum
 			if (ele.is(":hidden"))
@@ -18,11 +19,21 @@
 		$(document).on('click', 'a[id^="change-pg-"]', function() {
 			var hash = window.location.hash;
 			//add a slash if we need to for a proper split
-			if (hash.slice(-1) != '/' && isNaN(hash.slice(-1))) hash += '/';
+			var pg = hash.slice(-1);
+			var nxt = $(this).attr('id').substring(10);
+			if(pg > nxt) DIR = 'r';
+			else DIR = 'l';
+			if (pg != '/' && isNaN(pg)){
+				hash += '/';
+				DIR = 'l';
+			}
 			hash = hash.split('/');
 			//change page part of URL
-			hash[hash.length - 1] = $(this).attr('id').substring(10);
+			hash[hash.length - 1] = nxt;
 			window.location.hash = hash.join('/');
+			$('html, body').animate({
+				scrollTop: $("body").offset().top
+			}, 1000);
 		});
 		//////////////////////////////////////////////////////
 		// clicking on a category will be handled with ajax..
@@ -38,7 +49,7 @@
 		} else {
 			window.location = "#";
 		}
-		$(window).on("hashchange", hash_ajax); //if the hashtag change
+
 		function hash_ajax() {
 			if (block)
 				return;
@@ -94,6 +105,7 @@
 				};
 				id = "r";
 			}
+			id = DIR;
 			var time = first === true ? 0 : 1000;
 			$.ajax({ // send it with ajax
 				url: page + ".php", //to the right file depending on the previus code
@@ -109,8 +121,8 @@
 							direction: ((id === "l") ? "left" : "right")
 						}, time, //slide the old one away 
 						function() {
-							$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
-							$(".arrow_l").show(500);
+							//$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
+							//$(".arrow_l").show(500);
 
 							while ($(".forum_1").length > 0) {
 								$(".forum_1").remove(); //REMOVE OLD ONE
@@ -122,15 +134,20 @@
 							block = false;
 							nav();
 							if (cat !== undefined || thread !== undefined) {
-								$('#forum-pages').html('<button id="forum-post">New Post</button>');
-								if (thread !== undefined) {
-									$('#forum-pages').append();
+								if (cat !== undefined) $('#forum-pages').html('<button id="forum-post">New Post</button>');
+								else if (thread !== undefined) {
 									$.ajax({
 										url: '/forum/handle.php',
 										type: 'GET',
 										data: data,
 										success: function(res2) {
-											$('#forum-pages').append(res2);
+											$('#forum-pages').html('<button id="forum-post">New Post</button>' + res2);
+											//run epic-edit function for each post
+											$('div[id^="epicedit-"]').each(function() {
+												var id = $(this).attr('id').substring(9);
+												epicDisplay('epicedit-' + id, 'epic-' + id);
+												$(this).hide().fadeIn();
+											});
 										}
 									});
 								}
@@ -158,7 +175,7 @@
 		function save(newID) {
 			var hash = window.location.hash;
 			if (hash.length === 0) {
-				$("div[class^='arrow_']").remove();
+				//$("div[class^='arrow_']").remove();
 				old = [];
 				current = 0;
 				window.location.hash = "#";
@@ -177,11 +194,11 @@
 
 		function arrows() {
 			$("body").append("<div class=\"arrow_l\"></div><div class=\"arrow_r\"></div>") //show arrows
-			if (current === 0)
-				$(".arrow_l").remove();
-			if (current == old.length - 1)
-				$(".arrow_r").remove();
-			$(".arrow_l, .arrow_r").show(500);
+			// if (current === 0)
+			// 	$(".arrow_l").remove();
+			// if (current == old.length - 1)
+			// 	$(".arrow_r").remove();
+			// $(".arrow_l, .arrow_r").show(500);
 		}
 
 		function nav() {
@@ -213,40 +230,46 @@
 		// history buttons :]
 		////////////////////////////////////////////////////
 		$(document).on("click", "div[class^='arrow_']", function() {
-			if (block) //check so its not blocked
-				return;
-			block = true; //its not blocked, we will continue but block from now on
+			// if (block) //check so its not blocked
+			// 	return;
+			// block = true; //its not blocked, we will continue but block from now on
+			// var id = $(this).attr("class").substr(-1); //get the direction, left or right (l or r)
+			// $("#main").prepend("<div class=\"forum_2\">" + //add a hidden div with the data
+			// 	((typeof(Storage) !== "undefined") ? //check for ls support
+			// 		sessionStorage.getItem(old[((id === "l") ? --current : ++current)][1]) //get the data depending on left or righ from sessionStorage
+			// 		:
+			// 		old_data[old[current][1]] //get data from variables when session is not supported
+			// 	) + "</div>"); //add the feteched data to a div
+
+
+			// window.location.hash = old[current][0]; //set the right hash in the url bar
+			// $(".forum_1").hide("slide", {
+			// 		direction: ((id !== "l") ? "left" : "right")
+			// 	}, 1000, //slide in the dirrection depending on l/r
+			// 	function() {
+			// 		while ($(".forum_1").length > 0) //remove all the old divs, this is a dummy proof way of it
+			// 		{
+			// 			$(".forum_1").remove(); //REMOVE OLD ONE
+			// 		}
+			// 		$(".forum_2").attr("class", "forum_1"); //change new to active so we can keep this going
+			// 		block = false; //unblock as we are done
+			// 		setTimeout(nav, 200); //recalculate nevigation with an extra small delay...
+			// 	}
+			// );
+			// nav();
+			// $(".forum_2").show("slide", {
+			// 	direction: ((id === "l") ? "left" : "right")
+			// }, 1000); //slide the new one simultaniasly with the old
+			// arrows(); //recalculate arrows
 			var id = $(this).attr("class").substr(-1); //get the direction, left or right (l or r)
-
-			$("#main").prepend("<div class=\"forum_2\">" + //add a hidden div with the data
-				((typeof(Storage) !== "undefined") ? //check for ls support
-					sessionStorage.getItem(old[((id === "l") ? --current : ++current)][1]) //get the data depending on left or righ from sessionStorage
-					:
-					old_data[old[current][1]] //get data from variables when session is not supported
-				) + "</div>"); //add the feteched data to a div
-
-
-			window.location.hash = old[current][0]; //set the right hash in the url bar
-
-			$(".forum_1").hide("slide", {
-					direction: ((id !== "l") ? "left" : "right")
-				}, 1000, //slide in the dirrection depending on l/r
-				function() {
-					while ($(".forum_1").length > 0) //remove all the old divs, this is a dummy proof way of it
-					{
-						$(".forum_1").remove(); //REMOVE OLD ONE
-					}
-					$(".forum_2").attr("class", "forum_1"); //change new to active so we can keep this going
-					block = false; //unblock as we are done
-					setTimeout(nav, 200); //recalculate nevigation with an extra small delay...
-				}
-			);
-			$(".forum_2").show("slide", {
-				direction: ((id === "l") ? "left" : "right")
-			}, 1000); //slide the new one simultaniasly with the old
-			arrows(); //recalculate arrows
+			DIR = id === 'l' ? 'r' : 'l';
+			REFER = 1;
+			if(id === 'l') window.history.back();
+			else window.history.forward();
 		});
-
+		$(document).on('click', '.forum', function(){
+			DIR = 'l';
+		});
 		/////////////////////////
 		// clear session storage
 		/////////////////////////
@@ -271,15 +294,8 @@
 			popup("New Post", '<form id="new-forum-post"><input type="hidden"name="signal"value="post"/><input type="hidden"name="' +
 				(thread ? 't' : 'f') + '"value="' + (thread || cat) + '"/><br>' +
 				(cat ? '<input style="padding:10px;width:75%"name="subject"placeholder="Subject"/>' : '') +
-				'<br><br><textarea name="body"class="tinymce form-control"></textarea><br><button class="pr-btn">Post</button></form>');
-			tinymce.init({
-					selector: '.tinymce',
-					width: 675,
-					height: 250
-				});
-				$(function() {
-					$('.mce-tinymce').css('margin', 'auto');
-				});
+				'<br><br><div id="epicedit-body"><textarea id="epic-body"name="body"class="epic-text form-control"></textarea></div><br><button class="pr-btn">Post</button></form>');
+			epicEdit('epicedit-body', 'epic-body');
 		});
 		//deleting
 		$(document).on('click', '[id^="forum-remove-"]', function() {
@@ -296,7 +312,7 @@
 				data: obj,
 				type: 'POST',
 				success: function(data) {
-					if(isTopic){
+					if (isTopic) {
 						$('.arrow_l').click();
 					}
 					$(window).trigger('hashchange');
@@ -304,8 +320,8 @@
 			});
 		});
 		//modifiying
-		$(document).on('click', '[id^="forum-modify-"]', function(){
-			
+		$(document).on('click', '[id^="forum-modify-"]', function() {
+
 		});
 		//new post creation
 		$(document).on('submit', '#new-forum-post', function(e) {
@@ -320,7 +336,6 @@
 					var hash = window.location.hash;
 					var cat = hash.indexOf("f=") != -1 ? true : false;
 					if (cat) {
-						alert(data);
 						window.location.reload(true);
 					} else {
 						//change to last page to see post
@@ -331,7 +346,7 @@
 						hash[hash.length - 1] = $('#last-page').val();
 						if (window.location.hash === hash.join('/')) $(window).trigger('hashchange');
 						else window.location.hash = hash.join('/');
-						$('.popup').fadeOut();
+						$('#msgbox_close').click(); //close popup and dim
 						$('html, body').animate({
 							scrollTop: $(document).height()
 						}, 3000);

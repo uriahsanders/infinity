@@ -2,7 +2,7 @@
 class Wall{
 	private $_db; //the database instance will lie here
 	private static $_instance; //own instance 
-	private $type = 0; //wall for what? User by default
+	public $type = 0; //wall for what? User by default
 	
 	/**
 	*	Gives the wall a type so we dont mix up ID's for different things

@@ -69,8 +69,7 @@
 					'<input style="width:75%;padding:10px"class="form-control"name="projectName"placeholder="projectname"/>',
 					'<br><br>',
 					'<textarea placeholder="Short Description"class="form-control"cols="75"rows="10"name="short"></textarea>',
-					'<br><br>',
-					'<textarea placeholder="Description"class="tinymce form-control"name="description"></textarea>',
+					'<br><br><div id="epicedit-desc"><textarea class="epic-text"id="description"name="description">Description</textarea></div>',
 					'<br><br>',
 					'<input class="form-control"type="hidden"name="video"value="temporary"/>',
 					'<input class="form-control"type="hidden"name="image"value="temporary"/>',
@@ -78,14 +77,7 @@
 					'</form>'
 				].join('');
 				popup('New Project', form, 'create-project');
-				tinymce.init({
-					selector: '.tinymce',
-					width: 675,
-					height: 250
-				});
-				$(function() {
-					$('.mce-tinymce').css('margin', 'auto');
-				});
+				epicEdit('epicedit-desc', 'description');
 			});
 			//entering a search request
 			$(document).on('submit', '#search-form', function() {
@@ -127,10 +119,11 @@
 						url: '../wall.php',
 						type: 'GET',
 						data: {
-							type: 1
+							type: 1,
+							id: $('#projectID').val()
 						},
 						success: function(res) {
-							$('#project-wall').html($('#pr-nav').html() + "<br><br>" + res);
+							$('#project-wall').html($('#pr-nav').html() + "<input type='hidden'value='1'id='wall-type'/><br><br>" + res);
 						}
 					});
 				$('#project-wall').show();
@@ -261,7 +254,8 @@
 					//so, whether or not the project has been joined in stored in a hidden input
 					//so hide form if it has been joined and show it otherwise
 					//required boolean is the value of the hidden input
-					this.joinForm($("#projectHasBeenJoined").val());
+					//this.joinForm($("#projectHasBeenJoined").val());
+					epicDisplay('epicdisplay-desc', 'display-desc');
 				});
 			},
 			//get a category
@@ -284,12 +278,13 @@
 					$('#create-project').append("<br>Your project's workspace has been created at: " + res + ". Launch it from there!");
 				});
 			},
-			deleteOne: function(id) {
+			deleteOne: function(id, callback) {
 				ajax('POST', {
 					signal: 'delete',
 					id: id
 				}, function(res) {
 					console.log(res);
+					if (callback) callback();
 					//console.log("Project was deleted.");
 				});
 			},
@@ -376,9 +371,11 @@
 				this.comment(comment);
 			},
 			handle_delete: function(id) {
-				this.deleteOne(id);
-				//nothing is here anymore so retrieve category again
-				this.retrieve(model.category);
+				var thiz = this;
+				this.deleteOne(id, function() {
+					//nothing is here anymore so retrieve category again
+					thiz.retrieve(model.category);
+				});
 			},
 			handle_loadMore: function() {
 				this.loadMore();

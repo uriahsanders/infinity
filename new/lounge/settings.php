@@ -42,13 +42,9 @@
         </select>
         <br><br>
         About Me:<br><br>
-        <textarea class="tinymce"name="about">
-            <?php echo $member->get($_SESSION['ID'], 'about'); ?>
-        </textarea><br><br>
+        <div id="epicedit-about"><textarea id="epic-about"class="epic-text"name="about"><?php echo $member->get($_SESSION['ID'], 'about'); ?></textarea></div><br><br>
         Resume:<br><br>
-        <textarea class="tinymce"name="resume">
-            <?php echo $member->get($_SESSION['ID'], 'resume'); ?>
-        </textarea>
+        <div id="epicedit-resume"><textarea id="epic-resume"class="epic-text"name="resume"><?php echo $member->get($_SESSION['ID'], 'resume'); ?></textarea></div>
         <br><br>
         <input type="text"class="form-control"style="display:inline;width:67%"placeholder="New Skill">&emsp;<button type="button"class="btn btn-info">Add Skill</button><br><br>
         <textarea style="display:inline;width:80%"name="" id="" cols="30" rows="5"class="form-control"placeholder="Skills..."disabled></textarea>
@@ -66,12 +62,13 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        epicEdit('epicedit-about', 'epic-about');
+        epicEdit('epicedit-resume', 'epic-resume');
         var sex = "<?php echo $sex ?>";
         $('#' + sex).attr("checked", true); //make the radio ticked
     });
     $('#options').on('submit', function(e){
         e.preventDefault();
-        tinyMCE.triggerSave();
         $.ajax({
             url: '../settings_handle.php',
             type: 'POST',

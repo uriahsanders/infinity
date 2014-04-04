@@ -15,7 +15,7 @@ include_once(PATH ."core/top.php");
 
 <div id="forum_nav">
 	<div id="forum_nav_1"><a href="#">Infinity-forum</a></div>&nbsp;<i class="fa fa-long-arrow-right fa-lg"></i>&nbsp;<!--
-    --><div id="forum_nav_2"><span></span><span><?php 
+    --><div id="forum_nav_2"><span></span><span style="text-align:center;"><?php 
 	echo "<ul>";
 	$member = Members::getInstance();
 	$MyRank = $member->getUserRank(0,"getIndex"); //get the current users rank
