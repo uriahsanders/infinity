@@ -224,7 +224,7 @@ else
 		   return $output;
 		}
 	
-		$dbms_schema = 'infiniz7_infinity.sql';
+		$dbms_schema = 'infinity.sql';
 		
 		$sql_query = @fread(@fopen($dbms_schema, 'r'), @filesize($dbms_schema)) or die('problem ');
 		$sql_query = remove_remarks($sql_query);
