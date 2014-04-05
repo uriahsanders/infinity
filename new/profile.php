@@ -90,8 +90,8 @@
             <tr>
                 <?php
                     $num = $projects->numProjects($ID);
-                    echo "<td><b>".$num."*</b><br/>Project".($num == 1 ? '' : 's')."<br /><br /></td>
-                    <td><b>1244*</b><br/><a>Forum Posts</a><br /><br /></td>";
+                    echo "<td><b>".$num."*</b><br/><a>Project".($num == 1 ? '' : 's')."</a><br /><br /></td>
+                    <td><b>".$member->numPosts($_SESSION['ID'])."</b><br/><a>Forum Posts</a><br /><br /></td>";
                 ?>
             </tr>
             <tr>

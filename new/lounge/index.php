@@ -6,41 +6,22 @@
     Login::checkAuth();
 	$member = Members::getInstance();
     $projects = new Projects();
-    if (isset($_GET['user']) && !empty($_GET['user']))
-    {    
-        $ID = $member->get($_GET['user'],"ID");
-        
-    }
-    else 
-    {
-        $ID = $_SESSION['ID'];
-    }
     include_once(PATH ."core/top.php");
     if(defined("PAGE") && PAGE == "start") 
     {
         include_once(PATH ."core/slide.php");
     }
     include_once(PATH ."core/bar_main_start.php");
-    if (empty($ID))
-        {
-            $start = "<script type=\"text/javascript\">\n $(document).ready(function(){\n";
-            $end   = " \n});</script>";
-            echo $start . "MsgBox(\"Error\", \"The user \\\"$_GET[user]\\\" does not exist.\",3);" . $end;
-            $ID = $_SESSION['ID'];
-        }
-    $data = $member->getUserData($ID, "ID");
+    $data = $member->getUserData($_SESSION['ID'], "ID");
     $image = $data["image"]; 
 ?>
 <input type="hidden" value="<?php echo $ID; ?>" id="usr_id" /> 
 <div id="pro_side">
     <div id="pro_user_pic">
         <?php
-            if($ID == $_SESSION['ID'])
-            {
                 echo '<span><img src="/images/s.png" title="settings"/>';
                 echo '<span><b class="user-pic-upload"id="upload">Upload</b><b id="remove">Delete</b></span>';                
                 echo '</span>';
-            }
         ?>
       <img src="/images/user/<?php echo $image; ?>" id="pro_profile_p"/>
       <div id="pro_user_type">
@@ -53,18 +34,36 @@
     </div>
     <div id="pro_info"style="text-align:center;border-radius:0px;padding:20px">
     <?php 
-      echo "<br><a style='font-size:1.4em'>Projects: <b>".$projects->numProjects($ID)."</b></a><br /><br>";
-      echo "<a style='font-size:1.4em'>Posts: <b>1244</b></a><br /><br>";
-      echo "<a style='font-size:1.4em'>Prestige: <b>".$data['prestige']."</a></b><br /><br>";
+      echo "<br><a style='font-size:1.4em'>Projects: <b>".$projects->numProjects($_SESSION['ID'])."</b></a><br /><br>";
+      echo "<a style='font-size:1.4em'>Posts: <b>".$member->numPosts($_SESSION['ID'])."</b></a><br /><br>";
+      echo "<span style='font-size:1.4em'>Prestige: <b>".$data['prestige']."</span></b><br /><br>";
     ?>
     </div><br>
-    <a class="fa fa-home fa-2x lounge-icon gold active"></a>&emsp;
+        <a href="index.php"class="fa fa-home fa-2x lounge-icon gold active"></a>&emsp;
         <a href="pm.php"class="fa fa-envelope-o fa-2x lounge-icon white"></a>&emsp;
         <a href="groups.php"class="fa fa-users fa-2x lounge-icon yellow"></a>&emsp;
         <a href="settings.php"class="fa fa-cogs fa-2x lounge-icon grey"></a>&emsp;
         <a href="suggestions.php"class="fa fa-folder fa-2x lounge-icon grey"></a>
 </div>
         <div>
+        <?php
+          //get last ten actions
+          while($row = Action::getActions($_SESSION['ID'], 0, 10)->fetch()){
+            echo '
+               <div class="panel">
+                    <div class="panel-heading">
+                      <span class="panel-title">'.$row['title'].' -'.$row['date'].'</span>
+                    </div>
+                    <div class="panel-body">
+                      '.$row['content'].'
+                      <br><br>
+                      <button class="btn btn-primary">Dismiss</button>
+                    </div>
+                </div>
+                <br>
+            ';
+          }
+        ?>
         <div class="panel">
                     <div class="panel-heading">
                       <span class="panel-title">News</span>
@@ -100,18 +99,6 @@
                       "Hey Uriah, this is Relax. Add me as soon as possible so we can get started!"
                       <br><br>
                       <button class="btn btn-success">Accept</button>&nbsp;<button class="btn btn-danger">Deny</button>
-                    </div>
-                </div>
-                <br>
-                <div class="panel">
-                    <div class="panel-heading">
-                      <span class="panel-title"><a>Relax</a> posted on your wall:</span>
-                    </div>
-                    <div class="panel-body">
-                      "What's up? I heard you recently got into that big project Jeremy started."
-                      <br><br>
-                      <textarea class="form-control"style="height:75px;background-color: rgba(255, 255, 255, .7);"></textarea><br><br>
-                      <button class="btn btn-success">Reply</button>
                     </div>
                 </div>
                 <br>

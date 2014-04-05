@@ -1287,6 +1287,7 @@ span.tooltip {
     padding: 5px;
     border-radius: 3px;
     border: 1px solid grey;
+    background-color: rgba(255, 255, 255, .7);
 }
 select{
     padding: 10px;
@@ -1294,11 +1295,15 @@ select{
 .lead{
     font-size: 1.2em;
 }
+.project-info{
+    /*background:url('/images/gray_sand.png');*/
+    padding: 10px;
+}
 .project{
-            background:url('/images/gray_sand.png');
+            background:url('/images/broken_noise.png');
             width:20%;
             display:inline-block;
-            height:330px;
+            height:400px;
             border-radius: 5px;
             margin: 10px;
             text-align: center;

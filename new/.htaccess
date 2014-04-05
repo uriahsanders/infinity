@@ -126,6 +126,24 @@ RewriteCond %{QUERY_STRING} !marker
 RewriteRule ^/?lounge\/settings\.php$ /lounge/settings [R=301,L]
 RewriteRule ^\/?lounge\/settings\/?$ /lounge/settings.php?marker [L]
 
+#groups
+RewriteCond %{REQUEST_URI} ^/lounge/groups.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?lounge\/groups\.php$ /lounge/groups [R=301,L]
+RewriteRule ^\/?lounge\/groups\/?$ /lounge/groups.php?marker [L]
+
+#suggestions
+RewriteCond %{REQUEST_URI} ^/lounge/suggestions.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?lounge\/suggestions\.php$ /lounge/suggestions [R=301,L]
+RewriteRule ^\/?lounge\/suggestions\/?$ /lounge/suggestions.php?marker [L]
+
+#pms
+RewriteCond %{REQUEST_URI} ^/lounge/pm.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?lounge\/pm\.php$ /lounge/pm [R=301,L]
+RewriteRule ^\/?lounge\/pm\/?$ /lounge/pm.php?marker [L]
+
 RewriteCond %{REQUEST_URI} ^/libs/notification.php$
 RewriteCond %{QUERY_STRING} !marker
 RewriteCond %{QUERY_STRING} ID=([0-9]+)

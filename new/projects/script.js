@@ -132,25 +132,16 @@
 				$('[id^="project"]').hide();
 				$('#project-main').show();
 			});
-			$(document).on('click', '#pr-stats', function() {
-				$('[id^="project"]').hide();
-				if ($('#project-stats').html() == '')
-					$.ajax({
-						url: 'script.php',
-						type: 'GET',
-						data: {
-							signal: 'stats',
-							id: $('#projectID').val()
-						},
-						success: function(res) {
-							$('#project-stats').html($('#pr-nav').html() + "<br><br>" + res);
-						}
-					});
-				$('#project-stats').show();
-			});
 			$(document).on('click', '#pr-join', function() {
-				$('[id^="project"]').hide();
-				$('#project-join').show();
+				var form = [
+					'<br><br><form id="project-form">',
+					'<br><br><div id="epicedit-join"><textarea class="epic-text"id="join"name="description"></textarea></div>',
+					'<br><br>',
+					'<button class="pr-btn">Send</button><br><br><br>',
+					'</form>'
+				].join('');
+				popup('Join Request', form, 'create-project');
+				epicEdit('epicedit-join', 'join');
 			});
 		});
 	});

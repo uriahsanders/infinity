@@ -195,4 +195,10 @@ class Members implements iMembers
 		public function status2name($status){
 			return $this->statuses[$status];
 		}
+		//get number of forum posts
+		public function numPosts($id){
+			$one = $this->_db->query("SELECT COUNT(*) FROM `posts` WHERE `by_` = ?", $id)->fetchColumn();
+			$two = $this->_db->query("SELECT COUNT(*) FROM `topics` WHERE `by_` = ?", $id)->fetchColumn();
+			return $one + $two;
+		}
 }

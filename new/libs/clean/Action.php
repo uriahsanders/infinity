@@ -5,11 +5,11 @@ if (!defined("INFINITY"))
 	*I suppose this file is a type of notification class, but more versatile
 	*Storing and removing actions of members
 	*Table: `actions`, (search & replace this to change all (no instance data 'cause static methods))
-	*Columns: `ID`, `user`, `title`, `content`, `category`, `date` `read`
+	*Columns: `ID`, `user`, `title`, `content`, `category`, `date`, `read`
 	*/
 	class Action{
 		//categories of actions so we can sort through
-		//public $categories = ['forum', 'profile', 'projects', 'PM'];
+		//public $categories = ['forum', 'profile', 'projects', 'PM', 'news'];
 		//one query function to be performed in multiples by public equivalent
 		private function newAction($user, $title, $content, $category){
 			Database::getInstance()->query("INSERT INTO `actions` (`user`, `title`, `content`, `category`, `date`) VALUES (?, ?, ?, ?, ?)",
@@ -53,6 +53,13 @@ if (!defined("INFINITY"))
 					//basically creating an action for one other person
 					$this->newAction($id, $title, $content, $category);
 					break;
+				case 'news':
+					//send to all members
+					$members = Database::getInstance()->query("SELECT `ID` FROM `memberinfo`");
+					while($row = $members->fetch()){
+						$this->newAction($row['ID'], $title, $content, $category);
+					}
+					break;
 				default:
 					//only add action for current user
 					$this->newAction($_SESSION['ID'], $title, $content, $category);
@@ -85,16 +92,17 @@ if (!defined("INFINITY"))
 		*	Action::getActions($_SESSION['ID'], 0, Action::getNumActions(), 'Test');
 		*/
 		public static function getActions($user, $begin, $amount, $search = false, $by = 'title'){
-			$execs = [$user]; //array or values to execute query with
-			$query = "SELECT * FROM `actions` WHERE `ID` = ?"; //begin query
+			$execs = [$user, 0]; //array or values to execute query with
+			$query = "SELECT * FROM `actions` WHERE `user` = ? AND `read` = ?"; //begin query
 			//if we're searching choose correct column and use LIKE, add on to query
 			if($search != false){
 				$query .= " AND `".$by."` LIKE %?%"; //search might be from user so filter
 				array_push($execs, $search); //add $search to execution array
 			}
 			$query .= " ORDER BY `date` LIMIT ".$begin.", ".$amount; //finish query
+			//System::Error($query);
 			$result = Database::getInstance()->query($query, $execs);
-			return $result->fetchAll();
+			return $result;
 		}
 		
 		/**

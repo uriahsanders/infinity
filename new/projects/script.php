@@ -43,8 +43,6 @@ switch($_SERVER['REQUEST_METHOD']){
 					die(show('projects', $res));
 				}
 				die();
-			case 'stats':
-				die('Stats');
 		}
 		die();
 }
@@ -54,14 +52,12 @@ switch($_SERVER['REQUEST_METHOD']){
 		$username = $member->get($creator, 'username');
 		return "<a>
         <div id=\"$username-$projectname-$id\"class=\"project\">
-          <div class=\"lead project-title\">$projectname</div>
+          <div class=\"lead project-title\">$projectname</div><br>
           <div class=\"project-img\">
-            <br>
-            <i class=\"fa fa-star gold\"style=\"font-size:9em\"></i>
+            <img src='/images/profile-photo.jpg'style='height:200px;width:200px'>
           </div>
           <div class=\"project-info\">
-            By ".$username." <br><br>
-            Created: ".System::timeDiff($date)." <br><br>
+            By ".$username.",  ".System::timeDiff($date)."<br><br>
             $short
           </div>
         </div>
@@ -77,7 +73,6 @@ switch($_SERVER['REQUEST_METHOD']){
 			$thisMember = $member->get($value, 'username');
 			$memberList .= "<a target=\"_blank\"href=\"/user/$thisMember\">".$thisMember.'</a><br>';
 		}
-		//$work = ($creator == $_SESSION['ID']) ? "<button id='delete'class='pr-btn'>Delete</button>" : '';
 		return "
 			<button class='pr-btn'id='pr-discover'>See More Projects</button><br><br>
 			<div id='project-main'style='width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'>
@@ -85,8 +80,7 @@ switch($_SERVER['REQUEST_METHOD']){
 				<input type='hidden'value='".$id."'id='usr_id'/>
 				<input id='projectID'type='hidden'value='".$id."'/>
 				<button class='pr-btn'id='pr-about'>About</button>&emsp;<button class='pr-btn'id='pr-posts'>Wall</button>&emsp;
-				<button class='pr-btn'id='pr-stats'>Stats</button>&emsp;<button class='pr-btn'id='pr-join'>Join</button>&emsp;
-				$work
+				<button class='pr-btn'id='pr-join'>Join</button>&emsp;
 				</div>
 				<br><br>
 				<span class='lead'style='font-size: 3em;'>$projectname</span><br><br> by <a target=\"_blank\"href=\"/user/$username\">$username</a><br><br>
@@ -95,8 +89,6 @@ switch($_SERVER['REQUEST_METHOD']){
 				<div id='epicdisplay-desc'style='padding:10px;border-radius:5px;margin:auto;width:85%;background:url(\"/images/gray_sand.png\");'><textarea class='epic-text'id='display-desc'>$description</textarea></div>
 			</div>
 			<div id='project-wall'style='display:none;width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'></div>
-			<div id='project-stats'style='display:none;width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'></div>
-			<div id='project-join'style='display:none;width:75%;background:url(\"/images/broken_noise.png\");margin:auto;padding:15px;border-radius:5px;text-align:center'></div>
 		";
 	}
 	function commentTemplate($id, $projectID, $date, $posterID, $body){

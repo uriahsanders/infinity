@@ -13,17 +13,15 @@
     include_once(PATH ."core/bar_main_start.php");
     $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
 ?>
-<br>
     <div id="pr-navigation">
-      <div class="nav"style="margin:auto;width:100%;margin-left:1%">
-        <button id="new-project"class="pr-btn btn-success">New Project</button><br><br>
-        View <button class="pr-btn btn-success">All <i class="fa fa-caret-down"></i></button>&nbsp;
-        Projects sorted by &nbsp;
-        <button class="pr-btn btn-success">Date <i class="fa fa-caret-down"></i></button>
-        <br><br>
-        <input class="form-control"placeholder="Search..."/>
+      <div class="nav"style="margin:auto;font-size:2em;">
+        View <a href="">All</a> projects sorted by <a href="">Date</a>
+        <!-- <br> -->
+        <!-- <button id="new-project"class="pr-btn btn-success">New Project</button> -->
       </div>
       <br>
+        Search: <input class="form-control"/>
+      <br><br>
     </div>
     <input id="token"type="hidden"value=<?php echo '"'.$_SESSION['token'].'"'; ?>/>
     <div id="meat"></div>
