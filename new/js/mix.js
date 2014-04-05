@@ -390,7 +390,7 @@ function MsgBox(title, txt, icon, style) {
 }
 $(document).on('click', '#dim', function() {
     document.body.style.overflow = "";
-    $('.popup, #dim').fadeOut(function(){
+    $('.popup, #dim').fadeOut(function() {
         $('.popup, #dim').remove();
     });
     $(this).fadeOut();
@@ -400,7 +400,7 @@ $(document).on('click', '#dim', function() {
 ///////////////////////////////
 $(document).on("click", "#msgbox_close", function() {
     $(".MsgBox_bg").fadeOut(500);
-   // document.body.style.overflow = "";
+    // document.body.style.overflow = "";
     $('.popup, #dim').fadeOut(function() {
         $('.popup, #dim').remove();
     });
@@ -421,13 +421,14 @@ function popup(title, what, id, style) {
 function epicEdit(container, id, change) {
     if (typeof change === 'undefined') val = true;
     else val = false;
+    var previewer;
     var auto = val ? 'auto' : false;
     var opts = {
         container: container,
         textarea: id || null,
         basePath: '/css/',
-        useNativeFullscreen: true,
         clientSideStorage: false,
+        autogrow: true,
         file: {
             name: 'epiceditor'
         },
@@ -438,14 +439,8 @@ function epicEdit(container, id, change) {
         },
         button: {
             preview: val,
-            fullscreen: val,
+            fullscreen: false,
             bar: auto
-        },
-        focusOnLoad: false,
-        shortcut: {
-            modifier: 18,
-            fullscreen: 70,
-            preview: 80
         },
         string: {
             togglePreview: 'Toggle Preview Mode',
@@ -454,7 +449,33 @@ function epicEdit(container, id, change) {
         }
     }
     var editor = new EpicEditor(opts);
-    editor.load();
+    editor.load(function() {
+        previewer = this.getElement('previewer');
+
+        // Prettify JS
+        var scriptTag = previewer.createElement('script');
+        scriptTag.src = 'https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js';
+
+        // Prettify CSS
+        // var cssTag = previewer.createElement('link');
+        // cssTag.rel = 'stylesheet';
+        // cssTag.type = 'text/css';
+        // cssTag.href = 'google-code-prettify/prettify.css';
+
+        // Add JS / CSS
+        previewer.body.appendChild(scriptTag);
+        //previewer.head.appendChild(cssTag);
+    });
+    editor.on('preview', function() {
+        // Add necessary classes to <code> elements
+        var previewerBody = previewer.body;
+        var codeBlocks = previewerBody.getElementsByTagName('code');
+
+        for (var i = 0; i < codeBlocks.length; i++)
+            codeBlocks[i].className += ' prettyprint';
+
+        prettyPrint(null, previewerBody);
+    });
     return editor;
 }
 

@@ -167,6 +167,7 @@ class Forum extends Members implements iForum
 	}
 	public function updateThread($id, $subject, $body){
 		if($this->sessionCreated($id, 'topics')) $this->sql->query("UPDATE `topics` SET `title` = ?, `msg` = ? WHERE `ID` = ?", $subject, $body, $id);
+		else die('failure');
 	}
 	public function updatePost($id, $body){
 		if($this->sessionCreated($id, 'posts')) $this->sql->query("UPDATE `posts` SET `msg` = ? WHERE `ID` = ?", $body, $id);
@@ -186,7 +187,7 @@ class Forum extends Members implements iForum
 		<div class=\"post\">
 		<table class=\"tbl_post\"><tr><td>
 		<div class=\"post_usr\"><a href=\"/user/$poster[username]\">$poster[username]</a><br/>
-		<span class=\"status\" id=\"offline\" title=\"offline\">&nbsp;</span>
+		<span class=\"status\" id=\"".$member->status2name($poster['status'])."\" title=\"".$member->status2name($poster['status'])."\">&nbsp;</span>
 		<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />
 		<span class=\"usr_rank\">".($poster['special'] !== 'Member' && $poster['special'] !== '' ? $poster['special'] : $ranks[$poster["rank"]])."</span><br><br>
 		<table class=\"usr_info\">
@@ -194,10 +195,10 @@ class Forum extends Members implements iForum
 		<tr><td>Prestige:</td><td>". $poster["prestige"]."</td></tr>
 		</table>
 		</div>
-		</td><td>
+		</td><td><input type='hidden'id='threadID'value='".$id."'/>
 		<div class=\"post_msg\"><div style='width:100%;height:100%'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>".$row[0]['msg']."</textarea></div></div>
 		<div class=\"post_msg_btm\">
-			<a>Quote</a> ".($_SESSION['ID'] == $row[0]['by_'] ? "&emsp; <a id='forum-modify-topics-".$id."'>Modify</a>".$remove : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>").
+			<span style='cursor:pointer'>Quote</span> ".($_SESSION['ID'] == $row[0]['by_'] ? "&emsp; <span style='cursor:pointer'id='forum-modify-topics-".$id."'>Modify</span>".$remove : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>").
 		"</div>
 		</td></tr></table>
 		</div>
@@ -205,5 +206,10 @@ class Forum extends Members implements iForum
 	}
 	public function getPostData($id, $what){
 		return $this->sql->query("SELECT * FROM `".$what."` WHERE `ID` = ?", $id)->fetch();
+	}
+	public function getCategoryFromThread($id){
+		$cat = $this->sql->query("SELECT `parent_ID` FROM `topics` WHERE `ID` = ?", $id)->fetchColumn();
+		$category = $this->sql->query("SELECT `name` FROM `subcat` WHERE `ID` = ?", $cat)->fetchColumn();
+		return $category;
 	}
 }

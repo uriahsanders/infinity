@@ -46,7 +46,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 					echo "<br/><i><a href=\"/user/$u\">Started by: $u</a></i>";
 					echo "</a></td>"; //pring name and description
 					echo "<td>".$forum->getPostCount($row2["ID"])."</td>"; //show posts in th thread
-					echo "<td>0</td>"; //show how many post are in this subcat
+					echo "<td>".Views::numViews($row2['ID'], 'thread')."</td>"; //show how many post are in this subcat
 					echo "<td>".$forum->getLastPost($row2["ID"])."</td>"; //get last message
 					echo "</tr>";
 				}

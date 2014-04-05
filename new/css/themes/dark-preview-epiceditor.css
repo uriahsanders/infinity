@@ -3,7 +3,6 @@ html { padding:0 10px; }
 body {
   margin:0;
   padding:10px 0;
-  /*background:rgb(41,41,41);*/
 }
 
 #epiceditor-preview h1,
@@ -18,7 +17,6 @@ body {
     padding: 0;
 }
 #epiceditor-preview {
-    /*background:rgb(41,41,41);*/
     color: #fff;
 }
 #epiceditor-preview a {
@@ -91,9 +89,8 @@ body {
     font-family: Monaco, Andale Mono, Courier New, monospace;
 }
 #epiceditor-preview code {
-    background-color: #000;
-    color: #f92672;
     padding: 1px 3px;
+    background: #fff;
     font-size: 12px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -102,17 +99,15 @@ body {
 #epiceditor-preview pre {
     display: block;
     padding: 14px;
-    color:#66d9ef;
     margin: 0 0 18px;
-    line-height: 16px;
-    font-size: 11px;
-    border: 1px solid #d9d9d9;
+    background: #fff;
+    line-height: 20px;
+    font-size: 12px;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 #epiceditor-preview pre code {
-    background-color: #000;
-    color:#ccc;
-    font-size: 11px;
+    font-size: 12px;
     padding: 0;
+    background: #fff;
 }

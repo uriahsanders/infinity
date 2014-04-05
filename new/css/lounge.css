@@ -10,6 +10,11 @@
 	border-radius: 3px;
 	color: #fff;
 }
+.panel{
+	width: 70%;
+	float: right;
+	margin-bottom: 10px;
+}
 .panel-heading{
 	background:url('../images/broken_noise.png');
 	border: 1px solid #000;

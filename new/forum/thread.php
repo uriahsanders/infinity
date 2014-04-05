@@ -7,7 +7,7 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 		$MyRank = $member->getUserRank(0,2); //get the current users rank
 		$ranks = $member->ranks;
     	$forum = new Forum; //new forum
-		
+		Views::view($_POST['t'], 'thread', $forum->getCategoryFromThread($_POST['t']));
 		echo "<div class=\"forum_box\">";
 		$res = $forum->sql->query("	SELECT topics.*, 
 												CASE WHEN 
@@ -77,11 +77,11 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "</table>";
 				echo "</div>";
 				echo "</td><td>";
-				echo "<div class=\"post_msg\"><div style='width:100%;height:100%'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>$row2[msg]</textarea></div></div>";
+				echo "<div class=\"post_msg\"><div style='width:100%;'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>$row2[msg]</textarea></div></div>";
 				
 				echo "<div class=\"post_msg_btm\">";
 				echo "
-					<a>Quote</a> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <a id='forum-modify-posts-".$id."'>Modify</a> &emsp; <a id='forum-remove-posts-".$id."'>Remove</a>" : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>");
+					<span style='cursor:pointer'>Quote</span> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <span style='cursor:pointer'id='forum-modify-posts-".$id."'>Modify</span> &emsp; <a id='forum-remove-posts-".$id."'>Remove</a>" : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>");
 				echo "</div>";
 				
 				echo "</td></tr></table>";

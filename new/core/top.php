@@ -43,6 +43,7 @@ if(!$logged)
         <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
         <script type="text/javascript" src="/js/jquery-1.9.0.min.js"></script>
         <script src="/js/jquery-ui.min.js" type="text/javascript"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
         <script src="/js/mix.js" type="text/javascript"></script>
         <script type="text/javascript"src="https://cdnjs.cloudflare.com/ajax/libs/epiceditor/0.2.2/js/epiceditor.min.js"></script>
         <?php 
@@ -73,6 +74,7 @@ if(!$logged)
             }
             else if(defined("PAGE") && PAGE == "lounge") 
             {
+                echo '<link rel="stylesheet" type="text/css" href="/css/profile.css" />';
                 echo '<link rel="stylesheet" type="text/css" href="/css/lounge.css" />';
                 echo '<script src="/js/lounge.js" type="text/javascript"></script>';
             }

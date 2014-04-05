@@ -1,6 +1,8 @@
 (function() {
 	var old = [],
-		old_data = [], DIR = 'l', REFER = 0;
+		old_data = [],
+		DIR = 'l',
+		MODIFY = null;
 	$(document).ready(function(e) {
 		window.onhashchange = hash_ajax;
 		$(document).on("click", ".cat_title", function() { //if you click on a forum 
@@ -21,9 +23,9 @@
 			//add a slash if we need to for a proper split
 			var pg = hash.slice(-1);
 			var nxt = $(this).attr('id').substring(10);
-			if(pg > nxt) DIR = 'r';
+			if (pg > nxt) DIR = 'r';
 			else DIR = 'l';
-			if (pg != '/' && isNaN(pg)){
+			if (pg != '/' && isNaN(pg)) {
 				hash += '/';
 				DIR = 'l';
 			}
@@ -121,9 +123,6 @@
 							direction: ((id === "l") ? "left" : "right")
 						}, time, //slide the old one away 
 						function() {
-							//$("body").append("<div class=\"arrow_l\"></div>") //show back arrow
-							//$(".arrow_l").show(500);
-
 							while ($(".forum_1").length > 0) {
 								$(".forum_1").remove(); //REMOVE OLD ONE
 							}
@@ -175,30 +174,25 @@
 		function save(newID) {
 			var hash = window.location.hash;
 			if (hash.length === 0) {
-				//$("div[class^='arrow_']").remove();
-				old = [];
-				current = 0;
 				window.location.hash = "#";
 				hash = "#";
 				//return;
 			}
-			if (typeof(Storage) !== "undefined") //check of html5 support (storrge)
-				sessionStorage.setItem(newID, $(".forum_1").html()); //supported, add the old data in the storrage
-			else
-				old_data[newID] = $(".forum_1").html(); //not supported add it to a normal variable 
-			old.splice(current);
-			old.push([hash, newID]); //push the id to history array
-
 			arrows();
 		}
 
 		function arrows() {
 			$("body").append("<div class=\"arrow_l\"></div><div class=\"arrow_r\"></div>") //show arrows
-			// if (current === 0)
-			// 	$(".arrow_l").remove();
-			// if (current == old.length - 1)
-			// 	$(".arrow_r").remove();
-			// $(".arrow_l, .arrow_r").show(500);
+			if (window.location.hash.length === 0) {
+				$(".arrow_l").remove();
+				$(".arrow_r").remove();
+			}
+			if (window.location.hash.indexOf("f=") != -1 && DIR === 'l') {
+				$(".arrow_r").remove();
+			}
+			if (window.location.hash.indexOf("t=") != -1) {
+				if ($('#last-page').val() == 1 || window.location.hash.slice(-1) === $('#last-page').val()) $(".arrow_r").remove();
+			}
 		}
 
 		function nav() {
@@ -226,48 +220,28 @@
 			});
 
 		}
+
+		function numPages() {
+			return $('.pg-link').length / 2 + 1;
+		}
 		////////////////////////////////////////////////////
 		// history buttons :]
 		////////////////////////////////////////////////////
 		$(document).on("click", "div[class^='arrow_']", function() {
-			// if (block) //check so its not blocked
-			// 	return;
-			// block = true; //its not blocked, we will continue but block from now on
-			// var id = $(this).attr("class").substr(-1); //get the direction, left or right (l or r)
-			// $("#main").prepend("<div class=\"forum_2\">" + //add a hidden div with the data
-			// 	((typeof(Storage) !== "undefined") ? //check for ls support
-			// 		sessionStorage.getItem(old[((id === "l") ? --current : ++current)][1]) //get the data depending on left or righ from sessionStorage
-			// 		:
-			// 		old_data[old[current][1]] //get data from variables when session is not supported
-			// 	) + "</div>"); //add the feteched data to a div
-
-
-			// window.location.hash = old[current][0]; //set the right hash in the url bar
-			// $(".forum_1").hide("slide", {
-			// 		direction: ((id !== "l") ? "left" : "right")
-			// 	}, 1000, //slide in the dirrection depending on l/r
-			// 	function() {
-			// 		while ($(".forum_1").length > 0) //remove all the old divs, this is a dummy proof way of it
-			// 		{
-			// 			$(".forum_1").remove(); //REMOVE OLD ONE
-			// 		}
-			// 		$(".forum_2").attr("class", "forum_1"); //change new to active so we can keep this going
-			// 		block = false; //unblock as we are done
-			// 		setTimeout(nav, 200); //recalculate nevigation with an extra small delay...
-			// 	}
-			// );
-			// nav();
-			// $(".forum_2").show("slide", {
-			// 	direction: ((id === "l") ? "left" : "right")
-			// }, 1000); //slide the new one simultaniasly with the old
-			// arrows(); //recalculate arrows
+			nav();
+			arrows(); //recalculate arrows
 			var id = $(this).attr("class").substr(-1); //get the direction, left or right (l or r)
 			DIR = id === 'l' ? 'r' : 'l';
 			REFER = 1;
-			if(id === 'l') window.history.back();
+			var pg = window.location.hash.slice(-1);
+			if (isNaN(pg)) pg = 1;
+			if (id === 'r' && window.location.hash.indexOf("t=") != -1 && numPages() > 1 && pg !== $('#last-page').val()) {
+				var nxt = parseInt(pg, 10) + 1;
+				$('#change-pg-' + nxt).click();
+			} else if (id === 'l') window.history.back();
 			else window.history.forward();
 		});
-		$(document).on('click', '.forum', function(){
+		$(document).on('click', '.forum', function() {
 			DIR = 'l';
 		});
 		/////////////////////////
@@ -320,8 +294,20 @@
 			});
 		});
 		//modifiying
-		$(document).on('click', '[id^="forum-modify-"]', function() {
-
+		$(document).on('click', '[id^="forum-modify-"]', function(e) {
+			var id = $(this).attr('id').split('-')[3];
+			var isF = $('#threadID').val() == id;
+			MODIFY = id;
+			var hash = window.location.hash;
+			if (hash.indexOf("f=") != -1)
+				var cat = hash.substr(hash.indexOf("f=") + 2, hash.indexOf("/") - 2); //get the ID of the category
+			if (hash.indexOf("t=") != -1)
+				var thread = hash.substr(hash.indexOf("t=") + 2, hash.indexOf("/") - 2); //get the ID of the thread
+			popup("Modify Post", '<form id="modify-forum-post"><input type="hidden"name="id"value="'+id+'"/><input type="hidden"name="signal"value="update"/><input type="hidden"name="' +
+				(!isF ? 't' : 'f') + '"value="' + (parseInt(thread || cat)) + '"/><br>' +
+				(isF ? '<input style="padding:10px;width:75%"name="subject"placeholder="Subject"/>' : '') +
+				'<br><br><div id="epicedit-body"><textarea id="epic-body"name="body"class="epic-text form-control">' + $('#epic-' + id).val() + '</textarea></div><br><button class="pr-btn">Modify</button></form>');
+			epicEdit('epicedit-body', 'epic-body');
 		});
 		//new post creation
 		$(document).on('submit', '#new-forum-post', function(e) {
@@ -351,6 +337,22 @@
 							scrollTop: $(document).height()
 						}, 3000);
 					}
+				}
+			});
+		});
+		//modify post
+		$(document).on('submit', '#modify-forum-post', function(e) {
+			e.preventDefault();
+			var formData = $(this).serialize();
+			$.ajax({
+				url: '/forum/handle.php',
+				data: formData,
+				type: 'POST',
+				success: function(data) {
+					$('#epic-' + MODIFY).val($('#epic-body').val());
+					$('#msgbox_close').click(); //close popup and dim
+					MODIFY = null;
+					window.location.reload(true);
 				}
 			});
 		});

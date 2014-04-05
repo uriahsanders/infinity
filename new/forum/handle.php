@@ -25,5 +25,4 @@ else if(isset($_POST['signal']) && $_POST['signal'] == 'update'){
 	else if(isset($_POST['f'])){
 		die($forum->updateThread($_POST['id'], $_POST['subject'], $_POST['body']));
 	}
-	echo "answer";
 }
