@@ -201,4 +201,134 @@ class Members implements iMembers
 			$two = $this->_db->query("SELECT COUNT(*) FROM `topics` WHERE `by_` = ?", $id)->fetchColumn();
 			return $one + $two;
 		}
+		public function Friend($idToFriend, $woot)
+		////////////////////////////////////
+		//	error codes
+		///////////////
+		// 	0: connection error
+		//	3: not friends
+		//	9: sucessfull
+		//	666: you are blocked by the other user
+		///////////////
+		//	add
+		// -1: can't friend yourself
+		//	1: already sent a friend request but not accepted
+		//	2: already friends
+		///////////////
+		//	accept
+		//	3: no friend request
+		///////////////
+		//	block
+		//	5: nothing to unblock
+		///////////////
+		//	unblock
+		//  4: you do not own this block
+		/////////////////////////////////////		
+		{	
+			switch($woot)
+			{
+				case "add":
+					if ($idToFriend == $_SESSION['ID'])
+					{
+						return -1; // I feel sorry for you trying to add yourself as a friend? go out and get some...
+					}
+					$res = $this->_db->query("SELECT * FROM friends WHERE (`usr_ID`=? AND `friend_id`=?) OR (`friend_ID`=? AND `usr_ID`=?)", $_SESSION['ID'], $idToFriend, $_SESSION['ID'], $idToFriend);	
+					break;	
+				case "accept":
+					$res = $this->_db->query("SELECT * FROM friends WHERE (`friend_id`=? AND `usr_ID`=?)", $_SESSION['ID'], $idToFriend);
+					break;
+				case "remove": case "block": case "unblock":
+					$res = $this->_db->query("SELECT * FROM friends WHERE (`usr_ID`=? AND `friend_id`=?) OR (`friend_ID`=? AND `usr_ID`=?)", $_SESSION['ID'], $idToFriend, $_SESSION['ID'], $idToFriend);
+					break;
+			}
+			if (!$res)
+			{
+				return 0; // urg connection error
+			}
+			
+			
+			
+			if ($woot == "block")
+				{
+					if (count($res->fetchAll()) != 0)
+						$res = $this->_db->query("UPDATE friends SET `block`=1, `block_by`=? WHERE (`usr_ID`=? AND `friend_id`=?) OR (`friend_ID`=? AND `usr_ID`=?)", $_SESSION['ID'], $_SESSION['ID'], $idToFriend, $_SESSION['ID'], $idToFriend);
+					else
+						$res = $this->_db->query("INSERT INTO friends SET `block`=1, `block_by`=?, `usr_ID`=?, `friend_id`=?", $_SESSION['ID'], $_SESSION['ID'], $idToFriend);
+					if (!$res)
+					{
+						return 0; // urg connection error
+					}
+					return 9; // YAY
+				} 
+			
+			if (count($res->fetchAll()) != 0) //There is something here :)
+			{
+				$row = $res->fetch();
+				if ($woot == "unblock")
+				{
+					if ($row['block'] != 1)
+					{
+						return 5; // nothing to unblock
+					}
+					if ($row['block_by'] != $_SESSION['ID'])
+					{
+						return 4; //you do not own this block
+					}
+					$res = $this->_db->query("UPDATE friends SET `block`=0, `block_by`=0 WHERE (`usr_ID`=? AND `friend_id`=?) OR (`friend_ID`=? AND `usr_ID`=?)",$_SESSION['ID'], $idToFriend, $_SESSION['ID'], $idToFriend);
+					if (!$res)
+					{
+						return 0; // urg connection error
+					}
+					return 9;
+				}
+				if ($row['block'] == 1)
+				{
+					return 666; // this "friend" has blocked you rofl	
+				}
+				
+				if ($woot == "remove")
+				{
+					$res = $this->_db->query("DELETE FROM friends WHERE (`usr_ID`=? AND `friend_id`=?) OR (`friend_ID`=? AND `usr_ID`=?)", $_SESSION['ID'], $idToFriend, $_SESSION['ID'], $idToFriend);
+					if (!$res)
+					{
+						return 0; // urg connection error
+					}
+					return 9; // friend removed, and thank god I'll comment else this would be so comfusing lol
+				}
+				if ($row['accepted'] != 1) // not accepted
+				{	
+					if ($woot == "add")
+					{
+						return 1; // already sent a friend request but not accepted	
+					}
+					else if ($woot == "accept")
+					{
+						$res = $this->_db->query("UPDATE friends SET `accepted`=1 WHERE (`friend_id`=? AND `usr_ID`=?)", $_SESSION['ID'], $idToFriend);	
+						if (!$res)
+						{
+							return 0; // urg connection error
+						}						
+						return 9; // YAY
+					}
+				}
+				else 
+				{
+					return 2; // already frineds
+				}
+			}
+			else
+			{
+				if ($woot == "add") 
+				{
+					$res = $this->_db->query("INSERT INTO friends (`usr_ID`,`friend_ID`,`date`) VALUES (?, ?, ?)", $_SESSION['ID'], $idToFriend, date("Y-m-d H:i:s"));
+					if (!$res)
+					{
+						return 0; // urg connection error
+					}
+					Action::addAction("$_SESSION[USR] wants to be your friend", '', 'PM', $idToFriend);
+					return 9; //yay friend request sent
+				}
+				return 3; // no friend request
+			}
+		}
 }

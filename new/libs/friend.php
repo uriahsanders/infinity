@@ -1,7 +1,8 @@
 <?php
 	define("INFINITY", true);
 	include("relax.php");
-	if(!$member->logged()) 
+	$member = Members::getInstance();
+	if(!Login::checkAuth()) 
 	{
 		die("AD");
 	}
@@ -17,7 +18,7 @@
 	{
 		die("00");//error with ID
 	}
-	if (!$member->getUsrData($_GET['ID']))
+	if (!$member->getUserData($_GET['ID']))
 	{
 		die("2");	// no user with that ID
 	}
@@ -29,13 +30,11 @@
 	else if (isset($_GET['action']) && $_GET['action'] == "accept")
 	{
 		$status = $member->Friend($_GET['ID'], "accept");
-		$member->RemoveNotification(1, $_GET['ID']);
 		die("A-".$status);
 	}
 	else if (isset($_GET['action']) && ($_GET['action'] == "remove" || $_GET['action'] == "decline"))
 	{
 		$status = $member->Friend($_GET['ID'], "remove");
-		$member->RemoveNotification(1, $_GET['ID']);
 		die("R-".$status);
 	}
 	else if (isset($_GET['action']) && $_GET['action'] == "block")

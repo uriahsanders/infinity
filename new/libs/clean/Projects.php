@@ -122,6 +122,8 @@ class Projects{
 				", $exec);
 			//get ID of project
 			$projectID = $this->sql->lastInsertId();
+			Action::addAction('created a new project: '.$projectname, 
+			preview($body)."<br></br><button class=\"btn btn-primary\">Dismiss</button>", 'project', $projectID);
 			//getting projects from members and putting new project in
 			$result = $this->sql->query("SELECT `projects` FROM `memberinfo` WHERE `ID` = ?", $_SESSION['ID']);
 			$projects = json_decode($result->fetch()['projects'], true);

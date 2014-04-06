@@ -20,10 +20,10 @@ class System
 		$links = array( //all links that we will have at the top
 			"/" => "Start",
 			"/lounge/"=>"",
-			"/projects/#!/all" => "Projects",
-			"/forum/#" => "Forum",
+			//"/projects/#!/all" => "Projects",
 			"/about/" => "About",
-			"/infinity/" => "Infinity",
+			"/contact/#" => "Contact",
+			"/blog/" => "Blog",
 			"/help/" => "Help"
 		);
 		if (Login::checkAuth(true)) // if loggedin show the lounge link as well

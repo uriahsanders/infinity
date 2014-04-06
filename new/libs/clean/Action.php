@@ -11,7 +11,7 @@ if (!defined("INFINITY"))
 		//categories of actions so we can sort through
 		//public $categories = ['forum', 'profile', 'projects', 'PM', 'news'];
 		//one query function to be performed in multiples by public equivalent
-		private function newAction($user, $title, $content, $category){
+		public static function newAction($user, $title, $content, $category){
 			Database::getInstance()->query("INSERT INTO `actions` (`user`, `title`, `content`, `category`, `date`) VALUES (?, ?, ?, ?, ?)",
 			 $user, $title, $content, $category, date("Y-m-d H:i:s"));
 		}
@@ -32,37 +32,42 @@ if (!defined("INFINITY"))
 					$forum = new Forum();
 					//tell each poster in the thread about this action as well
 					foreach($forum->getPostersInThread($id) as $poster){
-						if($poster != $_SESSION['ID']) $this->newAction($poster, $title, $content, $category);
+						if($poster != $_SESSION['ID']) self::newAction($poster, $title, $content, $category);
 					}
 					break;
 				case 'profile':
 					$member = Members::getInstance();
 					//tell all friends about this action as well
 					foreach($member->getFriends($_SESSION['ID']) as $friend){
-						$this->newAction($friend['ID'], $title, $content, $category);
+						self::newAction($friend['ID'], $title, $content, $category);
 					}
 					break;
 				case 'projects':
 					$projects = new Projects();
 					//tell all members in the project about this action as well
 					foreach($projects->getMembers($id) as $member){
-						if($member != $_SESSION['ID']) $this->newAction($member, $title, $content, $category);
+						if($member != $_SESSION['ID']) self::newAction($member, $title, $content, $category);
+					}
+					$member = Members::getInstance();
+					//tell all friends about this action as well
+					foreach($member->getFriends($_SESSION['ID']) as $friend){
+						self::newAction($friend['ID'], $title, $content, $category);
 					}
 					break;
 				case 'PM':
 					//basically creating an action for one other person
-					$this->newAction($id, $title, $content, $category);
+					self::newAction($id, $title, $content, $category);
 					break;
 				case 'news':
 					//send to all members
 					$members = Database::getInstance()->query("SELECT `ID` FROM `memberinfo`");
 					while($row = $members->fetch()){
-						$this->newAction($row['ID'], $title, $content, $category);
+						self::newAction($row['ID'], $title, $content, $category);
 					}
 					break;
 				default:
 					//only add action for current user
-					$this->newAction($_SESSION['ID'], $title, $content, $category);
+					self::newAction($_SESSION['ID'], $title, $content, $category);
 			}
 		}
 		
@@ -91,7 +96,7 @@ if (!defined("INFINITY"))
 		*	//search all actions of session for the title 'test'
 		*	Action::getActions($_SESSION['ID'], 0, Action::getNumActions(), 'Test');
 		*/
-		public static function getActions($user, $begin, $amount, $search = false, $by = 'title'){
+		public static function getActions($user, $amount, $search = false, $by = 'title'){
 			$execs = [$user, 0]; //array or values to execute query with
 			$query = "SELECT * FROM `actions` WHERE `user` = ? AND `read` = ?"; //begin query
 			//if we're searching choose correct column and use LIKE, add on to query
@@ -99,10 +104,10 @@ if (!defined("INFINITY"))
 				$query .= " AND `".$by."` LIKE %?%"; //search might be from user so filter
 				array_push($execs, $search); //add $search to execution array
 			}
-			$query .= " ORDER BY `date` LIMIT ".$begin.", ".$amount; //finish query
+			$query .= " ORDER BY `date` LIMIT ".$amount; //finish query
 			//System::Error($query);
 			$result = Database::getInstance()->query($query, $execs);
-			return $result;
+			return $result->fetchAll(); //idk why but looping with fetch is infinite....
 		}
 		
 		/**

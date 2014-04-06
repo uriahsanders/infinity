@@ -1,22 +1,13 @@
 <?php 
     define("INFINITY", true); // this is so the includes can't get directly accessed
-    define("PAGE", "lounge"); // this is what page it is, for the links at the top
     include_once("../libs/relax.php"); // use PATH from now on
-    
     Login::checkAuth();
-    
-    include_once(PATH ."core/top.php");
-    if(defined("PAGE") && PAGE == "start") 
-    {
-        include_once(PATH ."core/slide.php");
-    }
-    include_once(PATH ."core/bar_main_start.php");
     $member = Members::getInstance();
     $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
     $sex = $member->getUserData($_SESSION['ID'], "ID")['sex']; //get the users sex
 ?> 
-  <div onsubmit="return false;"style="width:80%;margin:auto;padding:10px;border-radius:5px;"class="text-center">
-    <div class="lead i fa-2x"style="margin:auto">Profile Options</div><br>
+  <div style="margin-left:300px"onsubmit="return false;"style="width:80%;margin:auto;padding:10px;border-radius:5px;"class="text-center">
+    <div style="margin:auto;font-size:1.5em">Profile Options</div><br>
     <form id="options"style="border:2px solid #000;width:75%;margin:auto;background:url('/images/gray_sand.png');padding:20px;height:100%;border-radius:5px;">
         <input type="password"class="form-control"name="current-password"style="display:inline;width:80%"placeholder="Current Password (Required)">
         <br><br>
@@ -25,9 +16,6 @@
         <input type="password"class="form-control"name="password"style="display:inline;width:80%"placeholder="New Password..."><br><br>
         <input type="password"class="form-control"name="verify-password"style="display:inline;width:80%"placeholder="Verify New Password..."><br><br>
         <input type="text"class="form-control"name="email"style="display:inline;width:80%"value=<?php echo '"'.$member->get($_SESSION['ID'], 'email').'"'; ?>placeholder="Email..."><br><br>
-        <div class="lead">Profile</div><br>
-        Choose Avatar: <input type="file"class="form-control"style="display:inline;">
-        <br><br>
         Age:<br>
         <input type="text"class="form-control"name="age"style="display:inline;width:80%"value=<?php echo '"'.$member->get($_SESSION['ID'], 'age').'"'; ?>placeholder="Age..."><br><br>
         Country:<br> <input type="text"class="form-control"name="country"style="display:inline;width:80%"value=<?php echo '"'.$member->get($_SESSION['ID'], 'country').'"'; ?>placeholder="Country..."><br><br>

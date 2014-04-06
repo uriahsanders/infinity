@@ -141,8 +141,10 @@ class Forum extends Members implements iForum
 		return self::LIMIT * ($pn - 1);
 	}
 	public function newThread($subject, $body, $parent){
-		$this->sql->query("INSERT INTO `topics` (`title`, `msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES (?, ?, ?, ?, ?, ?)",
-		$subject, $body, System::getRealIp(), $_SESSION['ID'], $parent, date('Y-m-d H:i:s'));
+		$this->sql->query("INSERT INTO `topics` (`title`, `msg`, `IP`, `by_`, `parent_ID`, `time_`, `category`) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		$subject, $body, System::getRealIp(), $_SESSION['ID'], $parent, date('Y-m-d H:i:s'), $this->nameOfSub($parent));
+		Action::addAction('created a new thread: '.$subject, 
+			preview($body)."<br></br><button class=\"btn btn-primary\">Dismiss</button>", 'forum', $this->sql->lastInsertId());
 	}
 	public function post($body, $parent){
 		$this->sql->query("INSERT INTO `posts` (`msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES (?, ?, ?, ?, ?)",
@@ -179,7 +181,7 @@ class Forum extends Members implements iForum
 		$poster = $member->getUserData($row[0]["by_"]);
 		$id = $row[0]['ID'];
 		//only show remove is no replies to topic yet
-		$remove = ($this->getPostCount($row[0]["ID"]) == 0) ? ' &emsp; <i id="forum-remove-topics-'.$id.'">Remove</i>' : '';
+		$remove = ($this->getPostCount($row[0]["ID"]) == 0) ? ' &emsp; <a id="forum-remove-topics-'.$id.'">Remove</a>' : '';
 		return "<br><div class=\"thread_title\">
 		<span>&nbsp;</span>".
 		$row[0]["title"]." - ".System::timeDiff($row[0]["time_"]). // topic title
@@ -206,6 +208,10 @@ class Forum extends Members implements iForum
 	}
 	public function getPostData($id, $what){
 		return $this->sql->query("SELECT * FROM `".$what."` WHERE `ID` = ?", $id)->fetch();
+	}
+	//get name of subcat through ID
+	public function nameOfSub($id){
+		return $this->sql->query("SELECT `name` FROM `subcat` WHERE `ID` = ?", $id)->fetchColumn();
 	}
 	public function getCategoryFromThread($id){
 		$cat = $this->sql->query("SELECT `parent_ID` FROM `topics` WHERE `ID` = ?", $id)->fetchColumn();

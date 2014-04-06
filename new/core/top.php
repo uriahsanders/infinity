@@ -120,11 +120,10 @@ if(!$logged)
                     <div class=\"member_bar\">
                     <div id=\"member_bar_body\">Welcome <b><a href=\"/user/\">$_SESSION[USR]</a></b>!
                     <div id=\"member_bar_links\">
-                    <a class='member_link'href=\"/lounge/\">Lounge</a>&nbsp;
-                    <!--<a class='member_link'href=\"/projects/\">Projects</a>&nbsp;-->
+                    <a class='member_link'href=\"/forum/#\">Forum</a>&nbsp;
+                    <a class='member_link'href=\"/projects/\">Projects</a>&nbsp;
                     <a class='member_link'href=\"/workspace/\">Workspace</a>&nbsp;
-                    <a class='member_link'href=\"/lounge/\">Groups</a>&nbsp;
-                    <a class='member_link'href=\"/lounge/\">Suggestions</a>&nbsp;
+                    <a class='member_link'href=\"/lounge/groups\">Groups</a>&nbsp;
                     </div>
                     </div>
                     <div id=\"member_bar_icons\">";
@@ -142,7 +141,7 @@ if(!$logged)
                 echo "<label><i class='fa fa-user user-$id' alt=\"$id\" title=\"$name\"></i>&nbsp;$name</label>";
                 echo "</span>";
                 echo "</div>";
-                echo "&nbsp;&nbsp;<a class='fa fa-envelope fa-lg'style='color:grey'><a>&nbsp;&nbsp;<a alt=\"settings\" title=\"settings\"href=\"/lounge/settings\"class='fa fa-cog fa-lg'style='color:grey'></a>&nbsp;&nbsp;
+                echo "&nbsp;&nbsp;<a class='fa fa-lg fa-exclamation'></a>&nbsp;&nbsp;<a id='pm-top'class='fa fa-envelope fa-lg'style='color:grey'><a>&nbsp;&nbsp;<a alt=\"settings\" title=\"settings\"href=\"/lounge/#!/settings\"class='fa fa-cog fa-lg'style='color:grey'></a>&nbsp;&nbsp;
                 <a class='fa fa-sign-out fa-lg'href=\"/lounge/logout\"alt=\"logout\" title=\"logout\"style='color:grey'></a>&nbsp;&nbsp;
                     </div>
                     </div>";

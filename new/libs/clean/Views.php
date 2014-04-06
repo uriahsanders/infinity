@@ -7,7 +7,7 @@ Actions will be used for lounge
 //class for keeping track of views on certain things
 class Views{
     const LIMIT = 20; //number of views to scan through
-    const AMNT = 1; //amount of suggestions for each view that we have (we parse by `what`)
+    const AMNT = 10; //amount of suggestions for each view that we have (we parse by `what`)
     //things you can view ($what): thread, project, profile
     //session has now seen this $id
     //$id is id of project, thread, or profile (member) maps with `assoc`
@@ -20,7 +20,7 @@ class Views{
         }
     }
     //has session seen this $id
-    private function hasSeen($id, $what){
+    public static function hasSeen($id, $what){
         //we have seen it if the amount of views on it from this session does not equal 0
         return Database::getInstance()->query("SELECT COUNT(*) FROM `views` WHERE 
         `assoc` = ? AND `what` = ? AND `by` = ?", $id, $what, $_SESSION['ID'])->fetchColumn() != 0;
@@ -39,17 +39,23 @@ class Views{
     //so we sort by the `what` parameter of the `views` table
     //make a suggestion based on views
     public static function makeSuggestion(){
-        $suggestions = []; //array of suggestions
-        while($row = self::sessionViews()->fetch()){
+        $forum = new Forum();
+        $suggestions = [
+            'projects' => [],
+            'threads' => []
+        ]; 
+        $i = 0;
+        //array of suggestions
+        foreach(self::sessionViews()->fetchAll() as $row){
             //first level of difference is what type of thing we're even dealing with
             $what = $row['what'];
             if($what == 'project'){
                 //now find some projects in this same category ranked by popularity
-                array_push($suggestions, Database::getInstance()->query("SELECT * FROM `projects` WHERE `launched` = ? AND `category` = ? 
+                array_push($suggestions['projects'], Database::getInstance()->query("SELECT * FROM `projects` WHERE `launched` = ? AND `category` = ? 
                     ORDER BY `popularity` LIMIT ".self::AMNT, 1, $row['category']));
             }else if($what == 'thread'){
                 //now find some threads in this same category ranked by views
-                array_push($suggestions, Database::getInstance()->query());
+                array_push($suggestions['threads'], Database::getInstance()->query("SELECT * FROM `topics` WHERE `category` = ? ORDER BY `popularity` LIMIT ".self::AMNT, $forum->getCategoryFromThread($row['assoc'])));
             }
         }
         return $suggestions;

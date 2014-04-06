@@ -14,7 +14,7 @@
     $_SESSION['token'] = base64_encode(time() . sha1( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] ) .uniqid(rand(), TRUE));
 ?>
     <div id="pr-navigation">
-      <div class="nav"style="margin:auto;font-size:2em;">
+      <div class="nav"style="margin:auto;font-size:1.5em;">
         View <a href="">All</a> projects sorted by <a href="">Date</a>
         <!-- <br> -->
         <!-- <button id="new-project"class="pr-btn btn-success">New Project</button> -->

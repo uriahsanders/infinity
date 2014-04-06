@@ -45,7 +45,7 @@ class Groups extends Action{
 		$this->sql->query("DELETE FROM `messages` WHERE `ID` = ?", $ID);
 	}
 	public function searchPMs($start = 0, $for){
-		return $this->sql->query("SELECT `subject` FROM `messages` WHERE `subject` LIKE %?% ".$this->limit($start), $for);
+		return $this->sql->query("SELECT `subject` FROM `messages` WHERE `subject` LIKE %?% AND `to` = ? OR `by` = ?".$this->limit($start), $for, $_SESSION['ID'], $_SESSION['ID']);
 	}
 	//$assoc is any id we want to associate this with
 	public function createGroup($name, $desc, $assoc = 0){
