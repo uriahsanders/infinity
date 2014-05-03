@@ -56,8 +56,10 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 			{
 				//echo $forum->postTemplate($row, $row2);
 				$id = $row2['ID'];
+				$poster = $member->getUserData($row2["by_"]);
 				echo "<br/>";
-				echo "<div id='thread-".$row['ID']."'class=\"thread\">";
+				echo "<div id='thread-".$id."'class=\"thread\">";
+				echo "<input id='forum-data-post-".$id."'type='hidden'value='".$id."-".$poster['username']."-".System::timeDiff($row2["time_"])."'/>";
 				echo "<div class=\"thread_title\">";
 				echo "<span>&nbsp;</span>"; 
 				echo "Re: ".$row[0]["title"]." - ".System::timeDiff($row2["time_"]); // topic title
@@ -65,7 +67,6 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<div class=\"post\">";
 				echo "<table class=\"tbl_post\"><tr><td>";
 				echo "<div class=\"post_usr\">";
-				$poster = $member->getUserData($row2["by_"]);
 				echo "<a href=\"/user/$poster[username]\">$poster[username]</a><br/>"; //username
 				echo "<span class=\"status\" id=\"".$member->status2name($poster['status'])."\" title=\"".$member->status2name($poster['status'])."\">&nbsp;</span>"; //online status
 				echo "<img src=\"/images/user/$poster[image]\" alt=\"$poster[username]\" />"; //picture
@@ -80,8 +81,15 @@ if (defined("INFINITY") || !empty($_POST)) //this file will only be accessable w
 				echo "<div class=\"post_msg\"><div style='width:100%;'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>$row2[msg]</textarea></div></div>";
 				
 				echo "<div class=\"post_msg_btm\">";
+				$btm = '';
+				if($_SESSION['ID'] == $row2['by_'] || Members::getInstance()->isPrivileged($_SESSION['ID'])){
+					$btm .= "&emsp; <span style='cursor:pointer'id='forum-modify-posts-".$id."'>Modify</span> &emsp; <a id='forum-remove-posts-".$id."'>Remove</a>";
+				}
+				if($_SESSION['ID'] != $row2['by_']){
+					$btm .= "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>";
+				}
 				echo "
-					<span style='cursor:pointer'>Quote</span> ".($_SESSION['ID'] == $row2['by_'] ? "&emsp; <span style='cursor:pointer'id='forum-modify-posts-".$id."'>Modify</span> &emsp; <a id='forum-remove-posts-".$id."'>Remove</a>" : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>");
+					<span style='cursor:pointer'id='forum-quote-".$id."'>Quote</span> ".$btm;
 				echo "</div>";
 				
 				echo "</td></tr></table>";

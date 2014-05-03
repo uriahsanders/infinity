@@ -414,7 +414,7 @@ $(".MsgBox").draggable({
 function popup(title, what, id, style) {
     //document.body.style.overflow = "hidden";
     $("<div id='dim'></div>").appendTo('body').fadeIn();
-    $('<div id="' + id + '"class="popup"style="' + (style || '') + '"><div id="msgbox_title"style="cursor:default">' + title + '<span id=\"msgbox_close\">&times;</span></div>' + what + '</div>')
+    $('<div id="' + id + '"class="popup"style="' + (style || '') + '"><div id="msgbox_title"style="cursor:default">' + title + '<span id=\"msgbox_close\">&times;</span></div><div id="popup-body">' + what + '</div></div>')
         .appendTo(document.body).hide().fadeIn();
 }
 //id is id of textarea to sync with
@@ -483,6 +483,59 @@ function epicDisplay(container, id) {
     var editor = epicEdit(container, id || null, false);
     editor.preview();
 }
+$(document).on('click', '#pm-top', function(e) {
+    e.preventDefault();
+    if (window.location.hash !== '#!/pm')
+        $.ajax({
+            url: '/lounge/script.php',
+            data: {
+                signal: 'list-pms',
+                sent: false,
+                mini: true
+            },
+            success: function(res) {
+                popup('messages', '<br><br>' + res);
+                $("#pm-to").tagit({
+                    autocomplete: {
+                        source: '/lounge/auto.php',
+                        minLength: 1
+                    }
+                });
+            }
+        });
+});
+$(document).on('submit', '#pm-form', function(e) {
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: '/lounge/script.php',
+        data: $(this).serialize(),
+        success: function(res) {
+            $('#msgbox_close').click();
+            MsgBox('Response', res, -1);
+        }
+    });
+});
+$(document).on('click', '#pm-mini-more', function() {
+    $('#msgbox_close').click();
+});
+$(document).on('click', 'div[id^="pm-row-"]', function() {
+    $(this).next().slideToggle();
+});
+//plugin for dropdowns
+(function($){
+    $.fn.dropDown = function(){
+        var id = this.attr('id');
+        $(document).on('click', '#'+id, function(){
+            $('#'+id+'-content').slideToggle();
+        });
+        $(document).on('click', '.'+id+'-item', function(){
+            $('#'+id).data('val', $(this).text());
+            $('#'+id).html($(this).text() + ' <i class="fa fa-caret-down"></i>');
+            $('#'+id+'-content').slideUp();
+        });
+    };
+})(jQuery);
 /////////////////////////////////
 //    preload images
 /////////////////////////////////

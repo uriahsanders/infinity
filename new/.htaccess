@@ -60,10 +60,31 @@ RewriteCond %{QUERY_STRING} !marker
 RewriteRule ^/?about\.php$ /about [R=301,L]
 RewriteRule ^\/?about\/?$ /about.php?marker [L]
 
-#forum ##I see you added this >.> will need forum in a own folder later so this will have to change
-# also forum will have a million of sub cats on url rewrite, have not decided if going with ID's (the easiest)
-# or with costum names ( looks best )
-# either way welcome to url_rewrite mod on apache scripting, regex is your friend... the only one ;)
+#contact page
+RewriteCond %{REQUEST_URI} ^/contact.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?contact\.php$ /contact [R=301,L]
+RewriteRule ^\/?contact\/?$ /contact.php?marker [L]
+
+#blog page
+RewriteCond %{REQUEST_URI} ^/blog.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?blog\.php$ /blog [R=301,L]
+RewriteRule ^\/?blog\/?$ /blog.php?marker [L]
+
+#help page
+RewriteCond %{REQUEST_URI} ^/help.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?help\.php$ /help [R=301,L]
+RewriteRule ^\/?help\/?$ /help.php?marker [L]
+
+#admin page
+RewriteCond %{REQUEST_URI} ^/admin.php$
+RewriteCond %{QUERY_STRING} !marker
+RewriteRule ^/?admin\.php$ /admin [R=301,L]
+RewriteRule ^\/?admin\/?$ /admin.php?marker [L]
+
+#forum 
 RewriteCond %{REQUEST_URI} ^/forum.php$
 RewriteCond %{QUERY_STRING} !marker
 RewriteRule ^/?forum\.php$ /forum [R=301,L]

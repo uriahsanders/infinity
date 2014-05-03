@@ -22,7 +22,7 @@ class System
 			"/lounge/"=>"",
 			//"/projects/#!/all" => "Projects",
 			"/about/" => "About",
-			"/contact/#" => "Contact",
+			"/contact/" => "Contact",
 			"/blog/" => "Blog",
 			"/help/" => "Help"
 		);
@@ -193,7 +193,9 @@ class System
 		//minutes, hours, days, weeks, months
 		$m = 60; $h = $m * 60; $d = $h * 24; $w = $d * 7; $mt = $w * 3.6; //cut this down to be safe
 		//show different results depending on what time frame we're in
-		if ($diff < $h) { //less than an hour ago
+		if($diff <= $m){
+			$time = "just now";
+		}else if ($diff < $h) { //less than an hour ago
 			$diff = intval($diff / $m);
 			$time = $diff . (($diff == 1) ? " minute" : " minutes") . " ago";
 		} else if ($diff < $d && $diff >= $h) { //more than an hour less than a day

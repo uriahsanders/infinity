@@ -1,21 +1,33 @@
 (function() {
 	window.onhashchange = hash_ajax;
 	hash_ajax();
+
+	function listPms(sent, callback) {
+		$.ajax({
+			type: 'GET',
+			url: 'script.php',
+			data: {
+				signal: 'list-pms',
+				sent: sent,
+			},
+			success: function(res) {
+				$('#lounge-main').html(res);
+				$("#pm-to").tagit({
+					autocomplete: {
+						source: 'auto.php',
+						minLength: 1
+					}
+				});
+				callback();
+			}
+		});
+	}
+
 	function hash_ajax() {
 		var hash = window.location.hash;
 		switch (hash) {
 			case '#!/pm':
-				$.ajax({
-					type: 'GET',
-					url: 'pm.php',
-					data: {
-						signal: 'list',
-						sent: false,
-					},
-					success: function(res) {
-						$('#lounge-main').html(res);
-					}
-				});
+				listPms(false);
 				break;
 			case '#!/settings':
 				$.ajax({
@@ -54,4 +66,38 @@
 				});
 		}
 	}
+	$(function() {
+		$(document).on('click', '[id^="action-dismiss-"]', function() {
+			var id = $(this).attr('id').substring(15);
+			$.ajax({
+				type: 'POST',
+				url: 'script.php',
+				data: {
+					id: id,
+					signal: 'dismiss-action'
+				},
+				success: function(res) {
+					$('#action-panel-' + id).fadeOut();
+				}
+			});
+		});
+		$(document).on('click', '#pm-init-send', function() {
+			if (!$('#epicedit-pm-body iframe').length) epicEdit('epicedit-pm-body', 'epic-pm-body');
+			$('#pm-form').slideToggle('slow');
+		});
+		$(document).on('click', '#pm-recieved', function(){
+			$('#lounge-main').fadeOut('normal', function(){
+				listPms(false, function(){
+					$('#lounge-main').fadeIn();
+				});
+			});
+		});
+		$(document).on('click', '#pm-sent', function(){
+			$('#lounge-main').fadeOut('normal', function(){
+				listPms(true, function(){
+					$('#lounge-main').fadeIn();
+				});
+			});
+		});
+	});
 })();

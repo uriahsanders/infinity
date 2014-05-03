@@ -1,9 +1,5 @@
 <div class="extra">
-        <div id="donate">Infinity-forum is free for non-profit users and we have chose not to have adds and annoying popups that will molest your <br/>
-        mind for all eternity or make you missclick on an add and acidently close wrong tab <br/>
-        so your work is lost or your music stops or even worse... <br />
-        WHAT HAPPENS IF YOU ACIDENTLY CLOSE DOWN YOUR PRESSIOUS FACEBOOK :S <br/>
-        to avode us getting adds to run we rely on your donations<br />
+        <div id="donate">Some text here.<br>
         <div id="slider-result">15$</div>  
         <div class="Dslider"></div>
         <input type="hidden" id="hidden"/>

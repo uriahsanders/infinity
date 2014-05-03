@@ -18,7 +18,7 @@
 	transition:all .8s;
 }
 .forum .cat_title, .thread .thread_title, .thread .thread_title2 {
-	padding:7px;
+	padding:10px;
 	background:url('/images/broken_noise.png');
 	border:1px solid rgba(255,255,255,.2);
 	position:relative;
@@ -105,13 +105,6 @@
 	position: relative;
 	z-index: 0;
 }
-.status {
-	position:absolute;
-	width: 16px;
-	height: 16px;
-	border-bottom-right-radius: 50px;
-	border-top-left-radius:17px;
-}
 .usr_rank {
 	padding: 3px 8px;
 	-webkit-border-radius: 10px;
@@ -126,14 +119,27 @@
 	position: relative;
 	display: inline-block;
 }
+.status {
+	position:absolute;
+	width: 16px;
+	height: 16px;
+	border-bottom-right-radius: 50px;
+	border-top-left-radius:17px;
+}
 .status:hover {
 	cursor:default;
 }
 .status[id='offline'] {
-	background:rgba(255, 0, 0, 0.5);
+	background:grey;
 }
 .status[id='online'] {
 	background:rgba(0, 255, 0, 0.5);
+}
+.status[id='away'] {
+	background:yellow;
+}
+.status[id='busy'] {
+	background:red;
 }
 .post_usr img {
 	width:110px;
@@ -174,7 +180,7 @@
 .tbl_subcat tr td:first-child > a {
 	color: white;
 	display:block;
-	padding: 8px;
+	padding: 12px;
 	position:relative;
 	top: 0;
 	width:100%;
@@ -280,7 +286,7 @@ div[id^='forum_nav_'] {
 	display: inline-block;
 	background: rgba(255, 255, 255, 0.2);
 	border: 1px solid rgba(255, 255, 255, 0.23);
-	padding: 8px 12px;
+	padding: 10px 12px;
 	font-size: 60%;
 }
 #forum-post{

@@ -119,6 +119,12 @@
 
 				success: function(res) { //when done
 					$("#main").prepend("<div class=\"forum_2\">" + res + "</div>"); //add the feteched data to a div
+					//run epic-edit function for each post
+											// $('div[id^="epicedit-"]').each(function() {
+											// 	var id = $(this).attr('id').substring(9);
+											// 	epicDisplay('epicedit-' + id, 'epic-' + id);
+											// 	$(this).hide().fadeIn();
+											// });
 					$(".forum_1").hide("slide", {
 							direction: ((id === "l") ? "left" : "right")
 						}, time, //slide the old one away 
@@ -258,6 +264,31 @@
 		$(document).on("click", "#forum_nav_2 span:nth-child(2) a, #forum_nav_2 span:first-child b", function() {
 			$("#forum_nav_2 span:nth-child(2)").slideToggle(300);
 		});
+		//transform a string into a markdown quote
+		function quoteString(name, date, str) {
+			var str = str.split("\n");
+			var quote = "From " + name + ", " + date + ":\n";
+			for (var i = 0, len = str.length; i < len; i++) {
+				quote += ">" + str[i] + "\n";
+			}
+			return quote + '\n\n';
+		}
+		//quoting
+		$(document).on('click', '[id^="forum-quote-"]', function() {
+			var id = $(this).attr('id').substring(12);
+			var postData = $('#forum-data-post-' + id).val().split('-');
+			var post = quoteString(postData[1], postData[2], $('#epic-' + id).val());
+			var hash = window.location.hash;
+			if (hash.indexOf("f=") != -1)
+				var cat = hash.substr(hash.indexOf("f=") + 2, hash.indexOf("/") - 2); //get the ID of the category
+			if (hash.indexOf("t=") != -1)
+				var thread = hash.substr(hash.indexOf("t=") + 2, hash.indexOf("/") - 2); //get the ID of the thread
+			popup("New Post", '<form id="new-forum-post"><input type="hidden"name="signal"value="post"/><input type="hidden"name="' +
+				(thread ? 't' : 'f') + '"value="' + (thread || cat) + '"/><br>' +
+				(cat ? '<input style="padding:10px;width:75%"name="subject"placeholder="Subject"/>' : '') +
+				'<br><br><div id="epicedit-body"><textarea id="epic-body"name="body"class="epic-text form-control">' + post + '</textarea></div><br><button class="pr-btn">Post</button></form>');
+			epicEdit('epicedit-body', 'epic-body');
+		});
 		//new post form
 		$(document).on('click', '#forum-post', function() {
 			var hash = window.location.hash;
@@ -303,7 +334,7 @@
 				var cat = hash.substr(hash.indexOf("f=") + 2, hash.indexOf("/") - 2); //get the ID of the category
 			if (hash.indexOf("t=") != -1)
 				var thread = hash.substr(hash.indexOf("t=") + 2, hash.indexOf("/") - 2); //get the ID of the thread
-			popup("Modify Post", '<form id="modify-forum-post"><input type="hidden"name="id"value="'+id+'"/><input type="hidden"name="signal"value="update"/><input type="hidden"name="' +
+			popup("Modify Post", '<form id="modify-forum-post"><input type="hidden"name="id"value="' + id + '"/><input type="hidden"name="signal"value="update"/><input type="hidden"name="' +
 				(!isF ? 't' : 'f') + '"value="' + (parseInt(thread || cat)) + '"/><br>' +
 				(isF ? '<input style="padding:10px;width:75%"name="subject"placeholder="Subject"/>' : '') +
 				'<br><br><div id="epicedit-body"><textarea id="epic-body"name="body"class="epic-text form-control">' + $('#epic-' + id).val() + '</textarea></div><br><button class="pr-btn">Modify</button></form>');

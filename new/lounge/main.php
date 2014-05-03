@@ -5,14 +5,15 @@
         $str = '';
           foreach(Action::getActions($_SESSION['ID'], 10) as $row){
             $str .= '
-               <div class="panel">
+               <div id="action-panel-'.$row['ID'].'"class="panel">
                     <div class="panel-heading">
-                      <span class="panel-title">'.$row['title'].' -'.$row['date'].'</span>
+                      <span class="panel-title">'.$row['by'].' '.$row['title'].' '.System::timeDIff($row['date']).'</span>
                     </div>
                     <div class="panel-body">
+                      '.htmlspecialchars_decode($row['html']).'
                       '.$row['content'].'
                       <br><br>
-                      <button class="btn btn-primary">Dismiss</button>
+                      <button id="action-dismiss-'.$row['ID'].'"class="btn btn-primary">Dismiss</button>
                     </div>
                 </div>
                 <br>

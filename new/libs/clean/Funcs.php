@@ -75,3 +75,7 @@ function filter($input){
 			return $msg;
 		}
 	}
+	//create a link for user
+	function userLink($name){
+		return '<a href="/user/'.$name.'">'.$name.'</a>';
+	}

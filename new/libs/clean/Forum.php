@@ -143,12 +143,14 @@ class Forum extends Members implements iForum
 	public function newThread($subject, $body, $parent){
 		$this->sql->query("INSERT INTO `topics` (`title`, `msg`, `IP`, `by_`, `parent_ID`, `time_`, `category`) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		$subject, $body, System::getRealIp(), $_SESSION['ID'], $parent, date('Y-m-d H:i:s'), $this->nameOfSub($parent));
-		Action::addAction('created a new thread: '.$subject, 
-			preview($body)."<br></br><button class=\"btn btn-primary\">Dismiss</button>", 'forum', $this->sql->lastInsertId());
+		Action::addAction('created a new thread', 
+			preview($body),  $_SESSION['USR'], 'thread', $this->sql->lastInsertId());
 	}
 	public function post($body, $parent){
 		$this->sql->query("INSERT INTO `posts` (`msg`, `IP`, `by_`, `parent_ID`, `time_`) VALUES (?, ?, ?, ?, ?)",
 		$body, System::getRealIp(), $_SESSION['ID'], $parent, date('Y-m-d H:i:s'));
+		Action::addAction('posted in SOMETHREAD', 
+			preview($body), $_SESSION['USR'], 'post', $this->sql->lastInsertId());
 	}
 	//return ture if this was created by the current session user
 	private function sessionCreated($id, $what){ //$what is either topics or posts
@@ -165,14 +167,14 @@ class Forum extends Members implements iForum
 					Potential HTML tampering to allow this action.');
 			}
 		}
-		if($this->sessionCreated($id, $what)) $this->sql->query("DELETE FROM `".$what."` WHERE `ID` = ?", $id);
+		if($this->sessionCreated($id, $what) || Members::getInstance()->isPrivileged($_SESSION['ID'])) $this->sql->query("DELETE FROM `".$what."` WHERE `ID` = ?", $id);
 	}
 	public function updateThread($id, $subject, $body){
-		if($this->sessionCreated($id, 'topics')) $this->sql->query("UPDATE `topics` SET `title` = ?, `msg` = ? WHERE `ID` = ?", $subject, $body, $id);
+		if($this->sessionCreated($id, 'topics') || Members::getInstance()->isPrivileged($_SESSION['ID'])) $this->sql->query("UPDATE `topics` SET `title` = ?, `msg` = ? WHERE `ID` = ?", $subject, $body, $id);
 		else die('failure');
 	}
 	public function updatePost($id, $body){
-		if($this->sessionCreated($id, 'posts')) $this->sql->query("UPDATE `posts` SET `msg` = ? WHERE `ID` = ?", $body, $id);
+		if($this->sessionCreated($id, 'posts') || Members::getInstance()->isPrivileged($_SESSION['ID'])) $this->sql->query("UPDATE `posts` SET `msg` = ? WHERE `ID` = ?", $body, $id);
 	}
 	//for topics only atm
 	public function postTemplate($row){
@@ -182,7 +184,15 @@ class Forum extends Members implements iForum
 		$id = $row[0]['ID'];
 		//only show remove is no replies to topic yet
 		$remove = ($this->getPostCount($row[0]["ID"]) == 0) ? ' &emsp; <a id="forum-remove-topics-'.$id.'">Remove</a>' : '';
+		$btm = '';
+		if($_SESSION['ID'] == $row[0]['by_'] || Members::getInstance()->isPrivileged($_SESSION['ID'])){
+			$btm .= "&emsp; <span style='cursor:pointer'id='forum-modify-topics-".$id."'>Modify</span>".$remove;
+		}
+		if($_SESSION['ID'] != $row[0]['by_']){
+			$btm .= "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>";
+		}
 		return "<br><div class=\"thread_title\">
+		<input id='forum-data-post-".$row[0]['ID']."'type='hidden'value='$row[ID]-$poster[username]-".System::timeDiff($row[0]["time_"])."'/>
 		<span>&nbsp;</span>".
 		$row[0]["title"]." - ".System::timeDiff($row[0]["time_"]). // topic title
 		"</div>
@@ -200,7 +210,7 @@ class Forum extends Members implements iForum
 		</td><td><input type='hidden'id='threadID'value='".$id."'/>
 		<div class=\"post_msg\"><div style='width:100%;height:100%'id='epicedit-".$id."'><textarea id='epic-".$id."'class='epic-text'>".$row[0]['msg']."</textarea></div></div>
 		<div class=\"post_msg_btm\">
-			<span style='cursor:pointer'>Quote</span> ".($_SESSION['ID'] == $row[0]['by_'] ? "&emsp; <span style='cursor:pointer'id='forum-modify-topics-".$id."'>Modify</span>".$remove : "&emsp; <a class='fa fa-plus'></a> &emsp;<a class='fa fa-minus'></a>").
+			<span style='cursor:pointer'id='forum-quote-".$id."'>Quote</span> ".$btm.
 		"</div>
 		</td></tr></table>
 		</div>

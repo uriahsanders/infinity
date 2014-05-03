@@ -367,8 +367,8 @@ a:hover {
     display:none;
 }
 .boxx {
-	position:absolute;
-	text-align:center;
+    position:absolute;
+    text-align:center;
 }
 .tour-main {
     position: absolute;
@@ -392,13 +392,13 @@ a:hover {
     transform: scale(0.01);
 }
 .jcrop-keymgr {
-	visibility:hidden;
+    visibility:hidden;
 }
 .boxx-main {
     position: relative;
     min-width:40%;
     min-height:100px;
-	font-size:100%;
+    font-size:100%;
     top:100px;
     -moz-opacity: 0;
     opacity: 0;
@@ -416,7 +416,7 @@ a:hover {
 .step2 {
 
 text-align: center;
-display: inline-block;	
+display: inline-block;  
 }
 .tour-main[active], .boxx-main[active]{
     -moz-opacity: 1;
@@ -499,7 +499,7 @@ display: inline-block;
     height:100%
 }
 
-input:not([type='checkbox']):not([type='button']):not([type='radio']):not(.form-control), textarea:not(.form-control), #rec_f_pwd{        
+input:not([type='checkbox']):not([type='button']):not([type='radio']):not(.form-control):not(.tag-input), textarea:not(.form-control), #rec_f_pwd{        
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
     border-radius: 3px;
@@ -551,8 +551,8 @@ input:focus, textarea:focus {
     box-shadow: 0px 0px 5px #000; 
 }
 input[type='submit'] {
-	width: auto !important;
-	height: 25px !important;
+    width: auto !important;
+    height: 25px !important;
 }
 .cf input, .cf textarea {    
     -moz-box-shadow: none;
@@ -1334,12 +1334,12 @@ select{
 }
 .popup{
     position:fixed;
-top:50%;
-left:50%;
-width:50%;  /* adjust as per your needs */
-height:50%;   /* adjust as per your needs */
-margin-left:-25%;   /* negative half of width above */
-margin-top:-25%;   /* negative half of height above */
+width:800px;
+    height:600px;
+    position:fixed;
+    top:50%;
+    left:50%;
+    margin:-300px 0 0 -400px; /* [-(height/2)px 0 0 -(width/2)px] */
 background: url(/images/broken_noise.png);
     border: 6px solid #000000;
     color: #ffffff;
@@ -1352,4 +1352,144 @@ background: url(/images/broken_noise.png);
     -o-box-shadow: 1px 1px 1px 0px rgba(255,255,255,.1),1px 1px 1px 0px rgba(255,255,255,.1) inset;
     z-index:500;
     overflow-y: auto;
+}
+.popup-body{
+    padding: 20px;
+}
+#pm-holder{
+    background: url('../images/broken_noise.png');
+    margin-left:350px;
+    width: 65%;
+    padding: 10px;
+    border-radius: 5px;
+}
+div[id^="pm-row"]{
+    background:rgba(255,255,255,.2);
+    width: 85%;
+    margin: auto;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+}
+div[id^="pm-body"]{
+    background:rgba(255,255,255,.2);
+    width: 85%;
+    margin: auto;
+    text-align: center;
+    padding: 15px;
+}
+#workspace-sidebar{
+    position: fixed;
+    left: 0px;
+    margin-top: -30px;
+    border: 1px solid #000;
+    width: 17%;
+    min-height: 100%;
+    background: url(/images/broken_noise.png);
+}
+#workspace-sidebar ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#workspace-sidebar ul li:not(:first-child){
+    padding: 13px;
+    /*border-bottom: 1px solid #000;*/
+    cursor: pointer;
+    width: 86%;
+    margin: auto;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+}
+#workspace-sidebar ul li:not(:first-child).active{
+    background: grey;
+    border: 1px solid #000;
+}
+#workspace-sidebar ul li:not(:first-child):hover{
+    opacity: 0.6;
+}
+#workspace-search{
+    border: 1px solid #000;
+    border-radius: 0px;
+    padding: 10px;
+    font-size: 1em;
+    width: 80%;
+    -webkit-box-shadow: 0 0 2px 0px rgba(255, 255, 255, 1), inset 0 0 0 1px rgba(0,0,0,1);
+-moz-box-shadow: 0 0 2px 0px rgba(255, 255, 255, 1), inset 0 0 0 1px rgba(0,0,0,1);
+box-shadow: 0 0 2px 0px rgba(255, 255, 255, 1), inset 0 0 0 1px rgba(0,0,0,1);
+background-color: rgba(255, 255, 255, .7);
+}
+#workspace-title{
+    font-size:2em;
+    font-style:italic;
+    margin-left: 17%;
+    text-align: left;
+}
+#workspace-main{
+    margin-left: 17%;
+}
+#workspace-loading{
+    
+}
+#workspace-options{
+    
+}
+.ctx-project, .dropdown-li{
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+.ctx-project:hover, .dropdown-li:hover{
+    background: darkgrey;
+}
+.workspace-dropdown{
+    display:none;
+    background:grey;
+    text-align:center;
+    border-radius: 3px;
+    padding: 5px;
+    position: absolute;
+    z-index: 10;
+}
+.hr-black{
+    height: 1px;
+    background: rgb(0, 0, 0);
+    border: 0;
+    box-shadow: 0 -1px 1px 0 rgba(255, 255, 255, .2);
+}
+.pr-thumbnail{
+    background: url(/images/broken_noise.png);
+    padding: 10px;
+    border: 1px solid #000;
+    margin-bottom: 5px;
+    height: 100px;
+}
+.prt-img{
+    background: #000;
+    width: 15%;
+    height: 100px;
+    float: left;
+    display: inline;
+}
+.prt-name{
+    display: inline;
+    float: left;
+    margin-left: 20px;
+}
+.prt-short{
+    background: rgba(255, 255, 255, .2);
+    border: 1px solid #000;
+    padding: 5px;
+    width: 65%;
+    height: 90px;
+    margin-left: 300px;
+    word-wrap: break-word;
+    overflow-y: hidden;
+}
+.prt-num{
+    float: right;
 }

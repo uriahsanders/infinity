@@ -7,7 +7,7 @@ class Groups extends Action{
 	const LIMIT = 30;
 	//end to query with param to specify which row to start at
 	private function limit($start){
-		return "ORDER BY `date` LIMIT ".$start.", ".self::LIMIT;
+		return "ORDER BY `date` DESC LIMIT ".$start.", ".self::LIMIT;
 	}
 	public function listMembers($start = 0){
 		$this->sql->query("SELECT * FROM `memberinfo` ".$this->limit($start));
@@ -27,11 +27,11 @@ class Groups extends Action{
 		}
 		return json_encode($json);
 	}
-	public function sendPM($subject, $body, $from, $to){
-		$this->sql->query("INSERT INTO `messages` (`subject`, `body`, `from`, `to`, `date`) VALUES (?, ?, ?, ?, ?)", $subject, $body, $from, $to, date('Y-m-d H:i:s'));
+	public function sendPM($subject, $body, $from, $to, $all){
+		$this->sql->query("INSERT INTO `messages` (`subject`, `body`, `from`, `to`, `date`, `all`) VALUES (?, ?, ?, ?, ?, ?)", $subject, $body, $from, $to, date('Y-m-d H:i:s'), $all);
 	}
 	public function viewPMs($start = 0){
-		return $this->sql->query("SELECT `subject`, `from`, `date`, `ID`, `read` FROM `messages` WHERE `to` = ? ".$this->limit($start), $_SESSION['ID']);
+		return $this->sql->query("SELECT * FROM `messages` WHERE `to` = ? ".$this->limit($start), $_SESSION['ID']);
 	}
 	//mark PM as read
 	private function PMRead($ID){
@@ -95,7 +95,7 @@ class Groups extends Action{
 	}
 	//view sent PM's
 	public function viewSent($start = 0){
-	    return $this->sql->query("SELECT `subject`, `from`, `date`, `ID`, `read` FROM `messages` WHERE `from` = ? ".$this->limit($start), $_SESSION['ID']);
+	    return $this->sql->query("SELECT * FROM `messages` WHERE `from` = ? ".$this->limit($start), $_SESSION['ID']);
 	}
 	//get data for a bunch of groups
 	public function viewGroups(){

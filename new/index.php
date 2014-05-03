@@ -76,11 +76,11 @@ include_once(PATH ."core/bar_main_start.php");
                     </div>
                     <div class="panel-body lead yellow">
                       Infinity makes it easy to come up with ideas. <br> Consult the community for advice or check out
-                      the <a href="projects.html">Projects page</a> for inspiration. <br> And it doesn't just have to be your own idea that
-                      captures your imagination: <br> The <a href="forum.html">Forums</a> are teeming with brilliant discussions
+                      the Projects page for inspiration. <br> And it doesn't just have to be your own idea that
+                      captures your imagination: <br> The Forums are teeming with brilliant discussions
                       and several projects are awaiting more contributors. 
                       <br><br>
-                      <button class="btn">Launch Your Idea</button>
+                      <!-- <button class="btn">Launch Your Idea</button> -->
                     </div>
                 </div>
                 <br>
@@ -95,7 +95,7 @@ include_once(PATH ."core/bar_main_start.php");
                       And Infinity isn't all just business, either! <br>
                       Take advantage of community activities to make real friends who share your interests.
                       <br><br>
-                      <button class="btn btn-success">Learn Something New</button>
+                      <!-- <button class="btn btn-success">Learn Something New</button> -->
                     </div>
                 </div>
                 <br>
@@ -107,10 +107,10 @@ include_once(PATH ."core/bar_main_start.php");
                       Now that you have an idea and the knowledge to pursue it, your going to need some help. <br>
                       Time to start networking and getting your idea out there. <br>
                       Start a project and invite people, public or private. <br>
-                      Use the Infinity <a href="workspace.html">Workspace</a> to keep track of what needs to get done. <br>
+                      Use the Infinity Workspace to keep track of what needs to get done. <br>
                       And pay attention to rankings and statistics to keep an eye out for interesting people.
                       <br><br>
-                      <button class="btn btn-primary">Find Awesome People</button>
+                      <!-- <button class="btn btn-primary">Find Awesome People</button> -->
                     </div>
                 </div>
                 <br>
@@ -126,7 +126,7 @@ include_once(PATH ."core/bar_main_start.php");
                       Infinity-Forum was designed to be a pathway to success, for anyone. <br>
                       The last thing we will do is get in the way.
                       <br><br>
-                      <button class="btn btn-danger">Contribute</button>
+                      <!-- <button class="btn btn-danger">Contribute</button> -->
                     </div>
                 </div>
                 <br>
@@ -136,7 +136,7 @@ include_once(PATH ."core/bar_main_start.php");
                         In just one place, make your dreams come to fruition. <br>
                         What will you create?
                         <br><br>
-                      <button class="btn btn-warning">Get Started</button>
+                      <!-- <button class="btn btn-warning">Get Started</button> -->
                     </h2>
                     <br>
                     <br>

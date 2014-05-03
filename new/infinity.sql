@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.8.1deb1
+-- version 4.1.14
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 31, 2014 at 10:06 PM
--- Server version: 5.5.34-0ubuntu0.13.04.1
--- PHP Version: 5.4.9-4ubuntu2.4
+-- Generation Time: Apr 30, 2014 at 06:31 PM
+-- Server version: 5.5.37-log
+-- PHP Version: 5.4.23
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `infinity`
+-- Database: `infinkl3_alpha`
 --
 
 -- --------------------------------------------------------
@@ -26,6 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `about`
 --
 
+DROP TABLE IF EXISTS `about`;
 CREATE TABLE IF NOT EXISTS `about` (
   `ID` int(3) NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
@@ -50,14 +51,41 @@ INSERT INTO `about` (`ID`, `subject`, `text`, `date`) VALUES
 -- Table structure for table `actions`
 --
 
+DROP TABLE IF EXISTS `actions`;
 CREATE TABLE IF NOT EXISTS `actions` (
   `user` int(11) NOT NULL,
-  `title` varchar(30) NOT NULL,
+  `title` varchar(60) NOT NULL,
   `content` varchar(250) NOT NULL,
   `category` varchar(20) NOT NULL,
   `date` datetime NOT NULL,
-  `read` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `read` tinyint(4) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `by` varchar(30) NOT NULL,
+  `html` text NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
+
+--
+-- Dumping data for table `actions`
+--
+
+INSERT INTO `actions` (`user`, `title`, `content`, `category`, `date`, `read`, `ID`, `by`, `html`) VALUES
+(9, 'created a new thread', '', 'thread', '2014-04-08 04:19:28', 0, 43, 'relax', ''),
+(9, 'posted on relax''s wall on ', 'Hhhhh', 'profile', '2014-04-08 04:23:25', 0, 46, 'relax', ''),
+(1, 'posted on jeremy''s wall on ', 'tewf', 'profile', '2014-04-12 22:53:51', 0, 56, 'jeremy', ''),
+(1, 'posted on jeremy''s wall on ', 'test comment', 'profile', '2014-04-12 22:55:22', 0, 58, 'Uriah', ''),
+(3, 'posted on jeremy''s wall on ', 'test comment', 'profile', '2014-04-12 22:55:22', 0, 59, 'Uriah', ''),
+(1, 'posted on jeremy''s wall on ', 'test post', 'profile', '2014-04-12 22:55:27', 0, 60, 'Uriah', ''),
+(3, 'posted on jeremy''s wall on ', 'test post', 'profile', '2014-04-12 22:55:27', 0, 61, 'Uriah', ''),
+(1, 'posted on jeremy''s wall on ', 'hello', 'profile', '2014-04-12 23:16:53', 0, 62, 'jeremy', ''),
+(1, 'posted on Uriah''s wall on ', 'test', 'profile', '2014-04-14 21:00:20', 0, 64, 'Uriah', ''),
+(3, 'posted on Uriah''s wall on ', 'test', 'profile', '2014-04-14 21:00:20', 0, 65, 'Uriah', ''),
+(1, 'posted on Uriah''s wall on ', '', 'profile', '2014-04-14 21:14:11', 0, 66, 'Uriah', ''),
+(3, 'posted on Uriah''s wall on ', '', 'profile', '2014-04-14 21:14:11', 0, 67, 'Uriah', ''),
+(1, 'posted on Uriah''s wall on ', 'test comment', 'profile', '2014-04-14 21:40:13', 0, 68, 'Uriah', ''),
+(1, 'posted on Uriah''s wall on ', 'OMFG those X''s look so ugly :P', 'profile', '2014-04-14 21:40:27', 0, 70, 'Uriah', ''),
+(1, 'posted on Uriah''s wall on ', 'SQLi dont work here, bro.', 'profile', '2014-04-14 21:40:45', 0, 72, 'Uriah', ''),
+(1, 'posted on Uriah''s wall on ', 's!', 'profile', '2014-04-14 21:41:30', 0, 74, 'Uriah', '');
 
 -- --------------------------------------------------------
 
@@ -65,6 +93,7 @@ CREATE TABLE IF NOT EXISTS `actions` (
 -- Table structure for table `categories`
 --
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -96,6 +125,7 @@ INSERT INTO `categories` (`ID`, `name`, `index_`, `min_rank`, `visible`) VALUES
 -- Table structure for table `feedback`
 --
 
+DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE IF NOT EXISTS `feedback` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `fee_l` int(11) NOT NULL,
@@ -113,6 +143,7 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 -- Table structure for table `friends`
 --
 
+DROP TABLE IF EXISTS `friends`;
 CREATE TABLE IF NOT EXISTS `friends` (
   `ID` int(20) NOT NULL AUTO_INCREMENT,
   `usr_ID` int(10) NOT NULL,
@@ -122,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `friends` (
   `accepted` int(11) NOT NULL DEFAULT '0',
   `date` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `friends`
@@ -134,7 +165,9 @@ INSERT INTO `friends` (`ID`, `usr_ID`, `friend_ID`, `block`, `block_by`, `accept
 (15, 1, 3, 0, 0, 1, '2013-06-20 04:41:22'),
 (16, 1, 4, 0, 0, 0, '2013-06-20 04:41:33'),
 (21, 2, 3, 0, 0, 1, '2013-06-20 18:43:16'),
-(20, 3, 4, 0, 0, 0, '2013-06-20 17:49:27');
+(20, 3, 4, 0, 0, 0, '2013-06-20 17:49:27'),
+(23, 2, 4, 0, 0, 0, '2014-04-05 23:33:57'),
+(24, 2, 12, 0, 0, 0, '2014-04-06 13:14:17');
 
 -- --------------------------------------------------------
 
@@ -142,14 +175,29 @@ INSERT INTO `friends` (`ID`, `usr_ID`, `friend_ID`, `block`, `block_by`, `accept
 -- Table structure for table `groups`
 --
 
+DROP TABLE IF EXISTS `groups`;
 CREATE TABLE IF NOT EXISTS `groups` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `description` text NOT NULL,
   `by` int(11) NOT NULL,
   `date` datetime NOT NULL,
+  `assoc` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `groups`
+--
+
+INSERT INTO `groups` (`ID`, `name`, `description`, `by`, `date`, `assoc`) VALUES
+(2, 'Test', 'Short descirption', 2, '2014-04-03 18:49:24', 132),
+(3, 'test', 'short', 2, '2014-04-04 23:42:15', 133),
+(4, 'fffffffff', 'short', 2, '2014-04-04 23:42:45', 134),
+(5, 'fffffffffs', 'short', 2, '2014-04-04 23:42:49', 135),
+(6, 'fffffffffsg', 'short', 2, '2014-04-04 23:42:51', 136),
+(7, 'fffffffffsgr', 'short', 2, '2014-04-04 23:42:53', 137),
+(8, 'lllllllll', 'llllllllllll', 2, '2014-04-04 23:43:08', 138);
 
 -- --------------------------------------------------------
 
@@ -157,12 +205,26 @@ CREATE TABLE IF NOT EXISTS `groups` (
 -- Table structure for table `group_data`
 --
 
+DROP TABLE IF EXISTS `group_data`;
 CREATE TABLE IF NOT EXISTS `group_data` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `groupID` int(11) NOT NULL,
   `elemID` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `group_data`
+--
+
+INSERT INTO `group_data` (`ID`, `groupID`, `elemID`) VALUES
+(2, 2, 2),
+(3, 3, 2),
+(4, 4, 2),
+(5, 5, 2),
+(6, 6, 2),
+(7, 7, 2),
+(8, 8, 2);
 
 -- --------------------------------------------------------
 
@@ -170,6 +232,7 @@ CREATE TABLE IF NOT EXISTS `group_data` (
 -- Table structure for table `infinity_messages`
 --
 
+DROP TABLE IF EXISTS `infinity_messages`;
 CREATE TABLE IF NOT EXISTS `infinity_messages` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
@@ -186,6 +249,7 @@ CREATE TABLE IF NOT EXISTS `infinity_messages` (
 -- Table structure for table `login_attempts`
 --
 
+DROP TABLE IF EXISTS `login_attempts`;
 CREATE TABLE IF NOT EXISTS `login_attempts` (
   `ID` int(6) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
@@ -193,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
   `date` varchar(30) NOT NULL,
   `date2` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=114 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=125 ;
 
 --
 -- Dumping data for table `login_attempts`
@@ -202,7 +266,8 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
 INSERT INTO `login_attempts` (`ID`, `username`, `IP`, `date`, `date2`) VALUES
 (50, 'uriahsanders', '127.0.0.1', '1395450158', '0000-00-00 00:00:00'),
 (89, 'uriahsanders', '127.0.0.1', '1395647081', '0000-00-00 00:00:00'),
-(107, 'Uriah', '127.0.0.1', '1396153128', '0000-00-00 00:00:00');
+(122, 'Uriah Sanders', '127.0.0.1', '1396685714', '0000-00-00 00:00:00'),
+(116, 'uriahsanders', '127.0.0.1', '1396496584', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -210,6 +275,7 @@ INSERT INTO `login_attempts` (`ID`, `username`, `IP`, `date`, `date2`) VALUES
 -- Table structure for table `memberinfo`
 --
 
+DROP TABLE IF EXISTS `memberinfo`;
 CREATE TABLE IF NOT EXISTS `memberinfo` (
   `ID` mediumint(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(16) NOT NULL,
@@ -225,7 +291,6 @@ CREATE TABLE IF NOT EXISTS `memberinfo` (
   `work` varchar(30) NOT NULL,
   `active_p` varchar(40) NOT NULL,
   `special` varchar(20) NOT NULL DEFAULT 'Member',
-  `points` int(8) NOT NULL DEFAULT '0',
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `status_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `about` text NOT NULL,
@@ -234,19 +299,20 @@ CREATE TABLE IF NOT EXISTS `memberinfo` (
   `projects` text NOT NULL,
   `prestige` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `memberinfo`
 --
 
-INSERT INTO `memberinfo` (`ID`, `username`, `sex`, `image`, `banner`, `rank`, `country`, `wURL`, `quote`, `age`, `last_login`, `work`, `active_p`, `special`, `points`, `status`, `status_time`, `about`, `resume`, `skills`, `projects`, `prestige`) VALUES
-(1, 'relax', 'Male', '9a1111520842d32326809d2e7678defep', '457a42062ca91fb20f0d67020aa89119p', 6, 'Sweden', 'http://moijo.org', 'You don''t get what you want... you get what you work for.', 26, '0000-00-00 00:00:00', 'Student', 'Infinity-forum', 'Co-Founder', 10000, 0, '2014-03-22 13:26:19', 'Testing Relax about', '', '', '', 0),
-(2, 'Uriah Sanders', 'Male', '', '', 6, 'USA', 'http://infinity-forum.org', 'My quote', 16, '0000-00-00 00:00:00', 'Infinity', 'infinity-forum', 'Co-Founder', 10000, 1, '2014-04-01 05:02:53', '                        This is some information about me.                ', '                        This is my resume.                ', '', '["125","126","127","128","129","130"]', 0),
-(3, 'jeremy', 'Male', '716e08e05e5a92e36e922bc6be9ebd19j', '', 6, 'USA', '', 'I like cookies', 14, '0000-00-00 00:00:00', '', '', 'Member', 10000, 0, '2014-03-28 05:23:36', '', '', '', '', 0),
-(4, 'wabi', '', '', '', 6, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 10000, 0, '2014-03-28 05:23:31', '', '', '', '', 0),
-(10, 'arty', '', 'b4cb6f5e620a2b31a3065caca393131ap', '566de5d708d32517a1a7c4ca59a6990dp', 5, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, 0, '0000-00-00 00:00:00', '', '', '', '', 0),
-(11, 'Test123', '', '', '', 1, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, 0, '2014-01-08 06:04:29', '', '', '', '', 0);
+INSERT INTO `memberinfo` (`ID`, `username`, `sex`, `image`, `banner`, `rank`, `country`, `wURL`, `quote`, `age`, `last_login`, `work`, `active_p`, `special`, `status`, `status_time`, `about`, `resume`, `skills`, `projects`, `prestige`) VALUES
+(1, 'relax', 'Male', '', '457a42062ca91fb20f0d67020aa89119p', 6, 'Sweden', 'http://moijo.org', 'You don''t get what you want... you get what you work for.', 26, '0000-00-00 00:00:00', 'Student', 'Infinity-forum', 'Co-Founder', 1, '2014-04-08 10:23:46', 'Testing Relax about', '', '', '', 1000),
+(2, 'Uriah', 'Male', '', '', 6, 'USA', 'http://alpha.infinity-forum.org', 'My quote', 16, '0000-00-00 00:00:00', 'Infinity', 'infinity-forum', 'Co-Founder', 0, '2014-04-30 22:16:24', 'This is some information about me.', 'This is my resume.', '', '["132","133","134","135","136","137","138"]', 1000),
+(3, 'jeremy', 'Male', '716e08e05e5a92e36e922bc6be9ebd19j', '', 6, 'USA', '', 'I like pie', 15, '0000-00-00 00:00:00', 'Student', '', 'Member', 1, '2014-04-30 21:33:59', '', '', '', '', 1000),
+(4, 'wabi', '', '', '', 6, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, '2014-03-28 05:23:31', '', '', '', '', 0),
+(10, 'arty', '', 'b4cb6f5e620a2b31a3065caca393131ap', '566de5d708d32517a1a7c4ca59a6990dp', 5, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, '0000-00-00 00:00:00', '', '', '', '', 0),
+(11, 'Test123', '', '', '', 1, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, '2014-01-08 06:04:29', '', '', '', '', 0),
+(12, 'alpha', '', '', '', 1, '', '', '', NULL, '0000-00-00 00:00:00', '', '', 'Member', 0, '2014-04-06 19:28:30', '', '', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -254,6 +320,7 @@ INSERT INTO `memberinfo` (`ID`, `username`, `sex`, `image`, `banner`, `rank`, `c
 -- Table structure for table `members`
 --
 
+DROP TABLE IF EXISTS `members`;
 CREATE TABLE IF NOT EXISTS `members` (
   `ID` mediumint(11) NOT NULL AUTO_INCREMENT,
   `admin` int(1) NOT NULL DEFAULT '0',
@@ -265,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `activatecode` varchar(34) NOT NULL,
   `note` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `members`
@@ -273,11 +340,12 @@ CREATE TABLE IF NOT EXISTS `members` (
 
 INSERT INTO `members` (`ID`, `admin`, `username`, `password`, `email`, `date`, `IP`, `activatecode`, `note`) VALUES
 (1, 1, 'relax', '$2a$12$pCFVjYScazDMlGUBV1wVoO77jspOCBODetA6yXUuDXJPp3WLOmeOy', 'relax@infinity-forum.org', '2013-05-25 13:54:03', '127.0.0.1', 'Y-71ad8cdc6c38455d9d9d6c176b6a6090', ''),
-(2, 1, 'Uriah Sanders', '$2a$12$1HXLUsxcf8ZB6INXDgqb7.FYzkec1vp9SpuQQ43WtTrMEr9oIvCre', 'uriah@infinity-forum.org', '2013-05-25 22:54:37', '108.23.116.84', 'Y-655e1e2bcd17683de73b22b9767475d9', ''),
+(2, 1, 'Uriah', '$2a$12$1HXLUsxcf8ZB6INXDgqb7.FYzkec1vp9SpuQQ43WtTrMEr9oIvCre', 'uriahsanders@ymail.com', '2013-05-25 22:54:37', '108.23.116.84', 'Y-655e1e2bcd17683de73b22b9767475d9', ''),
 (3, 1, 'jeremy', '$2a$12$Xlo9eARyi6eleXabNVVhneuPdnxvxGyk1h2Vnfh.8CIN1JwSWor4G', 'jeremy@infinity-forum.org', '2013-05-25 23:41:27', '99.155.45.129', 'Y-536429b4778c171b9cf8a310380d123d', ''),
 (4, 1, 'wabi', '$2a$12$2oBcqX8VPj.Pi7JU3YOQ9OcqM.VIEIvS8HkOzPCzumEcOgwg2baSO', 'd4us.mach1na@gmail.com', '2013-05-29 21:28:15', '50.40.124.192', 'Y-72a2fe57959f27f115853c86448e556a', ''),
 (10, 0, 'arty', '$2a$12$Cy7sAPwYED7HdtjQaZ/3HuwAJSG8WeiiE/jXuGSh1.o1048e..9DK', 'arty@infinity-forum.org', '2013-07-08 05:41:57', '108.29.127.124', 'Y-59e097bbfb029344030c1afe48057839', ''),
-(11, 0, 'Test123', '$2a$12$.9cxEkRi2SQUpsYxPBbhWeFjK8F7vF7yZ/7XfebgGzxdp0bcQGnE2', 'r3lax.uwh@gmail.com', '2014-01-07 22:49:04', '127.0.0.1', 'Y-b4455d0ad203ac2001eefb639f1e2e04', '');
+(11, 0, 'Test123', '$2a$12$.9cxEkRi2SQUpsYxPBbhWeFjK8F7vF7yZ/7XfebgGzxdp0bcQGnE2', 'r3lax.uwh@gmail.com', '2014-01-07 22:49:04', '127.0.0.1', 'Y-b4455d0ad203ac2001eefb639f1e2e04', ''),
+(12, 0, 'alpha', '$2a$12$DbGmT3Waw0aQJ6kgCuW1iehgkbVMFoYnGAFT9sryznwGEYdNK4nNO', 'bobkueger@yahoo.com', '2014-04-06 12:28:34', '71.119.211.232', 'Y-1828953aaabb2126989613c0cba10c53', '');
 
 -- --------------------------------------------------------
 
@@ -285,6 +353,7 @@ INSERT INTO `members` (`ID`, `admin`, `username`, `password`, `email`, `date`, `
 -- Table structure for table `messages`
 --
 
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE IF NOT EXISTS `messages` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `subject` varchar(30) NOT NULL,
@@ -293,8 +362,28 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `to` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `read` tinyint(4) NOT NULL,
+  `all` text NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`ID`, `subject`, `body`, `from`, `to`, `date`, `read`, `all`) VALUES
+(1, 'test', '#header\r\nI am testing bro!', 2, 3, '2014-04-08 18:38:16', 0, ''),
+(3, 'hh', 'hhh', 2, 3, '2014-04-08 18:48:45', 0, ''),
+(4, 'Hello', 'whats up\r\n', 3, 2, '2014-04-08 18:49:51', 0, ''),
+(14, 'Multi-User PM test', 'testing 123', 2, 2, '2014-04-08 19:30:11', 0, ''),
+(15, 'Multi-User PM test', 'testing 123', 2, 3, '2014-04-08 19:30:11', 0, ''),
+(16, 'fsdjfhj', 'fjksdf', 3, 2, '2014-04-08 19:54:48', 0, ''),
+(17, 'gfg', 'vbb', 3, 2, '2014-04-08 19:58:22', 0, ''),
+(18, 'fgf', 'dffgsfgf', 3, 2, '2014-04-08 20:04:15', 0, ''),
+(19, 'test', 'yet another test', 2, 2, '2014-04-12 13:21:30', 0, 'Uriah'),
+(20, 'testing', 'mini pm test', 2, 2, '2014-04-12 13:29:59', 0, 'Uriah'),
+(21, 'fffffffff', 'ffffffff', 2, 2, '2014-04-12 13:32:38', 0, 'Uriah'),
+(22, 'jjjjjjjjjjjjj', 'jjjjjjjjjj', 2, 2, '2014-04-12 13:34:39', 0, 'Uriah'),
+(23, 'fsdffds', 'fdsfsdf', 3, 3, '2014-04-12 22:54:14', 0, 'jeremy');
 
 -- --------------------------------------------------------
 
@@ -302,6 +391,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
 -- Table structure for table `news`
 --
 
+DROP TABLE IF EXISTS `news`;
 CREATE TABLE IF NOT EXISTS `news` (
   `ID` int(4) NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
@@ -328,6 +418,7 @@ INSERT INTO `news` (`ID`, `subject`, `text`, `date`) VALUES
 -- Table structure for table `notifications`
 --
 
+DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE IF NOT EXISTS `notifications` (
   `ID` int(15) NOT NULL AUTO_INCREMENT,
   `usr_ID` int(8) NOT NULL,
@@ -346,6 +437,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 -- Table structure for table `posts`
 --
 
+DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `msg` mediumtext NOT NULL,
@@ -357,7 +449,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   UNIQUE KEY `ID` (`ID`),
   KEY `by_` (`by_`),
   KEY `parent_ID` (`parent_ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=142 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=181 ;
 
 --
 -- Dumping data for table `posts`
@@ -461,10 +553,46 @@ INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`, `popularity
 (135, 'First test of a forum post!', '127.0.0.1', 2, 1, '2014-03-31 21:32:57', 0),
 (136, 'Second forum test!', '127.0.0.1', 2, 1, '2014-03-31 21:38:13', 0),
 (137, 'Third forum test! OMG!', '127.0.0.1', 2, 1, '2014-03-31 21:39:14', 0),
-(138, 'OMG!!!!', '127.0.0.1', 2, 1, '2014-03-31 21:40:51', 0),
+(138, 'OMG!!!!\r\n\r\n-Edit', '127.0.0.1', 2, 1, '2014-03-31 21:40:51', 0),
 (139, 'OMG AGAIN!!!!', '127.0.0.1', 2, 1, '2014-03-31 21:41:11', 0),
 (140, 'Testing some stuff', '127.0.0.1', 2, 1, '2014-03-31 21:45:02', 0),
-(141, 'gggggggggg', '127.0.0.1', 2, 1, '2014-03-31 21:45:56', 0);
+(141, 'gggggggggg', '127.0.0.1', 2, 1, '2014-03-31 21:45:56', 0),
+(143, 'test reply', '127.0.0.1', 2, 25, '2014-04-01 21:55:00', 0),
+(144, '#Header\r\n\r\nThat was a test for markdown code.', '127.0.0.1', 2, 25, '2014-04-03 21:25:31', 0),
+(145, 'Testing popup auto-close with post.', '127.0.0.1', 2, 25, '2014-04-03 21:27:31', 0),
+(146, '#markdown test\r\n###Header 3', '127.0.0.1', 2, 9, '2014-04-03 21:41:39', 0),
+(147, '#markdown test\r\n###Header 3', '127.0.0.1', 2, 9, '2014-04-03 21:41:39', 0),
+(148, 'test', '127.0.0.1', 2, 9, '2014-04-03 21:42:05', 0),
+(149, 'test', '127.0.0.1', 2, 9, '2014-04-03 21:42:05', 0),
+(150, '#another', '127.0.0.1', 2, 9, '2014-04-03 21:42:58', 0),
+(151, 'why', '127.0.0.1', 2, 9, '2014-04-03 21:43:08', 0),
+(152, 'test', '127.0.0.1', 2, 9, '2014-04-03 21:58:14', 0),
+(153, '#test', '127.0.0.1', 2, 9, '2014-04-03 21:58:56', 0),
+(154, 'test', '127.0.0.1', 2, 9, '2014-04-03 22:03:04', 0),
+(155, 'test', '127.0.0.1', 2, 9, '2014-04-03 22:03:04', 0),
+(156, '#last md test', '127.0.0.1', 2, 9, '2014-04-03 23:55:41', 0),
+(157, 'This is a beautiful test\r\n------------------------\r\n\r\n##Full of surprises\r\n\r\n&gt;and filled with wonders\r\n&gt;and awesomeness\r\n&gt;and love', '127.0.0.1', 2, 3, '2014-04-04 19:24:58', 0),
+(158, '#another great test\r\n\r\n&gt;that is full of surprises\r\n\r\n&gt;and lots of other great things\r\n\r\n&gt;I love markdown\r\n\r\nOnly thing is, I dont know markdown. Which is unfortunate.\r\n\r\nBECAUSE MY SITE USES MARKDOWN!!!!!\r\n---------------------------------\r\n\r\nOh well, thats life.\r\n\r\n##AND ITs a HaRd ''NuFF liFe FoR Me!', '127.0.0.1', 2, 3, '2014-04-04 19:29:21', 0),
+(159, '#test size\r\n\r\n#test size\r\n\r\n#test size\r\n#test size\r\n\r\n#test size\r\n\r\n#test size\r\n\r\n#test size\r\n\r\n#test size\r\n\r\n#test size\r\n\r\n#test size\r\n#test size\r\n\r\n#test size\r\n#test size\r\n\r\n\r\n#test size\r\n\r\n#test size\r\n\r\n', '127.0.0.1', 2, 3, '2014-04-04 20:44:09', 0),
+(161, '#code test\r\n\r\n    var test = 4;\r\n    if(name == 3) alert(test);', '127.0.0.1', 2, 26, '2014-04-04 21:10:11', 0),
+(162, 'First test on actual server! ', '71.119.211.232', 2, 27, '2014-04-06 12:10:24', 0),
+(163, 'Woah bro! That post was long!', '71.119.211.232', 12, 3, '2014-04-06 13:27:46', 0),
+(164, '&lt;script&gt;alert(document.cookie);&lt;/script&gt;', '68.179.157.58', 3, 27, '2014-04-06 13:31:47', 0),
+(165, 'this is a reply\r\n', '68.179.157.58', 3, 29, '2014-04-06 13:55:29', 0),
+(166, 'Replying to your reply. Post in this thread again please.', '71.119.211.232', 2, 29, '2014-04-06 13:58:03', 0),
+(167, 'hello', '68.179.157.58', 3, 29, '2014-04-06 13:59:00', 0),
+(168, 'this is a normal post\r\n', '68.179.157.58', 3, 27, '2014-04-06 14:06:38', 0),
+(169, 'this is a normal post\r\n', '68.179.157.58', 3, 27, '2014-04-06 14:06:38', 0),
+(170, 'test', '68.179.157.58', 3, 27, '2014-04-06 14:08:55', 0),
+(171, '#test', '68.179.157.58', 3, 26, '2014-04-06 14:32:06', 0),
+(172, '#test', '68.179.157.58', 3, 26, '2014-04-06 14:32:07', 0),
+(173, 'dksabkjdkjs', '68.179.157.58', 3, 35, '2014-04-06 16:33:41', 0),
+(174, 'fsf', '68.179.157.58', 3, 35, '2014-04-06 16:35:04', 0),
+(175, 'test', '71.119.211.232', 2, 37, '2014-04-06 16:39:57', 0),
+(176, 'test', '68.179.157.58', 3, 37, '2014-04-06 16:44:40', 0),
+(177, 'reply', '71.119.211.232', 2, 39, '2014-04-06 17:56:21', 0),
+(178, 'multiple line\r\n\r\nmultiple line\r\n\r\nmultiple line\r\n\r\nmultiple line\r\n\r\nor i guess it should be:\r\n\r\nmultiple lines', '71.119.211.232', 2, 40, '2014-04-07 18:20:28', 0),
+(180, '#Quote Test\r\nFrom Uriah, 47 minutes ago\r\n&gt;multiple line\r\n&gt;\r\n&gt;multiple line\r\n&gt;\r\n&gt;multiple line\r\n&gt;\r\n&gt;multiple line\r\n&gt;\r\n&gt;or i guess it should be:\r\n&gt;\r\n&gt;multiple lines\r\n\r\nThat was a quote that now automatically inserts the name and date from the post you are quoting. Hurray!', '71.119.211.232', 2, 40, '2014-04-07 19:08:30', 0);
 
 -- --------------------------------------------------------
 
@@ -472,6 +600,7 @@ INSERT INTO `posts` (`ID`, `msg`, `IP`, `by_`, `parent_ID`, `time_`, `popularity
 -- Table structure for table `projects`
 --
 
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `projectname` varchar(15) NOT NULL,
@@ -486,19 +615,20 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `video` varchar(50) NOT NULL,
   `launched` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=131 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=139 ;
 
 --
 -- Dumping data for table `projects`
 --
 
 INSERT INTO `projects` (`ID`, `projectname`, `creator`, `date`, `popularity`, `members`, `short`, `description`, `category`, `image`, `video`, `launched`) VALUES
-(125, 'hhhhhhhh', 2, '2014-03-26 18:59:45', 0, '[2]', 'hhhhhhh', 'hhhhhhh', 'Technology', 'temporary', 'temporary', 1),
-(126, 'hhhhhhhh', 2, '2014-03-26 18:59:45', 0, '[2]', 'hhhhhhh', 'hhhhhhh', 'Technology', 'temporary', 'temporary', 1),
-(127, 'hhhhhhhh', 2, '2014-03-26 18:59:46', 0, '[2]', 'hhhhhhh', 'hhhhhhh', 'Technology', 'temporary', 'temporary', 1),
-(128, 'hhhhhhhh', 2, '2014-03-26 18:59:46', 0, '[2]', 'hhhhhhh', 'hhhhhhh', 'Technology', 'temporary', 'temporary', 1),
-(129, 'Test', 2, '2014-03-30 20:27:08', 0, '[2]', 'Yes, again.', 'I am actually testing again!', 'Technology', 'temporary', 'temporary', 1),
-(130, 'hhhhhhhhh', 2, '2014-03-30 20:29:00', 0, '[2]', 'hhhhhhhhh', 'hhhhhhhhhh', 'Technology', 'temporary', 'temporary', 1);
+(132, 'Test', 2, '2014-04-03 18:49:24', 0, '[2]', 'Short descirption', '#Header\r\nThis is an amazing description', 'Technology', 'temporary', 'temporary', 1),
+(133, 'test', 2, '2014-04-04 23:42:15', 0, '[2]', 'short', 'Description', 'Technology', 'temporary', 'temporary', 1),
+(134, 'fffffffff', 2, '2014-04-04 23:42:45', 0, '[2]', 'short', 'Description', 'Technology', 'temporary', 'temporary', 1),
+(135, 'fffffffffs', 2, '2014-04-04 23:42:49', 0, '[2]', 'short', 'Description', 'Technology', 'temporary', 'temporary', 1),
+(136, 'fffffffffsg', 2, '2014-04-04 23:42:51', 0, '[2]', 'short', 'Description', 'Technology', 'temporary', 'temporary', 1),
+(137, 'fffffffffsgr', 2, '2014-04-04 23:42:53', 0, '[2]', 'short', 'Description', 'Technology', 'temporary', 'temporary', 1),
+(138, 'lllllllll', 2, '2014-04-04 23:43:08', 0, '[2]', 'llllllllllll', 'Description', 'Technology', 'temporary', 'temporary', 1);
 
 -- --------------------------------------------------------
 
@@ -506,6 +636,7 @@ INSERT INTO `projects` (`ID`, `projectname`, `creator`, `date`, `popularity`, `m
 -- Table structure for table `ranks`
 --
 
+DROP TABLE IF EXISTS `ranks`;
 CREATE TABLE IF NOT EXISTS `ranks` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -531,6 +662,7 @@ INSERT INTO `ranks` (`ID`, `name`) VALUES
 -- Table structure for table `recover`
 --
 
+DROP TABLE IF EXISTS `recover`;
 CREATE TABLE IF NOT EXISTS `recover` (
   `ID` mediumint(9) NOT NULL AUTO_INCREMENT,
   `ID_usr` int(5) NOT NULL,
@@ -538,7 +670,14 @@ CREATE TABLE IF NOT EXISTS `recover` (
   `IP` varchar(15) NOT NULL,
   `time` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `recover`
+--
+
+INSERT INTO `recover` (`ID`, `ID_usr`, `code`, `IP`, `time`) VALUES
+(2, 2, '2c5f4640a1f92ee9cd6327aef8c29e9e', '127.0.0.1', '2014-04-05 23:04:04');
 
 -- --------------------------------------------------------
 
@@ -546,6 +685,7 @@ CREATE TABLE IF NOT EXISTS `recover` (
 -- Table structure for table `subcat`
 --
 
+DROP TABLE IF EXISTS `subcat`;
 CREATE TABLE IF NOT EXISTS `subcat` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `parent_ID` int(11) NOT NULL,
@@ -605,6 +745,7 @@ INSERT INTO `subcat` (`ID`, `parent_ID`, `name`, `index_`, `desc_`, `min_rank`, 
 -- Table structure for table `subforum`
 --
 
+DROP TABLE IF EXISTS `subforum`;
 CREATE TABLE IF NOT EXISTS `subforum` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -644,6 +785,7 @@ INSERT INTO `subforum` (`ID`, `name`, `parent_ID`, `visible`, `min_rank`, `index
 -- Table structure for table `suspicious`
 --
 
+DROP TABLE IF EXISTS `suspicious`;
 CREATE TABLE IF NOT EXISTS `suspicious` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL,
@@ -651,7 +793,49 @@ CREATE TABLE IF NOT EXISTS `suspicious` (
   `date` datetime NOT NULL,
   `message` varchar(250) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
+
+--
+-- Dumping data for table `suspicious`
+--
+
+INSERT INTO `suspicious` (`ID`, `userID`, `IP`, `date`, `message`) VALUES
+(1, 1, '127.0.0.1', '2014-04-01 20:59:30', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(2, 1, '127.0.0.1', '2014-04-01 20:59:30', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(3, 1, '127.0.0.1', '2014-04-01 20:59:36', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(4, 1, '127.0.0.1', '2014-04-01 20:59:51', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(5, 1, '127.0.0.1', '2014-04-01 21:00:49', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(6, 1, '127.0.0.1', '2014-04-01 21:01:03', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(7, 1, '127.0.0.1', '2014-04-01 21:01:03', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(8, 1, '127.0.0.1', '2014-04-01 21:01:07', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(9, 1, '127.0.0.1', '2014-04-01 21:01:12', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(10, 1, '127.0.0.1', '2014-04-01 21:01:37', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(11, 1, '127.0.0.1', '2014-04-01 21:01:55', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(12, 1, '127.0.0.1', '2014-04-01 21:02:35', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(13, 1, '127.0.0.1', '2014-04-01 21:02:35', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(14, 1, '127.0.0.1', '2014-04-01 21:02:38', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(15, 1, '127.0.0.1', '2014-04-01 21:03:27', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(16, 1, '127.0.0.1', '2014-04-01 21:03:45', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(17, 1, '127.0.0.1', '2014-04-01 21:03:45', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table posts) that they did not create.'),
+(18, 1, '127.0.0.1', '2014-04-01 21:12:17', 'Potential HTML tampering; user is attempting \n				to delete a post or topic (from table topics) that they did not create.'),
+(19, 1, '127.0.0.1', '2014-04-03 18:40:40', 'Potential HTML tampering; user is attempting \n				to manipulate a project that they did not create.'),
+(20, 1, '127.0.0.1', '2014-04-04 22:07:48', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(21, 1, '127.0.0.1', '2014-04-04 22:08:00', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(22, 1, '127.0.0.1', '2014-04-04 22:08:22', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(23, 1, '127.0.0.1', '2014-04-04 22:09:24', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(24, 1, '127.0.0.1', '2014-04-04 22:09:43', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(25, 1, '127.0.0.1', '2014-04-04 22:10:06', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(26, 1, '127.0.0.1', '2014-04-04 22:11:41', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(27, 1, '127.0.0.1', '2014-04-04 22:12:03', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(28, 1, '127.0.0.1', '2014-04-04 22:12:15', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(29, 1, '127.0.0.1', '2014-04-04 22:13:18', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(30, 1, '127.0.0.1', '2014-04-04 22:13:32', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(31, 1, '127.0.0.1', '2014-04-04 22:17:01', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(32, 1, '127.0.0.1', '2014-04-04 22:20:54', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(33, 1, '71.119.211.232', '2014-04-12 22:16:12', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(34, 1, '71.119.211.232', '2014-04-12 22:16:15', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table posts) that they did not create.'),
+(35, 1, '71.119.211.232', '2014-04-12 22:16:40', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table topics) that they did not create.'),
+(36, 1, '71.119.211.232', '2014-04-21 00:00:03', 'Potential HTML tampering; user is attempting \n				to manipulate a post or topic (from table topics) that they did not create.');
 
 -- --------------------------------------------------------
 
@@ -659,6 +843,7 @@ CREATE TABLE IF NOT EXISTS `suspicious` (
 -- Table structure for table `topics`
 --
 
+DROP TABLE IF EXISTS `topics`;
 CREATE TABLE IF NOT EXISTS `topics` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `sub` tinyint(1) NOT NULL DEFAULT '0',
@@ -669,39 +854,141 @@ CREATE TABLE IF NOT EXISTS `topics` (
   `by_` mediumint(9) NOT NULL,
   `IP` varchar(16) NOT NULL,
   `popularity` int(11) NOT NULL,
+  `category` varchar(30) NOT NULL,
   UNIQUE KEY `ID` (`ID`),
   KEY `by` (`by_`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=41 ;
 
 --
 -- Dumping data for table `topics`
 --
 
-INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, `IP`, `popularity`) VALUES
-(1, 0, 'sha chigru gleec gemtuka eegre papsyh yrooheev iboordoaz thooch yxiptu gly pse egroboar googluster oachoatoop uwupti ', 'ootchi zoaloapt astyloo ', 1, '2007-12-03 02:09:04', 10, '127.0.0.1', 0),
-(2, 1, 'phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee mphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy aksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee makphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy suv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy ', 'zitam ape feeja ', 1, '2000-02-16 02:01:11', 1, '127.0.0.1', 0),
-(3, 0, 'leelocafe vylre mirt eecordee nems psyz yjomp gleetsoatu awosheegov roptoack gak ekelroshon whe fefturs oots iglysto gughaph kythuksy toowhyt iween psigroo thoa eeckeeco staruds iwughergoo zaw wodsept oxiroachur ejaltir foati oagnissolr steempub upeekycoo goasiwo ', 'choassys meepte ootu sto ithoamops ', 1, '2009-10-23 05:07:28', 10, '127.0.0.1', 0),
-(4, 0, 'chicmal geekehyv awhooz ooc oard psoo gadseeca vomsu roo uthiwa kodricmy agr cugnen ujoosh eec yfe glilsi ifechee zyz ahateekro wyfer evucketee coak oal choaba ', 'ufu eeftech vodee ceestu icoomsuf grodsy ', 1, '2013-03-29 20:23:10', 4, '127.0.0.1', 0),
-(5, 0, 'iptochoka atoam psewho tyfaps wibeth baxampoady koxoost oglyptoagl peeda umagyps soapsocag ochi oawoalso ', 'unessa seghudref zoobeej uchoshu oatchi ', 1, '2012-12-29 17:14:41', 3, '127.0.0.1', 0),
-(6, 0, 'odiwads azeesh ooreewh ochit aheewh aboglolr jeeh enoastexee ihezaseeb oatsefi oogluthi ekoali xept leg pseerga ooptyky psymtuz wirde gixol eelseksy egee agloonaw jish agl molsoomsih jyd megnos ', 'phegher ekydeelt stiry ', 1, '2000-08-02 20:45:36', 3, '127.0.0.1', 0),
-(7, 0, 'mirgoofe astystety psirsa ookrilt poag stoolyph ykyh epaft ebywh stoop efiworda obersempe dalrytsoa iptu ujoleewh phofa phoo ', 'imuxo sampe styk ykatse ', 1, '2002-02-03 13:57:49', 10, '127.0.0.1', 0),
-(8, 0, 'voghoampo psoabym etoam woaglar ysheepsupt ewhoafoa ehee agloglapto zoatyceer ihoohoadoa enukoozelt shudrephoa xawhootcho ubuthivess vits ytypseluli enydadra ', 'abigida uzikse ysage ithy eptute oagassoow ', 1, '2005-09-14 15:27:09', 10, '127.0.0.1', 0),
-(9, 0, 'the axamp chem cempeerg shu tethoof eegnolta thegnooz erybyftu ihoakrucm wher pidsee ageets igroa glehymp opteegl sha eemp lee anooptee oaftecke iru ajal iryngux loopeve icusoa ipoo oow rikooss gybuhox wheegly jar chiv obophoafec ', 'stoamt upsegrojy das ', 2, '2010-12-10 01:01:16', 3, '127.0.0.1', 0),
-(10, 0, 'ecudri chemacka groabog coanukicha biftythycu eexewhopho oass ypessaf nodroshoal domi noapse huhigh oozissoa hursoanguk oanso stoa sungij arergood midroals vyz ozasoach olegys machewhoss phaneemsoo nylrep ypsu oapooz ugryphygli oageem ipoaxat churgosooc compuchu oxoosheeg ogloobiw ', 'jerufte atartoock gyptij ', 2, '2000-02-02 13:46:21', 1, '127.0.0.1', 0),
-(11, 0, 'fee pooree boomycy oadrekroos jecikseep ooghahov eedsipsoos noamud pej veeroanoof iheex ugulsotchi vaphoarsu isoomu grojossy ooryzons edoohocm chipsyc ', 'alorg phomsucky eegnodryb echah ', 2, '2010-07-14 15:06:50', 2, '127.0.0.1', 0),
-(13, 0, 'oagh oockic gragrixos ugregu vexamtetoo exav ixoohe psesi ogred pyrtu lypema psyps oophaw oonsoa shojanativ ech pso thu rixy apteele phyftur ', 'sto eensa oanoo ', 2, '2002-11-29 02:10:05', 2, '127.0.0.1', 0),
-(14, 0, 'ugoa zith olijiw ysh epseb tengeeshy oavuds ooz kotee ychesajoa eec oavygroo racmu ', 'ufalti stiltast sho ymoostep ', 2, '2005-03-02 08:37:54', 10, '127.0.0.1', 0),
-(15, 0, 'ala vagy eephyp jitsadsowh yceejeez oackoa iwomtywhoo opsefoad mikywi aheev ozy cywuchel koax keds ogruz oorgeex gleece ogle ilooso ipag ', 'oart leltilsig cha ', 2, '2007-05-06 13:06:43', 10, '127.0.0.1', 0),
-(16, 0, 'oagloo belr liwheess xytchuneen choong rop imogokubu uhongimoa egycoteecm awybefoasu pteeshoo jampov luroh phoakrixo ijecmo ', 'oamtahy chetsu ust ', 3, '2007-02-19 21:42:04', 1, '127.0.0.1', 0),
-(17, 0, 'mersacm lees veftux ecergeeph ekoo ipadseemen saksylr zoalos owu yba eetchaftoa shee beepapsugl agyptoa baphoa thoxeksuds zoakooxet vimpu akyglolug sahyg eek grersinsod doochoozis wholaloa agr xoost emis okyta estor oag ptoo ', 'xileel goothez vizosooj ewhyz adeegopy ', 3, '2006-05-01 20:16:56', 1, '127.0.0.1', 0),
-(18, 0, 'othymyni eeceleeth stoovogh fifick chic vee foacuwhu shooroath jugoa ahuphupse oodsilsilr thavo koogroo dyvoad oalrih ', 'reedeexez eegeegub estywob ', 3, '2012-08-02 11:49:47', 4, '127.0.0.1', 0),
-(19, 0, 'ykoa epoocheef ptoavyz eshunood yboophe oov pterteew azagib ysite oawhazile pheeh iwetch uwooshiz doavoch ptoakeron igilsoob oohoaby edoapsi cyw oolikeecox eer oan oardaghyr achepsogle cheerseh optypt irooweek ephacogle ', 'toaboojeh xajeegh tocooloak hytchubyc oat ', 3, '2004-12-10 05:20:36', 1, '127.0.0.1', 0),
-(21, 0, 'puwywyrd upt aboordaz kat cidses aheeltor achoasofa ixoarga buftydr egra wylroab ywhee oongoopt roftyxyg fupsoofim wherge itophoogr xockywev dudruw glissu ylishoar oate upicom yreeksec ptod stexu ymookryfty ', 'ebee eegr cyrtuj choax ', 3, '2011-07-08 07:11:15', 2, '127.0.0.1', 0),
-(22, 0, 'Testing an initial post', '', 0, '2014-03-31 21:54:55', 2, '127.0.0.1', 0),
-(23, 0, 'Testing an initial post', '', 0, '2014-03-31 21:54:57', 2, '127.0.0.1', 0),
-(24, 0, 'Testing an initial post', '', 0, '2014-03-31 21:54:57', 2, '127.0.0.1', 0),
-(25, 0, 'testing init post', 'Test', 1, '2014-03-31 21:55:32', 2, '127.0.0.1', 0),
-(26, 0, 'Another topic test!', 'Testing again', 1, '2014-03-31 21:58:16', 2, '127.0.0.1', 0);
+INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, `IP`, `popularity`, `category`) VALUES
+(1, 0, 'sha chigru gleec gemtuka eegre papsyh yrooheev iboordoaz thooch yxiptu gly pse egroboar googluster oachoatoop uwupti ', 'ootchi zoaloapt astyloo ', 1, '2007-12-03 02:09:04', 10, '127.0.0.1', 0, ''),
+(2, 1, 'phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee mphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy aksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee makphawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy suv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy phawhoaf atypsee poazewa nudremtoam oaf mift oopeejoj oarsyxywhy ebat ekee maksuv anapsi oowonsoord oozysylu whegliwh see nishoalsef apoa aph jissy ', 'zitam ape feeja ', 1, '2000-02-16 02:01:11', 1, '127.0.0.1', 0, ''),
+(3, 0, 'leelocafe vylre mirt eecordee nems psyz yjomp gleetsoatu awosheegov roptoack gak ekelroshon whe fefturs oots iglysto gughaph kythuksy toowhyt iween psigroo thoa eeckeeco staruds iwughergoo zaw wodsept oxiroachur ejaltir foati oagnissolr steempub upeekycoo goasiwo ', 'choassys meepte ootu sto ithoamops ', 1, '2009-10-23 05:07:28', 10, '127.0.0.1', 0, ''),
+(4, 0, 'chicmal geekehyv awhooz ooc oard psoo gadseeca vomsu roo uthiwa kodricmy agr cugnen ujoosh eec yfe glilsi ifechee zyz ahateekro wyfer evucketee coak oal choaba ', 'ufu eeftech vodee ceestu icoomsuf grodsy ', 1, '2013-03-29 20:23:10', 4, '127.0.0.1', 0, ''),
+(5, 0, 'iptochoka atoam psewho tyfaps wibeth baxampoady koxoost oglyptoagl peeda umagyps soapsocag ochi oawoalso ', 'unessa seghudref zoobeej uchoshu oatchi ', 1, '2012-12-29 17:14:41', 3, '127.0.0.1', 0, ''),
+(6, 0, 'odiwads azeesh ooreewh ochit aheewh aboglolr jeeh enoastexee ihezaseeb oatsefi oogluthi ekoali xept leg pseerga ooptyky psymtuz wirde gixol eelseksy egee agloonaw jish agl molsoomsih jyd megnos ', 'phegher ekydeelt stiry ', 1, '2000-08-02 20:45:36', 3, '127.0.0.1', 0, ''),
+(7, 0, 'mirgoofe astystety psirsa ookrilt poag stoolyph ykyh epaft ebywh stoop efiworda obersempe dalrytsoa iptu ujoleewh phofa phoo ', 'imuxo sampe styk ykatse ', 1, '2002-02-03 13:57:49', 10, '127.0.0.1', 0, ''),
+(8, 0, 'voghoampo psoabym etoam woaglar ysheepsupt ewhoafoa ehee agloglapto zoatyceer ihoohoadoa enukoozelt shudrephoa xawhootcho ubuthivess vits ytypseluli enydadra ', 'abigida uzikse ysage ithy eptute oagassoow ', 1, '2005-09-14 15:27:09', 10, '127.0.0.1', 0, ''),
+(9, 0, 'the axamp chem cempeerg shu tethoof eegnolta thegnooz erybyftu ihoakrucm wher pidsee ageets igroa glehymp opteegl sha eemp lee anooptee oaftecke iru ajal iryngux loopeve icusoa ipoo oow rikooss gybuhox wheegly jar chiv obophoafec ', 'stoamt upsegrojy das ', 2, '2010-12-10 01:01:16', 3, '127.0.0.1', 0, ''),
+(10, 0, 'ecudri chemacka groabog coanukicha biftythycu eexewhopho oass ypessaf nodroshoal domi noapse huhigh oozissoa hursoanguk oanso stoa sungij arergood midroals vyz ozasoach olegys machewhoss phaneemsoo nylrep ypsu oapooz ugryphygli oageem ipoaxat churgosooc compuchu oxoosheeg ogloobiw ', 'jerufte atartoock gyptij ', 2, '2000-02-02 13:46:21', 1, '127.0.0.1', 0, ''),
+(11, 0, 'fee pooree boomycy oadrekroos jecikseep ooghahov eedsipsoos noamud pej veeroanoof iheex ugulsotchi vaphoarsu isoomu grojossy ooryzons edoohocm chipsyc ', 'alorg phomsucky eegnodryb echah ', 2, '2010-07-14 15:06:50', 2, '127.0.0.1', 0, ''),
+(13, 0, 'oagh oockic gragrixos ugregu vexamtetoo exav ixoohe psesi ogred pyrtu lypema psyps oophaw oonsoa shojanativ ech pso thu rixy apteele phyftur ', 'sto eensa oanoo ', 2, '2002-11-29 02:10:05', 2, '127.0.0.1', 0, ''),
+(14, 0, 'ugoa zith olijiw ysh epseb tengeeshy oavuds ooz kotee ychesajoa eec oavygroo racmu ', 'ufalti stiltast sho ymoostep ', 2, '2005-03-02 08:37:54', 10, '127.0.0.1', 0, ''),
+(15, 0, 'ala vagy eephyp jitsadsowh yceejeez oackoa iwomtywhoo opsefoad mikywi aheev ozy cywuchel koax keds ogruz oorgeex gleece ogle ilooso ipag ', 'oart leltilsig cha ', 2, '2007-05-06 13:06:43', 10, '127.0.0.1', 0, ''),
+(16, 0, 'oagloo belr liwheess xytchuneen choong rop imogokubu uhongimoa egycoteecm awybefoasu pteeshoo jampov luroh phoakrixo ijecmo ', 'oamtahy chetsu ust ', 3, '2007-02-19 21:42:04', 1, '127.0.0.1', 0, ''),
+(17, 0, 'mersacm lees veftux ecergeeph ekoo ipadseemen saksylr zoalos owu yba eetchaftoa shee beepapsugl agyptoa baphoa thoxeksuds zoakooxet vimpu akyglolug sahyg eek grersinsod doochoozis wholaloa agr xoost emis okyta estor oag ptoo ', 'xileel goothez vizosooj ewhyz adeegopy ', 3, '2006-05-01 20:16:56', 1, '127.0.0.1', 0, ''),
+(18, 0, 'othymyni eeceleeth stoovogh fifick chic vee foacuwhu shooroath jugoa ahuphupse oodsilsilr thavo koogroo dyvoad oalrih ', 'reedeexez eegeegub estywob ', 3, '2012-08-02 11:49:47', 4, '127.0.0.1', 0, ''),
+(19, 0, 'ykoa epoocheef ptoavyz eshunood yboophe oov pterteew azagib ysite oawhazile pheeh iwetch uwooshiz doavoch ptoakeron igilsoob oohoaby edoapsi cyw oolikeecox eer oan oardaghyr achepsogle cheerseh optypt irooweek ephacogle ', 'toaboojeh xajeegh tocooloak hytchubyc oat ', 3, '2004-12-10 05:20:36', 1, '127.0.0.1', 0, ''),
+(21, 0, 'puwywyrd upt aboordaz kat cidses aheeltor achoasofa ixoarga buftydr egra wylroab ywhee oongoopt roftyxyg fupsoofim wherge itophoogr xockywev dudruw glissu ylishoar oate upicom yreeksec ptod stexu ymookryfty ', 'ebee eegr cyrtuj choax ', 3, '2011-07-08 07:11:15', 2, '127.0.0.1', 0, ''),
+(25, 0, 'testing init post', 'Test', 1, '2014-03-31 21:55:32', 2, '127.0.0.1', 0, ''),
+(26, 0, '#Yet Another Post\r\n\r\nAnd this one is in english!\r\n\r\n-Edit: First edit ever!', 'Test', 1, '2014-04-04 20:45:41', 2, '127.0.0.1', 0, ''),
+(27, 0, 'This is a thread with the category of its parent.', 'Thread', 1, '2014-04-06 01:02:05', 2, '127.0.0.1', 0, 'General discussion'),
+(28, 0, 'fdsjnfjdsljkfljkdf', 'kfsdlf', 3, '2014-04-06 13:25:29', 3, '68.179.157.58', 0, 'Random'),
+(29, 0, 'hi', 'this is a post', 1, '2014-04-06 13:55:12', 3, '68.179.157.58', 0, 'General discussion'),
+(30, 0, 'fkjddklf', 'fjlkdfld', 1, '2014-04-06 14:20:15', 3, '68.179.157.58', 0, 'General discussion'),
+(31, 0, 'fkjddklf', 'fjlkdfld', 1, '2014-04-06 14:20:38', 3, '68.179.157.58', 0, 'General discussion'),
+(32, 0, 'fkjddklf', 'fjlkdfld', 1, '2014-04-06 14:20:38', 3, '68.179.157.58', 0, 'General discussion'),
+(33, 0, 'fklds', 'tekjs;d', 1, '2014-04-06 14:22:15', 3, '68.179.157.58', 0, 'General discussion'),
+(34, 0, 'dlks', '&lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;', 1, '2014-04-06 14:23:05', 3, '68.179.157.58', 0, 'General discussion'),
+(35, 0, 'fkldsjfkl', 'sfkldjslf', 1, '2014-04-06 16:33:27', 3, '68.179.157.58', 0, 'General discussion'),
+(37, 0, 'test', 'test', 1, '2014-04-06 16:39:41', 3, '68.179.157.58', 0, 'General discussion'),
+(38, 0, 'test', 'test', 1, '2014-04-06 16:48:43', 3, '68.179.157.58', 0, 'General discussion'),
+(39, 0, 'test', 'test ', 1, '2014-04-06 16:54:01', 3, '68.179.157.58', 0, 'General discussion'),
+(40, 0, 'test', 'test', 1, '2014-04-06 16:57:31', 3, '68.179.157.58', 0, 'General discussion');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `views`
+--
+
+DROP TABLE IF EXISTS `views`;
+CREATE TABLE IF NOT EXISTS `views` (
+  `ID` int(11) NOT NULL,
+  `assoc` int(11) NOT NULL,
+  `what` varchar(20) NOT NULL,
+  `date` datetime NOT NULL,
+  `by` int(11) NOT NULL,
+  `category` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `views`
+--
+
+INSERT INTO `views` (`ID`, `assoc`, `what`, `date`, `by`, `category`) VALUES
+(0, 2, 'profile', '2014-04-02 20:45:22', 2, 'none'),
+(0, 3, 'profile', '2014-04-02 20:45:33', 2, 'none'),
+(0, 1, 'profile', '2014-04-02 20:46:56', 2, 'none'),
+(0, 125, 'project', '2014-04-02 22:13:21', 2, 'none'),
+(0, 131, 'project', '2014-04-03 18:24:57', 2, 'none'),
+(0, 129, 'project', '2014-04-03 18:25:22', 2, 'none'),
+(0, 126, 'project', '2014-04-03 18:29:27', 2, 'none'),
+(0, 127, 'project', '2014-04-03 18:33:38', 2, 'none'),
+(0, 128, 'project', '2014-04-03 18:33:50', 2, 'none'),
+(0, 130, 'project', '2014-04-03 18:40:39', 2, 'none'),
+(0, 0, 'project', '2014-04-03 18:41:02', 2, 'none'),
+(0, 132, 'project', '2014-04-03 18:49:30', 2, 'none'),
+(0, 25, 'thread', '2014-04-04 17:33:52', 2, 'General discussion'),
+(0, 1, 'thread', '2014-04-04 17:34:18', 2, 'General discussion'),
+(0, 18, 'thread', '2014-04-04 17:36:59', 2, 'Random'),
+(0, 4, 'thread', '2014-04-04 17:38:15', 2, 'General discussion'),
+(0, 9, 'thread', '2014-04-04 17:39:32', 2, 'Members introduction'),
+(0, 15, 'thread', '2014-04-04 18:21:42', 2, 'Members introduction'),
+(0, 11, 'thread', '2014-04-04 18:21:49', 2, 'Members introduction'),
+(0, 3, 'thread', '2014-04-04 19:24:01', 2, 'General discussion'),
+(0, 5, 'thread', '2014-04-04 20:26:14', 2, 'General discussion'),
+(0, 26, 'thread', '2014-04-04 20:45:43', 2, 'General discussion'),
+(0, 27, 'thread', '2014-04-04 22:17:54', 2, 'General discussion'),
+(0, 134, 'project', '2014-04-04 23:43:19', 2, 'none'),
+(0, 4, 'profile', '2014-04-05 12:29:23', 2, 'none'),
+(0, 138, 'project', '2014-04-05 23:59:22', 2, 'Technology'),
+(0, 12, 'profile', '2014-04-06 12:29:12', 12, 'none'),
+(0, 12, 'profile', '2014-04-06 13:02:26', 2, 'none'),
+(0, 9, 'thread', '2014-04-06 13:24:37', 3, 'Members introduction'),
+(0, 28, 'thread', '2014-04-06 13:25:42', 3, 'Random'),
+(0, 2, 'profile', '2014-04-06 13:26:00', 3, 'none'),
+(0, 27, 'thread', '2014-04-06 13:26:44', 12, 'General discussion'),
+(0, 3, 'thread', '2014-04-06 13:26:53', 12, 'General discussion'),
+(0, 3, 'profile', '2014-04-06 13:27:01', 3, 'none'),
+(0, 1, 'profile', '2014-04-06 13:29:06', 3, 'none'),
+(0, 27, 'thread', '2014-04-06 13:30:36', 3, 'General discussion'),
+(0, 29, 'thread', '2014-04-06 13:55:18', 3, 'General discussion'),
+(0, 29, 'thread', '2014-04-06 13:57:05', 2, 'General discussion'),
+(0, 12, 'profile', '2014-04-06 14:10:27', 3, 'none'),
+(0, 31, 'thread', '2014-04-06 14:21:43', 2, 'General discussion'),
+(0, 34, 'thread', '2014-04-06 14:23:14', 3, 'General discussion'),
+(0, 26, 'thread', '2014-04-06 14:26:28', 3, 'General discussion'),
+(0, 34, 'thread', '2014-04-06 14:36:21', 2, 'General discussion'),
+(0, 34, 'thread', '2014-04-06 14:49:21', 1, 'General discussion'),
+(0, 3, 'profile', '2014-04-06 14:49:25', 1, 'none'),
+(0, 132, 'project', '2014-04-06 14:49:34', 1, 'Technology'),
+(0, 10, 'profile', '2014-04-06 15:14:38', 1, 'none'),
+(0, 18, 'thread', '2014-04-06 15:16:08', 1, 'Random'),
+(0, 1, 'profile', '2014-04-06 15:16:23', 1, 'none'),
+(0, 35, 'thread', '2014-04-06 16:33:33', 3, 'General discussion'),
+(0, 37, 'thread', '2014-04-06 16:39:46', 2, 'General discussion'),
+(0, 37, 'thread', '2014-04-06 16:44:31', 3, 'General discussion'),
+(0, 38, 'thread', '2014-04-06 16:51:55', 2, 'General discussion'),
+(0, 40, 'thread', '2014-04-06 17:46:00', 2, 'General discussion'),
+(0, 41, 'thread', '2014-04-06 17:46:15', 2, 'General discussion'),
+(0, 39, 'thread', '2014-04-06 17:46:59', 2, 'General discussion'),
+(0, 42, 'thread', '2014-04-06 17:51:55', 2, 'General discussion'),
+(0, 43, 'thread', '2014-04-06 17:53:59', 2, 'General discussion'),
+(0, 40, 'thread', '2014-04-07 19:10:17', 3, 'General discussion'),
+(0, 0, 'thread', '2014-04-08 04:18:53', 1, ''),
+(0, 44, 'thread', '2014-04-08 04:19:44', 1, 'General discussion'),
+(0, 44, 'thread', '2014-04-08 18:17:44', 2, 'General discussion'),
+(0, 13, 'thread', '2014-04-08 20:42:44', 3, 'Members introduction'),
+(0, 44, 'thread', '2014-04-10 17:38:49', 3, 'General discussion'),
+(0, 0, 'thread', '2014-04-12 03:09:43', 2, ''),
+(0, 13, 'thread', '2014-04-12 13:51:16', 2, 'Members introduction'),
+(0, 28, 'thread', '2014-04-12 22:17:33', 2, 'Random'),
+(0, 33, 'thread', '2014-04-14 00:08:54', 2, 'General discussion'),
+(0, 36, 'thread', '2014-04-20 14:59:32', 2, 'General discussion');
 
 -- --------------------------------------------------------
 
@@ -709,6 +996,7 @@ INSERT INTO `topics` (`ID`, `sub`, `msg`, `title`, `parent_ID`, `time_`, `by_`, 
 -- Table structure for table `wall`
 --
 
+DROP TABLE IF EXISTS `wall`;
 CREATE TABLE IF NOT EXISTS `wall` (
   `ID` int(5) NOT NULL AUTO_INCREMENT,
   `type` tinyint(4) NOT NULL,
@@ -722,7 +1010,7 @@ CREATE TABLE IF NOT EXISTS `wall` (
   `geo` varchar(50) DEFAULT NULL,
   `like` longtext NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=54 ;
 
 --
 -- Dumping data for table `wall`
@@ -747,7 +1035,32 @@ INSERT INTO `wall` (`ID`, `type`, `by`, `to`, `privacy`, `date`, `txt`, `child`,
 (16, 0, 1, 2, 0, '2013-07-18 05:47:56', 'test', 0, '31.4.245.152', 'NONE', ''),
 (17, 0, 2, 2, 0, '2014-03-25 18:23:45', 'ggggggggggggg', 0, '127.0.0.1', 'NONE', ''),
 (18, 0, 2, 2, 0, '2014-03-25 18:23:55', 'nnnnnnnnnnnn', 17, '127.0.0.1', 'NONE', ''),
-(19, 0, 2, 2, 0, '2014-03-25 18:26:22', 'Making sure that posts work with ajax, and aren''t vulnerable to injection.', 17, '127.0.0.1', 'NONE', '');
+(19, 0, 2, 2, 0, '2014-03-25 18:26:22', 'Making sure that posts work with ajax, and aren''t vulnerable to injection.', 17, '127.0.0.1', 'NONE', ''),
+(35, 1, 2, 132, 0, '2014-04-04 23:45:21', 'Another', 0, '127.0.0.1', 'NONE', ''),
+(34, 1, 2, 132, 0, '2014-04-04 00:02:47', 'ffffff', 30, '127.0.0.1', 'NONE', ''),
+(33, 1, 2, 132, 0, '2014-04-04 00:02:40', 'ffff', 30, '127.0.0.1', 'NONE', ''),
+(32, 1, 2, 132, 0, '2014-04-03 19:33:29', 'test project wall reply\n', 30, '127.0.0.1', 'NONE', ''),
+(31, 1, 2, 132, 0, '2014-04-03 19:33:28', 'test project wall reply\n', 30, '127.0.0.1', 'NONE', ''),
+(30, 1, 2, 132, 0, '2014-04-03 19:19:00', 'jjjjjjjjjjjj', 0, '127.0.0.1', 'NONE', ''),
+(29, 0, 2, 2, 0, '2014-04-02 22:45:53', 'test', 0, '127.0.0.1', 'NONE', ''),
+(36, 1, 2, 132, 0, '2014-04-05 00:41:11', 'jjjjjjjjjjjjjjjjjjjjj', 35, '127.0.0.1', 'NONE', ''),
+(37, 0, 2, 2, 0, '2014-04-06 12:25:55', 'ggggggggggggg', 29, '71.119.211.232', 'NONE', ''),
+(38, 0, 3, 2, 0, '2014-04-06 13:26:10', 'test', 0, '68.179.157.58', 'NONE', ''),
+(39, 0, 3, 2, 0, '2014-04-06 13:26:29', '&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;', 0, '68.179.157.58', 'NONE', ''),
+(40, 0, 3, 2, 0, '2014-04-06 13:48:24', 'Hi Uriah', 0, '68.179.157.58', 'NONE', ''),
+(41, 0, 3, 2, 0, '2014-04-06 13:51:50', '''SELECT * FROM members--', 0, '68.179.157.58', 'NONE', ''),
+(42, 0, 3, 2, 0, '2014-04-06 13:52:48', '&lt;script&gt;alert(document.cookie)&lt;/script&gt;', 39, '68.179.157.58', 'NONE', ''),
+(43, 0, 1, 1, 0, '2014-04-08 04:23:25', 'Hhhhh', 1, '79.102.233.34', 'NONE', ''),
+(44, 0, 3, 3, 0, '2014-04-12 22:53:51', 'tewf', 0, '108.86.195.246', 'NONE', ''),
+(45, 0, 2, 3, 0, '2014-04-12 22:55:21', 'test comment', 44, '71.119.211.232', 'NONE', ''),
+(46, 0, 2, 3, 0, '2014-04-12 22:55:27', 'test post', 0, '71.119.211.232', 'NONE', ''),
+(47, 0, 3, 3, 0, '2014-04-12 23:16:53', 'hello', 0, '108.86.195.246', 'NONE', ''),
+(48, 0, 2, 2, 0, '2014-04-14 21:00:20', 'test', 0, '71.119.211.232', 'NONE', ''),
+(49, 0, 2, 2, 0, '2014-04-14 21:14:11', '', 39, '71.119.211.232', 'NONE', ''),
+(50, 0, 2, 2, 0, '2014-04-14 21:40:13', 'test comment', 48, '71.119.211.232', 'NONE', ''),
+(51, 0, 2, 2, 0, '2014-04-14 21:40:27', 'OMFG those X''s look so ugly :P', 48, '71.119.211.232', 'NONE', ''),
+(52, 0, 2, 2, 0, '2014-04-14 21:40:45', 'SQLi dont work here, bro.', 41, '71.119.211.232', 'NONE', ''),
+(53, 0, 2, 2, 0, '2014-04-14 21:41:30', 'I just had an awesome idea for discovering projects!', 0, '71.119.211.232', 'NONE', '');
 
 -- --------------------------------------------------------
 
@@ -755,6 +1068,7 @@ INSERT INTO `wall` (`ID`, `type`, `by`, `to`, `privacy`, `date`, `txt`, `child`,
 -- Table structure for table `workspace_data`
 --
 
+DROP TABLE IF EXISTS `workspace_data`;
 CREATE TABLE IF NOT EXISTS `workspace_data` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `projectID` int(11) NOT NULL,

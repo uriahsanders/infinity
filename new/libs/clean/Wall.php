@@ -51,8 +51,8 @@ class Wall{
 		if (!$res)
 			return 0; // error
 		$this->lastID = $this->_db->lastInsertId();
-		Action::addAction('posted on the wall of '.Members::getInstance()->get($to, 'username'), 
-			preview($txt)."<br></br><textarea class='form-control'></textarea><br><br><button class=\"btn btn-primary\">Reply</button>", 'profile', $this->lastID);
+		Action::addAction('posted on '.Members::getInstance()->get($to, 'username')."'s wall on ", 
+			preview($txt),  $_SESSION['USR'], 'profile', $this->lastID);
 		return 1;
 	}
 

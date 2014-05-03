@@ -1,33 +1,28 @@
 <?php
-/**if (!defined("INFINITY"))
+if (!defined("INFINITY"))
     die(); // do not allow direct access to this fie
 //Workspace Data SQL database structure:
 //ID | projectID | version | original | type | title | body | date | level | by | to | data | lastUser | branch | suggested | active
-interface Security{
-	public function has_access_to($projectID); //are they a part of the project?
-	public function has_privilege($projectID, $branch, $privilegeNum); //lowest required privilege
-	public function verify_params($rest, $arr); //make sure all REST requests have been made
-}
-class Workspace implements Security{
+class Workspace{
 	const LIMIT = 10; //how many results to retrieve
 	private $sql;
-	private $table = '`workspace_data`';
+	private $table = "`workspace_data`";
 	public function __construct(){
 		$this->sql = Database::getInstance();
 	}
-	public function date(){
-		return date("Y:m:d"); //{temp} (we want our date to be consistent)
-	}
+	//are they a part of the project?
 	public function has_access_to($projectID){
-		$members = $this->getMembers($projectID);;
+		$members = $this->getMembers($projectID);
 		return (array_search($_SESSION['ID'], $members)) ? true : false;
 	}
+	//lowest required privilege
 	public function has_privilege($projectID, $branch, $privilegeNum){
 		//privileges are stored in data of type = branch, branch = branch, to = userID, level = privilege
 		$result = $this->sql->query("SELECT `level` FROM ".$this->table." 
 			WHERE `type` = ? AND `branch` = ? AND `to` = ?", 'privilege', $branch, $_SESSION['ID']);
 		return ($privilegeNum >= $result->fetch()['level']) ? true : false; //is privilege equal or better?
 	}
+	//make sure all REST requests have been made
 	public function verify_params($rest, $arr){
 		for($i = 0; $i < count($arr); ++$i){
             if(!isset($rest[$arr[$i]])) die();
@@ -37,7 +32,8 @@ class Workspace implements Security{
 		return " ORDER BY `date` LIMIT ".$start.", ".self::LIMIT;
 	}
 	//common phrase
-	private $begin = "SELECT * FROM ".$this->table." WHERE `projectID` = ? AND `branch` = ?";
+	//private $begin = "SELECT * FROM ".$this->table." WHERE `projectID` = ? AND `branch` = ?";
+	private $begin = "SELECT * FROM `workspace_data` WHERE `projectID` = ? AND `branch` = ?";
 	//return array from $result
 	private function db2arr($result){
 		$res = [];
@@ -47,7 +43,7 @@ class Workspace implements Security{
 		return $res;
 	}
 	public function getBranches($projectID){
-		$result = $this->sql->query("SELECT `title` FROM ".$table." WHERE `projectID` = ? AND `type` = ?", $projectID, 'branch');
+		$result = $this->sql->query("SELECT `title` FROM ".$this->table." WHERE `projectID` = ? AND `type` = ?", $projectID, 'branch');
 		return $this->arrValues($result, 'title');
 	}
 	public function getProjects($userID){
@@ -108,7 +104,7 @@ class Workspace implements Security{
 			$this->sql->query("INSERT INTO ".$this->table." 
 			(`projectID`, `type`, `title`, `body`, `date`, `level`, `by`, `to`, `data`, `branch`, `suggested`, `active`)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-			", $projectID, $type, $title, $body, $this->date(), $level, $_SESSION['ID'], $to, $data, $branch, $suggested, json_encode([]));
+			", $projectID, $type, $title, $body, date("Y-m-d H:i:s"), $level, $_SESSION['ID'], $to, $data, $branch, $suggested, json_encode([]));
 			return $this->sql->lastInsertId(); //return ID of recently created element
 		}
 	}
@@ -117,7 +113,7 @@ class Workspace implements Security{
 			$this->sql->query("INSERT INTO ".$this->table." 
 			(`projectID`, `type`, `title`, `body`, `date`, `level`, `by`, `to`, `data`, `branch`, `suggested`, `active`, `original`, `version`)
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-			", $projectID, $type, $title, $body, $this->date(), $level, $_SESSION['ID'], $to, $data, $branch, $suggested,
+			", $projectID, $type, $title, $body, date("Y-m-d H:i:s"), $level, $_SESSION['ID'], $to, $data, $branch, $suggested,
 			 json_encode([]), $elementID, ($version + 1));
 			return $this->sql->lastInsertId();
 		}
@@ -169,12 +165,6 @@ class Workspace implements Security{
 			$this->orderElementVersions($elementID);
 		}
 	}
-	public function changeStatus($projectID, $newStatus){
-		if($this->has_access_to($projectID)){
-			$this->sql->query("UPDATE ".$table." SET `data` = ? WHERE `projectID` = ? AND `type` = ? AND `to` = ?",
-			 $newStatus, $projectID, 'status', $_SESSION['ID']);
-		}
-	}
 	public function leaveProject($projectID){
 		//remove from project members array
 		$members = $this->getMembers($projectID);
@@ -208,14 +198,14 @@ class Workspace implements Security{
 	public function createBranch($projectID, $title){
 		if($this->has_access_to($projectID) && $this->has_privilege($projectID, 'Master', 3)){ //manager
 			$this->sql->query("INSERT INTO ".$table." (`projectID`, `type`, `title`, `date`, `by`, `branch`)
-				VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', $title, $this->date(), $_SESSION['ID'], $title);
+				VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'branch', $title, date("Y-m-d H:i:s"), $_SESSION['ID'], $title);
 			foreach($this->getMembers($projectID) as $value){
 				//add in new privileeges for new branch for each member
 				$priv = ($value == $_SESSION['ID'] && $this->has_privilege($projectID, 'Master', 5)) //if creator and this session id
 				 ? 5 //then creator in new branch privilege
 				 : ($value == $_SESSION['ID'] //else if this is just session id
 				 	? 3 //privilege is manager (lowest priv to create branch)
-				 	: 0) //else privelege is observer by default
+				 	: 0); //else privelege is observer by default
 				$this->sql->query("INSERT INTO ".$table." (`projectID`, `type`, `branch`, `to`, `level`)
 				VALUES (?, ?, ?, ?, ?, ?)", $projectID, 'privilege', $title, $value, $priv);
 			}
@@ -246,4 +236,3 @@ class Workspace implements Security{
 		}
 	}
 }
-**/

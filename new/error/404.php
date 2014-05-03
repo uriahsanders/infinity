@@ -25,9 +25,7 @@
         <?php
 			define("INFINITY", true);
 			include_once("../libs/relax.php");
-			listlinks("");
-			
-			
+			System::listLinks('start');
 		?>
         
     </div>

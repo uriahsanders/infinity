@@ -62,7 +62,7 @@
             type: 'POST',
             data: $(this).serialize(),
             success: function(data){
-                window.location.reload(true);
+                MsgBox('Settings', data, -1);
             }
         });
     });

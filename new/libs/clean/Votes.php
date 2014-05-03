@@ -13,14 +13,14 @@ class Votes{
 	*	@param int $amount - how many votes to give
 	*	@param string $what - is this for a member or a project?
 	*	@param int $id -ID of member or project
-	*	@example Votes::vote(1, 'forum', 3, true); //take one point from a member by post of ID 3
+	*	@example Votes::vote(1, 'forum', 3, 2); //take one point from a member by post of ID 3
 	*/
-	public static function vote($amount, $what, $id, $take = 0){ //take equals 0 for NOT taking away (subtracting) a vote, 1 if we are
+	public static function vote($amount, $what, $id, $vote = 1){ //vote equals 0 for none, 1 for positive, 2 for negative vote
 		//if we can vote on this again
-		if($this->canVoteAgain($what, $id, $take)){
+		if($this->canVoteAgain($what, $id, $vote)){
 			$table = $what == 'forum' ? 'memberinfo' : 'projects';
 			$currency = $table == 'memberinfo' ? 'prestige' : 'popularity';
-			$sign = $take == 0 ? '+' : '-';
+			$sign = $vote == 1 ? '+' : '-';
 			$this->sql->beginTransaction();
 			try{
 				//update prestige or popularity for members/project
@@ -31,8 +31,8 @@ class Votes{
 					Database::getInstance()->query("UPDATE `topics` SET `popularity` = `popularity` ".$sign." ? WHERE `ID` = ?", $id, $amount);
 				}
 				//tell db we voted and when
-				Database::getInstance()->query("INSERT INTO `votes` (`what`, `by`, `to`, `when`, `take`) VALUES (?, ?, ?, ?, ?)", 
-					$what, $_SESSION['ID'], $id, date('Y-m-d H:i:s'), $take);
+				Database::getInstance()->query("INSERT INTO `votes` (`what`, `by`, `to`, `when`, `vote`) VALUES (?, ?, ?, ?, ?)", 
+					$what, $_SESSION['ID'], $id, date('Y-m-d H:i:s'), $vote);
 				$this->sql->commit();
 			}catch(Exception $e){
 				$this->sql->rollback();
@@ -68,21 +68,21 @@ class Votes{
 	*	@static
 	*	@param string $what - is this for a forum post or a project?
 	*	@param int $id -ID of member or project
-	*	@example Votes::vote(1, 'member', 3, true); //take one point from a member
 	*/
-	private function canVoteAgain($what, $id, $take){
-		$this->sql->beginTransaction();
-		try{
-			//how many fresh votes are there?
-			$result = Database::getInstance()->query("SELECT `take` FROM `votes` WHERE `to` = ? AND `what` = ? AND `by` = ?", $to, $what, $_SESSION['ID']);
-			$this->sql->commit();
-			$res = $result->fetchAll();
-			//we can vote again if there are no more fresh votes with same $take
-			if(count($res == 0) && $res[0]['take'] != $take) return true;
-			return false;
-		}catch(Exception $e){
-			$this->sql->rollback();
-			System::Error($e->getMessage());
-		}
+	private function canVoteAgain($what, $id, $vote){
+		//how many fresh votes are there?
+		$result = Database::getInstance()->query("SELECT `vote` FROM `votes` WHERE `to` = ? AND `what` = ? AND `by` = ?", $to, $what, $_SESSION['ID']);
+		$res = $result->fetchAll();
+		//we can vote again if there are no more fresh votes with same $vote
+		if(count($res == 0) && $res[0]['vote'] != $vote) return true;
+		return false;
+	}
+
+	//get our current vote on ID $id
+	//return 0 if have not voted, 1 if voted positive, 2 if voted negative
+	//on ID $id
+	//just extra info: grey => 0, green => 1, red => 2
+	public static function currentVote($id){
+		return Database::getInstance()->query("SELECT `vote` FROM `votes` WHERE `to` = ? AND `by` = ?", $id, $_SESSION['ID'])->fetchColumn();
 	}
 }

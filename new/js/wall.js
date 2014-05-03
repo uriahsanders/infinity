@@ -29,6 +29,23 @@ $(document).ready(function(e) {
 		});
 	});
 
+	$(document).on('click', '.wall-remove-post', function() {
+		wallRemovePost($(this).data('idd'));
+	});
+	$(document).on('click', '.wall-remove-comment', function() {
+		wallRemoveComment($(this).data('idd'));
+	});
+
+	function wallRemoveComment(id) {
+		$('#wall-a-post-' + id + ".pro_stream_log_a").fadeOut().remove();
+		$('#wall-hr-'+id).fadeOut().remove();
+	}
+
+	function wallRemovePost(id) {
+		$('#wall-post-' + id + ".pro_usr_stream_log").children().fadeOut().remove();
+		$('#wall-post-' + id + ".pro_usr_stream_log").fadeOut().remove();
+	}
+
 	function WallAdd(txt, where, ID, usr, UD, time, to, likes) {
 		var Meee = $.parseJSON($("#Mee").val());
 		var where = ((typeof where == "undefined" || where == null) ? 0 : where)

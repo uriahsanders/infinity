@@ -112,6 +112,15 @@ class Members implements iMembers
 		}
 		return false;
 	}*/
+	//see if user is an admin
+	public function isAdmin($who){
+		return $this->_db->query("SELECT `admin` FROM `members` WHERE `ID` = ?", $who)->fetchColumn() == 1;
+	}
+	//if moderator or above
+	public function isPrivileged($who){
+		return $this->getUserRank($_SESSION['ID'], 0) >= 4;
+	}
+	//see if user is moderator or above
 	//ex: get($_SESSION['ID'], 'image'); //returns usr image
 	public function get($ID, $what){
 		return $this->getUserData($ID)[$what];

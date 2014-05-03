@@ -16,14 +16,14 @@ if(isset($_POST['signal']) && $_POST['signal'] == 'options' && isset($_POST['tok
 				if(strlen($p['password']) > 2) 
 					$_db->query("UPDATE `members` SET `password` = ? WHERE `ID` = ?", $p['password'], $_SESSION['ID']);
 			}else{
-				die("Your new passwords dont match bro.");
+				die("The two new passwords you inputed do not match.");
 			}
 			$_db->query("UPDATE `members` SET `username` = ?, `email` = ? WHERE `ID` = ?",
 				$p['username'], $p['email'], $_SESSION['ID']);
 			$_db->query("UPDATE `memberinfo` SET `username` = ?, `country` = ?, `age` = ?, `about` = ?, `resume` = ?, `work` = ?, `quote` = ?, `wURL` = ?, `sex` = ? WHERE `ID` = ?",
 				$p['username'], $p['country'], $p['age'], $p['about'], $p['resume'], $p['work'], $p['quote'], $p['wURL'], $p['gender'], $_SESSION['ID']);
 			$_SESSION['USR'] = $p['username'];
-			echo "Your stuff was updated.";
+			echo "Your settings have been updated.";
 		}else{
 			echo "Sorry, your password is not correct.";
 		}

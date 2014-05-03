@@ -43,8 +43,12 @@ if(!$logged)
         <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
         <script type="text/javascript" src="/js/jquery-1.9.0.min.js"></script>
         <script src="/js/jquery-ui.min.js" type="text/javascript"></script> 
+        <link rel="stylesheet" type="text/css" href="/css/token-input.css" />
+        <link rel="stylesheet" type="text/css"
+        href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
         <script src="/js/mix.js" type="text/javascript"></script>
+        <script src="/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript"src="https://cdnjs.cloudflare.com/ajax/libs/epiceditor/0.2.2/js/epiceditor.min.js"></script>
         <?php 
             /*
@@ -121,7 +125,7 @@ if(!$logged)
                     <div id=\"member_bar_body\">Welcome <b><a href=\"/user/\">$_SESSION[USR]</a></b>!
                     <div id=\"member_bar_links\">
                     <a class='member_link'href=\"/forum/#\">Forum</a>&nbsp;
-                    <a class='member_link'href=\"/projects/\">Projects</a>&nbsp;
+                    <a class='member_link'href=\"/workspace/#!/discover\">Projects</a>&nbsp;
                     <a class='member_link'href=\"/workspace/\">Workspace</a>&nbsp;
                     <a class='member_link'href=\"/lounge/groups\">Groups</a>&nbsp;
                     </div>
@@ -141,7 +145,10 @@ if(!$logged)
                 echo "<label><i class='fa fa-user user-$id' alt=\"$id\" title=\"$name\"></i>&nbsp;$name</label>";
                 echo "</span>";
                 echo "</div>";
-                echo "&nbsp;&nbsp;<a class='fa fa-lg fa-exclamation'></a>&nbsp;&nbsp;<a id='pm-top'class='fa fa-envelope fa-lg'style='color:grey'><a>&nbsp;&nbsp;<a alt=\"settings\" title=\"settings\"href=\"/lounge/#!/settings\"class='fa fa-cog fa-lg'style='color:grey'></a>&nbsp;&nbsp;
+                if(Members::getInstance()->isAdmin($_SESSION['ID'])){
+                    echo '&nbsp;&nbsp;<a class="fa fa-magic fa-lg"title="Admin"href="/admin/"></a>';
+                }
+                echo "&nbsp;&nbsp;<a href=\"/lounge/\"class='fa fa-lg fa-exclamation'></a>&nbsp;&nbsp;<a id='pm-top'class='fa fa-envelope fa-lg'style='color:grey'><a>&nbsp;&nbsp;<a alt=\"settings\" title=\"settings\"href=\"/lounge/#!/settings\"class='fa fa-cog fa-lg'style='color:grey'></a>&nbsp;&nbsp;
                 <a class='fa fa-sign-out fa-lg'href=\"/lounge/logout\"alt=\"logout\" title=\"logout\"style='color:grey'></a>&nbsp;&nbsp;
                     </div>
                     </div>";

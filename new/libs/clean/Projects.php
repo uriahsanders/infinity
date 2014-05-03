@@ -85,7 +85,7 @@ class Projects{
 			FROM `projects` WHERE `launched` = ? ";
 		$exec = [1]; //values to execute with
 		//handling category sepearately so we can possibly view all projects
-		if($category != 'all'){
+		if($category != 'All'){
 			$query .= " AND `category` = ? ";
 			array_push($exec, $category); //add new arg
 		}
