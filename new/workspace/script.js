@@ -31,6 +31,26 @@
 		$('#workspace-ctx').dropDown();
 		$('#workspace-discover-category').dropDown();
 		$('#workspace-discover-by').dropDown();
+		$('#main-body').css({
+			margin: 0
+		});
+		var sidebar = $('#workspace-sidebar').offset().top;
+		$(window).scroll(function() {
+			if (sidebar < $(window).scrollTop()) {
+				$("#workspace-sidebar").css({
+					position: "fixed",
+					top: 0,
+					left: 0,
+					"margin-top": "0px"
+				});
+			} else {
+				$("#workspace-sidebar").css({
+					"position": "absolute",
+					"float": "left",
+					"margin-top": "-30px"
+				});
+			}
+		});
 	});
 	//ROUTER
 	Router.create(function(hash, count) {
@@ -41,7 +61,7 @@
 			var by = $('#workspace-discover-by').data('val');
 			Workspace.showProjects(category, by);
 		}
-		
+
 	});
 	var Workspace = (function() {
 		//shorthand ajax so we can bulk handle errors and successes
@@ -72,12 +92,12 @@
 			loading: function() {
 				$('#workspace-main').html('<div id="workspace-loading"> <br><br><br><br><br> <i class="fa fa-spinner fa-spin"style="font-size:15em;color:grey"></i> <br><br> <span style="font-size:2em">Loading...</span> </div>');
 			},
-			showProjects: function(category, by){
+			showProjects: function(category, by) {
 				ajax('GET', {
 					signal: 'showProjects',
 					category: category,
 					by: by
-				}, function(res){
+				}, function(res) {
 					$('#workspace-main').html(res);
 				});
 			}
