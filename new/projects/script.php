@@ -1,63 +1,44 @@
 <?php
 define("INFINITY", true); // this is so the includes can't get directly accessed
 include_once('../libs/relax.php');
+$workspace = new Workspace();
 $projects = new Projects();
-switch($_SERVER['REQUEST_METHOD']){
-	case 'POST':
-		if(!$_POST['token'] || $_POST['token'] != $_SESSION['token']) die(); //CSRF defense
-		switch($_POST['signal']){
-			case 'create':
-				die($projects->create($_POST['projectName'], $_POST['category'], $_POST['short'], $_POST['description'], $_POST['image'], $_POST['video']));
-			case 'delete':
-				die($projects->delete($_POST['id']));
-			case 'update':
-				die($projects->update($_POST['id'], $_POST['category'], $_POST['projectName'], $_POST['short'], $_POST['description'], $_POST['image'], $_POST['video']));
-			case 'comment':
-				die($projects->comment($_POST['id'], $_POST['comment']));
-			case 'join':
-				die($projects->join($_POST['id'], $_POST['bool']));
-		}
-		die();
-	case 'GET':
-		switch($_GET['signal']){
-			case 'search':
-				$res = $projects->search($_GET['query']);
-				die(show('projects', $res));
-			case 'getOne':
-				$res = $projects->getOne($_GET['creator'], $_GET['projectname']);
-				//view this project
-				Views::view($res['ID'], 'project', $res['category']);
-				die(projectTemplate($res['ID'], $res['projectname'], $res['creator'], $res['date'], $res['popularity'], $res['members'], $res['short'], $res['description'], $res['image'], $res['video']));
-			case 'retrieve':
-				$res = $projects->retrieve($_GET['category']);
-				die(show('projects', $res));
-			case 'comments':
-				$res = $projects->comments($_GET['projectID']);
-				die(show('comments', $res));
-			case 'loadMore':
-				$action = $_GET['action'];
-				$res = $projects->load_more($_GET['results'], $action, $_GET['category'], $_GET['query'], $_GET['projectID']);
-				if($action == 'project'){
-					die(show('comments', $res));
-				}else if($action == 'searching' || $action == 'category'){
-					die(show('projects', $res));
-				}
-				die();
-		}
-		die();
-}
-	function commentTemplate($id, $projectID, $date, $posterID, $body){
-		return 'comment';
+if(isset($_POST['signal'])){
+	if(!isset($_POST['token']) || $_POST['token'] != $_SESSION['token']){
+		System::logSuspect('Unauthorized token whilst attempting to make a POST request to the workspace.');
 	}
-	//repetition safe function
-	function show($what, $res){
+	switch($_POST['signal']){
+
+	}
+}
+else if(isset($_GET['signal'])){
+	switch($_GET['signal']){
+		case 'showProjects':
+			show('pr-thumbnail', $projects->retrieve($_GET['category']));
+	}
+}
+function pr_thumbnail($id, $name, $creator, $date, $short, $desc, $img){
+	return '
+		<div class="pr-thumbnail">
+		<div class="prt-img"></div><div class="prt-name"><span style="font-size:1.2em;font-weight:bold;">'.$name.'</span><br><br> By <a>'.Members::getInstance()->get($creator, 'username').'</a>
+		</div> 
+		<div class="prt-short">'.$short.'</div>
+		<div class="prt-desc">'.$short.'</div>
+		</div>
+	';
+}
+function show($what, $res){
 		$done = '';
 		foreach($res as $attr){
-			$done .= ($what == 'projects') ?
-			thumbnailTemplate($attr['ID'], $attr['projectname'], $attr['creator'], $attr['date'], $attr['popularity'], $attr['short'], $attr['image'])
-			:
-			commentTemplate($attr['ID'], $attr['projectID'], $attr['date'], $attr['posterID'], $attr['body']);
+			switch($what){
+				case 'pr-thumbnail':
+					$done .= pr_thumbnail($attr['ID'], $attr['projectname'], $attr['creator'], $attr['date'], 
+						$attr['short'], $attr['description'], $attr['image']);
+			}
 		}
-		if($done == '') $done = '<br>No projects have been created yet.';
-		return $done;
-	}
+		if($done == '') $done = '<br><div style="background:url(\'/images/broken_noise.png\');padding:100px;
+					border:1px solid #000;width: 60%;margin:auto;font-size:2em">
+					There are no projects here yet.
+					</div>';
+		die($done);
+}

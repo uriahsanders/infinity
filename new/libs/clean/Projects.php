@@ -81,7 +81,7 @@ class Projects{
 	*/
 	public function retrieve($category, $start = 0){ //GET
 		//retrieve only information neccesary for a thumbnail
-		$query = "SELECT `ID`, `projectname`, `creator`, `date`, `popularity`, `short`, `image`, `launched` 
+		$query = "SELECT *
 			FROM `projects` WHERE `launched` = ? ";
 		$exec = [1]; //values to execute with
 		//handling category sepearately so we can possibly view all projects

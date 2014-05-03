@@ -126,7 +126,7 @@ if(!$logged)
                     <div id=\"member_bar_links\">
                     <a class='member_link'href=\"/lounge/\">Lounge</a>&nbsp;
                     <a class='member_link'href=\"/forum/#\">Forum</a>&nbsp;
-                    <a class='member_link'href=\"/workspace/\">Projects</a>&nbsp;
+                    <a class='member_link'href=\"/projects/#discover\">Projects</a>&nbsp;
                     <a class='member_link'href=\"/lounge/groups\">Groups</a>&nbsp;
                     </div>
                     </div>

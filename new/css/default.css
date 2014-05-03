@@ -1468,6 +1468,16 @@ background-color: rgba(255, 255, 255, .7);
     margin-bottom: 5px;
     height: 100px;
     width: 100%;
+    opacity: 0.8;
+    cursor: pointer;
+     -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+}
+.pr-thumbnail:hover{
+    opacity: 1;
 }
 .prt-img{
     background: #000;
@@ -1493,4 +1503,7 @@ background-color: rgba(255, 255, 255, .7);
 }
 .prt-num{
     float: right;
+}
+.prt-desc{
+    display: none;
 }
