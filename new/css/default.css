@@ -3,6 +3,214 @@
     //    relax@infinity-forum.org 
     ///////////////////////////////////////
 */
+/* glue: 0.9.4 hash: 7462ef306b */
+.sprite-main-logo_big,
+.sprite-main-broken_noise,
+.sprite-main-logo99,
+.sprite-main-12,
+.sprite-main-gray_sand,
+.sprite-main-13,
+.sprite-main-qa,
+.sprite-main-q,
+.sprite-main-na,
+.sprite-main-n,
+.sprite-main-ka,
+.sprite-main-k,
+.sprite-main-fa,
+.sprite-main-f2,
+.sprite-main-f,
+.sprite-main-da,
+.sprite-main-d,
+.sprite-main-warning_64,
+.sprite-main-help_64,
+.sprite-main-error_64,
+.sprite-main-checkmark_64,
+.sprite-main-dark_stripes,
+.sprite-main-s,
+.sprite-main-logout {
+            background-image: url('main.png');
+            background-repeat: no-repeat;
+        }
+        
+        .sprite-main-logo_big {
+            background-position: 0 0;
+            width: 800px;
+            height: 208px;
+        }
+        
+        .sprite-main-broken_noise {
+            background-position: 0 -208px;
+            width: 476px;
+            height: 476px;
+        }
+        
+        .sprite-main-logo99 {
+            background-position: 0 -684px;
+            width: 400px;
+            height: 104px;
+        }
+        
+        .sprite-main-12 {
+            background-position: -400px -684px;
+            width: 400px;
+            height: 41px;
+        }
+        
+        .sprite-main-gray_sand {
+            background-position: -476px -208px;
+            width: 211px;
+            height: 211px;
+        }
+        
+        .sprite-main-13 {
+            background-position: -687px -208px;
+            width: 105px;
+            height: 60px;
+        }
+        
+        .sprite-main-qa {
+            background-position: -687px -268px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-q {
+            background-position: -476px -419px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-na {
+            background-position: -555px -419px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-n {
+            background-position: -634px -419px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-ka {
+            background-position: -713px -419px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-k {
+            background-position: -476px -497px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-fa {
+            background-position: -555px -497px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-f2 {
+            background-position: -634px -497px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-f {
+            background-position: -713px -497px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-da {
+            background-position: -476px -575px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-d {
+            background-position: -555px -575px;
+            width: 79px;
+            height: 78px;
+        }
+        
+        .sprite-main-warning_64 {
+            background-position: -687px -346px;
+            width: 64px;
+            height: 64px;
+        }
+        
+        .sprite-main-help_64 {
+            background-position: -634px -575px;
+            width: 64px;
+            height: 64px;
+        }
+        
+        .sprite-main-error_64 {
+            background-position: -698px -575px;
+            width: 64px;
+            height: 64px;
+        }
+        
+        .sprite-main-checkmark_64 {
+            background-position: -800px 0;
+            width: 64px;
+            height: 64px;
+        }
+        
+        .sprite-main-dark_stripes {
+            background-position: -800px -64px;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .sprite-main-s {
+            background-position: -800px -114px;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .sprite-main-logout {
+            background-position: -820px -114px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        @media screen and (-webkit-min-device-pixel-ratio: 1.0), screen and (min--moz-device-pixel-ratio: 1.0), screen and (-o-min-device-pixel-ratio: 100/100), screen and (min-device-pixel-ratio: 1.0), screen and (min-resolution: 1.0dppx) {
+            .sprite-main-logo_big,
+    .sprite-main-broken_noise,
+    .sprite-main-logo99,
+    .sprite-main-12,
+    .sprite-main-gray_sand,
+    .sprite-main-13,
+    .sprite-main-qa,
+    .sprite-main-q,
+    .sprite-main-na,
+    .sprite-main-n,
+    .sprite-main-ka,
+    .sprite-main-k,
+    .sprite-main-fa,
+    .sprite-main-f2,
+    .sprite-main-f,
+    .sprite-main-da,
+    .sprite-main-d,
+    .sprite-main-warning_64,
+    .sprite-main-help_64,
+    .sprite-main-error_64,
+    .sprite-main-checkmark_64,
+    .sprite-main-dark_stripes,
+    .sprite-main-s,
+    .sprite-main-logout {
+                background-image: url('main.png');
+                -webkit-background-size: 864px 788px;
+                -moz-background-size: 864px 788px;
+                background-size: 864px 788px;
+            }
+        }
+        
+
+/* sprite end */
+
 html, body {    
     margin:0;
     padding:0;
