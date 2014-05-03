@@ -19,15 +19,15 @@ class System
 	{
 		$links = array( //all links that we will have at the top
 			"/" => "Start",
-			"/lounge/"=>"",
+			// "/lounge/"=>"",
 			//"/projects/#!/all" => "Projects",
 			"/about/" => "About",
 			"/contact/" => "Contact",
 			"/blog/" => "Blog",
 			"/help/" => "Help"
 		);
-		if (Login::checkAuth(true)) // if loggedin show the lounge link as well
-			$links["/lounge/"] = "Lounge";               
+		// if (Login::checkAuth(true)) // if loggedin show the lounge link as well
+			// $links["/lounge/"] = "Lounge";               
 	  
 		foreach ($links as $k => &$n) {
 			if ($n != "") { // only if name is not empty like member is as default

@@ -1,4 +1,4 @@
-(function($) {
+$(function() {
 	//MODEL
 	var model = {
 		scriptFile: 'script.php', //server communication script
@@ -52,17 +52,6 @@
 			}
 		});
 	});
-	//ROUTER
-	Router.create(function(hash, count) {
-		var hash = hash.split('/'); //split hash into seperate components
-		if (hash[0] === 'discover' || hash[0] == false) {
-			//see projects
-			var category = $('#workspace-discover-category').data('val');
-			var by = $('#workspace-discover-by').data('val');
-			Workspace.showProjects(category, by);
-		}
-
-	});
 	var Workspace = (function() {
 		//shorthand ajax so we can bulk handle errors and successes
 		function ajax(type, request, callback) {
@@ -103,4 +92,15 @@
 			}
 		}
 	})();
-})(jQuery);
+	//ROUTER
+	Router.create(function(hash, count) {
+		var hash = hash.split('/'); //split hash into seperate components
+		if (hash[0] === 'discover' || hash[0] == false) {
+			//see projects
+			var category = $('#workspace-discover-category').data('val');
+			var by = $('#workspace-discover-by').data('val');
+			Workspace.showProjects(category, by);
+		}
+	});
+	Router.run(); //temp gurantee load but possible double request
+})();
